@@ -1,18 +1,40 @@
 import Everytime from "@/components/Everytime";
+import LoginPage from "@/components/LoginPage";
 import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
   const components = [
     <PersonalInfo key="personal-info" />,
     <Survey key="survey" />,
     <Everytime key="everytime" />,
   ];
   const totalSteps = components.length;
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/auth/check`,
+          {
+            credentials: "include",
+          }
+        );
+        setIsAuthenticated(response.status === 200);
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -25,6 +47,14 @@ function App() {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  if (isAuthenticated === null) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
