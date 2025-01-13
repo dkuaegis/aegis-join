@@ -44,7 +44,7 @@ export interface Member {
     gender: Gender,
     student_id: string,
     phone_number: string,
-    deparment: Department,
+    department: Department,
     academic_status: AcademicStatus,
     grade: Grade,
     semester: Semester,
