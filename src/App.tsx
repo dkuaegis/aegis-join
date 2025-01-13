@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { useState, useEffect } from "react";
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isPersonalInfoValid, setIsPersonalInfoValid] = useState(true);
   const [showErrors, setShowErrors] = useState(false);
 
