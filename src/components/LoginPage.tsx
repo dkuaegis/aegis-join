@@ -24,6 +24,13 @@ function LoginPage() {
             Google로 로그인
           </a>
         </Button>
+        <Button className="w-full" asChild>
+          <a
+            href="https://cms.dankook.ac.kr/web/polymer/-67?p_p_id=Bbs_WAR_bbsportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_Bbs_WAR_bbsportlet_extFileId=125144"
+          >
+            단국대 GMAIL 생성 가이드
+          </a>
+        </Button>
       </div>
     </div>
   );

@@ -4,14 +4,19 @@ import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useEffect, useState } from "react";
-
+import { useState, useEffect } from "react";
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isPersonalInfoValid, setIsPersonalInfoValid] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
 
   const components = [
-    <PersonalInfo key="personal-info" />,
+    <PersonalInfo
+      key="personal-info"
+      onValidate={setIsPersonalInfoValid}
+      showErrors={showErrors}
+    />,
     <Survey key="survey" />,
     <Everytime key="everytime" />,
   ];
@@ -37,7 +42,13 @@ function App() {
   }, []);
 
   const handleNext = () => {
+    if (currentStep === 1 && !isPersonalInfoValid) {
+      setShowErrors(true);
+      return;
+    }
+
     if (currentStep < totalSteps) {
+      setShowErrors(false);
       setCurrentStep(currentStep + 1);
     }
   };
