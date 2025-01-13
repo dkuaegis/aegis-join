@@ -4,7 +4,7 @@ import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -21,6 +21,25 @@ function App() {
     <Everytime key="everytime" />,
   ];
   const totalSteps = components.length;
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/auth/check`,
+          {
+            credentials: "include",
+          }
+        );
+        setIsAuthenticated(response.status === 200);
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const handleNext = () => {
     if (currentStep === 1 && !isPersonalInfoValid) {
