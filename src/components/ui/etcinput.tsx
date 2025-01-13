@@ -21,7 +21,7 @@ const EtcInput = React.forwardRef<
   return (
     <input
       className={cn(
-        "flex w-full border-b-2 bg-transparent px-0 py-0 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:font-medium file:text-foreground file:text-sm placeholder:text-muted-foreground focus:outline-none focus:border-b-2 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 md:text-sm resize-none",
+        "flex w-full h-4 max-h-4 border-b-2 bg-transparent px-0 py-0 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:font-medium file:text-foreground file:text-sm placeholder:text-muted-foreground focus:outline-none focus:border-b-2 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
         className
       )}
       value={value}

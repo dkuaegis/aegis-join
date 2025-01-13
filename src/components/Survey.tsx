@@ -122,8 +122,8 @@ function Survey() {
         <div className="space-y-4">
           {Object.entries(groupedInterests).map(([category, fields]) => (
             <div key={category} className="space-y-2">
-              <Label className="font-medium">{category}</Label>
-              <div className="ml-4 space-y-2">
+              <Label className="font-medium text-xl">{category}</Label>
+              <div className="ml-4 space-y-4">
                 {fields.map((field) => (
                   <>
                   <div key={field.id} className="flex items-center space-x-2">
@@ -148,7 +148,7 @@ function Survey() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="joinReason">가입 이유</Label>
+        <Label htmlFor="joinReason" className="text-xl">가입 이유</Label>
         <Textarea
           id="joinReason"
           name="joinReason"
@@ -159,7 +159,7 @@ function Survey() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="messageToManagement">운영진에게 하고 싶은 말</Label>
+        <Label htmlFor="messageToManagement" className="text-xl">운영진에게 하고 싶은 말</Label>
         <Textarea
           id="messageToManagement"
           name="messageToManagement"
