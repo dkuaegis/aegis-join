@@ -1,5 +1,4 @@
 import Everytime from "@/components/Everytime";
-import LoginPage from "@/components/LoginPage";
 import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
 import { Button } from "@/components/ui/button";
@@ -10,18 +9,18 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isPersonalInfoValid, setIsPersonalInfoValid] = useState(true);
   const [isSurveyValid, setIsSurveyValid] = useState(true);
-  const [showErrors, setShowErrors] = useState(false);
-
+  const [showPersonalInfoErrors, setShowPersonalInfoErrors] = useState(false);
+  const [showSurveyValidErrors, setShowSurveyValidErrors] = useState(false);
   const components = [
     <PersonalInfo
       key="personal-info"
       onValidate={setIsPersonalInfoValid}
-      showErrors={showErrors}
+      showErrors={showPersonalInfoErrors}
     />,
     <Survey
       key="survey"
       onValidate={setIsSurveyValid}
-      isValid={isSurveyValid}
+      showErrors={showSurveyValidErrors}
     />,
     <Everytime key="everytime" />,
   ];
@@ -47,22 +46,25 @@ function App() {
   }, []);
 
   const handleNext = () => {
-    if (currentStep === 1 && !isPersonalInfoValid) {
-      setShowErrors(true);
+    if (currentStep === 0 && !isPersonalInfoValid) {
+      setShowPersonalInfoErrors(true);
       return;
     }
     if (currentStep === 2 && !isSurveyValid) {
-      setIsSurveyValid(false);
+      setShowSurveyValidErrors(true);
       return;
     }
     if (currentStep < totalSteps) {
-      setShowErrors(false);
+      setShowPersonalInfoErrors(false);
+      setShowSurveyValidErrors(false);
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handlePrevious = () => {
     if (currentStep > 1) {
+      setShowPersonalInfoErrors(false);
+      setShowSurveyValidErrors(false);
       setCurrentStep(currentStep - 1);
     }
   };
@@ -71,9 +73,9 @@ function App() {
     return null;
   }
 
-  if (!isAuthenticated) {
-    return <LoginPage />;
-  }
+  // if (!isAuthenticated) {
+  //   return <LoginPage />;
+  // }
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">

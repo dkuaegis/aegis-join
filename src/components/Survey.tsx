@@ -113,10 +113,10 @@ function isETC(field: InterestField): boolean {
 
 function Survey({
   onValidate,
-  isValid,
+  showErrors,
 }: {
   onValidate: (isValid: boolean) => void;
-  isValid: boolean;
+  showErrors: boolean;
 }) {
   const [interestEtcField, setInterestEtcField] = useState<
     Map<InterestField, string>
@@ -217,7 +217,7 @@ function Survey({
 
       <p
         className={`text-red-500 text-xs ${
-          !isValid &&
+          showErrors &&
           !Array.from(checkBox.values()).some((isChecked) => isChecked)
             ? "visibility-visible opacity-100"
             : "visibility-hidden opacity-0"
@@ -229,7 +229,9 @@ function Survey({
       <div className="space-y-2">
         <Label htmlFor="joinReason" className="flex items-end text-xl">
           가입 이유{" "}
-          <span className="pb-1 pl-2 text-red-500 text-xs ">
+          <span
+            className={`pb-1 pl-2 text-red-500 text-xs ${showErrors ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
+          >
             *필수 항목입니다
           </span>
         </Label>
