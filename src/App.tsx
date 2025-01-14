@@ -1,4 +1,5 @@
 import Everytime from "@/components/Everytime";
+import LoginPage from "@/components/LoginPage";
 import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
 import { Button } from "@/components/ui/button";
@@ -73,9 +74,9 @@ function App() {
     return null;
   }
 
-  // if (!isAuthenticated) {
-  //   return <LoginPage />;
-  // }
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
