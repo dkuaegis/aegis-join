@@ -95,7 +95,6 @@ function Survey({
   };
 
   useEffect(() => {
-  
     setSurveyForm({
       interestFields: Array.from(checkBox.entries())
         .filter(([_,isChecked]) => isChecked)
@@ -104,9 +103,8 @@ function Survey({
       registrationReason,
       feedBack
     });
-    console.log(surveyForm);
     validateSurveyForm();
-  },[interestEtcField, registrationReason, feedBack, checkBox,surveyForm]);
+  },[interestEtcField, registrationReason, feedBack, checkBox]);
 
   function checkedItemHandler(isChecked:boolean | string, id: InterestField) { 
     if(typeof isChecked === 'boolean') {

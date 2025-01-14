@@ -12,8 +12,6 @@ const EtcInput = React.forwardRef<
 >(({ className, onValueChange, ...props }, ref) => {
   const [value, setValue] = React.useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.style.height = "auto"; 
-    e.target.style.height = `${e.target.scrollHeight}px`; 
     const newValue = e.target.value;
     setValue(newValue);
     onValueChange?.(newValue);

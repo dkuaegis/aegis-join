@@ -10,10 +10,12 @@ const Textarea = React.forwardRef<
   HTMLTextAreaElement,
   TextareaProps
 >(({ className, onValueChange, ...props }, ref) => {
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState(props.defaultValue || "");
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.target.style.height = "auto"; 
-    e.target.style.height = `${e.target.scrollHeight}px`; 
+    requestAnimationFrame(() => {
+      e.target.style.height = "auto"; 
+      e.target.style.height = `${e.target.scrollHeight}px`; 
+    });
     const newValue = e.target.value;
     setValue(newValue);
     onValueChange?.(newValue);
