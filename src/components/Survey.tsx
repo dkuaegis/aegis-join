@@ -11,7 +11,7 @@ interface InterestItem {
   category?: string;
 }
 
-export const interests: InterestItem[] = [
+ const interests: InterestItem[] = [
   // 보안
   { id: InterestField.SECURITY_WEBHACKING, description: "웹해킹", category: "보안" },
   { id: InterestField.SECURITY_SYSTEMHACKING, description: "시스템해킹", category: "보안" },
@@ -68,7 +68,13 @@ function isETC(field: InterestField): boolean {
   return groupedETC.has(field);
 }
 
-function Survey() {
+function Survey({
+  onValidate,
+  isValid,
+}: {
+  onValidate: (isValid: boolean) => void;
+  isValid: boolean;
+}) {
   const [interestEtcField, setInterestEtcField] = useState<Map<InterestField,string>>(new Map);
   const [registrationReason, setRegistrationReason] = useState<string>("");
   const [feedBack, setFeedBack] = useState<string>("");
@@ -76,7 +82,20 @@ function Survey() {
 
   const [surveyForm, setSurveyForm] = useState<SurveyForm>();
 
+  const validateSurveyForm = () => {
+    // 가입 이유가 비어있지 않고 체크박스 중 하나라도 선택되었을 때 true
+    const isRegistrationReasonValid = registrationReason.trim() !== "";
+    const isAnyCheckboxChecked = Array.from(checkBox.values()).some((isChecked) => isChecked);
+  
+    if (isRegistrationReasonValid && isAnyCheckboxChecked) {
+      onValidate(true);
+    } else {
+      onValidate(false);
+    }
+  };
+
   useEffect(() => {
+  
     setSurveyForm({
       interestFields: Array.from(checkBox.entries())
         .filter(([_,isChecked]) => isChecked)
@@ -86,7 +105,8 @@ function Survey() {
       feedBack
     });
     console.log(surveyForm);
-  },[interestEtcField, registrationReason, feedBack, checkBox]);
+    validateSurveyForm();
+  },[interestEtcField, registrationReason, feedBack, checkBox,surveyForm]);
 
   function checkedItemHandler(isChecked:boolean | string, id: InterestField) { 
     if(typeof isChecked === 'boolean') {
@@ -98,13 +118,8 @@ function Survey() {
     }
   }
 
-  const handleFeedbackTextareaChange = (value: string) => {
-    setFeedBack(value);
-  }
-
-  const handleReasonTextareaChange = (value: string) => {
-    setRegistrationReason(value);
-  }
+  const handleFeedbackTextareaChange = (value: string) => setFeedBack(value);
+  const handleReasonTextareaChange = (value: string) => setRegistrationReason(value);
 
   const handleEtcTextareaChange = (field: InterestField,value: string) => {
     setInterestEtcField((prev) => {
@@ -121,16 +136,18 @@ function Survey() {
         <Label>관심분야 (다중 선택 가능)</Label>
         <div className="space-y-4">
           {Object.entries(groupedInterests).map(([category, fields]) => (
-            <div key={category} className="space-y-2">
+            <div key={category} className="my-4">
               <Label className="font-medium text-xl">{category}</Label>
-              <div className="ml-4 space-y-4">
+              <div className="mx-4 mt-2 grid gap-y-4">
                 {fields.map((field) => (
                   <>
                   <div key={field.id} className="flex items-center space-x-2">
                     <Checkbox id={field.id} onCheckedChange={(checked) => checkedItemHandler(checked, field.id)}  />
                     <Label htmlFor={field.id}>{field.description}</Label>
-                    {checkBox.get(field.id) && isETC(field.id) &&
+                    {isETC(field.id) &&
                     <EtcInput 
+                      className={`${checkBox.get(field.id) ?
+                      "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
                       id={field.id}
                       name={field.id} 
                       placeholder="기타 관심 분야를 작성해주세요"
@@ -146,9 +163,13 @@ function Survey() {
           ))}
         </div>
       </div>
-
+      
+      <p className={`text-red-500 text-xs ${!isValid && !Array.from(checkBox.values()).some((isChecked) => isChecked)?
+        "visibility-visible opacity-100" : "visibility-hidden opacity-0"
+      }`}>적어도 하나의 분야를 선택해주세요!</p>
+      
       <div className="space-y-2">
-        <Label htmlFor="joinReason" className="text-xl">가입 이유</Label>
+        <Label htmlFor="joinReason" className="text-xl">가입 이유 <span className="text-red-500 text-xs">&nbsp;*필수 항목입니다</span></Label>
         <Textarea
           id="joinReason"
           name="joinReason"
@@ -160,6 +181,7 @@ function Survey() {
 
       <div className="space-y-2">
         <Label htmlFor="messageToManagement" className="text-xl">운영진에게 하고 싶은 말</Label>
+        
         <Textarea
           id="messageToManagement"
           name="messageToManagement"
