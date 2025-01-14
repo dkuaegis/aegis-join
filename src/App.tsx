@@ -72,9 +72,9 @@ function App() {
     return null;
   }
 
-  // if (!isAuthenticated) {
-  //   return <LoginPage />;
-  // }
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
