@@ -170,10 +170,10 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="phoneNumber">전화번호</Label>
         <Input
+          type="tel"
           id="phoneNumber"
           value={phoneNumber}
           onChange={(e) => {
-            // 숫자만 남기기
             const rawValue = e.target.value.replace(/[^0-9]/g, "");
 
             // 형식 적용
@@ -202,7 +202,8 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="department">소속</Label>
         <Select value={department} onValueChange={setDepartment}>
-          <SelectTrigger>
+          <SelectTrigger
+            className={errors.phoneNumber && showErrors ? "border-red-500" : ""}>
             <SelectValue placeholder="학과 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -227,7 +228,8 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="academicStatus">모집 학기 기준 학적</Label>
         <Select value={academicStatus} onValueChange={setAcademicStatus}>
-          <SelectTrigger>
+          <SelectTrigger
+            className={errors.phoneNumber && showErrors ? "border-red-500" : ""}>
             <SelectValue placeholder="학적 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -245,7 +247,8 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="academicYear">모집 학기 기준 학년</Label>
         <Select value={academicYear} onValueChange={setAcademicYear}>
-          <SelectTrigger>
+          <SelectTrigger
+            className={errors.phoneNumber && showErrors ? "border-red-500" : ""}>
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -265,7 +268,8 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="academicSemester">모집 학기 기준 학기</Label>
         <Select value={academicSemester} onValueChange={setAcademicSemester}>
-          <SelectTrigger>
+          <SelectTrigger
+            className={errors.phoneNumber && showErrors ? "border-red-500" : ""}>
             <SelectValue placeholder="학기 선택" />
           </SelectTrigger>
           <SelectContent>
