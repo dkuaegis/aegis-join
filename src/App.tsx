@@ -9,6 +9,7 @@ function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isPersonalInfoValid, setIsPersonalInfoValid] = useState(true);
+  const [isSurveyValid, setIsSurveyValid] = useState(true);
   const [showErrors, setShowErrors] = useState(false);
 
   const components = [
@@ -17,7 +18,11 @@ function App() {
       onValidate={setIsPersonalInfoValid}
       showErrors={showErrors}
     />,
-    <Survey key="survey" />,
+    <Survey 
+    key="survey"
+    onValidate={setIsSurveyValid}
+    isValid={isSurveyValid}
+    />,
     <Everytime key="everytime" />,
   ];
   const totalSteps = components.length;
@@ -44,6 +49,10 @@ function App() {
   const handleNext = () => {
     if (currentStep === 1 && !isPersonalInfoValid) {
       setShowErrors(true);
+      return;
+    } else
+    if (currentStep === 2 && !isSurveyValid) {
+      setIsSurveyValid(false);
       return;
     }
 
@@ -80,13 +89,17 @@ function App() {
 
       <div className="flex justify-between">
         {currentStep > 1 && (
-          <Button type="button" onClick={handlePrevious}>
+          <Button 
+          type="button" 
+          onClick={handlePrevious}
+          >
             이전
           </Button>
         )}
         {currentStep < totalSteps && (
           <Button
             type="button"
+            variant={(!isPersonalInfoValid && currentStep === 1) || (!isSurveyValid && currentStep === 2) ? "secondary" : "default"}
             onClick={handleNext}
             className={currentStep === 1 ? "ml-auto" : ""}
           >
