@@ -72,9 +72,9 @@ function App() {
     return null;
   }
 
-  if (!isAuthenticated) {
-    return <LoginPage />;
-  }
+  // if (!isAuthenticated) {
+  //   return <LoginPage />;
+  // }
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
@@ -99,7 +99,7 @@ function App() {
         {currentStep < totalSteps && (
           <Button
             type="button"
-            variant={!(isPersonalInfoValid && isSurveyValid) ? "secondary" : "default"}
+            variant={(!isPersonalInfoValid && currentStep === 1) || (!isSurveyValid && currentStep === 2) ? "secondary" : "default"}
             onClick={handleNext}
             className={currentStep === 1 ? "ml-auto" : ""}
           >

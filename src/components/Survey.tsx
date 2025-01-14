@@ -19,16 +19,19 @@ interface InterestItem {
   { id: InterestField.SECURITY_FORENSIC, description: "포렌식", category: "보안" },
   { id: InterestField.SECURITY_MALWARE, description: "악성코드분석", category: "보안" },
   { id: InterestField.SECURITY_CRYPTOGRAPHY, description: "암호학", category: "보안" },
+  { id: InterestField.SECURITY_NOT_SURE, description: "분야를 아직 정하지 못 했어요", category: "보안" },
   { id: InterestField.SECURITY_ETC, description: "기타", category: "보안" },
 
   // 웹
   { id: InterestField.WEB_FRONTEND, description: "프론트엔드", category: "웹" },
   { id: InterestField.WEB_BACKEND, description: "백엔드", category: "웹" },
+  { id: InterestField.WEB_NOT_SURE, description: "분야를 아직 정하지 못 했어요", category: "웹" },
   { id: InterestField.WEB_ETC, description: "기타", category: "웹" },
 
   // 게임
   { id: InterestField.GAME_CLIENT, description: "클라이언트", category: "게임" },
   { id: InterestField.GAME_SERVER, description: "서버", category: "게임" },
+  { id: InterestField.GAME_NOT_SURE, description: "분야를 아직 정하지 못 했어요", category: "게임" },
   { id: InterestField.GAME_ETC, description: "기타", category: "게임" },
 
   // 기타
@@ -167,7 +170,7 @@ function Survey({
       }`}>적어도 하나의 분야를 선택해주세요!</p>
       
       <div className="space-y-2">
-        <Label htmlFor="joinReason" className="text-xl">가입 이유 <span className="text-red-500 text-xs">&nbsp;*필수 항목입니다</span></Label>
+        <Label htmlFor="joinReason" className="flex text-xl items-end">가입 이유 <span className="text-red-500 text-xs pl-2 pb-1 ">*필수 항목입니다</span></Label>
         <Textarea
           id="joinReason"
           name="joinReason"
