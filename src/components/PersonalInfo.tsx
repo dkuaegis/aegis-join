@@ -174,7 +174,6 @@ function PersonalInfo({
           id="phoneNumber"
           value={phoneNumber}
           onChange={(e) => {
-            // 숫자만 남기기
             const rawValue = e.target.value.replace(/[^0-9]/g, "");
 
             // 형식 적용

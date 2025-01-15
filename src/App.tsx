@@ -2,6 +2,8 @@ import Everytime from "@/components/Everytime";
 import LoginPage from "@/components/LoginPage";
 import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
+import Discord from "./components/Discord";
+import Payment from "@/components/Payment";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
@@ -24,6 +26,8 @@ function App() {
       showErrors={showSurveyValidErrors}
     />,
     <Everytime key="everytime" />,
+    <Discord key="discord" />,
+    <Payment key="payment" />,
   ];
   const totalSteps = components.length;
 
