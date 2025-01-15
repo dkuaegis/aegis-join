@@ -132,11 +132,17 @@ function Survey({
   const validateSurveyForm = useCallback(() => {
     // 가입 이유가 비어있지 않고 체크박스가 활성화 되어야 valid. 하지만 etc 필드가 체크됐을 때, 비어있으면 안된다.
     // 체크박스의 활성화 됨을 볼 때, 어느 체크박스 하나라도 활성화 되어있으면 ok.
-  
+
     const isRegistrationReasonValid = registrationReason.trim() !== "";
-    const isCheckBoxValid = Array.from(checkBox.values()).some((isChecked) => isChecked);
+    const isCheckBoxValid = Array.from(checkBox.values()).some(
+      (isChecked) => isChecked
+    );
     const isEveryEtcValid = Array.from(checkBox.entries()).every(
-      ([field, isChecked]) => !isChecked || (isETC(field) ? ((interestEtcField.get(field) ?? "").trim() !== "") : true)
+      ([field, isChecked]) =>
+        !isChecked ||
+        (isETC(field)
+          ? (interestEtcField.get(field) ?? "").trim() !== ""
+          : true)
     );
 
     if (isRegistrationReasonValid && isCheckBoxValid && isEveryEtcValid) {
@@ -210,12 +216,19 @@ function Survey({
                         />
                       )}
                     </div>
-                    {isETC(field.id) && (<p
-                      className={`pl-2 text-red-500 text-xs ${(showErrors && checkBox.get(field.id) &&
-                        (interestEtcField.get(field.id)?? "").trim() === "") ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
-                    >
+                    {isETC(field.id) && (
+                      <p
+                        className={`pl-2 text-red-500 text-xs ${
+                          showErrors &&
+                          checkBox.get(field.id) &&
+                          (interestEtcField.get(field.id) ?? "").trim() === ""
+                            ? "visibility-visible opacity-100"
+                            : "visibility-hidden opacity-0"
+                        }`}
+                      >
                         기타 분야를 작성해주세요
-                    </p> )}
+                      </p>
+                    )}
                   </>
                 ))}
               </div>
