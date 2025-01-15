@@ -2,6 +2,7 @@ import Everytime from "@/components/Everytime";
 import LoginPage from "@/components/LoginPage";
 import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
+import Payment from "@/components/Payment";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
@@ -24,6 +25,7 @@ function App() {
       isValid={isSurveyValid}
     />,
     <Everytime key="everytime" />,
+    <Payment key="payment" />,
   ];
   const totalSteps = components.length;
 
