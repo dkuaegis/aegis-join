@@ -47,7 +47,7 @@ function App() {
   }, []);
 
   const handleNext = () => {
-    if (currentStep === 0 && !isPersonalInfoValid) {
+    if (currentStep === 1 && !isPersonalInfoValid) {
       setShowPersonalInfoErrors(true);
       return;
     }

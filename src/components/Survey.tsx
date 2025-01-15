@@ -135,13 +135,16 @@ function Survey({
     const isAnyCheckboxChecked = Array.from(checkBox.values()).some(
       (isChecked) => isChecked
     );
+    const isAnyEtcValid = Array.from(interestEtcField.entries()).some(
+      ([field, value]) => checkBox.get(field) && value.trim() !== ""
+    );
 
-    if (isRegistrationReasonValid && isAnyCheckboxChecked) {
+    if (isRegistrationReasonValid && isAnyCheckboxChecked && isAnyEtcValid) {
       onValidate(true);
     } else {
       onValidate(false);
     }
-  }, [registrationReason, checkBox, onValidate]);
+  }, [interestEtcField, registrationReason, checkBox, onValidate]);
 
   useEffect(() => {
     console.log(feedBack, interestEtcField);
@@ -207,6 +210,16 @@ function Survey({
                         />
                       )}
                     </div>
+                    {showErrors && 
+                      isETC(field.id) && 
+                      checkBox.get(field.id) && 
+                      (interestEtcField.get(field.id)?? "").trim() === "" && 
+                      (<p
+                        className={`pb-1 pl-2 text-red-500 text-xs ${showErrors ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
+                      >
+                        기타 분야를 작성해주세요
+                      </p>)
+                      }
                   </>
                 ))}
               </div>
