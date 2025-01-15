@@ -130,16 +130,16 @@ function Survey({
   // const [surveyForm, setSurveyForm] = useState<SurveyForm>();
 
   const validateSurveyForm = useCallback(() => {
-    // 가입 이유가 비어있지 않고 체크박스 중 하나라도 선택되었을 때 true
+    // 가입 이유가 비어있지 않고 체크박스가 활성화 되어야 valid. 하지만 etc 필드가 체크됐을 때, 비어있으면 안된다.
+    // 체크박스의 활성화 됨을 볼 때, 어느 체크박스 하나라도 활성화 되어있으면 ok.
+  
     const isRegistrationReasonValid = registrationReason.trim() !== "";
-    const isAnyCheckboxChecked = Array.from(checkBox.values()).some(
-      (isChecked) => isChecked
-    );
-    const isAnyEtcValid = Array.from(interestEtcField.entries()).some(
-      ([field, value]) => checkBox.get(field) && value.trim() !== ""
+    const isCheckBoxValid = Array.from(checkBox.values()).some((isChecked) => isChecked);
+    const isEveryEtcValid = Array.from(checkBox.entries()).every(
+      ([field, isChecked]) => !isChecked || (isETC(field) ? ((interestEtcField.get(field) ?? "").trim() !== "") : true)
     );
 
-    if (isRegistrationReasonValid && isAnyCheckboxChecked && isAnyEtcValid) {
+    if (isRegistrationReasonValid && isCheckBoxValid && isEveryEtcValid) {
       onValidate(true);
     } else {
       onValidate(false);
@@ -180,7 +180,7 @@ function Survey({
         <Label>관심분야 (다중 선택 가능)</Label>
         <div className="space-y-4">
           {Object.entries(groupedInterests).map(([category, fields]) => (
-            <div key={category} className="my-4">
+            <div key={category} className="mt-4">
               <Label className="font-medium text-xl">{category}</Label>
               <div className="mx-4 mt-2 grid gap-y-4">
                 {fields.map((field) => (
@@ -210,16 +210,12 @@ function Survey({
                         />
                       )}
                     </div>
-                    {showErrors && 
-                      isETC(field.id) && 
-                      checkBox.get(field.id) && 
-                      (interestEtcField.get(field.id)?? "").trim() === "" && 
-                      (<p
-                        className={`pb-1 pl-2 text-red-500 text-xs ${showErrors ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
-                      >
+                    {isETC(field.id) && (<p
+                      className={`pl-2 text-red-500 text-xs ${(showErrors && checkBox.get(field.id) &&
+                        (interestEtcField.get(field.id)?? "").trim() === "") ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
+                    >
                         기타 분야를 작성해주세요
-                      </p>)
-                      }
+                    </p> )}
                   </>
                 ))}
               </div>
