@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { InterestField } from "@/types/api/survey";
 import { useCallback, useEffect, useState } from "react";
+import { GlobeLock, CodeXml, Gamepad2, Ellipsis} from "lucide-react";
 
 interface InterestItem {
   id: InterestField;
@@ -82,6 +83,8 @@ const interests: InterestItem[] = [
   { id: InterestField.ETC, description: "기타" },
 ];
 
+
+
 const groupedInterests = interests.reduce(
   (acc, interest) => {
     if (interest.category) {
@@ -106,6 +109,13 @@ const groupedETC = new Set([
   InterestField.GAME_ETC,
   InterestField.ETC,
 ]);
+
+const LabelIcons: Record<string, React.ComponentType> = {
+  보안: GlobeLock,
+  웹:  CodeXml,
+  게임: Gamepad2,
+  기타: Ellipsis,
+};
 
 function isETC(field: InterestField): boolean {
   return groupedETC.has(field);
@@ -185,9 +195,14 @@ function Survey({
       <div className="space-y-2">
         <Label>관심분야 (다중 선택 가능)</Label>
         <div className="space-y-4">
-          {Object.entries(groupedInterests).map(([category, fields]) => (
+          {Object.entries(groupedInterests).map(([category, fields]) => {
+            const IconComponent = LabelIcons[category]; 
+            return (
             <div key={category} className="mt-4">
-              <Label className="font-medium text-xl">{category}</Label>
+              <div className="flex">
+              <IconComponent />
+              <Label className="font-medium text-xl pl-2">{category}</Label>
+              </div>
               <div className="mx-4 mt-2 grid gap-y-4">
                 {fields.map((field) => (
                   <>
@@ -233,7 +248,7 @@ function Survey({
                 ))}
               </div>
             </div>
-          ))}
+          )})}
         </div>
       </div>
 
