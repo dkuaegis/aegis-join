@@ -82,7 +82,7 @@ function Payment() {
                 {senderMessage}
             </p>
             )}
-            <div>송금할 금액:{membershipFee}</div>
+            <div>송금할 금액: {membershipFee.toLocaleString()}원</div>
             <div>예금주명: 윤성민</div>
         </AlertDescription>
         </Alert>
