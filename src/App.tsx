@@ -1,13 +1,14 @@
 import Everytime from "@/components/Everytime";
 import LoginPage from "@/components/LoginPage";
-import Payment from "@/components/Payment";
 import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
+import Discord from "./components/Discord";
+import Payment from "@/components/Payment";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import Coupon from "./components/Coupon";
-import Discord from "./components/Discord";
+
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
