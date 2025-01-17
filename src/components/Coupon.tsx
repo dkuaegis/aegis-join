@@ -75,7 +75,7 @@ export default function Coupon() {
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
-  const [requestSuccess,setRequestSuccess] = useState<boolean | null>(null);
+  const [requestSuccess, setRequestSuccess] = useState<boolean | null>(null);
 
   const table = useReactTable({
     data: coupons,
@@ -90,43 +90,41 @@ export default function Coupon() {
     },
   });
 
-
   const postCoupon = async () => {
     const payload = selectedCoupons;
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/payments`, {
+        `${import.meta.env.VITE_API_URL}/api/payments`,
+        {
           // credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
-        });
-
-        if(!response.ok) {
-          setRequestSuccess(false);
-          throw new Error("에러남");
         }
-        setRequestSuccess(true);
-        
-    } catch (err: unknown) {
-          
-    }
+      );
+
+      if (!response.ok) {
+        setRequestSuccess(false);
+        throw new Error("에러남");
+      }
+      setRequestSuccess(true);
+    } catch (err: unknown) {}
     setTimeout(() => setRequestSuccess(null), 1500);
-  }
+  };
 
   useEffect(() => {
     // 이 컴포넌트가 마운트 될 때 실행되는 fetch
     const getCoupon = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/join/coupons`,
+          `${import.meta.env.VITE_API_URL}/api/join/coupons`
           // {
           //   credentials: "include",
-          // } 
+          // }
         );
-        if(!response.ok) {
+        if (!response.ok) {
           throw new Error("에러남");
         }
 
@@ -148,18 +146,14 @@ export default function Coupon() {
         return row?.original.issuedCouponId; // 해당 행의 `issuedCouponId` 반환
       })
       .filter((id): id is number => id !== undefined); // 유효한 값만 필터링
-      
+
     setSelectedCoupons(selectedRowIds);
   }, [rowSelection, table]);
 
-  const totalDiscountPrice = selectedCoupons.reduce(
-    (total, couponID) => {
-      const coupon = coupons.find((c) => c.issuedCouponId === couponID);
-      return total + (coupon?.discountAmount || 0);
-    },
-    0
-  );
-
+  const totalDiscountPrice = selectedCoupons.reduce((total, couponID) => {
+    const coupon = coupons.find((c) => c.issuedCouponId === couponID);
+    return total + (coupon?.discountAmount || 0);
+  }, 0);
 
   const hasRows = table.getRowModel().rows.length > 0; // 데이터 존재 여부 확인
 
@@ -215,12 +209,7 @@ export default function Coupon() {
                   총 할인 금액: {totalDiscountPrice.toLocaleString()}원
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button
-                    onClick={
-                      postCoupon
-                    }
-                  >쿠폰 사용하기
-                  </Button>
+                  <Button onClick={postCoupon}>쿠폰 사용하기</Button>
                 </TableCell>
               </TableRow>
             </>
@@ -238,10 +227,11 @@ export default function Coupon() {
       </Table>
       {requestSuccess === null ? null : (
         <p className="items-center text-2xl">
-          {requestSuccess ? "쿠폰이 적용되었습니다!" : "쿠폰 적용이 실패하였습니다."}
+          {requestSuccess
+            ? "쿠폰이 적용되었습니다!"
+            : "쿠폰 적용이 실패하였습니다."}
         </p>
-        )
-      }
+      )}
     </div>
   );
 }
