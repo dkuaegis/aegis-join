@@ -1,13 +1,13 @@
 import Everytime from "@/components/Everytime";
 import LoginPage from "@/components/LoginPage";
+import Payment from "@/components/Payment";
 import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
-import Discord from "./components/Discord";
-import Payment from "@/components/Payment";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import Coupon from "./components/Coupon";
+import Discord from "./components/Discord";
 
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -86,7 +86,7 @@ function App() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-md px-4 py-8 mb-4">
+    <div className="mx-auto mb-4 w-full max-w-md px-4 py-8">
       <div className="mb-6">
         <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
         <Progress
@@ -96,32 +96,29 @@ function App() {
       </div>
       <div className="mb-6 space-y-6">{components[currentStep - 1]}</div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm">
-  <div className="mx-auto w-full max-w-md px-4 py-4">
-    <div className="flex justify-between">
-        {currentStep > 1 && (
-          <Button 
-          type="button" 
-          onClick={handlePrevious}
-          >
-            이전
-          </Button>
-        )}
-        {currentStep < totalSteps && (
-          <Button
-            type="button"
-            variant={
-              (!isPersonalInfoValid && currentStep === 1) ||
-              (!isSurveyValid && currentStep === 2)
-                ? "secondary"
-                : "default"
-            }
-            onClick={handleNext}
-            className={currentStep === 1 ? "ml-auto" : ""}
-          >
-            다음
-          </Button>
-        )}
+      <div className="fixed right-0 bottom-0 left-0 bg-background/80 backdrop-blur-sm">
+        <div className="mx-auto w-full max-w-md px-4 py-4">
+          <div className="flex justify-between">
+            {currentStep > 1 && (
+              <Button type="button" onClick={handlePrevious}>
+                이전
+              </Button>
+            )}
+            {currentStep < totalSteps && (
+              <Button
+                type="button"
+                variant={
+                  (!isPersonalInfoValid && currentStep === 1) ||
+                  (!isSurveyValid && currentStep === 2)
+                    ? "secondary"
+                    : "default"
+                }
+                onClick={handleNext}
+                className={currentStep === 1 ? "ml-auto" : ""}
+              >
+                다음
+              </Button>
+            )}
           </div>
         </div>
       </div>

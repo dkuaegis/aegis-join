@@ -39,7 +39,9 @@ export const columns: ColumnDef<CouponData>[] = [
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllRowsSelected()}
-        onCheckedChange={() => table.toggleAllRowsSelected(!table.getIsAllRowsSelected())}
+        onCheckedChange={() =>
+          table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+        }
       />
     ),
     cell: ({ row }) => (
@@ -71,11 +73,15 @@ export const columns: ColumnDef<CouponData>[] = [
     ),
     cell: ({ row }) => row.getValue<number>("discountAmount").toLocaleString(),
     meta: {
-      style: { minWidth: "150px", maxWidth: "150px", minHeight: "150px", maxHeight: "150px"}, // 최소 및 최대 너비 설정
+      style: {
+        minWidth: "150px",
+        maxWidth: "150px",
+        minHeight: "150px",
+        maxHeight: "150px",
+      }, // 최소 및 최대 너비 설정
     },
   },
 ];
-
 
 export default function Coupon() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -106,7 +112,7 @@ export default function Coupon() {
   return (
     <div className="space-y-4">
       <h3 className="font-semibold text-lg">쿠폰함</h3>
-      <Table >
+      <Table>
         {hasRows && ( // 데이터가 있을 때만 헤더 렌더링
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -147,7 +153,11 @@ export default function Coupon() {
               ))}
               {/* 총 할인 금액과 버튼 추가 */}
               <TableRow>
-                <TableCell className="font-medium text-lg" colSpan={2} style={{ overflow: "hidden", width: "100%", height: "100%" }}>
+                <TableCell
+                  className="font-medium text-lg"
+                  colSpan={2}
+                  style={{ overflow: "hidden", width: "100%", height: "100%" }}
+                >
                   총 할인 금액: {totalDiscountPrice.toLocaleString()}원
                 </TableCell>
                 <TableCell className="text-right">

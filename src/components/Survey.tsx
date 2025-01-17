@@ -3,8 +3,8 @@ import { EtcInput } from "@/components/ui/etcinput";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { InterestField } from "@/types/api/survey";
+import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { GlobeLock, CodeXml, Gamepad2, Ellipsis} from "lucide-react";
 
 interface InterestItem {
   id: InterestField;
@@ -83,8 +83,6 @@ const interests: InterestItem[] = [
   { id: InterestField.ETC, description: "기타" },
 ];
 
-
-
 const groupedInterests = interests.reduce(
   (acc, interest) => {
     if (interest.category) {
@@ -112,7 +110,7 @@ const groupedETC = new Set([
 
 const LabelIcons: Record<string, React.ComponentType> = {
   보안: GlobeLock,
-  웹:  CodeXml,
+  웹: CodeXml,
   게임: Gamepad2,
   기타: Ellipsis,
 };
@@ -173,7 +171,7 @@ function Survey({
     return () => {
       console.log("UNMOUNTED");
     };
-  } , []);
+  }, []);
 
   function checkedItemHandler(isChecked: boolean | string, id: InterestField) {
     if (typeof isChecked === "boolean") {
@@ -204,59 +202,63 @@ function Survey({
         <Label>관심분야 (다중 선택 가능)</Label>
         <div className="space-y-4">
           {Object.entries(groupedInterests).map(([category, fields]) => {
-            const IconComponent = LabelIcons[category]; 
+            const IconComponent = LabelIcons[category];
             return (
-            <div key={category} className="mt-4">
-              <div className="flex">
-              <IconComponent />
-              <Label className="font-medium text-xl pl-2">{category}</Label>
-              </div>
-              <div className="mx-4 mt-2 grid gap-y-4">
-                {fields.map((field) => (
-                  <>
-                    <div key={field.id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={field.id}
-                        onCheckedChange={(checked) =>
-                          checkedItemHandler(checked, field.id)
-                        }
-                      />
-                      <Label htmlFor={field.id}>{field.description}</Label>
+              <div key={category} className="mt-4">
+                <div className="flex">
+                  <IconComponent />
+                  <Label className="pl-2 font-medium text-xl">{category}</Label>
+                </div>
+                <div className="mx-4 mt-2 grid gap-y-4">
+                  {fields.map((field) => (
+                    <>
+                      <div
+                        key={field.id}
+                        className="flex items-center space-x-2"
+                      >
+                        <Checkbox
+                          id={field.id}
+                          onCheckedChange={(checked) =>
+                            checkedItemHandler(checked, field.id)
+                          }
+                        />
+                        <Label htmlFor={field.id}>{field.description}</Label>
+                        {isETC(field.id) && (
+                          <EtcInput
+                            className={`${
+                              checkBox.get(field.id)
+                                ? "visibility-visible opacity-100"
+                                : "visibility-hidden opacity-0"
+                            }`}
+                            id={field.id}
+                            name={field.id}
+                            placeholder="기타 관심 분야를 작성해주세요"
+                            maxLength={20}
+                            onValueChange={(value) =>
+                              handleEtcTextareaChange(field.id, value)
+                            }
+                          />
+                        )}
+                      </div>
                       {isETC(field.id) && (
-                        <EtcInput
-                          className={`${
-                            checkBox.get(field.id)
+                        <p
+                          className={`pl-2 text-red-500 text-xs ${
+                            showErrors &&
+                            checkBox.get(field.id) &&
+                            (interestEtcField.get(field.id) ?? "").trim() === ""
                               ? "visibility-visible opacity-100"
                               : "visibility-hidden opacity-0"
                           }`}
-                          id={field.id}
-                          name={field.id}
-                          placeholder="기타 관심 분야를 작성해주세요"
-                          maxLength={20}
-                          onValueChange={(value) =>
-                            handleEtcTextareaChange(field.id, value)
-                          }
-                        />
+                        >
+                          기타 분야를 작성해주세요
+                        </p>
                       )}
-                    </div>
-                    {isETC(field.id) && (
-                      <p
-                        className={`pl-2 text-red-500 text-xs ${
-                          showErrors &&
-                          checkBox.get(field.id) &&
-                          (interestEtcField.get(field.id) ?? "").trim() === ""
-                            ? "visibility-visible opacity-100"
-                            : "visibility-hidden opacity-0"
-                        }`}
-                      >
-                        기타 분야를 작성해주세요
-                      </p>
-                    )}
-                  </>
-                ))}
+                    </>
+                  ))}
+                </div>
               </div>
-            </div>
-          )})}
+            );
+          })}
         </div>
       </div>
 
