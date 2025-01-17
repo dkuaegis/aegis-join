@@ -48,11 +48,8 @@ function Discord() {
                     setIsChecking(false);
                     return;
                 }
-
                 attempts++;
                 setTimeout(poll, interval);
-
-
             } catch (err: any) {
                 setIsChecking(false);
             }

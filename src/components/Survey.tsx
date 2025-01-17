@@ -167,6 +167,14 @@ function Survey({
     validateSurveyForm();
   }, [validateSurveyForm, feedBack, interestEtcField]);
 
+  useEffect(() => {
+    console.log("MOUNTED!");
+
+    return () => {
+      console.log("UNMOUNTED");
+    };
+  } , []);
+
   function checkedItemHandler(isChecked: boolean | string, id: InterestField) {
     if (typeof isChecked === "boolean") {
       setCheckBox((prev) => {
