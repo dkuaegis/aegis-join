@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CouponData } from "@/types/api/coupon";
+import type { CouponData } from "@/types/api/coupon";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -74,7 +74,7 @@ export default function Coupon() {
   const [coupons, setCoupons] = useState<CouponData[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [requestSuccess,setRequestSuccess] = useState<boolean | null>(null);
 
   const table = useReactTable({
@@ -132,7 +132,6 @@ export default function Coupon() {
 
         const data: CouponData[] = await response.json();
         setCoupons(data);
-        console.log(data);
       } catch (error) {
         console.error(error);
       }
@@ -142,8 +141,15 @@ export default function Coupon() {
   }, []);
 
   useEffect(() => {
-    const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original.issuedCouponId);
-    setSelectedCoupons(selectedRows);
+    const selectedRowIds = Object.keys(rowSelection) // 선택된 행 ID 가져오기
+      .filter((key) => rowSelection[key]) // 선택된 행 필터링
+      .map((key) => {
+        const row = table.getRowModel().rows.find((r) => r.id === key); // 행 데이터 찾기
+        return row?.original.issuedCouponId; // 해당 행의 `issuedCouponId` 반환
+      })
+      .filter((id): id is number => id !== undefined); // 유효한 값만 필터링
+      
+    setSelectedCoupons(selectedRowIds);
   }, [rowSelection, table]);
 
   const totalDiscountPrice = selectedCoupons.reduce(
@@ -231,7 +237,7 @@ export default function Coupon() {
         </TableBody>
       </Table>
       {requestSuccess === null ? null : (
-        <p className="text-2xl items-center">
+        <p className="items-center text-2xl">
           {requestSuccess ? "쿠폰이 적용되었습니다!" : "쿠폰 적용이 실패하였습니다."}
         </p>
         )
