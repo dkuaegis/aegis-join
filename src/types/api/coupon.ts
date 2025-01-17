@@ -1,4 +1,3 @@
-
 export interface CouponData {
   issuedCouponId: number;
   memberId: number;

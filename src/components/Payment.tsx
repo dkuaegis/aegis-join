@@ -1,16 +1,89 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
+import type {
+  AcademicStatus,
+  Department,
+  Gender,
+  Grade,
+  Semester,
+} from "@/types/api/member";
 import { Copy } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+interface payInfo {
+  status: "PENDING" | "COMPLETED" | "OVERPAID" | "CANCELED";
+  expectedDepositAmount: number;
+  currentDepositAmount: number;
+}
+
+interface members {
+  id: number;
+  email: string;
+  name: string;
+  birthDate: string;
+  gender: Gender;
+  studentId: string;
+  phoneNumber: string;
+  department: Department;
+  academicStatus: AcademicStatus;
+  grade: Grade;
+  semester: Semester;
+  joinProgress: number;
+}
 
 function Payment() {
-  const membershipFee = 10000;
-
+  const [members, setMembers] = useState<members | null>(null);
+  const [payInfo, setPayInfo] = useState<payInfo | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [accountMessage, setAccountMessage] = useState<string | null>(null);
   const [senderMessage, setSenderMessage] = useState<string | null>(null);
   const [messageType, setMessageType] = useState<"success" | "error" | null>(
     null
   );
+
+  useEffect(() => {
+    const fetchPayInfo = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/join/pay-info`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch pay information");
+        }
+        const data: payInfo = await response.json();
+        console.log("Fetched pay info:", data);
+        setPayInfo(data);
+      } catch (error) {
+        console.error("Error fetching pay info:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPayInfo();
+  }, []);
+
+  useEffect(() => {
+    const fetchMemberInfo = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/join/mem-info`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch memeber information");
+        }
+        const data: members = await response.json();
+        console.log("Fetched pay info:", data);
+        setMembers(data);
+      } catch (error) {
+        console.error("Error fetching member info:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMemberInfo();
+  }, []);
 
   const copyAccountNumber = () => {
     const accountNumber = "IBK기업은행 98215064101017";
@@ -29,7 +102,6 @@ function Payment() {
   };
 
   const copySenderName = () => {
-    // 송금자명. 추후 데이터 불러오기 및 파싱 요망
     const senderName = "권대근220236";
     navigator.clipboard
       .writeText(senderName)
@@ -44,6 +116,15 @@ function Payment() {
         setTimeout(() => setSenderMessage(null), 2000);
       });
   };
+
+  // Calculate remaining amount
+  const remainingAmount = payInfo
+    ? payInfo.expectedDepositAmount - payInfo.currentDepositAmount
+    : null;
+
+  const senderName = members
+    ? `${members.name}${members.studentId.slice(-6)}`
+    : null;
 
   return (
     <div className="space-y-4">
@@ -67,8 +148,14 @@ function Payment() {
             </p>
           )}
           <div className="flex items-center">
-            {/* 송금자명. 추후데이터 불러오기 및 파싱 요망 */}
-            <span>송금자명: 권대근220236</span>
+            <span>
+              송금자명:{" "}
+              {isLoading
+                ? "로딩 중..."
+                : senderName !== null
+                  ? senderName
+                  : "정보를 불러오지 못했습니다."}
+            </span>
             <Copy
               className="ml-2 cursor-pointer text-gray-600 hover:text-gray-800"
               size={16}
@@ -82,7 +169,14 @@ function Payment() {
               {senderMessage}
             </p>
           )}
-          <div>송금할 금액: {membershipFee.toLocaleString()}원</div>
+          <div>
+            송금할 금액:{" "}
+            {isLoading
+              ? "로딩 중..."
+              : remainingAmount !== null
+                ? `${remainingAmount.toLocaleString()}원`
+                : "정보를 불러오지 못했습니다."}
+          </div>
           <div>예금주명: 윤성민</div>
         </AlertDescription>
       </Alert>

@@ -1,45 +1,45 @@
 export enum Gender {
-  male = "MALE",
-  female = "FEMALE",
+  MALE = "MALE",
+  FEMALE = "FEMALE",
 }
 
 export enum Department {
-  soft = "SOFTWARE_ENGINEERING",
-  computer = "COMPUTER_ENGINEERING",
-  mobile = "MOBILE_SYSTEM_ENGINEERING",
-  datascience = "STATISTICS_DATA_SCIENCE",
-  cyber = "CYBER_SECURITY",
-  converge = "SW_CONVERGENCE_DIVISION",
+  SOFTWARE_ENGINEERING = "SOFTWARE_ENGINEERING",
+  COMPUTER_ENGINEERING = "COMPUTER_ENGINEERING",
+  MOBILE_SYSTEM_ENGINEERING = "MOBILE_SYSTEM_ENGINEERING",
+  STATISTICS_DATA_SCIENCE = "STATISTICS_DATA_SCIENCE",
+  CYBER_SECURITY = "CYBER_SECURITY",
+  SW_CONVERGENCE_DIVISION = "SW_CONVERGENCE_DIVISION",
 }
 
 export enum AcademicStatus {
-  enroll = "ENROLLED",
-  off = "LEAVE_OF_ABSENCE",
-  graduate = "GRADUATED",
+  ENROLLED = "ENROLLED",
+  LEAVE_OF_ABSENCE = "LEAVE_OF_ABSENCE",
+  GRADUATED = "GRADUATED",
 }
 
 export enum Grade {
-  one = "ONE",
-  two = "TWO",
-  three = "THREE",
-  four = "FOUR",
-  five = "FIVE",
-  six = "SIX",
+  ONE = "ONE",
+  TWO = "TWO",
+  THREE = "THREE",
+  FOUR = "FOUR",
+  FIVE = "FIVE",
+  SIX = "SIX",
 }
 
 export enum Semester {
-  first = "FIRST",
-  second = "SECOND",
+  FIRST = "FIRST",
+  SECOND = "SECOND",
 }
 
 export enum Role {
-  guest = "ROLE_GUEST",
-  user = "ROLE_USER",
-  admin = "ROLE_ADMIN",
+  ROLE_GUEST = "ROLE_GUEST",
+  ROLE_USER = "ROLE_USER",
+  ROLE_ADMIN = "ROLE_ADMIN",
 }
 
 export interface Member {
-  birth_date: Date;
+  birth_date: string;
   gender: Gender;
   student_id: string;
   phone_number: string;
