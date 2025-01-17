@@ -10,7 +10,7 @@ import type {
 import { Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface PayInfo {
+interface payInfo {
   status: "PENDING" | "COMPLETED" | "OVERPAID" | "CANCELED";
   expectedDepositAmount: number;
   currentDepositAmount: number;
@@ -33,7 +33,7 @@ interface members {
 
 function Payment() {
   const [members, setMembers] = useState<members | null>(null);
-  const [payInfo, setPayInfo] = useState<PayInfo | null>(null);
+  const [payInfo, setPayInfo] = useState<payInfo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [accountMessage, setAccountMessage] = useState<string | null>(null);
   const [senderMessage, setSenderMessage] = useState<string | null>(null);
@@ -50,7 +50,7 @@ function Payment() {
         if (!response.ok) {
           throw new Error("Failed to fetch pay information");
         }
-        const data: PayInfo = await response.json();
+        const data: payInfo = await response.json();
         console.log("Fetched pay info:", data);
         setPayInfo(data);
       } catch (error) {
@@ -64,7 +64,7 @@ function Payment() {
   }, []);
 
   useEffect(() => {
-    const fetchPayInfo = async () => {
+    const fetchMemberInfo = async () => {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/join/mem-info`
@@ -82,7 +82,7 @@ function Payment() {
       }
     };
 
-    fetchPayInfo();
+    fetchMemberInfo();
   }, []);
 
   const copyAccountNumber = () => {
