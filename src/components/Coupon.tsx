@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { CouponData } from "@/types/api/coupon";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -16,21 +17,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { useState } from "react";
-
-// 데이터 타입 정의
-interface CouponData {
-  id: number;
-  name: string;
-  discountAmount: number;
-}
-
-// 샘플 데이터
-const data: CouponData[] = [
-  { id: 1, name: "대충 쿠폰", discountAmount: 100 },
-  { id: 2, name: "ㅇㅇ", discountAmount: 1000 },
-  { id: 3, name: "DKU", discountAmount: 2000 },
-];
+import { useEffect, useState } from "react";
 
 // 컬럼 정의
 export const columns: ColumnDef<CouponData>[] = [
@@ -54,9 +41,9 @@ export const columns: ColumnDef<CouponData>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "couponName",
     header: "쿠폰명",
-    cell: ({ row }) => row.getValue("name"),
+    cell: ({ row }) => row.getValue("couponName"),
     meta: {
       style: { width: "150px" },
     },
@@ -84,11 +71,14 @@ export const columns: ColumnDef<CouponData>[] = [
 ];
 
 export default function Coupon() {
+  const [coupons, setCoupons] = useState<CouponData[]>([]);
+  const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+  const [requestSuccess,setRequestSuccess] = useState<boolean | null>(null);
 
   const table = useReactTable({
-    data,
+    data: coupons,
     columns,
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
@@ -100,12 +90,76 @@ export default function Coupon() {
     },
   });
 
-  // 선택된 행들의 할인 총액 계산
-  const selectedRows = table.getSelectedRowModel().rows;
-  const totalDiscountPrice = selectedRows.reduce(
-    (total, row) => total + row.original.discountAmount,
+
+  const postCoupon = async () => {
+    const payload = selectedCoupons;
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/payments`, {
+          // credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if(!response.ok) {
+          setRequestSuccess(false);
+          throw new Error("에러남");
+        }
+        setRequestSuccess(true);
+        
+    } catch (err: unknown) {
+          
+    }
+    setTimeout(() => setRequestSuccess(null), 1500);
+  }
+
+  useEffect(() => {
+    // 이 컴포넌트가 마운트 될 때 실행되는 fetch
+    const getCoupon = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/join/coupons`,
+          // {
+          //   credentials: "include",
+          // } 
+        );
+        if(!response.ok) {
+          throw new Error("에러남");
+        }
+
+        const data: CouponData[] = await response.json();
+        setCoupons(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getCoupon();
+  }, []);
+
+  useEffect(() => {
+    const selectedRowIds = Object.keys(rowSelection) // 선택된 행 ID 가져오기
+      .filter((key) => rowSelection[key]) // 선택된 행 필터링
+      .map((key) => {
+        const row = table.getRowModel().rows.find((r) => r.id === key); // 행 데이터 찾기
+        return row?.original.issuedCouponId; // 해당 행의 `issuedCouponId` 반환
+      })
+      .filter((id): id is number => id !== undefined); // 유효한 값만 필터링
+      
+    setSelectedCoupons(selectedRowIds);
+  }, [rowSelection, table]);
+
+  const totalDiscountPrice = selectedCoupons.reduce(
+    (total, couponID) => {
+      const coupon = coupons.find((c) => c.issuedCouponId === couponID);
+      return total + (coupon?.discountAmount || 0);
+    },
     0
   );
+
 
   const hasRows = table.getRowModel().rows.length > 0; // 데이터 존재 여부 확인
 
@@ -161,7 +215,12 @@ export default function Coupon() {
                   총 할인 금액: {totalDiscountPrice.toLocaleString()}원
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button>쿠폰 적용하기</Button>
+                  <Button
+                    onClick={
+                      postCoupon
+                    }
+                  >쿠폰 사용하기
+                  </Button>
                 </TableCell>
               </TableRow>
             </>
@@ -177,6 +236,12 @@ export default function Coupon() {
           )}
         </TableBody>
       </Table>
+      {requestSuccess === null ? null : (
+        <p className="items-center text-2xl">
+          {requestSuccess ? "쿠폰이 적용되었습니다!" : "쿠폰 적용이 실패하였습니다."}
+        </p>
+        )
+      }
     </div>
   );
 }
