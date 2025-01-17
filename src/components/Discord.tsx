@@ -18,7 +18,7 @@ function Discord() {
   useEffect(() => {
     const fetchDiscordLink = async () => {
       try {
-        const response = await fetch(import.meta.env.VITE_GET_DISCORD_URL);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/discord/link`);
         if (!response.ok) {
           throw new Error(`HTTP ERROR! status: ${response.status}`);
         }
@@ -40,7 +40,7 @@ function Discord() {
 
     const poll = async () => {
       try {
-        const response = await fetch(import.meta.env.VITE_GET_DISCORD_CHECK);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/discord/check`);
         if (!response.ok) {
           throw new Error("HTTP ERROR");
         }
