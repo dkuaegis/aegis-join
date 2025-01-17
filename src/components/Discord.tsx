@@ -13,7 +13,7 @@ function Discord() {
   const [isChecking, setIsChecking] = useState<boolean>(false);
   const [isDiscordInvitedSuccess, setIsDiscordInvitedSuccess] =
     useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+
 
   useEffect(() => {
     const fetchDiscordLink = async () => {
@@ -89,7 +89,7 @@ function Discord() {
         </Button>
       </div>
       <div className="flex items-center justify-center">
-        {isDiscordInvitedSuccess ? (
+        {isDiscordInvitedSuccess && isChecking ? (
           <>
             <CheckCircleIcon className="h-8 w-8 text-green-400" />
             <p className="pl-4 text-green-400">가입 확인이 완료되었습니다 !</p>
