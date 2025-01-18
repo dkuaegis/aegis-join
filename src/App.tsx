@@ -8,9 +8,9 @@ import { Progress } from "@/components/ui/progress";
 import { useCallback, useEffect, useState } from "react";
 import Coupon from "./components/Coupon";
 import Discord from "./components/Discord";
-import { GetPaymentInfo, PaymentStatus } from "./types/api/payment";
+import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 
-//join progress 는 그 컴포넌트에서 get 요청을 날릴 때만 갱신된다. 
+//join progress 는 그 컴포넌트에서 get 요청을 날릴 때만 갱신된다.
 
 const joinProgressOrder = [
   "GOOGLE_LOGIN", //구글 로그인을 한 상태. 이 상태가 아니라면 401을 보낸다. Auth 가 안됐다는 뜻.
@@ -23,23 +23,23 @@ const joinProgressOrder = [
   "COMPLETE",
 ] as const;
 
-type JoinProgress = typeof joinProgressOrder[number];
+type JoinProgress = (typeof joinProgressOrder)[number];
 
 function progressToStep(progress: JoinProgress): number {
   const index = joinProgressOrder.indexOf(progress);
-  if(index === -1) {
+  if (index === -1) {
     throw new Error(`Invalid progress value${progress}`);
   }
-  if(progress === "GOOGLE_LOGIN") { //처음에 오면 GOOGLE_LOGIN 이라서, PERSONAL_INFORMATION 인 것과 같은 페이지를 보여줘야함.
+  if (progress === "GOOGLE_LOGIN") {
+    //처음에 오면 GOOGLE_LOGIN 이라서, PERSONAL_INFORMATION 인 것과 같은 페이지를 보여줘야함.
     return index + 1;
-  } else {
-    return index;
   }
+  return index;
 }
 
 interface GetAuthCheck {
-  student_name_id: string, //이름이랑 학번 합쳐서 줌 
-  joinProgress: JoinProgress,    // 진행상황 가져옴.
+  student_name_id: string; //이름이랑 학번 합쳐서 줌
+  joinProgress: JoinProgress; // 진행상황 가져옴.
 }
 
 function App() {
@@ -57,9 +57,10 @@ function App() {
   const [isDiscordValid, setIsDiscordValid] = useState<boolean>(false);
   const [isCouponValid, setIsCouponValid] = useState<boolean>(false);
   const [isPaymentValid, setIsPaymentValid] = useState<boolean>(false);
-  const [showPersonalInfoErrors, setShowPersonalInfoErrors] = useState<boolean>(false);
-  const [showSurveyValidErrors, setShowSurveyValidErrors] = useState<boolean>(false);
-
+  const [showPersonalInfoErrors, setShowPersonalInfoErrors] =
+    useState<boolean>(false);
+  const [showSurveyValidErrors, setShowSurveyValidErrors] =
+    useState<boolean>(false);
 
   // 폴링 상태를 로컬 스토리지에서 가져옴.
   const [discordPolling, setDiscordPolling] = useState<boolean>(() => {
@@ -71,13 +72,13 @@ function App() {
     return storedValue === "true";
   });
   useEffect(() => {
-    if(discordPolling) {
+    if (discordPolling) {
       startDiscordPolling();
     }
   }, [discordPolling]);
-  
+
   useEffect(() => {
-    if(paymentsPolling) {
+    if (paymentsPolling) {
       startPaymentsPolling();
     }
   }, [paymentsPolling]);
@@ -122,7 +123,7 @@ function App() {
         if (!response.ok) {
           throw new Error("HTTP ERROR");
         }
-        const data:GetPaymentInfo = await response.json();
+        const data: GetPaymentInfo = await response.json();
 
         if (data.status === "COMPLETE") {
           setPaymentInfo(data);
@@ -150,21 +151,15 @@ function App() {
       onValidate={setIsSurveyValid}
       showErrors={showSurveyValidErrors}
     />,
-    <Everytime 
-      key="everytime" 
-      onValidate={setIsEverytimeValid}
-    />,
-    <Discord 
+    <Everytime key="everytime" onValidate={setIsEverytimeValid} />,
+    <Discord
       key="discord"
       setPolling={setDiscordPolling}
       isValid={isDiscordValid}
     />,
-    <Coupon 
-      key="coupon" 
-      onValidate={setIsCouponValid}
-    />,
-    <Payment 
-      key="payment" 
+    <Coupon key="coupon" onValidate={setIsCouponValid} />,
+    <Payment
+      key="payment"
       isValid={isPaymentValid}
       senderNameID={studentNameID}
       startPolling={setPaymentsPolling}
@@ -177,12 +172,12 @@ function App() {
     const checkAuth = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/check`,
+          `${import.meta.env.VITE_API_URL}/auth/check`
           // {
           //    credentials: "include",
           // }
         );
-        if(!response.ok) {
+        if (!response.ok) {
           throw new Error("인증 정보 없음.");
         }
 
@@ -190,7 +185,6 @@ function App() {
         const data: GetAuthCheck = await response.json();
         setCurrentStep(progressToStep(data.joinProgress));
         setStudentNameID(data.student_name_id);
-
       } catch (error) {
         console.error("Auth check error:", error);
         setIsAuthenticated(false);
@@ -199,8 +193,6 @@ function App() {
 
     checkAuth();
   }, []);
-
-
 
   const handleNext = () => {
     if (currentStep === 1 && !isPersonalInfoValid) {
@@ -269,12 +261,12 @@ function App() {
               <Button
                 type="button"
                 variant={
-                  (isPersonalInfoValid &&  currentStep === 1) ||
-                  (isSurveyValid &&        currentStep === 2) ||
-                  (isEverytimeValid &&     currentStep === 3) ||
-                  (isDiscordValid &&       currentStep === 4) ||
-                  (isCouponValid &&        currentStep === 5) ||
-                  (isPaymentValid &&       currentStep === 6)
+                  (isPersonalInfoValid && currentStep === 1) ||
+                  (isSurveyValid && currentStep === 2) ||
+                  (isEverytimeValid && currentStep === 3) ||
+                  (isDiscordValid && currentStep === 4) ||
+                  (isCouponValid && currentStep === 5) ||
+                  (isPaymentValid && currentStep === 6)
                     ? "default"
                     : "secondary"
                 }

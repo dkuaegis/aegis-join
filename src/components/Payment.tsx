@@ -1,22 +1,20 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
-import { GetPaymentInfo } from "@/types/api/payment";
+import type { GetPaymentInfo } from "@/types/api/payment";
 import { Copy } from "lucide-react";
 import { useEffect, useState } from "react";
-
-
 
 function Payment({
   isValid,
   startPolling,
   senderNameID,
   payInfo,
-}: {  
+}: {
   isValid: boolean;
   startPolling: (isValid: boolean) => void;
   senderNameID: string;
   payInfo: GetPaymentInfo;
-}) { 
+}) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [accountMessage, setAccountMessage] = useState<string | null>(null);
   const [senderMessage, setSenderMessage] = useState<string | null>(null);
@@ -26,17 +24,17 @@ function Payment({
 
   useEffect(() => {
     // 여기서의 isValid 는 송금 완료의 의미를 가진다.
-    if(isValid === false) {
+    if (isValid === false) {
       startPolling(true);
     } else {
       startPolling(false);
     }
-  }, []);
+  }, [isValid, startPolling]);
 
   useEffect(() => {
-    if(senderNameID === "") setIsLoading(true);
+    if (senderNameID === "") setIsLoading(true);
     else setIsLoading(false);
-  })
+  }, [senderNameID]);
 
   const copyAccountNumber = () => {
     const accountNumber = "IBK기업은행 98215064101017";

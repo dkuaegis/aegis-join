@@ -11,12 +11,12 @@ function Everytime({
   onValidate: (isValid: boolean) => void;
 }) {
   const [everytimeLink, setEverytimeLink] = useState<string>("");
-  
+
   // 에브리 타임 시간표도 유효성을 검사해야 한다면, validate 로 검사중.... 띄우기.
-  
+
   useEffect(() => {
     onValidate(false);
-  }, [])
+  }, [onValidate]);
 
   const handleEverytimeValidate = useCallback(() => {
     console.log(everytimeLink);
@@ -25,9 +25,7 @@ function Everytime({
     } else {
       onValidate(false);
     }
-
   }, [everytimeLink, onValidate]);
-
 
   return (
     <div className="mb-12 space-y-4">
@@ -57,11 +55,11 @@ function Everytime({
               required
             />
           </div>
-          <Button 
-            className="inline" 
+          <Button
+            className="inline"
             type="submit"
             onClick={handleEverytimeValidate}
-            >
+          >
             제출
           </Button>
         </div>

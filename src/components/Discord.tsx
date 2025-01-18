@@ -9,12 +9,12 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 
 function Discord({
-    setPolling,
-    isValid,
-  }: {
-    setPolling: (isValid: boolean) => void;
-    isValid: boolean;
-  }) {
+  setPolling,
+  isValid,
+}: {
+  setPolling: (isValid: boolean) => void;
+  isValid: boolean;
+}) {
   const [discordLink, setDiscordLink] = useState<string>("");
 
   // 디스코드 페이지를 get 햇을 떄 link 를 보내주지만, 이때 이미 사용자가 가입해있으면 어떡함?
@@ -30,14 +30,11 @@ function Discord({
         const data = await response.json();
         console.log(data);
         setDiscordLink(data.discordLink);
-      } catch (err: unknown) {
-
-      }
+      } catch (err: unknown) {}
     };
 
     fetchDiscordLink();
   }, []);
-
 
   function discordCheck() {
     window.open(discordLink, "_blank");

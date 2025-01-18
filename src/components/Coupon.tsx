@@ -84,7 +84,6 @@ export default function Coupon({
 
   //쿠폰이 없으면 validate true.
 
-
   const table = useReactTable({
     data: coupons,
     columns,
@@ -97,8 +96,6 @@ export default function Coupon({
       rowSelection,
     },
   });
-
-
 
   const postCoupon = async () => {
     if (isCouponLoading) return;
@@ -158,7 +155,7 @@ export default function Coupon({
     };
 
     getCoupon();
-  }, []);
+  }, [onValidate]);
 
   useEffect(() => {
     const selectedRowIds = Object.keys(rowSelection) // 선택된 행 ID 가져오기
@@ -231,12 +228,9 @@ export default function Coupon({
                   총 할인 금액: {totalDiscountPrice.toLocaleString()}원
                 </TableCell>
                 <TableCell className="text-right">
-                  {coupons.length > 0 &&
-                  <Button 
-                    onClick={postCoupon}
-                  >쿠폰 사용하기
-                  </Button>
-                  } 
+                  {coupons.length > 0 && (
+                    <Button onClick={postCoupon}>쿠폰 사용하기</Button>
+                  )}
                 </TableCell>
               </TableRow>
             </>
