@@ -35,3 +35,11 @@ export interface SurveyForm {
   registrationReason: string;
   feedBack: string;
 }
+
+export interface GetSurveyForm extends SurveyForm {
+
+}
+
+export interface PostSurveyForm extends SurveyForm{
+
+}
