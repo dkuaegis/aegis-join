@@ -4,16 +4,20 @@ import {
   ExternalLink,
   LoaderCircle,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 
-function Discord() {
+function Discord({
+  setPolling,
+  isValid,
+}: {
+  setPolling: (isValid: boolean) => void;
+  isValid: boolean;
+}) {
   const [discordLink, setDiscordLink] = useState<string>("");
-  const [isChecking, setIsChecking] = useState<boolean>(false);
-  const [isDiscordInvitedSuccess, setIsDiscordInvitedSuccess] =
-    useState<boolean>(false);
 
+  // 디스코드 페이지를 get 햇을 떄 link 를 보내주지만, 이때 이미 사용자가 가입해있으면 어떡함?
   useEffect(() => {
     const fetchDiscordLink = async () => {
       try {
@@ -26,48 +30,15 @@ function Discord() {
         const data = await response.json();
         console.log(data);
         setDiscordLink(data.discordLink);
-      } catch (err: unknown) {
-      } finally {
-        setIsChecking(true);
-      }
+      } catch (err: unknown) {}
     };
 
     fetchDiscordLink();
   }, []);
 
-  const startPolling = useCallback(() => {
-    let attempts = 0;
-    const interval = 2000;
-
-    const poll = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/discord/check`
-        );
-        if (!response.ok) {
-          throw new Error("HTTP ERROR");
-        }
-        const data = await response.json();
-
-        if (data.status === "COMPLETE") {
-          setIsDiscordInvitedSuccess(true);
-          setIsChecking(false);
-          return;
-        }
-        attempts++;
-        setTimeout(poll, interval);
-      } catch (err: unknown) {
-        setIsChecking(false);
-      }
-    };
-
-    setIsChecking(true);
-    poll();
-  }, []);
-
   function discordCheck() {
     window.open(discordLink, "_blank");
-    startPolling();
+    setPolling(true);
   }
 
   return (
@@ -92,7 +63,7 @@ function Discord() {
         </Button>
       </div>
       <div className="flex items-center justify-center">
-        {isDiscordInvitedSuccess && isChecking ? (
+        {isValid ? (
           <>
             <CheckCircleIcon className="h-8 w-8 text-green-400" />
             <p className="pl-4 text-green-400">가입 확인이 완료되었습니다 !</p>

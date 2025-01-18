@@ -3,8 +3,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ClockAlert, Link } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
-function Everytime() {
+function Everytime({
+  onValidate,
+}: {
+  onValidate: (isValid: boolean) => void;
+}) {
+  const [everytimeLink, setEverytimeLink] = useState<string>("");
+
+  // 에브리 타임 시간표도 유효성을 검사해야 한다면, validate 로 검사중.... 띄우기.
+
+  useEffect(() => {
+    onValidate(false);
+  }, [onValidate]);
+
+  const handleEverytimeValidate = useCallback(() => {
+    console.log(everytimeLink);
+    if (everytimeLink.trim() !== "") {
+      onValidate(true);
+    } else {
+      onValidate(false);
+    }
+  }, [everytimeLink, onValidate]);
+
   return (
     <div className="mb-12 space-y-4">
       <h3 className="font-semibold text-lg">에브리타임 시간표 제출</h3>
@@ -29,10 +51,15 @@ function Everytime() {
               name="timetableLink"
               placeholder="https://everytime.kr/timetable/..."
               className="pl-10"
+              onChange={(e) => setEverytimeLink(e.target.value)}
               required
             />
           </div>
-          <Button className="inline" type="submit">
+          <Button
+            className="inline"
+            type="submit"
+            onClick={handleEverytimeValidate}
+          >
             제출
           </Button>
         </div>

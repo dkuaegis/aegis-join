@@ -1,39 +1,20 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
-import type {
-  AcademicStatus,
-  Department,
-  Gender,
-  Grade,
-  Semester,
-} from "@/types/api/member";
+import type { GetPaymentInfo } from "@/types/api/payment";
 import { Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface payInfo {
-  status: "PENDING" | "COMPLETED" | "OVERPAID" | "CANCELED";
-  expectedDepositAmount: number;
-  currentDepositAmount: number;
-}
-
-interface members {
-  id: number;
-  email: string;
-  name: string;
-  birthDate: string;
-  gender: Gender;
-  studentId: string;
-  phoneNumber: string;
-  department: Department;
-  academicStatus: AcademicStatus;
-  grade: Grade;
-  semester: Semester;
-  joinProgress: number;
-}
-
-function Payment() {
-  const [members, setMembers] = useState<members | null>(null);
-  const [payInfo, setPayInfo] = useState<payInfo | null>(null);
+function Payment({
+  isValid,
+  startPolling,
+  senderNameID,
+  payInfo,
+}: {
+  isValid: boolean;
+  startPolling: (isValid: boolean) => void;
+  senderNameID: string;
+  payInfo: GetPaymentInfo;
+}) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [accountMessage, setAccountMessage] = useState<string | null>(null);
   const [senderMessage, setSenderMessage] = useState<string | null>(null);
@@ -42,48 +23,18 @@ function Payment() {
   );
 
   useEffect(() => {
-    const fetchPayInfo = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/join/pay-info`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch pay information");
-        }
-        const data: payInfo = await response.json();
-        console.log("Fetched pay info:", data);
-        setPayInfo(data);
-      } catch (error) {
-        console.error("Error fetching pay info:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPayInfo();
-  }, []);
+    // 여기서의 isValid 는 송금 완료의 의미를 가진다.
+    if (isValid === false) {
+      startPolling(true);
+    } else {
+      startPolling(false);
+    }
+  }, [isValid, startPolling]);
 
   useEffect(() => {
-    const fetchMemberInfo = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/join/mem-info`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch memeber information");
-        }
-        const data: members = await response.json();
-        console.log("Fetched pay info:", data);
-        setMembers(data);
-      } catch (error) {
-        console.error("Error fetching member info:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMemberInfo();
-  }, []);
+    if (senderNameID === "") setIsLoading(true);
+    else setIsLoading(false);
+  }, [senderNameID]);
 
   const copyAccountNumber = () => {
     const accountNumber = "IBK기업은행 98215064101017";
@@ -102,9 +53,8 @@ function Payment() {
   };
 
   const copySenderName = () => {
-    const senderName = "권대근220236";
     navigator.clipboard
-      .writeText(senderName)
+      .writeText(senderNameID)
       .then(() => {
         setSenderMessage("송금자명이 복사되었습니다!");
         setMessageType("success");
@@ -120,10 +70,6 @@ function Payment() {
   // Calculate remaining amount
   const remainingAmount = payInfo
     ? payInfo.expectedDepositAmount - payInfo.currentDepositAmount
-    : null;
-
-  const senderName = members
-    ? `${members.name}${members.studentId.slice(-6)}`
     : null;
 
   return (
@@ -152,8 +98,8 @@ function Payment() {
               송금자명:{" "}
               {isLoading
                 ? "로딩 중..."
-                : senderName !== null
-                  ? senderName
+                : senderNameID !== null
+                  ? senderNameID
                   : "정보를 불러오지 못했습니다."}
             </span>
             <Copy

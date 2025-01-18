@@ -70,12 +70,19 @@ export const columns: ColumnDef<CouponData>[] = [
   },
 ];
 
-export default function Coupon() {
+export default function Coupon({
+  onValidate,
+}: {
+  onValidate: (isValid: boolean) => void;
+}) {
   const [coupons, setCoupons] = useState<CouponData[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [requestSuccess, setRequestSuccess] = useState<boolean | null>(null);
+  const [isCouponLoading, setIsCouponLoading] = useState<boolean>(false);
+
+  //쿠폰이 없으면 validate true.
 
   const table = useReactTable({
     data: coupons,
@@ -91,6 +98,11 @@ export default function Coupon() {
   });
 
   const postCoupon = async () => {
+    if (isCouponLoading) return;
+    if (requestSuccess !== null) return;
+
+    setIsCouponLoading(true);
+
     const payload = selectedCoupons;
     try {
       const response = await fetch(
@@ -104,13 +116,17 @@ export default function Coupon() {
           body: JSON.stringify(payload),
         }
       );
-
       if (!response.ok) {
-        setRequestSuccess(false);
         throw new Error("에러남");
       }
       setRequestSuccess(true);
-    } catch (err: unknown) {}
+      onValidate(true);
+    } catch (err: unknown) {
+      setRequestSuccess(false);
+      onValidate(false);
+    } finally {
+      setIsCouponLoading(false);
+    }
     setTimeout(() => setRequestSuccess(null), 1500);
   };
 
@@ -129,14 +145,17 @@ export default function Coupon() {
         }
 
         const data: CouponData[] = await response.json();
+        const noCoupon = !(data.length > 0);
+
         setCoupons(data);
+        onValidate(noCoupon);
       } catch (error) {
-        console.error(error);
+        onValidate(false);
       }
     };
 
     getCoupon();
-  }, []);
+  }, [onValidate]);
 
   useEffect(() => {
     const selectedRowIds = Object.keys(rowSelection) // 선택된 행 ID 가져오기
@@ -209,7 +228,9 @@ export default function Coupon() {
                   총 할인 금액: {totalDiscountPrice.toLocaleString()}원
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button onClick={postCoupon}>쿠폰 사용하기</Button>
+                  {coupons.length > 0 && (
+                    <Button onClick={postCoupon}>쿠폰 사용하기</Button>
+                  )}
                 </TableCell>
               </TableRow>
             </>
