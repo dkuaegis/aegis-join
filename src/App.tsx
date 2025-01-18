@@ -43,7 +43,7 @@ interface GetAuthCheck {
 }
 
 function App() {
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  
   const [studentNameID, setStudentNameID] = useState<string>("");
   const [paymentInfo, setPaymentInfo] = useState<GetPaymentInfo>({
     status: PaymentStatus.PENDING,
@@ -71,13 +71,24 @@ function App() {
     const storedValue = localStorage.getItem("paymentsPolling");
     return storedValue === "true";
   });
+  const [currentStep, setCurrentStep] = useState<number>(() => {
+    const storedValue = localStorage.getItem("currentStep");
+    return storedValue ? Number(storedValue) : 2;
+  });
+
   useEffect(() => {
+    localStorage.setItem("currentStep", String(currentStep));
+  }, [currentStep]);
+
+  useEffect(() => {
+    localStorage.setItem("discordPolling", String(discordPolling));
     if (discordPolling) {
       startDiscordPolling();
     }
   }, [discordPolling]);
 
   useEffect(() => {
+    localStorage.setItem("paymentsPolling", String(paymentsPolling));
     if (paymentsPolling) {
       startPaymentsPolling();
     }
