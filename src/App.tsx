@@ -73,7 +73,7 @@ function App() {
   });
   const [currentStep, setCurrentStep] = useState<number>(() => {
     const storedValue = localStorage.getItem("currentStep");
-    return storedValue ? Number(storedValue) : 2;
+    return storedValue ? Number(storedValue) : 1;
   });
 
   useEffect(() => {
@@ -183,7 +183,7 @@ function App() {
     const checkAuth = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/check`
+          "http://localhost:3001/auth/check"
           // {
           //    credentials: "include",
           // }
