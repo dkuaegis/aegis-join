@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -9,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 function phoneNumberCheck(number: string): boolean {
   const result = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
@@ -112,7 +112,8 @@ function PersonalInfo({
     const fetchMemberData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/member`);
+          `${import.meta.env.VITE_API_URL}/api/member`
+        );
         if (response.ok) {
           const data = await response.json();
           // Assuming the response data has the structure needed
@@ -140,13 +141,15 @@ function PersonalInfo({
       const postMemberData = async () => {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/member`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formValuesRef.current), // Use formValuesRef
-          });
+            `${import.meta.env.VITE_API_URL}/api/member`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formValuesRef.current), // Use formValuesRef
+            }
+          );
 
           if (!response.ok) {
             console.error("Failed to post member data");
@@ -184,8 +187,6 @@ function PersonalInfo({
     grade,
     academicSemester,
   ]);
-  
-  
 
   return (
     <div className="space-y-4">
@@ -302,16 +303,24 @@ function PersonalInfo({
             <SelectValue placeholder="학과 선택" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="SOFTWARE_ENGINEERING">SW융합대학 소프트웨어학과</SelectItem>
-            <SelectItem value="COMPUTER_ENGINEERING">SW융합대학 컴퓨터공학과</SelectItem>
+            <SelectItem value="SOFTWARE_ENGINEERING">
+              SW융합대학 소프트웨어학과
+            </SelectItem>
+            <SelectItem value="COMPUTER_ENGINEERING">
+              SW융합대학 컴퓨터공학과
+            </SelectItem>
             <SelectItem value="MOBILE_SYSTEM_ENGINEERING">
               SW융합대학 모바일시스템공학과
             </SelectItem>
-            <SelectItem value="CYBER_SECURITY">SW융합대학 사이버보안학과</SelectItem>
+            <SelectItem value="CYBER_SECURITY">
+              SW융합대학 사이버보안학과
+            </SelectItem>
             <SelectItem value="STATISTICS_DATA_SCIENCE">
               SW융합대학 통계데이터사이언스학과
             </SelectItem>
-            <SelectItem value="SW_CONVERGENCE_DIVISION">SW융합대학 SW융합학부</SelectItem>
+            <SelectItem value="SW_CONVERGENCE_DIVISION">
+              SW융합대학 SW융합학부
+            </SelectItem>
           </SelectContent>
         </Select>
         {errors.department && showErrors && (
@@ -341,36 +350,35 @@ function PersonalInfo({
 
       {/* 학년 선택 */}
       <div className="space-y-2">
-  <Label htmlFor="grade">모집 학기 기준 학년</Label>
-  <Select value={grade} onValueChange={setGrade}>
-    <SelectTrigger
-      className={errors.studentId && showErrors ? "border-red-500" : ""}
-    >
-      <SelectValue placeholder="학년 선택" />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectItem key="ONE" value="ONE">
-        1학년
-      </SelectItem>
-      <SelectItem key="TWO" value="TWO">
-        2학년
-      </SelectItem>
-      <SelectItem key="THREE" value="THREE">
-        3학년
-      </SelectItem>
-      <SelectItem key="FOUR" value="FOUR">
-        4학년
-      </SelectItem>
-      <SelectItem key="FIVE" value="FIVE">
-        5학년
-      </SelectItem>
-    </SelectContent>
-  </Select>
-  {errors.grade && showErrors && (
-    <p className="text-red-500 text-xs">학년을 선택해주세요</p>
-  )}
-</div>
-
+        <Label htmlFor="grade">모집 학기 기준 학년</Label>
+        <Select value={grade} onValueChange={setGrade}>
+          <SelectTrigger
+            className={errors.studentId && showErrors ? "border-red-500" : ""}
+          >
+            <SelectValue placeholder="학년 선택" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="ONE" value="ONE">
+              1학년
+            </SelectItem>
+            <SelectItem key="TWO" value="TWO">
+              2학년
+            </SelectItem>
+            <SelectItem key="THREE" value="THREE">
+              3학년
+            </SelectItem>
+            <SelectItem key="FOUR" value="FOUR">
+              4학년
+            </SelectItem>
+            <SelectItem key="FIVE" value="FIVE">
+              5학년
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        {errors.grade && showErrors && (
+          <p className="text-red-500 text-xs">학년을 선택해주세요</p>
+        )}
+      </div>
 
       {/* 학기 선택 */}
       <div className="space-y-2">

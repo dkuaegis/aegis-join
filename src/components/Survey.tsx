@@ -2,7 +2,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { EtcInput } from "@/components/ui/etcinput";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { GetSurveyForm, InterestField, PostSurveyForm } from "@/types/api/survey";
+import {
+  type GetSurveyForm,
+  InterestField,
+  type PostSurveyForm,
+} from "@/types/api/survey";
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -126,7 +130,6 @@ function Survey({
   onValidate: (isValid: boolean) => void;
   showErrors: boolean;
 }) {
-  
   const [checkBox, setCheckBox] = useState<Map<InterestField, boolean>>(
     new Map()
   );
@@ -142,10 +145,13 @@ function Survey({
     feedBack: "",
   });
 
-  const etcExist = useCallback((field: InterestField): boolean => {
-    const value = interestEtcField.get(field);
-    return value !== undefined && value.trim() !== "";
-  }, [interestEtcField]);
+  const etcExist = useCallback(
+    (field: InterestField): boolean => {
+      const value = interestEtcField.get(field);
+      return value !== undefined && value.trim() !== "";
+    },
+    [interestEtcField]
+  );
 
   // ref 로 최신상태를 갱신.
   useEffect(() => {
@@ -153,7 +159,10 @@ function Survey({
       interestFields: Array.from(checkBox.entries())
         .filter(([_, isChecked]) => isChecked)
         .map(([field]) => field),
-      interestEtc: Object.fromEntries(interestEtcField) as Record<InterestField, string>,
+      interestEtc: Object.fromEntries(interestEtcField) as Record<
+        InterestField,
+        string
+      >,
       registrationReason: registrationReason,
       feedBack: feedBack,
     };
@@ -164,24 +173,29 @@ function Survey({
     const getSurveyData = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`);
-        if(!response.ok) {
+        if (!response.ok) {
           throw new Error("가져오는데 에러");
         }
         const data: GetSurveyForm = await response.json();
-        
+
         // 응답 객체를 상태에 넣어주기.
-        setCheckBox(new Map(data.interestFields.map((field: InterestField) => [field, true])));
-        setInterestEtcField(new Map(Object.entries(data.interestEtc).map(([key, value]) => [
-          key as InterestField,
-          value,
-        ])));
+        setCheckBox(
+          new Map(
+            data.interestFields.map((field: InterestField) => [field, true])
+          )
+        );
+        setInterestEtcField(
+          new Map(
+            Object.entries(data.interestEtc).map(([key, value]) => [
+              key as InterestField,
+              value,
+            ])
+          )
+        );
         setRegistrationReason(data.registrationReason || "");
-        setFeedBack(data.feedBack  || "");
-        console.log("GET",data);
-
-      } catch (error) {
-
-      }
+        setFeedBack(data.feedBack || "");
+        console.log("GET", data);
+      } catch (error) {}
     };
 
     getSurveyData();
@@ -190,26 +204,26 @@ function Survey({
       console.log("UNMOUNTED", surveyFormRef.current);
       const postSurveyData = async () => {
         try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/survey/post`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(surveyFormRef.current),
-          });
-          if(!response.ok) {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/survey/post`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(surveyFormRef.current),
+            }
+          );
+          if (!response.ok) {
             throw new Error("POST 하는데 에러!!");
           }
           console.log("POST");
-        } catch (error) {
-  
-        }
+        } catch (error) {}
       };
 
       postSurveyData();
     };
-  }, [])
-
+  }, []);
 
   const validateSurveyForm = useCallback(() => {
     // 가입 이유가 비어있지 않고 체크박스가 활성화 되어야 valid. 하지만 etc 필드가 체크됐을 때, 비어있으면 안된다.
