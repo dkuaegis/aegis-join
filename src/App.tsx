@@ -43,7 +43,6 @@ interface GetAuthCheck {
 }
 
 function App() {
-  
   const [studentNameID, setStudentNameID] = useState<string>("");
   const [paymentInfo, setPaymentInfo] = useState<GetPaymentInfo>({
     status: PaymentStatus.PENDING,
