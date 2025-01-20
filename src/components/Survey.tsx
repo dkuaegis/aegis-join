@@ -2,9 +2,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { EtcInput } from "@/components/ui/etcinput";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { InterestField } from "@/types/api/survey";
+import { GetSurveyForm, InterestField, PostSurveyForm } from "@/types/api/survey";
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface InterestItem {
   id: InterestField;
@@ -83,24 +83,6 @@ const interests: InterestItem[] = [
   { id: InterestField.ETC, description: "기타" },
 ];
 
-const groupedInterests = interests.reduce(
-  (acc, interest) => {
-    if (interest.category) {
-      if (!acc[interest.category]) {
-        acc[interest.category] = [];
-      }
-      acc[interest.category].push(interest);
-    } else {
-      if (!acc.기타) {
-        acc.기타 = [];
-      }
-      acc.기타.push(interest);
-    }
-    return acc;
-  },
-  {} as Record<string, InterestItem[]>
-);
-
 const groupedETC = new Set([
   InterestField.SECURITY_ETC,
   InterestField.WEB_ETC,
@@ -119,6 +101,24 @@ function isETC(field: InterestField): boolean {
   return groupedETC.has(field);
 }
 
+const groupedInterests = interests.reduce(
+  (acc, interest) => {
+    if (interest.category) {
+      if (!acc[interest.category]) {
+        acc[interest.category] = [];
+      }
+      acc[interest.category].push(interest);
+    } else {
+      if (!acc.기타) {
+        acc.기타 = [];
+      }
+      acc.기타.push(interest);
+    }
+    return acc;
+  },
+  {} as Record<string, InterestItem[]>
+);
+
 function Survey({
   onValidate,
   showErrors,
@@ -126,16 +126,90 @@ function Survey({
   onValidate: (isValid: boolean) => void;
   showErrors: boolean;
 }) {
+  
+  const [checkBox, setCheckBox] = useState<Map<InterestField, boolean>>(
+    new Map()
+  );
   const [interestEtcField, setInterestEtcField] = useState<
     Map<InterestField, string>
   >(new Map());
   const [registrationReason, setRegistrationReason] = useState<string>("");
   const [feedBack, setFeedBack] = useState<string>("");
-  const [checkBox, setCheckBox] = useState<Map<InterestField, boolean>>(
-    new Map()
-  );
+  const surveyFormRef = useRef<PostSurveyForm>({
+    interestFields: [],
+    interestEtc: {} as Record<InterestField, string>,
+    registrationReason: "",
+    feedBack: "",
+  });
 
-  // const [surveyForm, setSurveyForm] = useState<SurveyForm>();
+  const etcExist = useCallback((field: InterestField): boolean => {
+    const value = interestEtcField.get(field);
+    return value !== undefined && value.trim() !== "";
+  }, [interestEtcField]);
+
+  // ref 로 최신상태를 갱신.
+  useEffect(() => {
+    surveyFormRef.current = {
+      interestFields: Array.from(checkBox.entries())
+        .filter(([_, isChecked]) => isChecked)
+        .map(([field]) => field),
+      interestEtc: Object.fromEntries(interestEtcField) as Record<InterestField, string>,
+      registrationReason: registrationReason,
+      feedBack: feedBack,
+    };
+  }, [checkBox, interestEtcField, registrationReason, feedBack]);
+
+  useEffect(() => {
+    console.log("MOUNTED");
+    const getSurveyData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`);
+        if(!response.ok) {
+          throw new Error("가져오는데 에러");
+        }
+        const data: GetSurveyForm = await response.json();
+        
+        // 응답 객체를 상태에 넣어주기.
+        setCheckBox(new Map(data.interestFields.map((field: InterestField) => [field, true])));
+        setInterestEtcField(new Map(Object.entries(data.interestEtc).map(([key, value]) => [
+          key as InterestField,
+          value,
+        ])));
+        setRegistrationReason(data.registrationReason || "");
+        setFeedBack(data.feedBack  || "");
+        console.log("GET",data);
+
+      } catch (error) {
+
+      }
+    };
+
+    getSurveyData();
+
+    return () => {
+      console.log("UNMOUNTED", surveyFormRef.current);
+      const postSurveyData = async () => {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/survey/post`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(surveyFormRef.current),
+          });
+          if(!response.ok) {
+            throw new Error("POST 하는데 에러!!");
+          }
+          console.log("POST");
+        } catch (error) {
+  
+        }
+      };
+
+      postSurveyData();
+    };
+  }, [])
+
 
   const validateSurveyForm = useCallback(() => {
     // 가입 이유가 비어있지 않고 체크박스가 활성화 되어야 valid. 하지만 etc 필드가 체크됐을 때, 비어있으면 안된다.
@@ -158,20 +232,11 @@ function Survey({
     } else {
       onValidate(false);
     }
-  }, [interestEtcField, registrationReason, checkBox, onValidate]);
+  }, [checkBox, interestEtcField, registrationReason, onValidate]);
 
   useEffect(() => {
-    console.log(feedBack, interestEtcField);
     validateSurveyForm();
-  }, [validateSurveyForm, feedBack, interestEtcField]);
-
-  useEffect(() => {
-    console.log("MOUNTED!");
-
-    return () => {
-      console.log("UNMOUNTED");
-    };
-  }, []);
+  }, [validateSurveyForm]);
 
   function checkedItemHandler(isChecked: boolean | string, id: InterestField) {
     if (typeof isChecked === "boolean") {
@@ -186,7 +251,6 @@ function Survey({
   const handleFeedbackTextareaChange = (value: string) => setFeedBack(value);
   const handleReasonTextareaChange = (value: string) =>
     setRegistrationReason(value);
-
   const handleEtcTextareaChange = (field: InterestField, value: string) => {
     setInterestEtcField((prev) => {
       const newMap = new Map<InterestField, string>(prev);
@@ -218,6 +282,7 @@ function Survey({
                       >
                         <Checkbox
                           id={field.id}
+                          checked={checkBox.get(field.id) || etcExist(field.id)}
                           onCheckedChange={(checked) =>
                             checkedItemHandler(checked, field.id)
                           }
@@ -234,6 +299,7 @@ function Survey({
                             name={field.id}
                             placeholder="기타 관심 분야를 작성해주세요"
                             maxLength={20}
+                            value={interestEtcField.get(field.id)}
                             onValueChange={(value) =>
                               handleEtcTextareaChange(field.id, value)
                             }
@@ -287,6 +353,7 @@ function Survey({
           name="joinReason"
           placeholder="동아리에서 어떤 활동을 하고 싶으신가요?"
           maxLength={511}
+          value={registrationReason}
           onValueChange={handleReasonTextareaChange}
         />
       </div>
@@ -301,6 +368,7 @@ function Survey({
           name="messageToManagement"
           placeholder="예시로 작년과는 이런 점이 달라졌으면 좋겠어요!"
           maxLength={511}
+          value={feedBack}
           onValueChange={handleFeedbackTextareaChange}
         />
       </div>

@@ -3,11 +3,11 @@ import LoginPage from "@/components/LoginPage";
 import Payment from "@/components/Payment";
 import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
+import Coupon from "./components/Coupon";
+import Discord from "./components/Discord";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useCallback, useEffect, useState } from "react";
-import Coupon from "./components/Coupon";
-import Discord from "./components/Discord";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 
 //join progress 는 그 컴포넌트에서 get 요청을 날릴 때만 갱신된다.
