@@ -73,7 +73,7 @@ function App() {
   });
   const [currentStep, setCurrentStep] = useState<number>(() => {
     const storedValue = localStorage.getItem("currentStep");
-    return storedValue ? Number(storedValue) : 2;
+    return storedValue ? Number(storedValue) : 1;
   });
 
   useEffect(() => {
