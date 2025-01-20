@@ -183,7 +183,7 @@ function App() {
     const checkAuth = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/auth/check"
+          `${import.meta.env.VITE_API_URL}/auth/check`
           // {
           //    credentials: "include",
           // }
