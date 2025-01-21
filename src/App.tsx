@@ -148,6 +148,7 @@ function App() {
           return;
         }
         attempts++;
+        setPaymentInfo(data);
         setTimeout(poll, interval); //재귀
       } catch (err: unknown) {
         setIsPaymentValid(false);
