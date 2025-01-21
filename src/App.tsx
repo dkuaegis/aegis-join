@@ -129,7 +129,7 @@ function App() {
     const poll = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/payments/status"
+          `${import.meta.env.VITE_API_URL}/payments/status`
         );
         if (!response.ok) {
           throw new Error("HTTP ERROR");
@@ -195,7 +195,7 @@ function App() {
     const checkAuth = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/auth/check"
+          `${import.meta.env.VITE_API_URL}/auth/check`
           // {
           //    credentials: "include",
           // }
