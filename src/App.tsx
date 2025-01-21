@@ -56,6 +56,7 @@ function App() {
   const [isDiscordValid, setIsDiscordValid] = useState<boolean>(false);
   const [isCouponValid, setIsCouponValid] = useState<boolean>(false);
   const [isPaymentValid, setIsPaymentValid] = useState<boolean>(false);
+  const [isOverpaid, setIsOverpaid] = useState<boolean>(false);
   const [showPersonalInfoErrors, setShowPersonalInfoErrors] =
     useState<boolean>(false);
   const [showSurveyValidErrors, setShowSurveyValidErrors] =
@@ -140,6 +141,12 @@ function App() {
           setIsPaymentValid(true);
           return;
         }
+        if (data.status === "OVERPAID") {
+          setIsOverpaid(true);
+          setPaymentInfo(data);
+          setIsPaymentValid(true);
+          return;
+        }
         attempts++;
         setTimeout(poll, interval); //재귀
       } catch (err: unknown) {
@@ -171,6 +178,7 @@ function App() {
     <Payment
       key="payment"
       isValid={isPaymentValid}
+      isOverpaid={isOverpaid}
       senderNameID={studentNameID}
       startPolling={setPaymentsPolling}
       payInfo={paymentInfo}
