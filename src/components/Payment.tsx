@@ -24,6 +24,11 @@ function Payment({
     null
   );
 
+  const ADMIN_CONTACT = {
+    phone: "010-2439-1815",
+    kakaoId: "yun_seongmin"
+  };
+
   useEffect(() => {
     // 여기서의 isValid 는 송금 완료의 의미를 가진다.
     if (isValid === false) {
@@ -155,10 +160,10 @@ function Payment({
               환불이 필요하시면 운영진에게 문의해 주세요.
               </AlertDescription>
               <AlertDescription>
-              연락처: 010-2439-1815
+              연락처: {ADMIN_CONTACT.phone}
               </AlertDescription>
               <AlertDescription>
-              카카오톡 ID: yun_seongmin
+              카카오톡 ID: {ADMIN_CONTACT.kakaoId}
             </AlertDescription>
         </Alert>
         ) :(null)}
