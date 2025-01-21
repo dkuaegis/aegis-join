@@ -129,7 +129,7 @@ function App() {
     const poll = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/payments/status`
+          "http://localhost:3001/payments/status"
         );
         if (!response.ok) {
           throw new Error("HTTP ERROR");
@@ -148,6 +148,7 @@ function App() {
           return;
         }
         attempts++;
+        setPaymentInfo(data);
         setTimeout(poll, interval); //재귀
       } catch (err: unknown) {
         setIsPaymentValid(false);
@@ -194,7 +195,7 @@ function App() {
     const checkAuth = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/check`
+          "http://localhost:3001/auth/check"
           // {
           //    credentials: "include",
           // }
