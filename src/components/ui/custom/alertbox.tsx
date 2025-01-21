@@ -1,5 +1,5 @@
 import { Alert, AlertDescription, AlertTitle } from "../alert";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 /*
 icon 에는 아이콘을 전달해주면 됩니다.
