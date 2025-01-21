@@ -1,16 +1,18 @@
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle, } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
-import { Copy } from "lucide-react";
+import { Copy, CheckCircleIcon, LoaderCircle, CircleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function Payment({
   isValid,
+  isOverpaid,
   startPolling,
   senderNameID,
   payInfo,
 }: {
   isValid: boolean;
+  isOverpaid: boolean;
   startPolling: (isValid: boolean) => void;
   senderNameID: string;
   payInfo: GetPaymentInfo;
@@ -126,6 +128,41 @@ function Payment({
           <div>예금주명: 윤성민</div>
         </AlertDescription>
       </Alert>
+      <div className="flex items-center justify-center">
+        {isValid ? (
+          <>
+            <CheckCircleIcon className="h-8 w-8 text-green-400" />
+            <p className="pl-4 text-green-400">동아리 가입이 완료되었습니다!</p>
+          </>
+        ) : (
+          <>
+            <LoaderCircle
+              className="h-8 w-8 animate-spin text-gray-500"
+              style={{ animation: "spin 3s linear infinite" }}
+            />
+            <p className="pl-4">회비를 납부해주세요.</p>
+          </>
+        )}
+      </div>
+      {/* 금액이 초과된 경우 */}
+      <div className="flex items-center justify-center">
+        {isOverpaid ? (
+          <Alert>
+            <CircleAlert className="h-4 w-4" />
+            <AlertTitle>회비 초과 납부 안내</AlertTitle>
+            <AlertDescription>
+              초과 납부가 발생한 경우에도 회원가입은 정상적으로 처리됩니다.
+              환불이 필요하시면 운영진에게 문의해 주세요.
+              </AlertDescription>
+              <AlertDescription>
+              연락처: 010-2439-1815
+              </AlertDescription>
+              <AlertDescription>
+              카카오톡 ID: yun_seongmin
+            </AlertDescription>
+        </Alert>
+        ) :(null)}
+      </div>
     </div>
   );
 }
