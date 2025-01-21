@@ -201,7 +201,6 @@ function Survey({
     getSurveyData();
 
     return () => {
-      console.log("UNMOUNTED", surveyFormRef.current);
       const postSurveyData = async () => {
         try {
           const response = await fetch(
@@ -218,7 +217,9 @@ function Survey({
             throw new Error("POST 하는데 에러!!");
           }
           console.log("POST");
-        } catch (error) {}
+        } catch (error) {
+          console.log(`error ${error}`);
+        }
       };
 
       postSurveyData();

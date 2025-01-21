@@ -168,7 +168,11 @@ function App() {
       onValidate={setIsSurveyValid}
       showErrors={showSurveyValidErrors}
     />,
-    <Everytime key="everytime" onValidate={setIsEverytimeValid} />,
+    <Everytime 
+    key="everytime" 
+    onValidate={setIsEverytimeValid} 
+    isValid={isEverytimeValid}
+    />,
     <Discord
       key="discord"
       setPolling={setDiscordPolling}
