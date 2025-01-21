@@ -5,6 +5,12 @@ import { Label } from "@/components/ui/label";
 import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
+enum LoadingState {
+  IDLE = "idle",
+  LOADING = "loading",
+  SUCCESS = "success",
+}
+
 function Everytime({
   onValidate,
   isValid,
@@ -13,24 +19,24 @@ function Everytime({
   isValid: boolean;
 }) {
   const [everytimeLink, setEverytimeLink] = useState<string>("");
-  const [loading, setLoading] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
 
   // 에브리 타임 시간표도 유효성을 검사해야 한다면, validate 로 검사중.... 띄우기.
 
   useEffect(() => {
     if (isValid === true) {
-      setLoading(false);
+      setLoading(LoadingState.SUCCESS);
     }
   }, [isValid]);
 
   const handleEverytimeValidate = useCallback(async () => {
-    if (loading) return;
+    if (loading === LoadingState.LOADING) return;
     if (everytimeLink.trim() === "") return;
 
     console.log(everytimeLink);
 
     try {
-      setLoading(true);
+      setLoading(LoadingState.LOADING);
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/everytime`,
         {
@@ -46,7 +52,7 @@ function Everytime({
         onValidate(false);
         throw new Error("error");
       }
-      setLoading(false);
+      setLoading(LoadingState.SUCCESS);
       onValidate(true);
     } catch (error) {}
   }, [loading, everytimeLink, onValidate]);
@@ -88,7 +94,7 @@ function Everytime({
           </Button>
         </div>
         <div className="flex items-center justify-center pt-4">
-          {loading === null ? null : loading ? (
+          {loading === LoadingState.IDLE ? null : loading === LoadingState.LOADING ? (
             <>
               <LoaderCircle
                 className="h-8 w-8 animate-spin text-gray-500"
