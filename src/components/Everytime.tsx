@@ -2,30 +2,54 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ClockAlert, Link } from "lucide-react";
+import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 function Everytime({
   onValidate,
+  isValid,
 }: {
   onValidate: (isValid: boolean) => void;
+  isValid: boolean;
 }) {
   const [everytimeLink, setEverytimeLink] = useState<string>("");
+  const [loading, setLoading] = useState<boolean | null>(null);
 
   // 에브리 타임 시간표도 유효성을 검사해야 한다면, validate 로 검사중.... 띄우기.
 
   useEffect(() => {
-    onValidate(false);
-  }, [onValidate]);
-
-  const handleEverytimeValidate = useCallback(() => {
-    console.log(everytimeLink);
-    if (everytimeLink.trim() !== "") {
-      onValidate(true);
-    } else {
-      onValidate(false);
+    if (isValid === true) {
+      setLoading(false);
     }
-  }, [everytimeLink, onValidate]);
+  }, [isValid]);
+
+  const handleEverytimeValidate = useCallback(async () => {
+    if (loading) return;
+    if (everytimeLink.trim() === "") return;
+
+    console.log(everytimeLink);
+
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/everytime`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ everytimeLink: everytimeLink }),
+        }
+      );
+
+      if (!response.ok) {
+        onValidate(false);
+        throw new Error("error");
+      }
+      setLoading(false);
+      onValidate(true);
+    } catch (error) {}
+  }, [loading, everytimeLink, onValidate]);
 
   return (
     <div className="mb-12 space-y-4">
@@ -62,6 +86,22 @@ function Everytime({
           >
             제출
           </Button>
+        </div>
+        <div className="flex items-center justify-center pt-4">
+          {loading === null ? null : loading ? (
+            <>
+              <LoaderCircle
+                className="h-8 w-8 animate-spin text-gray-500"
+                style={{ animation: "spin 3s linear infinite" }}
+              />
+              <p className="pl-4">시간표 정보를 읽는 중 입니다. . .</p>
+            </>
+          ) : (
+            <>
+              <CheckCircleIcon className="h-8 w-8 text-green-400" />
+              <p className="pl-4 text-green-400">제출이 완료되었습니다 !</p>
+            </>
+          )}
         </div>
       </div>
     </div>
