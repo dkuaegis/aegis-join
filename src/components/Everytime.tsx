@@ -7,10 +7,10 @@ import { useCallback, useEffect, useState } from "react";
 
 function Everytime({
   onValidate,
-  isValid
+  isValid,
 }: {
   onValidate: (isValid: boolean) => void;
-  isValid: boolean
+  isValid: boolean;
 }) {
   const [everytimeLink, setEverytimeLink] = useState<string>("");
   const [loading, setLoading] = useState<boolean | null>(null);
@@ -18,18 +18,17 @@ function Everytime({
   // 에브리 타임 시간표도 유효성을 검사해야 한다면, validate 로 검사중.... 띄우기.
 
   useEffect(() => {
-    setLoading(null);
-    if(isValid === true) {
+    if (isValid === true) {
       setLoading(false);
-    }              
-  }, [])       
+    }
+  }, [isValid]);
 
   const handleEverytimeValidate = useCallback(async () => {
-    if(loading) return;
+    if (loading) return;
     if (everytimeLink.trim() === "") return;
 
     console.log(everytimeLink);
-    
+
     try {
       setLoading(true);
       const response = await fetch(
@@ -39,20 +38,18 @@ function Everytime({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({everytimeLink: everytimeLink}),
+          body: JSON.stringify({ everytimeLink: everytimeLink }),
         }
       );
 
-      if(!response.ok) {
+      if (!response.ok) {
         onValidate(false);
         throw new Error("error");
       }
       setLoading(false);
       onValidate(true);
-      } catch (error) {
-
-      }
-  }, [everytimeLink, onValidate]);
+    } catch (error) {}
+  }, [loading, everytimeLink, onValidate]);
 
   return (
     <div className="mb-12 space-y-4">
@@ -89,22 +86,22 @@ function Everytime({
           >
             제출
           </Button>
-        </div >
+        </div>
         <div className="flex items-center justify-center pt-4">
-        {loading === null ? null : loading ? (
-          <>
-            <LoaderCircle
-              className="h-8 w-8 animate-spin text-gray-500"
-              style={{ animation: "spin 3s linear infinite" }}
-            />
-            <p className="pl-4">시간표 정보를 읽는 중 입니다. . .</p>
-          </>
-        ) : (
-          <>
-            <CheckCircleIcon className="h-8 w-8 text-green-400" />
-            <p className="pl-4 text-green-400">제출이 완료되었습니다 !</p>
-          </>
-        )}
+          {loading === null ? null : loading ? (
+            <>
+              <LoaderCircle
+                className="h-8 w-8 animate-spin text-gray-500"
+                style={{ animation: "spin 3s linear infinite" }}
+              />
+              <p className="pl-4">시간표 정보를 읽는 중 입니다. . .</p>
+            </>
+          ) : (
+            <>
+              <CheckCircleIcon className="h-8 w-8 text-green-400" />
+              <p className="pl-4 text-green-400">제출이 완료되었습니다 !</p>
+            </>
+          )}
         </div>
       </div>
     </div>

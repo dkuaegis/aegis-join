@@ -1,7 +1,7 @@
-import { Alert, AlertDescription, AlertTitle, } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
-import { Copy, CheckCircleIcon, LoaderCircle, CircleAlert } from "lucide-react";
+import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function Payment({
@@ -26,7 +26,7 @@ function Payment({
 
   const ADMIN_CONTACT = {
     phone: "010-2439-1815",
-    kakaoId: "yun_seongmin"
+    kakaoId: "yun_seongmin",
   };
 
   useEffect(() => {
@@ -158,15 +158,13 @@ function Payment({
             <AlertDescription>
               초과 납부가 발생한 경우에도 회원가입은 정상적으로 처리됩니다.
               환불이 필요하시면 운영진에게 문의해 주세요.
-              </AlertDescription>
-              <AlertDescription>
-              연락처: {ADMIN_CONTACT.phone}
-              </AlertDescription>
-              <AlertDescription>
+            </AlertDescription>
+            <AlertDescription>연락처: {ADMIN_CONTACT.phone}</AlertDescription>
+            <AlertDescription>
               카카오톡 ID: {ADMIN_CONTACT.kakaoId}
             </AlertDescription>
-        </Alert>
-        ) :(null)}
+          </Alert>
+        ) : null}
       </div>
     </div>
   );
