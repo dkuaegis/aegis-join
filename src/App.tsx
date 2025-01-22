@@ -39,6 +39,7 @@ function App() {
     const storedValue = localStorage.getItem("paymentsPolling");
     return storedValue === "true";
   });
+  
   const [currentStep, setCurrentStep] = useState<number>(() => {
     const storedValue = localStorage.getItem("currentStep");
     return storedValue ? Number(storedValue) : 1;
