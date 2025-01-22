@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { CouponData } from "@/types/api/coupon";
+import { LoadingState } from "@/types/state/loading";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -72,13 +73,16 @@ export const columns: ColumnDef<CouponData>[] = [
 
 export default function Coupon({
   onValidate,
+  isValid,
 }: {
   onValidate: (isValid: boolean) => void;
+  isValid: boolean;
 }) {
   const [coupons, setCoupons] = useState<CouponData[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+  const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
   const [requestSuccess, setRequestSuccess] = useState<boolean | null>(null);
   const [isCouponLoading, setIsCouponLoading] = useState<boolean>(false);
 
@@ -97,11 +101,19 @@ export default function Coupon({
     },
   });
 
-  const postCoupon = async () => {
-    if (isCouponLoading) return;
-    if (requestSuccess !== null) return;
+  useEffect(() => {
+    if(isValid === true) return;
+    if(loading === LoadingState.SUCCESS) {
+      onValidate(true);
+    } else {
+      onValidate(false);
+    }
+  }, [loading]);
 
-    setIsCouponLoading(true);
+  const postCoupon = async () => {
+    if (loading === LoadingState.LOADING) return;
+
+    setLoading(LoadingState.LOADING);
 
     const payload = selectedCoupons;
     try {
@@ -119,15 +131,12 @@ export default function Coupon({
       if (!response.ok) {
         throw new Error("에러남");
       }
-      setRequestSuccess(true);
-      onValidate(true);
+      setLoading(LoadingState.SUCCESS);
     } catch (err: unknown) {
-      setRequestSuccess(false);
-      onValidate(false);
-    } finally {
-      setIsCouponLoading(false);
+      setLoading(LoadingState.ERROR);
     }
-    setTimeout(() => setRequestSuccess(null), 1500);
+
+    setTimeout(() => setLoading(LoadingState.IDLE), 1500);
   };
 
   useEffect(() => {
@@ -246,13 +255,21 @@ export default function Coupon({
           )}
         </TableBody>
       </Table>
-      {requestSuccess === null ? null : (
-        <p className="items-center text-2xl">
-          {requestSuccess
-            ? "쿠폰이 적용되었습니다!"
-            : "쿠폰 적용이 실패하였습니다."}
-        </p>
-      )}
+      <p className="items-center text-2xl">
+        {CouponMessage(loading)} 
+      </p>
+
     </div>
   );
+}
+
+const CouponMessage = (loading: LoadingState) => {
+  switch(loading) {
+    case(LoadingState.SUCCESS):
+      return "쿠폰이 적용되었습니다!";
+    case(LoadingState.ERROR):
+      return "쿠폰 적용이 실패하였습니다.";
+    default:
+      return null;
+  }
 }

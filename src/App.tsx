@@ -179,7 +179,7 @@ function App() {
       setPolling={setDiscordPolling}
       isValid={isDiscordValid}
     />,
-    <Coupon key="coupon" onValidate={setIsCouponValid} />,
+    <Coupon key="coupon" onValidate={setIsCouponValid} isValid={isCouponValid} />,
     <Payment
       key="payment"
       isValid={isPaymentValid}
