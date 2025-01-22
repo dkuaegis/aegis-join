@@ -10,38 +10,6 @@ import Coupon from "./components/Coupon";
 import Discord from "./components/Discord";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 
-//join progress 는 그 컴포넌트에서 get 요청을 날릴 때만 갱신된다.
-
-const joinProgressOrder = [
-  "GOOGLE_LOGIN", //구글 로그인을 한 상태. 이 상태가 아니라면 401을 보낸다. Auth 가 안됐다는 뜻.
-  "PERSONAL_INFORMATION",
-  "SURVEY",
-  "EVERYTIME",
-  "DISCORD",
-  "COUPON",
-  "PAYMENT",
-  "COMPLETE",
-] as const;
-
-type JoinProgress = (typeof joinProgressOrder)[number];
-
-function progressToStep(progress: JoinProgress): number {
-  const index = joinProgressOrder.indexOf(progress);
-  if (index === -1) {
-    throw new Error(`Invalid progress value${progress}`);
-  }
-  if (progress === "GOOGLE_LOGIN") {
-    //처음에 오면 GOOGLE_LOGIN 이라서, PERSONAL_INFORMATION 인 것과 같은 페이지를 보여줘야함.
-    return index + 1;
-  }
-  return index;
-}
-
-interface GetAuthCheck {
-  student_name_id: string; //이름이랑 학번 합쳐서 줌
-  joinProgress: JoinProgress; // 진행상황 가져옴.
-}
-
 function App() {
   const [senderName, setSenderName] = useState<string>("");
   const [paymentInfo, setPaymentInfo] = useState<GetPaymentInfo>({
@@ -204,10 +172,8 @@ function App() {
         if (!response.ok) {
           throw new Error("인증 정보 없음.");
         }
-
         setIsAuthenticated(response.status === 200);
-        const data: GetAuthCheck = await response.json();
-        setCurrentStep(progressToStep(data.joinProgress));
+
       } catch (error) {
         console.error("Auth check error:", error);
         setIsAuthenticated(false);
