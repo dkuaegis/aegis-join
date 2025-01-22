@@ -10,6 +10,20 @@ import {
 } from "@/components/ui/select";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+//전화번호 입력 포맷팅 함수
+function formatPhoneNumber(rawValue: string): string {
+  const sanitizedValue = rawValue.replace(/[^0-9]/g, ""); // 숫자 외의 문자 제거
+
+  if (sanitizedValue.length <= 3) {
+    
+    return sanitizedValue;
+  }
+  if (sanitizedValue.length <= 7) {
+    return `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3)}`;
+  }
+  return `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 7)}-${sanitizedValue.slice(7, 11)}`;
+}
+
 function phoneNumberCheck(number: string): boolean {
   const result = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
   return result.test(number);
@@ -32,6 +46,16 @@ function PersonalInfo({
   const [grade, setGrade] = useState("");
   const [academicSemester, setAcademicSemester] = useState("");
 
+  //학과 필드 배열
+  const departments = [
+    { value: "SOFTWARE_ENGINEERING", label: "SW융합대학 소프트웨어학과" },
+    { value: "COMPUTER_ENGINEERING", label: "SW융합대학 컴퓨터공학과" },
+    { value: "MOBILE_SYSTEM_ENGINEERING", label: "SW융합대학 모바일시스템공학과" },
+    { value: "CYBER_SECURITY", label: "SW융합대학 사이버보안학과" },
+    { value: "STATISTICS_DATA_SCIENCE", label: "SW융합대학 통계데이터사이언스학과" },
+    { value: "SW_CONVERGENCE_DIVISION", label: "SW융합대학 SW융합학부" }
+  ];
+
   const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null);
 
   const formValuesRef = useRef({
@@ -45,7 +69,7 @@ function PersonalInfo({
     grade,
     academicSemester,
   });
-
+  
   const validateForm = useCallback(() => {
     const isGenderValid = gender === "MALE" || gender === "FEMALE";
     const isPhoneNumberValid = phoneNumberCheck(phoneNumber);
@@ -105,7 +129,7 @@ function PersonalInfo({
     }
   }, [phoneNumber]);
 
-  // Fetch member data when component mounts
+  // 컴포넌트 마운트 시 fetch
   useEffect(() => {
     console.log("MOUNTED!");
 
@@ -268,20 +292,7 @@ function PersonalInfo({
           type="tel"
           id="phoneNumber"
           value={phoneNumber}
-          onChange={(e) => {
-            const rawValue = e.target.value.replace(/[^0-9]/g, "");
-
-            // 형식 적용
-            if (rawValue.length <= 3) {
-              setPhoneNumber(rawValue);
-            } else if (rawValue.length <= 7) {
-              setPhoneNumber(`${rawValue.slice(0, 3)}-${rawValue.slice(3)}`);
-            } else {
-              setPhoneNumber(
-                `${rawValue.slice(0, 3)}-${rawValue.slice(3, 7)}-${rawValue.slice(7, 11)}`
-              );
-            }
-          }}
+          onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))}
           placeholder="010-1234-5678"
           className={errors.phoneNumber && showErrors ? "border-red-500" : ""}
         />
@@ -297,30 +308,15 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="department">소속</Label>
         <Select value={department} onValueChange={setDepartment}>
-          <SelectTrigger
-            className={errors.studentId && showErrors ? "border-red-500" : ""}
-          >
+          <SelectTrigger className={errors.studentId && showErrors ? "border-red-500" : ""}>
             <SelectValue placeholder="학과 선택" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="SOFTWARE_ENGINEERING">
-              SW융합대학 소프트웨어학과
+            {departments.map(({ value, label }) => (
+            <SelectItem key={value} value={value}>
+              {label}
             </SelectItem>
-            <SelectItem value="COMPUTER_ENGINEERING">
-              SW융합대학 컴퓨터공학과
-            </SelectItem>
-            <SelectItem value="MOBILE_SYSTEM_ENGINEERING">
-              SW융합대학 모바일시스템공학과
-            </SelectItem>
-            <SelectItem value="CYBER_SECURITY">
-              SW융합대학 사이버보안학과
-            </SelectItem>
-            <SelectItem value="STATISTICS_DATA_SCIENCE">
-              SW융합대학 통계데이터사이언스학과
-            </SelectItem>
-            <SelectItem value="SW_CONVERGENCE_DIVISION">
-              SW융합대학 SW융합학부
-            </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         {errors.department && showErrors && (

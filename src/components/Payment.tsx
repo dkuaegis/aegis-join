@@ -1,4 +1,5 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import AlertBox from "./ui/custom/alertbox";
 import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import { Copy, CheckCircleIcon, LoaderCircle, CircleAlert } from "lucide-react";
@@ -142,25 +143,26 @@ function Payment({
         )}
       </div>
       {isValid === false && payInfo.currentDepositAmount > 0 && (
-        <Alert>
-          <CircleAlert className="h-4 w-4" />
-          <AlertTitle>추가 납부 안내</AlertTitle>
-          <AlertDescription>
-            아직 회비가 완납되지 않았습니다. 남은 금액 {remainingAmount.toLocaleString()}원을 납부해주세요.
-          </AlertDescription>
-        </Alert>
+        <AlertBox
+          icon={<CircleAlert className="h-4 w-4" />}
+          title="회비 추가 납부 안내"
+          description={[
+            "아직 회비가 완납되지 않았습니다.",
+            `남은 금액 ${remainingAmount.toLocaleString()}원을 납부해주세요.`
+          ]}
+        />
       )}
       <div className="flex items-center justify-center">
         {isOverpaid ? (
-          <Alert>
-            <CircleAlert className="h-4 w-4" />
-            <AlertTitle>회비 초과 납부 안내</AlertTitle>
-            <AlertDescription>
-              초과 납부가 발생한 경우에도 회원가입은 정상적으로 처리됩니다. 환불이 필요하시면 운영진에게 문의해 주세요.
-            </AlertDescription>
-            <AlertDescription>연락처: {ADMIN_CONTACT.phone}</AlertDescription>
-            <AlertDescription>카카오톡 ID: {ADMIN_CONTACT.kakaoId}</AlertDescription>
-          </Alert>
+          <AlertBox
+          icon={<CircleAlert className="h-4 w-4" />}
+          title="회비 초과 납부 안내"
+          description={[
+            "초과 납부가 발생한 경우에도 회원가입은 정상적으로 처리됩니다. 환불이 필요하시면 운영진에게 문의해 주세요.",
+            `연락처: ${ADMIN_CONTACT.phone}`,
+            `카카오톡 ID: ${ADMIN_CONTACT.kakaoId}`,
+          ]}
+        />
         ) : null}
       </div>
     </div>

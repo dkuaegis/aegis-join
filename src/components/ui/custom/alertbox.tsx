@@ -7,7 +7,7 @@ icon 에는 아이콘을 전달해주면 됩니다.
 interface AlertBoxProps {
     icon: ReactNode;
     title: string;
-    description: string;
+    description: string[];
 }
 
 const AlertBox = ({
@@ -19,7 +19,11 @@ return (
     <Alert>
         {icon}
         <AlertTitle>{title}</AlertTitle>
-        <AlertDescription>{description}</AlertDescription>
+        {description.map((desc) => (
+            <AlertDescription key={desc}>
+                {desc}
+            </AlertDescription>
+        ))}
     </Alert>
     );
 };

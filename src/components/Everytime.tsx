@@ -91,7 +91,7 @@ function Everytime({
       <AlertBox 
         icon={<ClockAlert className="h-4 w-4" />}
         title="시간표 제출이 왜 필요한가요?"
-        description="활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요."
+        description={["활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요."]}
       />
       <div className="my-10 space-y-2">
         <Label htmlFor="timetableLink">에브리타임 시간표 링크</Label>
