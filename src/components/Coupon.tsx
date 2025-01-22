@@ -83,8 +83,7 @@ export default function Coupon({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
-  const [requestSuccess, setRequestSuccess] = useState<boolean | null>(null);
-  const [isCouponLoading, setIsCouponLoading] = useState<boolean>(false);
+
 
   //쿠폰이 없으면 validate true.
 
@@ -108,7 +107,7 @@ export default function Coupon({
     } else {
       onValidate(false);
     }
-  }, [loading]);
+  }, [onValidate, isValid, loading]);
 
   const postCoupon = async () => {
     if (loading === LoadingState.LOADING) return;

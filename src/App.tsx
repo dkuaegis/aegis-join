@@ -43,7 +43,7 @@ interface GetAuthCheck {
 }
 
 function App() {
-  const [studentNameID, setStudentNameID] = useState<string>("");
+  const [senderName, setSenderName] = useState<string>("");
   const [paymentInfo, setPaymentInfo] = useState<GetPaymentInfo>({
     status: PaymentStatus.PENDING,
     expectedDepositAmount: 10000,
@@ -163,6 +163,7 @@ function App() {
       key="personal-info"
       onValidate={setIsPersonalInfoValid}
       showErrors={showPersonalInfoErrors}
+      setSenderName={setSenderName}
     />,
     <Survey
       key="survey"
@@ -184,7 +185,7 @@ function App() {
       key="payment"
       isValid={isPaymentValid}
       isOverpaid={isOverpaid}
-      senderNameID={studentNameID}
+      senderName={senderName}
       startPolling={setPaymentsPolling}
       payInfo={paymentInfo}
     />,
@@ -207,7 +208,6 @@ function App() {
         setIsAuthenticated(response.status === 200);
         const data: GetAuthCheck = await response.json();
         setCurrentStep(progressToStep(data.joinProgress));
-        setStudentNameID(data.student_name_id);
       } catch (error) {
         console.error("Auth check error:", error);
         setIsAuthenticated(false);
@@ -218,21 +218,21 @@ function App() {
   }, []);
 
   const handleNext = () => {
-    if (currentStep === 1 && !isPersonalInfoValid) {
+    if (currentStep === 10 && !isPersonalInfoValid) {
       setShowPersonalInfoErrors(true);
       return;
     }
-    if (currentStep === 2 && !isSurveyValid) {
+    if (currentStep === 20 && !isSurveyValid) {
       setShowSurveyValidErrors(true);
       return;
     }
-    if (currentStep === 3 && !isEverytimeValid) {
+    if (currentStep === 30 && !isEverytimeValid) {
       return;
     }
-    if (currentStep === 4 && !isDiscordValid) {
+    if (currentStep === 40 && !isDiscordValid) {
       return;
     }
-    if (currentStep === 5 && !isCouponValid) {
+    if (currentStep === 50 && !isCouponValid) {
       return;
     }
     if (currentStep === 6 && !isPaymentValid) {

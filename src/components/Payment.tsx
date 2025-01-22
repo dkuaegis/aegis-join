@@ -9,13 +9,13 @@ function Payment({
   isValid,
   isOverpaid,
   startPolling,
-  senderNameID,
   payInfo,
+  senderName
 }: {
   isValid: boolean;
   isOverpaid: boolean;
   startPolling: (isValid: boolean) => void;
-  senderNameID: string;
+  senderName: string;
   payInfo: GetPaymentInfo;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -25,9 +25,11 @@ function Payment({
     null
   );
 
-  const ADMIN_CONTACT = {
-    phone: "010-2439-1815",
+  //동아리 정보
+  const ADMIN_INFO = {
+    phoneNumber: "010-2439-1815",
     kakaoId: "yun_seongmin",
+    accountNumber: "IBK기업은행 98215064101017"
   };
 
   useEffect(() => {
@@ -40,14 +42,13 @@ function Payment({
   }, [isValid, startPolling]);
 
   useEffect(() => {
-    if (senderNameID === "") setIsLoading(true);
+    if (senderName === "") setIsLoading(true);
     else setIsLoading(false);
-  }, [senderNameID]);
+  }, [senderName]);
 
   const copyAccountNumber = () => {
-    const accountNumber = "IBK기업은행 98215064101017";
     navigator.clipboard
-      .writeText(accountNumber)
+      .writeText(ADMIN_INFO.accountNumber)
       .then(() => {
         setAccountMessage("계좌번호가 복사되었습니다!");
         setMessageType("success");
@@ -62,7 +63,7 @@ function Payment({
 
   const copySenderName = () => {
     navigator.clipboard
-      .writeText(senderNameID)
+      .writeText(senderName)
       .then(() => {
         setSenderMessage("송금자명이 복사되었습니다!");
         setMessageType("success");
@@ -85,7 +86,7 @@ function Payment({
       <Alert>
         <AlertDescription className="space-y-2 text-base">
           <div className="flex items-center">
-            <span>계좌번호: IBK기업은행 98215064101017</span>
+            <span>계좌번호: {ADMIN_INFO.accountNumber}</span>
             <Copy
               className="ml-2 cursor-pointer text-gray-600 hover:text-gray-800"
               size={16}
@@ -103,7 +104,7 @@ function Payment({
           )}
           <div className="flex items-center">
             <span>
-              송금자명: {isLoading ? "로딩 중..." : senderNameID || "정보를 불러오지 못했습니다."}
+              송금자명: {isLoading ? "로딩 중..." : senderName || "정보를 불러오지 못했습니다."}
             </span>
             <Copy
               className="ml-2 cursor-pointer text-gray-600 hover:text-gray-800"
@@ -159,8 +160,8 @@ function Payment({
           title="회비 초과 납부 안내"
           description={[
             "초과 납부가 발생한 경우에도 회원가입은 정상적으로 처리됩니다. 환불이 필요하시면 운영진에게 문의해 주세요.",
-            `연락처: ${ADMIN_CONTACT.phone}`,
-            `카카오톡 ID: ${ADMIN_CONTACT.kakaoId}`,
+            `연락처: ${ADMIN_INFO.phoneNumber}`,
+            `카카오톡 ID: ${ADMIN_INFO.kakaoId}`,
           ]}
         />
         ) : null}
