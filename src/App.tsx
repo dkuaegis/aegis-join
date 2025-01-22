@@ -218,21 +218,21 @@ function App() {
   }, []);
 
   const handleNext = () => {
-    if (currentStep === 10 && !isPersonalInfoValid) {
+    if (currentStep === 1 && !isPersonalInfoValid) {
       setShowPersonalInfoErrors(true);
       return;
     }
-    if (currentStep === 20 && !isSurveyValid) {
+    if (currentStep === 2 && !isSurveyValid) {
       setShowSurveyValidErrors(true);
       return;
     }
-    if (currentStep === 30 && !isEverytimeValid) {
+    if (currentStep === 3 && !isEverytimeValid) {
       return;
     }
-    if (currentStep === 40 && !isDiscordValid) {
+    if (currentStep === 4 && !isDiscordValid) {
       return;
     }
-    if (currentStep === 50 && !isCouponValid) {
+    if (currentStep === 5 && !isCouponValid) {
       return;
     }
     if (currentStep === 6 && !isPaymentValid) {
