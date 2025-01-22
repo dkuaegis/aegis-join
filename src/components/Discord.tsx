@@ -5,8 +5,9 @@ import {
   LoaderCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
+import AlertBox from "./ui/custom/alertbox";
+
 
 function Discord({
   setPolling,
@@ -44,11 +45,11 @@ function Discord({
   return (
     <div className="space-y-4">
       <h3 className="font-semibold text-lg">디스코드 연동</h3>
-      <Alert>
-        <CircleHelp className="h-4 w-4" />
-        <AlertTitle>디스코드 연동이 왜 필요한가요?</AlertTitle>
-        <AlertDescription>어쩌구 저쩌구</AlertDescription>
-      </Alert>
+      <AlertBox
+        icon={<CircleHelp className="h-4 w-4" />}
+        title="디스코드 연동이 왜 필요한가요?"
+        description={["어쩌구 저쩌구"]}
+      />
       <div className="flex items-center justify-between rounded-lg bg-secondary p-4">
         <span className="truncate font-medium text-sm shadow-none">
           {discordLink}

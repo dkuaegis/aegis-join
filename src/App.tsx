@@ -43,7 +43,7 @@ interface GetAuthCheck {
 }
 
 function App() {
-  const [studentNameID, setStudentNameID] = useState<string>("");
+  const [senderName, setSenderName] = useState<string>("");
   const [paymentInfo, setPaymentInfo] = useState<GetPaymentInfo>({
     status: PaymentStatus.PENDING,
     expectedDepositAmount: 10000,
@@ -163,6 +163,7 @@ function App() {
       key="personal-info"
       onValidate={setIsPersonalInfoValid}
       showErrors={showPersonalInfoErrors}
+      setSenderName={setSenderName}
     />,
     <Survey
       key="survey"
@@ -179,12 +180,12 @@ function App() {
       setPolling={setDiscordPolling}
       isValid={isDiscordValid}
     />,
-    <Coupon key="coupon" onValidate={setIsCouponValid} />,
+    <Coupon key="coupon" onValidate={setIsCouponValid} isValid={isCouponValid} />,
     <Payment
       key="payment"
       isValid={isPaymentValid}
       isOverpaid={isOverpaid}
-      senderNameID={studentNameID}
+      senderName={senderName}
       startPolling={setPaymentsPolling}
       payInfo={paymentInfo}
     />,
@@ -207,7 +208,6 @@ function App() {
         setIsAuthenticated(response.status === 200);
         const data: GetAuthCheck = await response.json();
         setCurrentStep(progressToStep(data.joinProgress));
-        setStudentNameID(data.student_name_id);
       } catch (error) {
         console.error("Auth check error:", error);
         setIsAuthenticated(false);
