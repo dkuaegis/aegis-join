@@ -5,10 +5,12 @@ import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import Coupon from "./components/Coupon";
 import Discord from "./components/Discord";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
+import { PageActions, pageReducer, pageState } from "./lib/pageReducer";
+import { startDiscordPolling } from "./lib/api/discordPolling";
 
 function App() {
   const [senderName, setSenderName] = useState<string>("");
@@ -40,56 +42,33 @@ function App() {
     return storedValue === "true";
   });
   
-  const [currentStep, setCurrentStep] = useState<number>(() => {
-    const storedValue = localStorage.getItem("currentStep");
-    return storedValue ? Number(storedValue) : 1;
-  });
+
+  // init
+  const storedPage = localStorage.getItem("currentPage");
+  const initialState: pageState = {
+    length: 6,
+    currentPageIndex: storedPage ? Number(storedPage) : 1,
+  }
+
+  const [currentPage, dispatch] = useReducer(pageReducer, initialState);
 
   useEffect(() => {
-    localStorage.setItem("currentStep", String(currentStep));
-  }, [currentStep]);
+    updateLocal("currentPage",currentPage.currentPageIndex);
+  }, [currentPage.currentPageIndex]);
 
   useEffect(() => {
-    localStorage.setItem("discordPolling", String(discordPolling));
+    updateLocal("discordPolling",discordPolling);
     if (discordPolling) {
-      startDiscordPolling();
+      startDiscordPolling(setIsDiscordValid);
     }
   }, [discordPolling]);
 
   useEffect(() => {
-    localStorage.setItem("paymentsPolling", String(paymentsPolling));
+    updateLocal("paymentsPolling",paymentsPolling);
     if (paymentsPolling) {
       startPaymentsPolling();
     }
   }, [paymentsPolling]);
-
-  const startDiscordPolling = useCallback(() => {
-    let attempts = 0;
-    const interval = 2000;
-
-    const poll = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/discord/check`
-        );
-        if (!response.ok) {
-          throw new Error("HTTP ERROR");
-        }
-        const data = await response.json();
-
-        if (data.status === "COMPLETE") {
-          setIsDiscordValid(true);
-          return;
-        }
-        attempts++;
-        setTimeout(poll, interval); //재귀
-      } catch (err: unknown) {
-        setIsDiscordValid(false);
-      }
-    };
-
-    poll();
-  }, []);
 
   const startPaymentsPolling = useCallback(() => {
     let attempts = 0;
@@ -185,45 +164,45 @@ function App() {
   }, []);
 
   const handleNext = () => {
-    if (currentStep === 1 && !isPersonalInfoValid) {
+    if (currentPage.currentPageIndex === 1 && !isPersonalInfoValid) {
       setShowPersonalInfoErrors(true);
       return;
     }
-    if (currentStep === 2 && !isSurveyValid) {
+    if (currentPage.currentPageIndex === 2 && !isSurveyValid) {
       setShowSurveyValidErrors(true);
       return;
     }
-    if (currentStep === 3 && !isEverytimeValid) {
+    if (currentPage.currentPageIndex === 3 && !isEverytimeValid) {
       return;
     }
-    if (currentStep === 4 && !isDiscordValid) {
+    if (currentPage.currentPageIndex === 4 && !isDiscordValid) {
       return;
     }
-    if (currentStep === 5 && !isCouponValid) {
+    if (currentPage.currentPageIndex === 5 && !isCouponValid) {
       return;
     }
-    if (currentStep === 6 && !isPaymentValid) {
+    if (currentPage.currentPageIndex === 6 && !isPaymentValid) {
       return;
     }
-    if (currentStep < totalSteps) {
+    if (currentPage.currentPageIndex < currentPage.length) {
       setShowPersonalInfoErrors(false);
       setShowSurveyValidErrors(false);
-      setCurrentStep(currentStep + 1);
+      dispatch({type: PageActions.NEXT});
     }
   };
 
   const handlePrevious = () => {
-    if (currentStep > 1) {
+    if (currentPage.currentPageIndex > 1) {
       setShowPersonalInfoErrors(false);
       setShowSurveyValidErrors(false);
-      setCurrentStep(currentStep - 1);
+      dispatch({type: PageActions.PREV});
     }
   };
 
   if (isAuthenticated === null) {
     return null;
   }
-
+  
   if (!isAuthenticated) {
     return <LoginPage />;
   }
@@ -233,35 +212,35 @@ function App() {
       <div className="mb-6">
         <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
         <Progress
-          value={(currentStep / totalSteps) * 100}
+          value={(currentPage.currentPageIndex / totalSteps) * 100}
           className="mt-4 w-full"
         />
       </div>
-      <div className="mb-6 space-y-6">{components[currentStep - 1]}</div>
+      <div className="mb-6 space-y-6">{components[currentPage.currentPageIndex - 1]}</div>
 
       <div className="fixed right-0 bottom-0 left-0 bg-background/80 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-md px-4 py-4">
           <div className="flex justify-between">
-            {currentStep > 1 && (
+            {currentPage.currentPageIndex > 1 && (
               <Button type="button" onClick={handlePrevious}>
                 이전
               </Button>
             )}
-            {currentStep < totalSteps && (
+            {currentPage.currentPageIndex < currentPage.length && (
               <Button
                 type="button"
                 variant={
-                  (isPersonalInfoValid && currentStep === 1) ||
-                  (isSurveyValid && currentStep === 2) ||
-                  (isEverytimeValid && currentStep === 3) ||
-                  (isDiscordValid && currentStep === 4) ||
-                  (isCouponValid && currentStep === 5) ||
-                  (isPaymentValid && currentStep === 6)
+                  (isPersonalInfoValid && currentPage.currentPageIndex === 1) ||
+                  (isSurveyValid && currentPage.currentPageIndex === 2) ||
+                  (isEverytimeValid && currentPage.currentPageIndex === 3) ||
+                  (isDiscordValid && currentPage.currentPageIndex === 4) ||
+                  (isCouponValid && currentPage.currentPageIndex === 5) ||
+                  (isPaymentValid && currentPage.currentPageIndex === 6)
                     ? "default"
                     : "secondary"
                 }
                 onClick={handleNext}
-                className={currentStep === 1 ? "ml-auto" : ""}
+                className={currentPage.currentPageIndex === 1 ? "ml-auto" : ""}
               >
                 다음
               </Button>
@@ -271,6 +250,14 @@ function App() {
       </div>
     </div>
   );
+}
+
+function updateLocal(name: string, value: any) {
+ localStorage.setItem(name, String(value));
+}
+
+function getLocal(name: string): string | null {
+  return localStorage.getItem(name);
 }
 
 export default App;
