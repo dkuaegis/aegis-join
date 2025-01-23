@@ -9,12 +9,12 @@ interface ValidationContextType {
 }
 
 const initialValidationState: ValidationState = {
-    PersonalInfo: ValidState.INVALID,
-    Survey: ValidState.INVALID,
-    Everytime: ValidState.INVALID,
-    Discord: ValidState.INVALID,
-    Coupon: ValidState.INVALID,
-    Payment: ValidState.INVALID,
+    personalInfo: ValidState.INVALID,
+    survey: ValidState.INVALID,
+    everytime: ValidState.INVALID,
+    discord: ValidState.INVALID,
+    coupon: ValidState.INVALID,
+    payment: ValidState.INVALID,
 }
 
 export const ValidationContext = createContext<ValidationContextType | undefined>(undefined);
@@ -36,3 +36,16 @@ export const useValidation = () => {
     }
     return context;
 };
+
+export const checkPageValidation = (state: ValidationState, page: number) => {
+    const pageValidationMap: Record<number, boolean> = {
+        1: state.personalInfo === ValidState.VALID,
+        2: state.survey === ValidState.VALID,
+        3: state.everytime === ValidState.VALID,
+        4: state.discord === ValidState.VALID,
+        5: state.coupon === ValidState.VALID,
+        6: state.payment === ValidState.VALID,
+      };
+      
+      return pageValidationMap[page] ?? false;
+}

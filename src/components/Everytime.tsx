@@ -10,10 +10,14 @@ import { useValidation } from "@/lib/context/validationContext";
 import { ValidationActions } from "@/lib/reducer/validationReducer";
 
 function Everytime() {
+
   const [everytimeLink, setEverytimeLink] = useState<string>("");
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
 
   const { validationState, validationDispatch } = useValidation();
+
+  const setValid = () => validationDispatch({ type: ValidationActions.SET_VALID, field:"everytime"});
+  const setInvalid = () => validationDispatch({ type: ValidationActions.SET_INVALID, field:"everytime"});
 
   const handleEverytimeSubmit = useCallback(async () => {
     
@@ -34,21 +38,21 @@ function Everytime() {
       );
 
       if (!response.ok) {
-        validationDispatch({ type: ValidationActions.SET_INVALID, field:"Everytime"})
+        setInvalid();
         throw new Error("error");
       }
       setLoading(LoadingState.SUCCESS);
-      validationDispatch({ type: ValidationActions.SET_VALID, field:"Everytime"})
+      setValid();
     } catch (error) {}
   }, [loading, everytimeLink]);
 
   useEffect(() => {
-    if (validationState.Everytime === ValidState.VALID) {
+    if (validationState.everytime === ValidState.VALID) {
       setLoading(LoadingState.SUCCESS);
     } else {
       setLoading(LoadingState.IDLE);
     }
-  }, [validationState.Everytime]);
+  }, [validationState.everytime]);
 
   return (
     <div className="mb-12 space-y-4">

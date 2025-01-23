@@ -2,11 +2,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { EtcInput } from "@/components/ui/etcinput";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useValidation } from "@/lib/context/validationContext";
+import { ValidationActions } from "@/lib/reducer/validationReducer";
 import {
   type GetSurveyForm,
   InterestField,
   type PostSurveyForm,
 } from "@/types/api/survey";
+import { ValidState } from "@/types/state/valid";
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -123,13 +126,7 @@ const groupedInterests = interests.reduce(
   {} as Record<string, InterestItem[]>
 );
 
-function Survey({
-  onValidate,
-  showErrors,
-}: {
-  onValidate: (isValid: boolean) => void;
-  showErrors: boolean;
-}) {
+function Survey() {
   const [checkBox, setCheckBox] = useState<Map<InterestField, boolean>>(
     new Map()
   );
@@ -144,6 +141,10 @@ function Survey({
     registrationReason: "",
     feedBack: "",
   });
+
+  const { validationState, validationDispatch } = useValidation();
+  const setValid = () => validationDispatch({ type: ValidationActions.SET_VALID, field:"survey"});
+  const setInvalid = () => validationDispatch({ type: ValidationActions.SET_INVALID, field:"survey"});
 
   const etcExist = useCallback(
     (field: InterestField): boolean => {
@@ -169,6 +170,7 @@ function Survey({
   }, [checkBox, interestEtcField, registrationReason, feedBack]);
 
   useEffect(() => {
+    setInvalid();
     console.log("MOUNTED");
     const getSurveyData = async () => {
       try {
@@ -243,11 +245,11 @@ function Survey({
     );
 
     if (isRegistrationReasonValid && isCheckBoxValid && isEveryEtcValid) {
-      onValidate(true);
+      setValid();
     } else {
-      onValidate(false);
+      setInvalid();
     }
-  }, [checkBox, interestEtcField, registrationReason, onValidate]);
+  }, [checkBox, interestEtcField, registrationReason]);
 
   useEffect(() => {
     validateSurveyForm();
@@ -324,7 +326,7 @@ function Survey({
                       {isETC(field.id) && (
                         <p
                           className={`pl-2 text-red-500 text-xs ${
-                            showErrors &&
+                            (validationState.survey === ValidState.SHOW_ERROR) &&
                             checkBox.get(field.id) &&
                             (interestEtcField.get(field.id) ?? "").trim() === ""
                               ? "visibility-visible opacity-100"
@@ -345,7 +347,7 @@ function Survey({
 
       <p
         className={`text-red-500 text-xs ${
-          showErrors &&
+          (validationState.survey === ValidState.SHOW_ERROR) &&
           !Array.from(checkBox.values()).some((isChecked) => isChecked)
             ? "visibility-visible opacity-100"
             : "visibility-hidden opacity-0"
@@ -358,7 +360,7 @@ function Survey({
         <Label htmlFor="joinReason" className="flex items-end text-xl">
           가입 이유{" "}
           <span
-            className={`pb-1 pl-2 text-red-500 text-xs ${showErrors ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
+            className={`pb-1 pl-2 text-red-500 text-xs ${(validationState.survey === ValidState.SHOW_ERROR) ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
           >
             *필수 항목입니다
           </span>

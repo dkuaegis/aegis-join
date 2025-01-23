@@ -4,12 +4,12 @@ import { ValidState } from "@/types/state/valid"
 
 
 export interface ValidationState {
-    PersonalInfo: ValidState;
-    Survey: ValidState;
-    Everytime: ValidState;
-    Discord: ValidState;
-    Coupon: ValidState;
-    Payment: ValidState;
+    personalInfo: ValidState;
+    survey: ValidState;
+    everytime: ValidState;
+    discord: ValidState;
+    coupon: ValidState;
+    payment: ValidState;
 }
 
 export enum ValidationActions {

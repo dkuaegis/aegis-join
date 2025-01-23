@@ -11,7 +11,9 @@ import Discord from "./components/Discord";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 import { PageActions, pageReducer, pageState } from "./lib/reducer/pageReducer";
 import { startDiscordPolling } from "./lib/api/discordPolling";
-import { ValidationProvider } from "./lib/context/validationContext";
+import { checkPageValidation, useValidation, ValidationProvider } from "./lib/context/validationContext";
+import { ValidState } from "./types/state/valid";
+import { ValidationActions } from "./lib/reducer/validationReducer";
 
 
 function App() {
@@ -23,16 +25,15 @@ function App() {
   });
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isPersonalInfoValid, setIsPersonalInfoValid] = useState<boolean>(true);
-  const [isSurveyValid, setIsSurveyValid] = useState<boolean>(true);
-  const [isEverytimeValid, setIsEverytimeValid] = useState<boolean>(false);
   const [isDiscordValid, setIsDiscordValid] = useState<boolean>(false);
   const [isCouponValid, setIsCouponValid] = useState<boolean>(false);
   const [isPaymentValid, setIsPaymentValid] = useState<boolean>(false);
   const [isOverpaid, setIsOverpaid] = useState<boolean>(false);
   const [showPersonalInfoErrors, setShowPersonalInfoErrors] =
     useState<boolean>(false);
-  const [showSurveyValidErrors, setShowSurveyValidErrors] =
-    useState<boolean>(false);
+
+  const { validationState, validationDispatch } = useValidation();
+  const surveyShowError = () => validationDispatch({ type: ValidationActions.SHOW_ERROR, field:"survey"});
 
   // 폴링 상태를 로컬 스토리지에서 가져옴.
   const [discordPolling, setDiscordPolling] = useState<boolean>(() => {
@@ -117,8 +118,6 @@ function App() {
     />,
     <Survey
       key="survey"
-      onValidate={setIsSurveyValid}
-      showErrors={showSurveyValidErrors}
     />,
     <Everytime
       key="everytime"
@@ -168,11 +167,11 @@ function App() {
       setShowPersonalInfoErrors(true);
       return;
     }
-    if (currentPage.currentPageIndex === 2 && !isSurveyValid) {
-      setShowSurveyValidErrors(true);
+    if (currentPage.currentPageIndex === 2 && validationState.survey !== ValidState.VALID) {
+      surveyShowError();
       return;
     }
-    if (currentPage.currentPageIndex === 3 && !isEverytimeValid) {
+    if (currentPage.currentPageIndex === 3 && validationState.everytime !== ValidState.VALID) {
       return;
     }
     if (currentPage.currentPageIndex === 4 && !isDiscordValid) {
@@ -186,7 +185,6 @@ function App() {
     }
     if (currentPage.currentPageIndex < currentPage.length) {
       setShowPersonalInfoErrors(false);
-      setShowSurveyValidErrors(false);
       dispatch({type: PageActions.NEXT});
     }
   };
@@ -194,7 +192,6 @@ function App() {
   const handlePrevious = () => {
     if (currentPage.currentPageIndex > 1) {
       setShowPersonalInfoErrors(false);
-      setShowSurveyValidErrors(false);
       dispatch({type: PageActions.PREV});
     }
   };
@@ -208,42 +205,41 @@ function App() {
   }
 
   return (
-    <ValidationProvider>
-      <div className="mx-auto mb-4 w-full max-w-md px-4 py-8">
-        <div className="mb-6">
-          <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
-          <Progress
-            value={(currentPage.currentPageIndex / totalSteps) * 100}
-            className="mt-4 w-full"
-          />
-        </div>
-        <div className="mb-6 space-y-6">{components[currentPage.currentPageIndex - 1]}</div>
 
-        <div className="fixed right-0 bottom-0 left-0 bg-background/80 backdrop-blur-sm">
-          <div className="mx-auto w-full max-w-md px-4 py-4">
-            <div className="flex justify-between">
-              {currentPage.currentPageIndex > 1 && (
-                <Button type="button" onClick={handlePrevious}>
-                  이전
-                </Button>
-              )}
-              {currentPage.currentPageIndex < currentPage.length && (
-                <Button
-                  type="button"
-                  variant={isPersonalInfoValid && currentPage.currentPageIndex === 1
-                      ? "default"
-                      : "secondary"}
-                  onClick={handleNext}
-                  className={currentPage.currentPageIndex === 1 ? "ml-auto" : ""}
-                >
-                  다음
-                </Button>
-              )}
-            </div>
+    <div className="mx-auto mb-4 w-full max-w-md px-4 py-8">
+      <div className="mb-6">
+        <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
+        <Progress
+          value={(currentPage.currentPageIndex / totalSteps) * 100}
+          className="mt-4 w-full"
+        />
+      </div>
+      <div className="mb-6 space-y-6">{components[currentPage.currentPageIndex - 1]}</div>
+
+      <div className="fixed right-0 bottom-0 left-0 bg-background/80 backdrop-blur-sm">
+        <div className="mx-auto w-full max-w-md px-4 py-4">
+          <div className="flex justify-between">
+            {currentPage.currentPageIndex > 1 && (
+              <Button type="button" onClick={handlePrevious}>
+                이전
+              </Button>
+            )}
+            {currentPage.currentPageIndex < currentPage.length && (
+              <Button
+                type="button"
+                variant={checkPageValidation(validationState, currentPage.currentPageIndex)
+                    ? "default"
+                    : "secondary"}
+                onClick={handleNext}
+                className={currentPage.currentPageIndex === 1 ? "ml-auto" : ""}
+              >
+                다음
+              </Button>
+            )}
           </div>
         </div>
       </div>
-    </ValidationProvider>
+    </div>
   );
 }
 
