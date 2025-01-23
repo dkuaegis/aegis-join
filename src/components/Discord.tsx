@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import AlertBox from "./ui/custom/alertbox";
 
-
 function Discord({
   setPolling,
   isValid,

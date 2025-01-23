@@ -143,8 +143,22 @@ function Survey() {
   });
 
   const { validationState, validationDispatch } = useValidation();
-  const setValid = () => validationDispatch({ type: ValidationActions.SET_VALID, field:"survey"});
-  const setInvalid = () => validationDispatch({ type: ValidationActions.SET_INVALID, field:"survey"});
+  const setValid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_VALID,
+        field: "survey",
+      }),
+    [validationDispatch]
+  );
+  const setInvalid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_INVALID,
+        field: "survey",
+      }),
+    [validationDispatch]
+  );
 
   const valid = validationState.survey;
 
@@ -228,7 +242,7 @@ function Survey() {
 
       postSurveyData();
     };
-  }, []);
+  }, [setInvalid]);
 
   const validateSurveyForm = useCallback(() => {
     // 가입 이유가 비어있지 않고 체크박스가 활성화 되어야 valid. 하지만 etc 필드가 체크됐을 때, 비어있으면 안된다.
@@ -251,7 +265,7 @@ function Survey() {
     } else {
       setInvalid();
     }
-  }, [checkBox, interestEtcField, registrationReason]);
+  }, [checkBox, interestEtcField, registrationReason, setValid, setInvalid]);
 
   useEffect(() => {
     validateSurveyForm();
@@ -328,7 +342,7 @@ function Survey() {
                       {isETC(field.id) && (
                         <p
                           className={`pl-2 text-red-500 text-xs ${
-                            (valid === ValidState.SHOW_ERROR) &&
+                            valid === ValidState.SHOW_ERROR &&
                             checkBox.get(field.id) &&
                             (interestEtcField.get(field.id) ?? "").trim() === ""
                               ? "visibility-visible opacity-100"
@@ -362,7 +376,7 @@ function Survey() {
         <Label htmlFor="joinReason" className="flex items-end text-xl">
           가입 이유{" "}
           <span
-            className={`pb-1 pl-2 text-red-500 text-xs ${(valid === ValidState.SHOW_ERROR) ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
+            className={`pb-1 pl-2 text-red-500 text-xs ${valid === ValidState.SHOW_ERROR ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
           >
             *필수 항목입니다
           </span>

@@ -21,7 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // 컬럼 정의
 export const columns: ColumnDef<CouponData>[] = [
@@ -83,9 +83,23 @@ export default function Coupon() {
 
   const { validationState, validationDispatch } = useValidation();
   const valid = validationState.coupon;
-  const setValid = () => validationDispatch({ type: ValidationActions.SET_VALID, field:"coupon"});
-  const setInvalid = () => validationDispatch({ type: ValidationActions.SET_INVALID, field:"coupon"});
 
+  const setValid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_VALID,
+        field: "coupon",
+      }),
+    [validationDispatch]
+  );
+  const setInvalid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_INVALID,
+        field: "coupon",
+      }),
+    [validationDispatch]
+  );
 
   //쿠폰이 없으면 validate true.
 
@@ -103,13 +117,13 @@ export default function Coupon() {
   });
 
   useEffect(() => {
-    if(valid === ValidState.VALID) return;
-    if(loading === LoadingState.SUCCESS) {
+    if (valid === ValidState.VALID) return;
+    if (loading === LoadingState.SUCCESS) {
       setValid();
     } else {
       setInvalid();
     }
-  }, [valid, loading]);
+  }, [valid, loading, setValid, setInvalid]);
 
   const postCoupon = async () => {
     if (loading === LoadingState.LOADING) return;
@@ -158,14 +172,14 @@ export default function Coupon() {
         const noCoupon = !(data.length > 0);
 
         setCoupons(data);
-        if(noCoupon) setValid();
+        if (noCoupon) setValid();
       } catch (error) {
         setInvalid();
       }
     };
 
     getCoupon();
-  }, []);
+  }, [setValid, setInvalid]);
 
   useEffect(() => {
     const selectedRowIds = Object.keys(rowSelection) // 선택된 행 ID 가져오기
@@ -256,21 +270,18 @@ export default function Coupon() {
           )}
         </TableBody>
       </Table>
-      <p className="items-center text-2xl">
-        {CouponMessage(loading)} 
-      </p>
-
+      <p className="items-center text-2xl">{CouponMessage(loading)}</p>
     </div>
   );
 }
 
 const CouponMessage = (loading: LoadingState) => {
-  switch(loading) {
-    case(LoadingState.SUCCESS):
+  switch (loading) {
+    case LoadingState.SUCCESS:
       return "쿠폰이 적용되었습니다!";
-    case(LoadingState.ERROR):
+    case LoadingState.ERROR:
       return "쿠폰 적용이 실패하였습니다.";
     default:
       return null;
   }
-}
+};

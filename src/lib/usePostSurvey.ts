@@ -1,8 +1,11 @@
 interface ApiResponse {
-    success: boolean;
+  success: boolean;
 }
 
-export const postForm = async <T>(form: T, url: string): Promise<ApiResponse> => {
+export const postForm = async <T>(
+  form: T,
+  url: string
+): Promise<ApiResponse> => {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
       method: "POST",
@@ -22,6 +25,4 @@ export const postForm = async <T>(form: T, url: string): Promise<ApiResponse> =>
     console.error("error:", error);
     return { success: false };
   }
-}
-
-
+};

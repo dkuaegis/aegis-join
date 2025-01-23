@@ -6,9 +6,9 @@ import { ValidationProvider } from "./lib/context/validationContext.tsx";
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
 createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-        <ValidationProvider>
-            <App />
-        </ValidationProvider>
-    </StrictMode>
+  <StrictMode>
+    <ValidationProvider>
+      <App />
+    </ValidationProvider>
+  </StrictMode>
 );

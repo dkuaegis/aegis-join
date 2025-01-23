@@ -11,14 +11,20 @@ import {
 import { useValidation } from "@/lib/context/validationContext";
 import { ValidationActions } from "@/lib/reducer/validationReducer";
 import { ValidState } from "@/types/state/valid";
-import { type Dispatch, type SetStateAction, useEffect, useRef, useState } from "react";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 //전화번호 입력 포맷팅 함수
 function formatPhoneNumber(rawValue: string): string {
   const sanitizedValue = rawValue.replace(/[^0-9]/g, ""); // 숫자 외의 문자 제거
 
   if (sanitizedValue.length <= 3) {
-    
     return sanitizedValue;
   }
   if (sanitizedValue.length <= 7) {
@@ -36,10 +42,16 @@ function phoneNumberCheck(number: string): boolean {
 const departments = [
   { value: "SOFTWARE_ENGINEERING", label: "SW융합대학 소프트웨어학과" },
   { value: "COMPUTER_ENGINEERING", label: "SW융합대학 컴퓨터공학과" },
-  { value: "MOBILE_SYSTEM_ENGINEERING", label: "SW융합대학 모바일시스템공학과" },
+  {
+    value: "MOBILE_SYSTEM_ENGINEERING",
+    label: "SW융합대학 모바일시스템공학과",
+  },
   { value: "CYBER_SECURITY", label: "SW융합대학 사이버보안학과" },
-  { value: "STATISTICS_DATA_SCIENCE", label: "SW융합대학 통계데이터사이언스학과" },
-  { value: "SW_CONVERGENCE_DIVISION", label: "SW융합대학 SW융합학부" }
+  {
+    value: "STATISTICS_DATA_SCIENCE",
+    label: "SW융합대학 통계데이터사이언스학과",
+  },
+  { value: "SW_CONVERGENCE_DIVISION", label: "SW융합대학 SW융합학부" },
 ];
 
 //학년 필드 배열
@@ -48,13 +60,13 @@ const grades = [
   { value: "TWO", label: "2학년" },
   { value: "THREE", label: "3학년" },
   { value: "FOUR", label: "4학년" },
-  { value: "FIVE", label: "5학년" }
+  { value: "FIVE", label: "5학년" },
 ];
 
 function PersonalInfo({
   setSenderName,
 }: {
-  setSenderName: Dispatch<SetStateAction<string>>
+  setSenderName: Dispatch<SetStateAction<string>>;
 }) {
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -68,8 +80,22 @@ function PersonalInfo({
 
   const { validationState, validationDispatch } = useValidation();
   // const valid = validationState.personalInfo;
-  const setValid = () => validationDispatch({ type: ValidationActions.SET_VALID, field:"personalInfo"});
-  const setInvalid = () => validationDispatch({ type: ValidationActions.SET_INVALID, field:"personalInfo"});
+  const setValid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_VALID,
+        field: "personalInfo",
+      }),
+    [validationDispatch]
+  );
+  const setInvalid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_INVALID,
+        field: "personalInfo",
+      }),
+    [validationDispatch]
+  );
 
   const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null);
 
@@ -84,8 +110,8 @@ function PersonalInfo({
     grade,
     academicSemester,
   });
-  
-  const showErrors = (validationState.personalInfo === ValidState.SHOW_ERROR);
+
+  const showErrors = validationState.personalInfo === ValidState.SHOW_ERROR;
   const [errors, setErrors] = useState({
     name: false,
     birthDate: false,
@@ -113,19 +139,19 @@ function PersonalInfo({
       !!grade &&
       !!academicSemester;
 
-    if(isValid) setValid();
+    if (isValid) setValid();
 
     if (validationState.personalInfo === ValidState.SHOW_ERROR) {
       setErrors({
-      name: !name,
-      birthDate: !birthDate,
-      gender: !isGenderValid,
-      studentId: !studentId,
-      phoneNumber: !phoneNumber || !isPhoneNumberValid,
-      department: !department,
-      academicStatus: !academicStatus,
-      grade: !grade,
-      academicSemester: !academicSemester,
+        name: !name,
+        birthDate: !birthDate,
+        gender: !isGenderValid,
+        studentId: !studentId,
+        phoneNumber: !phoneNumber || !isPhoneNumberValid,
+        department: !department,
+        academicStatus: !academicStatus,
+        grade: !grade,
+        academicSemester: !academicSemester,
       });
     }
   }, [
@@ -139,7 +165,8 @@ function PersonalInfo({
     grade,
     academicSemester,
     validationState.personalInfo,
-  ])
+    setValid,
+  ]);
 
   useEffect(() => {
     if (phoneNumber) {
@@ -209,11 +236,11 @@ function PersonalInfo({
       postMemberData();
       console.log("UNMOUNTED");
     };
-  }, []);
+  }, [setInvalid]);
 
   useEffect(() => {
     setSenderName(`${name}${studentId.slice(-6)}`);
-  }, [name, studentId, setSenderName]);  
+  }, [name, studentId, setSenderName]);
 
   useEffect(() => {
     // Update the formValuesRef whenever the state changes
@@ -336,14 +363,16 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="department">소속</Label>
         <Select value={department} onValueChange={setDepartment}>
-          <SelectTrigger className={errors.studentId && showErrors ? "border-red-500" : ""}>
+          <SelectTrigger
+            className={errors.studentId && showErrors ? "border-red-500" : ""}
+          >
             <SelectValue placeholder="학과 선택" />
           </SelectTrigger>
           <SelectContent>
             {departments.map(({ value, label }) => (
-            <SelectItem key={value} value={value}>
-              {label}
-            </SelectItem>
+              <SelectItem key={value} value={value}>
+                {label}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>

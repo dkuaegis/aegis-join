@@ -1,9 +1,7 @@
-
-
 export interface pageState {
   length: number;
   currentPageIndex: number;
-};
+}
 export enum PageActions {
   NEXT = "NEXT",
   PREV = "PREV",
@@ -21,14 +19,17 @@ interface PrevAction {
 type PageActionType = NextAction | PrevAction;
 
 // 4. 리듀서 함수 정의
-export const pageReducer = (state: pageState, action: PageActionType): pageState => {
+export const pageReducer = (
+  state: pageState,
+  action: PageActionType
+): pageState => {
   switch (action.type) {
     case PageActions.NEXT:
       if (state.currentPageIndex < state.length) {
         return {
           ...state,
           currentPageIndex: state.currentPageIndex + 1,
-        }
+        };
       }
       return state;
 
@@ -37,10 +38,10 @@ export const pageReducer = (state: pageState, action: PageActionType): pageState
         return {
           ...state,
           currentPageIndex: state.currentPageIndex - 1,
-        }
+        };
       }
       return state;
-  
+
     default:
       return state;
   }

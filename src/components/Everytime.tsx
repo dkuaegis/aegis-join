@@ -1,26 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useValidation } from "@/lib/context/validationContext";
+import { ValidationActions } from "@/lib/reducer/validationReducer";
+import { LoadingState } from "@/types/state/loading";
+import { ValidState } from "@/types/state/valid";
 import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import AlertBox from "./ui/custom/alertbox";
-import { LoadingState } from "@/types/state/loading";
-import { ValidState } from "@/types/state/valid";
-import { useValidation } from "@/lib/context/validationContext";
-import { ValidationActions } from "@/lib/reducer/validationReducer";
 
 function Everytime() {
-
   const [everytimeLink, setEverytimeLink] = useState<string>("");
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
 
   const { validationState, validationDispatch } = useValidation();
 
-  const setValid = () => validationDispatch({ type: ValidationActions.SET_VALID, field:"everytime"});
-  const setInvalid = () => validationDispatch({ type: ValidationActions.SET_INVALID, field:"everytime"});
+  const setValid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_VALID,
+        field: "everytime",
+      }),
+    [validationDispatch]
+  );
+  const setInvalid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_INVALID,
+        field: "everytime",
+      }),
+    [validationDispatch]
+  );
 
   const handleEverytimeSubmit = useCallback(async () => {
-    
     if (loading === LoadingState.LOADING) return;
     if (everytimeLink.trim() === "") return;
 
@@ -44,7 +56,7 @@ function Everytime() {
       setLoading(LoadingState.SUCCESS);
       setValid();
     } catch (error) {}
-  }, [loading, everytimeLink]);
+  }, [loading, everytimeLink, setValid, setInvalid]);
 
   useEffect(() => {
     if (validationState.everytime === ValidState.VALID) {
@@ -57,10 +69,12 @@ function Everytime() {
   return (
     <div className="mb-12 space-y-4">
       <h3 className="font-semibold text-lg">에브리타임 시간표 제출</h3>
-      <AlertBox 
+      <AlertBox
         icon={<ClockAlert className="h-4 w-4" />}
         title="시간표 제출이 왜 필요한가요?"
-        description={["활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요."]}
+        description={[
+          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요.",
+        ]}
       />
       <div className="my-10 space-y-2">
         <Label htmlFor="timetableLink">에브리타임 시간표 링크</Label>
@@ -107,7 +121,7 @@ const StatusMessage = (loading: LoadingState) => {
           <p className="pl-4">시간표 정보를 읽는 중 입니다. . .</p>
         </>
       );
-    
+
     case LoadingState.SUCCESS:
       return (
         <>
@@ -115,7 +129,7 @@ const StatusMessage = (loading: LoadingState) => {
           <p className="pl-4 text-green-400">제출이 완료되었습니다 !</p>
         </>
       );
-    
+
     default:
       return null;
   }
