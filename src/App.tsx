@@ -5,12 +5,14 @@ import PersonalInfo from "@/components/PersonalInfo";
 import Survey from "@/components/Survey";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState, createContext } from "react";
 import Coupon from "./components/Coupon";
 import Discord from "./components/Discord";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
-import { PageActions, pageReducer, pageState } from "./lib/pageReducer";
+import { PageActions, pageReducer, pageState } from "./lib/reducer/pageReducer";
 import { startDiscordPolling } from "./lib/api/discordPolling";
+import { ValidationProvider } from "./lib/context/validationContext";
+
 
 function App() {
   const [senderName, setSenderName] = useState<string>("");
@@ -34,17 +36,17 @@ function App() {
 
   // 폴링 상태를 로컬 스토리지에서 가져옴.
   const [discordPolling, setDiscordPolling] = useState<boolean>(() => {
-    const storedValue = localStorage.getItem("discordPolling");
+    const storedValue = getLocal("discordPolling")
     return storedValue === "true";
   });
   const [paymentsPolling, setPaymentsPolling] = useState<boolean>(() => {
-    const storedValue = localStorage.getItem("paymentsPolling");
+    const storedValue = getLocal("paymentsPolling");
     return storedValue === "true";
   });
   
 
   // init
-  const storedPage = localStorage.getItem("currentPage");
+  const storedPage = getLocal("currentPage");
   const initialState: pageState = {
     length: 6,
     currentPageIndex: storedPage ? Number(storedPage) : 1,
@@ -120,8 +122,6 @@ function App() {
     />,
     <Everytime
       key="everytime"
-      onValidate={setIsEverytimeValid}
-      isValid={isEverytimeValid}
     />,
     <Discord
       key="discord"
@@ -208,47 +208,42 @@ function App() {
   }
 
   return (
-    <div className="mx-auto mb-4 w-full max-w-md px-4 py-8">
-      <div className="mb-6">
-        <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
-        <Progress
-          value={(currentPage.currentPageIndex / totalSteps) * 100}
-          className="mt-4 w-full"
-        />
-      </div>
-      <div className="mb-6 space-y-6">{components[currentPage.currentPageIndex - 1]}</div>
+    <ValidationProvider>
+      <div className="mx-auto mb-4 w-full max-w-md px-4 py-8">
+        <div className="mb-6">
+          <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
+          <Progress
+            value={(currentPage.currentPageIndex / totalSteps) * 100}
+            className="mt-4 w-full"
+          />
+        </div>
+        <div className="mb-6 space-y-6">{components[currentPage.currentPageIndex - 1]}</div>
 
-      <div className="fixed right-0 bottom-0 left-0 bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto w-full max-w-md px-4 py-4">
-          <div className="flex justify-between">
-            {currentPage.currentPageIndex > 1 && (
-              <Button type="button" onClick={handlePrevious}>
-                이전
-              </Button>
-            )}
-            {currentPage.currentPageIndex < currentPage.length && (
-              <Button
-                type="button"
-                variant={
-                  (isPersonalInfoValid && currentPage.currentPageIndex === 1) ||
-                  (isSurveyValid && currentPage.currentPageIndex === 2) ||
-                  (isEverytimeValid && currentPage.currentPageIndex === 3) ||
-                  (isDiscordValid && currentPage.currentPageIndex === 4) ||
-                  (isCouponValid && currentPage.currentPageIndex === 5) ||
-                  (isPaymentValid && currentPage.currentPageIndex === 6)
-                    ? "default"
-                    : "secondary"
-                }
-                onClick={handleNext}
-                className={currentPage.currentPageIndex === 1 ? "ml-auto" : ""}
-              >
-                다음
-              </Button>
-            )}
+        <div className="fixed right-0 bottom-0 left-0 bg-background/80 backdrop-blur-sm">
+          <div className="mx-auto w-full max-w-md px-4 py-4">
+            <div className="flex justify-between">
+              {currentPage.currentPageIndex > 1 && (
+                <Button type="button" onClick={handlePrevious}>
+                  이전
+                </Button>
+              )}
+              {currentPage.currentPageIndex < currentPage.length && (
+                <Button
+                  type="button"
+                  variant={isPersonalInfoValid && currentPage.currentPageIndex === 1
+                      ? "default"
+                      : "secondary"}
+                  onClick={handleNext}
+                  className={currentPage.currentPageIndex === 1 ? "ml-auto" : ""}
+                >
+                  다음
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ValidationProvider>
   );
 }
 

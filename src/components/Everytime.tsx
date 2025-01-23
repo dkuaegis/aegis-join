@@ -5,16 +5,15 @@ import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import AlertBox from "./ui/custom/alertbox";
 import { LoadingState } from "@/types/state/loading";
+import { ValidState } from "@/types/state/valid";
+import { useValidation } from "@/lib/context/validationContext";
+import { ValidationActions } from "@/lib/reducer/validationReducer";
 
-function Everytime({
-  onValidate,
-  isValid,
-}: {
-  onValidate: (isValid: boolean) => void;
-  isValid: boolean;
-}) {
+function Everytime() {
   const [everytimeLink, setEverytimeLink] = useState<string>("");
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
+
+  const { validationState, validationDispatch } = useValidation();
 
   const handleEverytimeSubmit = useCallback(async () => {
     
@@ -35,21 +34,21 @@ function Everytime({
       );
 
       if (!response.ok) {
-        onValidate(false);
+        validationDispatch({ type: ValidationActions.SET_INVALID, field:"Everytime"})
         throw new Error("error");
       }
       setLoading(LoadingState.SUCCESS);
-      onValidate(true);
+      validationDispatch({ type: ValidationActions.SET_VALID, field:"Everytime"})
     } catch (error) {}
-  }, [loading, everytimeLink, onValidate]);
+  }, [loading, everytimeLink]);
 
   useEffect(() => {
-    if (isValid === true) {
+    if (validationState.Everytime === ValidState.VALID) {
       setLoading(LoadingState.SUCCESS);
     } else {
       setLoading(LoadingState.IDLE);
     }
-  }, [isValid]);
+  }, [validationState.Everytime]);
 
   return (
     <div className="mb-12 space-y-4">
