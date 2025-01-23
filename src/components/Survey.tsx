@@ -146,6 +146,8 @@ function Survey() {
   const setValid = () => validationDispatch({ type: ValidationActions.SET_VALID, field:"survey"});
   const setInvalid = () => validationDispatch({ type: ValidationActions.SET_INVALID, field:"survey"});
 
+  const valid = validationState.survey;
+
   const etcExist = useCallback(
     (field: InterestField): boolean => {
       const value = interestEtcField.get(field);
@@ -326,7 +328,7 @@ function Survey() {
                       {isETC(field.id) && (
                         <p
                           className={`pl-2 text-red-500 text-xs ${
-                            (validationState.survey === ValidState.SHOW_ERROR) &&
+                            (valid === ValidState.SHOW_ERROR) &&
                             checkBox.get(field.id) &&
                             (interestEtcField.get(field.id) ?? "").trim() === ""
                               ? "visibility-visible opacity-100"
@@ -347,7 +349,7 @@ function Survey() {
 
       <p
         className={`text-red-500 text-xs ${
-          (validationState.survey === ValidState.SHOW_ERROR) &&
+          (valid === ValidState.SHOW_ERROR) &&
           !Array.from(checkBox.values()).some((isChecked) => isChecked)
             ? "visibility-visible opacity-100"
             : "visibility-hidden opacity-0"
@@ -360,7 +362,7 @@ function Survey() {
         <Label htmlFor="joinReason" className="flex items-end text-xl">
           가입 이유{" "}
           <span
-            className={`pb-1 pl-2 text-red-500 text-xs ${(validationState.survey === ValidState.SHOW_ERROR) ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
+            className={`pb-1 pl-2 text-red-500 text-xs ${(valid === ValidState.SHOW_ERROR) ? "visibility-visible opacity-100" : "visibility-hidden opacity-0"}`}
           >
             *필수 항목입니다
           </span>

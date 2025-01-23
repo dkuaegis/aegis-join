@@ -24,17 +24,16 @@ function App() {
     currentDepositAmount: 10000,
   });
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [isPersonalInfoValid, setIsPersonalInfoValid] = useState<boolean>(true);
-  const [isDiscordValid, setIsDiscordValid] = useState<boolean>(false);
   const [isCouponValid, setIsCouponValid] = useState<boolean>(false);
   const [isPaymentValid, setIsPaymentValid] = useState<boolean>(false);
   const [isOverpaid, setIsOverpaid] = useState<boolean>(false);
-  const [showPersonalInfoErrors, setShowPersonalInfoErrors] =
-    useState<boolean>(false);
+
 
   const { validationState, validationDispatch } = useValidation();
-  const surveyShowError = () => validationDispatch({ type: ValidationActions.SHOW_ERROR, field:"survey"});
 
+  const surveyShowError = () => validationDispatch({ type: ValidationActions.SHOW_ERROR, field:"survey"});
+  const personalInfoShowError = () => validationDispatch({ type: ValidationActions.SHOW_ERROR, field:"personalInfo"});
+  
   // 폴링 상태를 로컬 스토리지에서 가져옴.
   const [discordPolling, setDiscordPolling] = useState<boolean>(() => {
     const storedValue = getLocal("discordPolling")
@@ -62,7 +61,7 @@ function App() {
   useEffect(() => {
     updateLocal("discordPolling",discordPolling);
     if (discordPolling) {
-      startDiscordPolling(setIsDiscordValid);
+      startDiscordPolling(validationDispatch);
     }
   }, [discordPolling]);
 
@@ -108,26 +107,24 @@ function App() {
 
     poll();
   }, []);
+  
+  const discordValid = validationState.discord === ValidState.VALID;
 
   const components = [
     <PersonalInfo
       key="personal-info"
-      onValidate={setIsPersonalInfoValid}
-      showErrors={showPersonalInfoErrors}
       setSenderName={setSenderName}
     />,
     <Survey
       key="survey"
     />,
-    <Everytime
-      key="everytime"
-    />,
+    <Everytime key="everytime"/>,
     <Discord
       key="discord"
       setPolling={setDiscordPolling}
-      isValid={isDiscordValid}
+      isValid={discordValid}
     />,
-    <Coupon key="coupon" onValidate={setIsCouponValid} isValid={isCouponValid} />,
+    <Coupon key="coupon"/>,
     <Payment
       key="payment"
       isValid={isPaymentValid}
@@ -163,37 +160,22 @@ function App() {
   }, []);
 
   const handleNext = () => {
-    if (currentPage.currentPageIndex === 1 && !isPersonalInfoValid) {
-      setShowPersonalInfoErrors(true);
+    if (currentPage.currentPageIndex === 1 && validationState.personalInfo !== ValidState.VALID) {
+      personalInfoShowError();
       return;
     }
     if (currentPage.currentPageIndex === 2 && validationState.survey !== ValidState.VALID) {
       surveyShowError();
       return;
     }
-    if (currentPage.currentPageIndex === 3 && validationState.everytime !== ValidState.VALID) {
+    if (currentPage.currentPageIndex >= 3 && !checkPageValidation(validationState,currentPage.currentPageIndex)) {
       return;
     }
-    if (currentPage.currentPageIndex === 4 && !isDiscordValid) {
-      return;
-    }
-    if (currentPage.currentPageIndex === 5 && !isCouponValid) {
-      return;
-    }
-    if (currentPage.currentPageIndex === 6 && !isPaymentValid) {
-      return;
-    }
-    if (currentPage.currentPageIndex < currentPage.length) {
-      setShowPersonalInfoErrors(false);
-      dispatch({type: PageActions.NEXT});
-    }
+    dispatch({type: PageActions.NEXT});
   };
 
   const handlePrevious = () => {
-    if (currentPage.currentPageIndex > 1) {
-      setShowPersonalInfoErrors(false);
-      dispatch({type: PageActions.PREV});
-    }
+    dispatch({type: PageActions.PREV});
   };
 
   if (isAuthenticated === null) {
