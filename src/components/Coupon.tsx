@@ -8,8 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useValidation } from "@/lib/context/validationContext";
+import { ValidationActions } from "@/lib/reducer/validationReducer";
 import type { CouponData } from "@/types/api/coupon";
 import { LoadingState } from "@/types/state/loading";
+import { ValidState } from "@/types/state/valid";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -18,7 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // 컬럼 정의
 export const columns: ColumnDef<CouponData>[] = [
@@ -71,19 +74,32 @@ export const columns: ColumnDef<CouponData>[] = [
   },
 ];
 
-export default function Coupon({
-  onValidate,
-  isValid,
-}: {
-  onValidate: (isValid: boolean) => void;
-  isValid: boolean;
-}) {
+export default function Coupon() {
   const [coupons, setCoupons] = useState<CouponData[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
 
+  const { validationState, validationDispatch } = useValidation();
+  const valid = validationState.coupon;
+
+  const setValid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_VALID,
+        field: "coupon",
+      }),
+    [validationDispatch]
+  );
+  const setInvalid = useCallback(
+    () =>
+      validationDispatch({
+        type: ValidationActions.SET_INVALID,
+        field: "coupon",
+      }),
+    [validationDispatch]
+  );
 
   //쿠폰이 없으면 validate true.
 
@@ -101,13 +117,13 @@ export default function Coupon({
   });
 
   useEffect(() => {
-    if(isValid === true) return;
-    if(loading === LoadingState.SUCCESS) {
-      onValidate(true);
+    if (valid === ValidState.VALID) return;
+    if (loading === LoadingState.SUCCESS) {
+      setValid();
     } else {
-      onValidate(false);
+      setInvalid();
     }
-  }, [onValidate, isValid, loading]);
+  }, [valid, loading, setValid, setInvalid]);
 
   const postCoupon = async () => {
     if (loading === LoadingState.LOADING) return;
@@ -156,14 +172,14 @@ export default function Coupon({
         const noCoupon = !(data.length > 0);
 
         setCoupons(data);
-        onValidate(noCoupon);
+        if (noCoupon) setValid();
       } catch (error) {
-        onValidate(false);
+        setInvalid();
       }
     };
 
     getCoupon();
-  }, [onValidate]);
+  }, [setValid, setInvalid]);
 
   useEffect(() => {
     const selectedRowIds = Object.keys(rowSelection) // 선택된 행 ID 가져오기
@@ -254,21 +270,18 @@ export default function Coupon({
           )}
         </TableBody>
       </Table>
-      <p className="items-center text-2xl">
-        {CouponMessage(loading)} 
-      </p>
-
+      <p className="items-center text-2xl">{CouponMessage(loading)}</p>
     </div>
   );
 }
 
 const CouponMessage = (loading: LoadingState) => {
-  switch(loading) {
-    case(LoadingState.SUCCESS):
+  switch (loading) {
+    case LoadingState.SUCCESS:
       return "쿠폰이 적용되었습니다!";
-    case(LoadingState.ERROR):
+    case LoadingState.ERROR:
       return "쿠폰 적용이 실패하였습니다.";
     default:
       return null;
   }
-}
+};

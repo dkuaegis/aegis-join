@@ -1,16 +1,16 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import AlertBox from "./ui/custom/alertbox";
 import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
-import { Copy, CheckCircleIcon, LoaderCircle, CircleAlert } from "lucide-react";
+import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import AlertBox from "./ui/custom/alertbox";
 
 function Payment({
   isValid,
   isOverpaid,
   startPolling,
   payInfo,
-  senderName
+  senderName,
 }: {
   isValid: boolean;
   isOverpaid: boolean;
@@ -29,7 +29,7 @@ function Payment({
   const ADMIN_INFO = {
     phoneNumber: "010-2439-1815",
     kakaoId: "yun_seongmin",
-    accountNumber: "IBK기업은행 98215064101017"
+    accountNumber: "IBK기업은행 98215064101017",
   };
 
   useEffect(() => {
@@ -77,7 +77,8 @@ function Payment({
   };
 
   // Calculate remaining amount
-  const remainingAmount = payInfo.expectedDepositAmount - payInfo.currentDepositAmount;
+  const remainingAmount =
+    payInfo.expectedDepositAmount - payInfo.currentDepositAmount;
 
   return (
     <div className="space-y-4">
@@ -104,7 +105,10 @@ function Payment({
           )}
           <div className="flex items-center">
             <span>
-              송금자명: {isLoading ? "로딩 중..." : senderName || "정보를 불러오지 못했습니다."}
+              송금자명:{" "}
+              {isLoading
+                ? "로딩 중..."
+                : senderName || "정보를 불러오지 못했습니다."}
             </span>
             <Copy
               className="ml-2 cursor-pointer text-gray-600 hover:text-gray-800"
@@ -122,7 +126,12 @@ function Payment({
             </p>
           )}
           <div>
-            송금할 금액: {isLoading ? "로딩 중..." : remainingAmount !== null ? `${remainingAmount.toLocaleString()}원` : "정보를 불러오지 못했습니다."}
+            송금할 금액:{" "}
+            {isLoading
+              ? "로딩 중..."
+              : remainingAmount !== null
+                ? `${remainingAmount.toLocaleString()}원`
+                : "정보를 불러오지 못했습니다."}
           </div>
           <div>예금주명: 윤성민</div>
         </AlertDescription>
@@ -149,21 +158,21 @@ function Payment({
           title="회비 추가 납부 안내"
           description={[
             "아직 회비가 완납되지 않았습니다.",
-            `남은 금액 ${remainingAmount.toLocaleString()}원을 납부해주세요.`
+            `남은 금액 ${remainingAmount.toLocaleString()}원을 납부해주세요.`,
           ]}
         />
       )}
       <div className="flex items-center justify-center">
         {isOverpaid ? (
           <AlertBox
-          icon={<CircleAlert className="h-4 w-4" />}
-          title="회비 초과 납부 안내"
-          description={[
-            "초과 납부가 발생한 경우에도 회원가입은 정상적으로 처리됩니다. 환불이 필요하시면 운영진에게 문의해 주세요.",
-            `연락처: ${ADMIN_INFO.phoneNumber}`,
-            `카카오톡 ID: ${ADMIN_INFO.kakaoId}`,
-          ]}
-        />
+            icon={<CircleAlert className="h-4 w-4" />}
+            title="회비 초과 납부 안내"
+            description={[
+              "초과 납부가 발생한 경우에도 회원가입은 정상적으로 처리됩니다. 환불이 필요하시면 운영진에게 문의해 주세요.",
+              `연락처: ${ADMIN_INFO.phoneNumber}`,
+              `카카오톡 ID: ${ADMIN_INFO.kakaoId}`,
+            ]}
+          />
         ) : null}
       </div>
     </div>
