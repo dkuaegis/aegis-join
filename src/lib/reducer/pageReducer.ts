@@ -5,7 +5,6 @@ export interface pageState {
 export enum PageActions {
   NEXT = "NEXT",
   PREV = "PREV",
-  GOTO = "GOTO",
 }
 
 interface NextAction {
@@ -25,7 +24,7 @@ export const pageReducer = (
 ): pageState => {
   switch (action.type) {
     case PageActions.NEXT:
-      if (state.currentPageIndex < state.length) {
+      if (state.currentPageIndex < state.length - 1) {
         return {
           ...state,
           currentPageIndex: state.currentPageIndex + 1,

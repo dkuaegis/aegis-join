@@ -364,7 +364,7 @@ function PersonalInfo({
         <Label htmlFor="department">소속</Label>
         <Select value={department} onValueChange={setDepartment}>
           <SelectTrigger
-            className={errors.studentId && showErrors ? "border-red-500" : ""}
+            className={errors.department && showErrors ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학과 선택" />
           </SelectTrigger>
@@ -386,7 +386,7 @@ function PersonalInfo({
         <Label htmlFor="academicStatus">모집 학기 기준 학적</Label>
         <Select value={academicStatus} onValueChange={setAcademicStatus}>
           <SelectTrigger
-            className={errors.studentId && showErrors ? "border-red-500" : ""}
+            className={errors.academicStatus && showErrors ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학적 선택" />
           </SelectTrigger>
@@ -406,7 +406,7 @@ function PersonalInfo({
         <Label htmlFor="grade">모집 학기 기준 학년</Label>
         <Select value={grade} onValueChange={setGrade}>
           <SelectTrigger
-            className={errors.studentId && showErrors ? "border-red-500" : ""}
+            className={errors.grade && showErrors ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
@@ -428,7 +428,7 @@ function PersonalInfo({
         <Label htmlFor="academicSemester">모집 학기 기준 학기</Label>
         <Select value={academicSemester} onValueChange={setAcademicSemester}>
           <SelectTrigger
-            className={errors.studentId && showErrors ? "border-red-500" : ""}
+            className={errors.academicSemester && showErrors ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학기 선택" />
           </SelectTrigger>
