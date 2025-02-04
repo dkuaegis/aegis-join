@@ -8,11 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useValidation } from "@/lib/context/validationContext";
-import { ValidationActions } from "@/lib/reducer/validationReducer";
 import type { CouponData } from "@/types/api/coupon";
 import { LoadingState } from "@/types/state/loading";
-import { ValidState } from "@/types/state/valid";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -21,7 +18,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // 컬럼 정의
 export const columns: ColumnDef<CouponData>[] = [
@@ -74,32 +71,20 @@ export const columns: ColumnDef<CouponData>[] = [
   },
 ];
 
-export default function Coupon() {
-  const [coupons, setCoupons] = useState<CouponData[]>([]);
+export default function Coupon({
+  onNext,
+  onPrev,
+}: {
+  onNext: () => void;
+  onPrev: () => void;
+}) {
+  const [coupons] = useState<CouponData[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
 
-  const { validationState, validationDispatch } = useValidation();
-  const valid = validationState.coupon;
-
-  const setValid = useCallback(
-    () =>
-      validationDispatch({
-        type: ValidationActions.SET_VALID,
-        field: "coupon",
-      }),
-    [validationDispatch]
-  );
-  const setInvalid = useCallback(
-    () =>
-      validationDispatch({
-        type: ValidationActions.SET_INVALID,
-        field: "coupon",
-      }),
-    [validationDispatch]
-  );
+  console.log(onNext, onPrev);
 
   //쿠폰이 없으면 validate true.
 
@@ -115,15 +100,6 @@ export default function Coupon() {
       rowSelection,
     },
   });
-
-  useEffect(() => {
-    if (valid === ValidState.VALID) return;
-    if (loading === LoadingState.SUCCESS) {
-      setValid();
-    } else {
-      setInvalid();
-    }
-  }, [valid, loading, setValid, setInvalid]);
 
   const postCoupon = async () => {
     if (loading === LoadingState.LOADING) return;
@@ -153,33 +129,6 @@ export default function Coupon() {
 
     setTimeout(() => setLoading(LoadingState.IDLE), 1500);
   };
-
-  useEffect(() => {
-    // 이 컴포넌트가 마운트 될 때 실행되는 fetch
-    const getCoupon = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/join/coupons`
-          // {
-          //   credentials: "include",
-          // }
-        );
-        if (!response.ok) {
-          throw new Error("에러남");
-        }
-
-        const data: CouponData[] = await response.json();
-        const noCoupon = !(data.length > 0);
-
-        setCoupons(data);
-        if (noCoupon) setValid();
-      } catch (error) {
-        setInvalid();
-      }
-    };
-
-    getCoupon();
-  }, [setValid, setInvalid]);
 
   useEffect(() => {
     const selectedRowIds = Object.keys(rowSelection) // 선택된 행 ID 가져오기

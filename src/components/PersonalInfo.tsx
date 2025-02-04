@@ -8,35 +8,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useValidation } from "@/lib/context/validationContext";
-import { ValidationActions } from "@/lib/reducer/validationReducer";
-import { ValidState } from "@/types/state/valid";
 import {
   type Dispatch,
   type SetStateAction,
-  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-
-//전화번호 입력 포맷팅 함수
-function formatPhoneNumber(rawValue: string): string {
-  const sanitizedValue = rawValue.replace(/[^0-9]/g, ""); // 숫자 외의 문자 제거
-
-  if (sanitizedValue.length <= 3) {
-    return sanitizedValue;
-  }
-  if (sanitizedValue.length <= 7) {
-    return `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3)}`;
-  }
-  return `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 7)}-${sanitizedValue.slice(7, 11)}`;
-}
-
-function phoneNumberCheck(number: string): boolean {
-  const result = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
-  return result.test(number);
-}
+import { formatPhoneNumber } from "../utils/PersonalInfo.helper";
 
 //학과 필드 배열
 const departments = [
@@ -65,9 +44,14 @@ const grades = [
 
 function PersonalInfo({
   setSenderName,
+  onNext,
+  onPrev,
 }: {
   setSenderName: Dispatch<SetStateAction<string>>;
+  onNext: () => void;
+  onPrev: () => void;
 }) {
+  console.log(onNext, onPrev);
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [gender, setGender] = useState<string>("");
@@ -78,26 +62,7 @@ function PersonalInfo({
   const [grade, setGrade] = useState("");
   const [academicSemester, setAcademicSemester] = useState("");
 
-  const { validationState, validationDispatch } = useValidation();
-  // const valid = validationState.personalInfo;
-  const setValid = useCallback(
-    () =>
-      validationDispatch({
-        type: ValidationActions.SET_VALID,
-        field: "personalInfo",
-      }),
-    [validationDispatch]
-  );
-  const setInvalid = useCallback(
-    () =>
-      validationDispatch({
-        type: ValidationActions.SET_INVALID,
-        field: "personalInfo",
-      }),
-    [validationDispatch]
-  );
-
-  const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null);
+  const [phoneNumberError] = useState<string | null>(null);
 
   const formValuesRef = useRef({
     name,
@@ -111,8 +76,7 @@ function PersonalInfo({
     academicSemester,
   });
 
-  const showErrors = validationState.personalInfo === ValidState.SHOW_ERROR;
-  const [errors, setErrors] = useState({
+  const [errors] = useState({
     name: false,
     birthDate: false,
     gender: false,
@@ -123,120 +87,6 @@ function PersonalInfo({
     grade: false,
     academicSemester: false,
   });
-
-  useEffect(() => {
-    const isGenderValid = gender === "MALE" || gender === "FEMALE";
-    const isPhoneNumberValid = phoneNumberCheck(phoneNumber);
-    const isValid: boolean =
-      !!name &&
-      !!birthDate &&
-      isGenderValid &&
-      !!studentId &&
-      !!phoneNumber &&
-      isPhoneNumberValid &&
-      !!department &&
-      !!academicStatus &&
-      !!grade &&
-      !!academicSemester;
-
-    if (isValid) setValid();
-
-    if (validationState.personalInfo === ValidState.SHOW_ERROR) {
-      setErrors({
-        name: !name,
-        birthDate: !birthDate,
-        gender: !isGenderValid,
-        studentId: !studentId,
-        phoneNumber: !phoneNumber || !isPhoneNumberValid,
-        department: !department,
-        academicStatus: !academicStatus,
-        grade: !grade,
-        academicSemester: !academicSemester,
-      });
-    }
-  }, [
-    name,
-    birthDate,
-    gender,
-    studentId,
-    phoneNumber,
-    department,
-    academicStatus,
-    grade,
-    academicSemester,
-    validationState.personalInfo,
-    setValid,
-  ]);
-
-  useEffect(() => {
-    if (phoneNumber) {
-      const isValidPhoneNumber = phoneNumberCheck(phoneNumber);
-      if (!isValidPhoneNumber) {
-        setPhoneNumberError("양식에 맞게 입력해주세요. ex) 010-1234-5678");
-      } else {
-        setPhoneNumberError(null);
-      }
-    }
-  }, [phoneNumber]);
-
-  // 컴포넌트 마운트 시 fetch
-  useEffect(() => {
-    console.log("MOUNTED!");
-    setInvalid(); // 마운트 시 invalid 로 초기화
-
-    const fetchMemberData = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/member`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          // Assuming the response data has the structure needed
-          setName(data.name);
-          setBirthDate(data.birthDate);
-          setGender(data.gender);
-          setStudentId(data.studentId);
-          setPhoneNumber(data.phoneNumber);
-          setDepartment(data.department);
-          setAcademicStatus(data.academicStatus);
-          setGrade(data.grade);
-          setAcademicSemester(data.academicSemester);
-        } else {
-          console.error("Failed to fetch member data");
-        }
-      } catch (error) {
-        console.error("Error fetching member data:", error);
-      }
-    };
-
-    fetchMemberData();
-
-    return () => {
-      // Cleanup, useRef ensures the latest values are posted
-      const postMemberData = async () => {
-        try {
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/member`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formValuesRef.current), // Use formValuesRef
-            }
-          );
-
-          if (!response.ok) {
-            console.error("Failed to post member data");
-          }
-        } catch (error) {
-          console.error("Error posting member data:", error);
-        }
-      };
-      postMemberData();
-      console.log("UNMOUNTED");
-    };
-  }, [setInvalid]);
 
   useEffect(() => {
     setSenderName(`${name}${studentId.slice(-6)}`);
@@ -272,6 +122,7 @@ function PersonalInfo({
       <h3 className="font-semibold text-lg">기본 인적사항</h3>
 
       {/* 이름 필드 */}
+
       <div className="space-y-2">
         <Label htmlFor="name">이름</Label>
         <Input
@@ -279,9 +130,9 @@ function PersonalInfo({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="홍길동"
-          className={errors.name && showErrors ? "border-red-500" : ""}
+          className={errors.name ? "border-red-500" : ""}
         />
-        {errors.name && showErrors && (
+        {errors.name && (
           <p className="text-red-500 text-xs">이름을 입력해주세요</p>
         )}
       </div>
@@ -297,9 +148,9 @@ function PersonalInfo({
             setBirthDate(rawValue);
           }}
           placeholder="020101"
-          className={errors.birthDate && showErrors ? "border-red-500" : ""}
+          className={errors.birthDate ? "border-red-500" : ""}
         />
-        {errors.birthDate && showErrors && (
+        {errors.birthDate && (
           <p className="text-red-500 text-xs">생년월일을 입력해주세요</p>
         )}
       </div>
@@ -317,7 +168,7 @@ function PersonalInfo({
             <Label htmlFor="FEMALE">여자</Label>
           </div>
         </RadioGroup>
-        {errors.gender && showErrors && (
+        {errors.gender && (
           <p className="text-red-500 text-xs">성별을 선택해주세요</p>
         )}
       </div>
@@ -333,9 +184,9 @@ function PersonalInfo({
             setStudentId(rawValue);
           }}
           placeholder="32000000"
-          className={errors.studentId && showErrors ? "border-red-500" : ""}
+          className={errors.studentId ? "border-red-500" : ""}
         />
-        {errors.studentId && showErrors && (
+        {errors.studentId && (
           <p className="text-red-500 text-xs">학번을 입력해주세요</p>
         )}
       </div>
@@ -349,12 +200,12 @@ function PersonalInfo({
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))}
           placeholder="010-1234-5678"
-          className={errors.phoneNumber && showErrors ? "border-red-500" : ""}
+          className={errors.phoneNumber ? "border-red-500" : ""}
         />
-        {phoneNumberError && showErrors && (
+        {phoneNumberError && (
           <p className="text-red-500 text-xs">{phoneNumberError}</p>
         )}
-        {errors.phoneNumber && showErrors && !phoneNumberError && (
+        {errors.phoneNumber && !phoneNumberError && (
           <p className="text-red-500 text-xs">전화번호를 입력해주세요</p>
         )}
       </div>
@@ -363,9 +214,7 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="department">소속</Label>
         <Select value={department} onValueChange={setDepartment}>
-          <SelectTrigger
-            className={errors.department && showErrors ? "border-red-500" : ""}
-          >
+          <SelectTrigger className={errors.department ? "border-red-500" : ""}>
             <SelectValue placeholder="학과 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -376,7 +225,7 @@ function PersonalInfo({
             ))}
           </SelectContent>
         </Select>
-        {errors.department && showErrors && (
+        {errors.department && (
           <p className="text-red-500 text-xs">학과를 선택해주세요</p>
         )}
       </div>
@@ -386,7 +235,7 @@ function PersonalInfo({
         <Label htmlFor="academicStatus">모집 학기 기준 학적</Label>
         <Select value={academicStatus} onValueChange={setAcademicStatus}>
           <SelectTrigger
-            className={errors.academicStatus && showErrors ? "border-red-500" : ""}
+            className={errors.academicStatus ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학적 선택" />
           </SelectTrigger>
@@ -396,7 +245,7 @@ function PersonalInfo({
             <SelectItem value="GRADUATED">졸업</SelectItem>
           </SelectContent>
         </Select>
-        {errors.academicStatus && showErrors && (
+        {errors.academicStatus && (
           <p className="text-red-500 text-xs">학적을 선택해주세요</p>
         )}
       </div>
@@ -405,9 +254,7 @@ function PersonalInfo({
       <div className="space-y-2">
         <Label htmlFor="grade">모집 학기 기준 학년</Label>
         <Select value={grade} onValueChange={setGrade}>
-          <SelectTrigger
-            className={errors.grade && showErrors ? "border-red-500" : ""}
-          >
+          <SelectTrigger className={errors.grade ? "border-red-500" : ""}>
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -418,7 +265,7 @@ function PersonalInfo({
             ))}
           </SelectContent>
         </Select>
-        {errors.grade && showErrors && (
+        {errors.grade && (
           <p className="text-red-500 text-xs">학년을 선택해주세요</p>
         )}
       </div>
@@ -428,7 +275,7 @@ function PersonalInfo({
         <Label htmlFor="academicSemester">모집 학기 기준 학기</Label>
         <Select value={academicSemester} onValueChange={setAcademicSemester}>
           <SelectTrigger
-            className={errors.academicSemester && showErrors ? "border-red-500" : ""}
+            className={errors.academicSemester ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학기 선택" />
           </SelectTrigger>
@@ -437,7 +284,7 @@ function PersonalInfo({
             <SelectItem value="SECOND">2학기</SelectItem>
           </SelectContent>
         </Select>
-        {errors.academicSemester && showErrors && (
+        {errors.academicSemester && (
           <p className="text-red-500 text-xs">학기를 선택해주세요</p>
         )}
       </div>

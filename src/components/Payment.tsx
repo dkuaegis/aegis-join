@@ -5,18 +5,26 @@ import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import AlertBox from "./ui/custom/alertbox";
 
+const ADMIN_INFO = {
+  phoneNumber: import.meta.env.VITE_ADMIN_PHONE,
+  kakaoId: import.meta.env.VITE_ADMIN_KAKAO,
+  accountNumber: import.meta.env.VITE_ADMIN_ACCOUNTNUMBER,
+};
+
 function Payment({
   isValid,
   isOverpaid,
-  startPolling,
   payInfo,
   senderName,
+  onNext,
+  onPrev,
 }: {
   isValid: boolean;
   isOverpaid: boolean;
-  startPolling: (isValid: boolean) => void;
   senderName: string;
   payInfo: GetPaymentInfo;
+  onNext: () => void;
+  onPrev: () => void;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [accountMessage, setAccountMessage] = useState<string | null>(null);
@@ -25,21 +33,9 @@ function Payment({
     null
   );
 
-  //동아리 정보
-  const ADMIN_INFO = {
-    phoneNumber: "010-2439-1815",
-    kakaoId: "yun_seongmin",
-    accountNumber: "IBK기업은행 98215064101017",
-  };
+  console.log(onNext, onPrev);
 
-  useEffect(() => {
-    // 여기서의 isValid 는 송금 완료의 의미를 가진다.
-    if (isValid === false) {
-      startPolling(true);
-    } else {
-      startPolling(false);
-    }
-  }, [isValid, startPolling]);
+  //동아리 정보
 
   useEffect(() => {
     if (senderName === "") setIsLoading(true);

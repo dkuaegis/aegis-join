@@ -1,70 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useValidation } from "@/lib/context/validationContext";
-import { ValidationActions } from "@/lib/reducer/validationReducer";
 import { LoadingState } from "@/types/state/loading";
-import { ValidState } from "@/types/state/valid";
 import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import AlertBox from "./ui/custom/alertbox";
 
-function Everytime() {
-  const [everytimeLink, setEverytimeLink] = useState<string>("");
-  const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
+function Everytime({
+  onNext,
+  onPrev,
+}: {
+  onNext: () => void;
+  onPrev: () => void;
+}) {
+  const [, setEverytimeLink] = useState<string>("");
+  const [loading] = useState<LoadingState>(LoadingState.IDLE);
 
-  const { validationState, validationDispatch } = useValidation();
-
-  const setValid = useCallback(
-    () =>
-      validationDispatch({
-        type: ValidationActions.SET_VALID,
-        field: "everytime",
-      }),
-    [validationDispatch]
-  );
-  const setInvalid = useCallback(
-    () =>
-      validationDispatch({
-        type: ValidationActions.SET_INVALID,
-        field: "everytime",
-      }),
-    [validationDispatch]
-  );
-
-  const handleEverytimeSubmit = useCallback(async () => {
-    if (loading === LoadingState.LOADING) return;
-    if (everytimeLink.trim() === "") return;
-
-    try {
-      setLoading(LoadingState.LOADING);
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/everytime`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ everytimeLink: everytimeLink }),
-        }
-      );
-
-      if (!response.ok) {
-        setInvalid();
-        throw new Error("error");
-      }
-      setLoading(LoadingState.SUCCESS);
-      setValid();
-    } catch (error) {}
-  }, [loading, everytimeLink, setValid, setInvalid]);
-
-  useEffect(() => {
-    if (validationState.everytime === ValidState.VALID) {
-      setLoading(LoadingState.SUCCESS);
-    } else {
-      setLoading(LoadingState.IDLE);
-    }
-  }, [validationState.everytime]);
+  console.log(onNext, onPrev);
 
   return (
     <div className="mb-12 space-y-4">
@@ -93,11 +45,7 @@ function Everytime() {
               required
             />
           </div>
-          <Button
-            className="inline"
-            type="submit"
-            onClick={handleEverytimeSubmit}
-          >
+          <Button className="inline" type="submit">
             제출
           </Button>
         </div>
