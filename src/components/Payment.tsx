@@ -5,6 +5,12 @@ import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import AlertBox from "./ui/custom/alertbox";
 
+const ADMIN_INFO = {
+  phoneNumber: import.meta.env.VITE_ADMIN_PHONE,
+  kakaoId: import.meta.env.VITE_ADMIN_KAKAO,
+  accountNumber: import.meta.env.VITE_ADMIN_ACCOUNTNUMBER,
+};
+
 function Payment({
   isValid,
   isOverpaid,
@@ -30,11 +36,6 @@ function Payment({
   console.log(onNext, onPrev);
 
   //동아리 정보
-  const ADMIN_INFO = {
-    phoneNumber: "010-2439-1815",
-    kakaoId: "yun_seongmin",
-    accountNumber: "IBK기업은행 98215064101017",
-  };
 
   useEffect(() => {
     if (senderName === "") setIsLoading(true);
