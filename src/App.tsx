@@ -1,14 +1,14 @@
-import Everytime from "@/components/Everytime";
-import LoginPage from "@/components/LoginPage";
-import Payment from "@/components/Payment";
-import PersonalInfo from "@/components/PersonalInfo";
-import Survey from "@/components/Survey";
+import Everytime from "@/components/pages/Everytime";
+import LoginPage from "@/components/pages/LoginPage";
+import Payment from "@/components/pages/Payment";
+import PersonalInfo from "@/components/pages/PersonalInfo";
+import Survey from "@/components/pages/Survey";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Coupon from "./components/Coupon";
-import Discord from "./components/Discord";
+import Coupon from "./components/pages/Coupon";
+import Discord from "./components/pages/Discord";
 import useFunnel from "./lib/funnel/useFunnel";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 
@@ -37,10 +37,10 @@ function App() {
     const checkAuth = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/check`
-          // {
-          //    credentials: "include",
-          // }
+          `${import.meta.env.VITE_API_URL}/auth/check`,
+          {
+            credentials: "include",
+          }
         );
         if (!response.ok) {
           throw new Error("인증 정보 없음.");
@@ -64,7 +64,7 @@ function App() {
   }
 
   return (
-    <div className="mx-auto mb-4 w-full max-w-md px-4 py-8">
+    <div className="mx-auto mb-4 w-full max-w-md px-4 py-8 pb-20">
       <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
       <Progress value={progress} className="mt-4 w-full" />
       <Routes>

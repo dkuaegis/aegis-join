@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import AlertBox from "./ui/custom/alertbox";
+import AlertBox from "../ui/custom/alertbox";
 
 const ADMIN_INFO = {
   phoneNumber: import.meta.env.VITE_ADMIN_PHONE,

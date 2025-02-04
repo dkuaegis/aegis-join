@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { InterestField, type PostSurveyForm } from "@/types/api/survey";
 import { ValidState } from "@/types/state/valid";
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 interface InterestItem {
   id: InterestField;
@@ -204,7 +204,7 @@ function Survey({
                 </div>
                 <div className="mx-4 mt-2 grid gap-y-4">
                   {fields.map((field) => (
-                    <>
+                    <React.Fragment key={field.id}>
                       <div
                         key={field.id}
                         className="flex items-center space-x-2"
@@ -228,7 +228,7 @@ function Survey({
                             name={field.id}
                             placeholder="기타 관심 분야를 작성해주세요"
                             maxLength={20}
-                            value={interestEtcField.get(field.id)}
+                            value={interestEtcField.get(field.id)||""}
                             onValueChange={(value) =>
                               handleEtcTextareaChange(field.id, value)
                             }
@@ -247,7 +247,7 @@ function Survey({
                           기타 분야를 작성해주세요
                         </p>
                       )}
-                    </>
+                    </React.Fragment>
                   ))}
                 </div>
               </div>

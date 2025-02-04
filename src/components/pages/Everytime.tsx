@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { LoadingState } from "@/types/state/loading";
 import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useState } from "react";
-import AlertBox from "./ui/custom/alertbox";
+import AlertBox from "../ui/custom/alertbox";
 
 function Everytime({
   onNext,
