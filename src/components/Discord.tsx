@@ -9,13 +9,16 @@ import { Button } from "./ui/button";
 import AlertBox from "./ui/custom/alertbox";
 
 function Discord({
-  setPolling,
   isValid,
+  onNext,
+  onPrev,
 }: {
-  setPolling: (isValid: boolean) => void;
   isValid: boolean;
+  onNext: () => void;
+  onPrev: () => void;
 }) {
   const [discordLink, setDiscordLink] = useState<string>("");
+  console.log(onNext, onPrev);
 
   // 디스코드 페이지를 get 했을 때 link 를 보내주지만, 이때 이미 사용자가 가입해있으면 어떡함?
   useEffect(() => {
@@ -38,7 +41,6 @@ function Discord({
 
   function discordCheck() {
     window.open(discordLink, "_blank");
-    setPolling(true);
   }
 
   return (
