@@ -11,6 +11,12 @@ const ADMIN_INFO = {
   accountNumber: import.meta.env.VITE_ADMIN_ACCOUNTNUMBER,
 };
 
+const ADMIN_INFO = {
+  phoneNumber: import.meta.env.VITE_ADMIN_PHONE,
+  kakaoId: import.meta.env.VITE_ADMIN_KAKAO,
+  accountNumber: import.meta.env.VITE_ADMIN_ACCOUNTNUMBER,
+};
+
 function Payment({
   isValid,
   isOverpaid,
