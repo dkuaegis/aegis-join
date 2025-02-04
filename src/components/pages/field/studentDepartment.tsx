@@ -35,7 +35,7 @@ const departments = [
     label: "SW융합대학 사이버보안학과",
   },
   {
-    value: "SW융합대학_통계데이터사이언스학과과",
+    value: "SW융합대학_통계데이터사이언스학과",
     label: "SW융합대학 통계데이터사이언스학과",
   },
   {
