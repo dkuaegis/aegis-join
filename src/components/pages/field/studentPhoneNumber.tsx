@@ -7,10 +7,10 @@ interface StudentPhoneNumberProps {
   formatPhoneNumber: (rawValue: string) => string;
   phoneNumberError: string | null;
   errors?: boolean;
-  showErrors?: boolean;
+  // showErrors?: boolean;
 }
 
-export function StudentPhoneNumber({phoneNumber, setPhoneNumber, formatPhoneNumber, phoneNumberError, errors, showErrors}: StudentPhoneNumberProps){
+export function StudentPhoneNumber({phoneNumber, setPhoneNumber, formatPhoneNumber, phoneNumberError, errors}: StudentPhoneNumberProps){
   return (
     <div className="space-y-2">
         <Label htmlFor="phoneNumber">전화번호</Label>
@@ -20,12 +20,12 @@ export function StudentPhoneNumber({phoneNumber, setPhoneNumber, formatPhoneNumb
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))}
           placeholder="010-1234-5678"
-          className={errors && showErrors ? "border-red-500" : ""}
+          className={errors ? "border-red-500" : ""} //errors && showErrors 변경
         />
-        {phoneNumberError && showErrors && (
+        {phoneNumberError && ( //phoneNumberErrors && showErrors 변경
           <p className="text-red-500 text-xs">{phoneNumberError}</p>
         )}
-        {errors && showErrors && !phoneNumberError && (
+        {errors && !phoneNumberError && ( //errors && showErrors 변경
           <p className="text-red-500 text-xs">전화번호를 입력해주세요</p>
         )}
       </div>

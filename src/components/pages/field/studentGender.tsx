@@ -6,10 +6,10 @@ interface StudentGenderProps {
   gender: Gender;
   setGender: (value: Gender) => void;
   errors?: boolean;
-  showErrors?: boolean;
+  // showErrors?: boolean;
 }
 
-export function StudentGender({gender, setGender, errors, showErrors}: StudentGenderProps) {
+export function StudentGender({gender, setGender, errors}: StudentGenderProps) {
   return(
     <div className="space-y-2">
         <Label>성별</Label>
@@ -23,7 +23,7 @@ export function StudentGender({gender, setGender, errors, showErrors}: StudentGe
             <Label htmlFor="FEMALE">여자</Label>
           </div>
         </RadioGroup>
-        {errors && showErrors && (
+        {errors && ( //errors && showErrors 변경
           <p className="text-red-500 text-xs">성별을 선택해주세요</p>
         )}
       </div>

@@ -436,21 +436,21 @@ interface StudentDepartmentProps {
   department: string;
   setDepartment: (value: string) => void;
   errors?: boolean;
-  showErrors?: boolean;
+  // showErrors?: boolean;
 }
 
 export function StudentDepartment({
   department,
   setDepartment,
   errors,
-  showErrors,
+  // showErrors,
 }: StudentDepartmentProps) {
   const [open, setOpen] = useState(false);
 
   const defaultDepartmentLabel =
     departments.find((dept) => dept.value === department)?.label || "학과 선택";
 
-  // CommandItem 스타일 변경
+  // CommandItem 스타일(검색창)
   const commandItemStyle = {
     whiteSpace: "nowrap", // 텍스트 줄바꿈 방지
     overflow: "hidden",    // 넘치는 텍스트 숨김
@@ -467,7 +467,7 @@ export function StudentDepartment({
               type="button"
               className={cn(
                 "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                errors && showErrors ? "border-red-500" : "",
+                errors ? "border-red-500" : "", //errors && showErrors 변경
                 open && "ring-2 ring-ring ring-offset-2"
               )}
             >
@@ -508,7 +508,7 @@ export function StudentDepartment({
         </PopoverContent>
       </Popover>
 
-      {errors && showErrors && (
+      {errors && ( //errors && showErrors 변경
         <p className="text-red-500 text-xs">학과를 선택해주세요</p>
       )}
     </div>

@@ -5,10 +5,10 @@ interface StudentIdProps {
   studentId: string;
   setStudentId: (value: string) => void;
   errors?: boolean;
-  showErrors?: boolean;
+  // showErrors?: boolean;
 }
 
-export function StudentId({studentId, setStudentId, errors, showErrors}: StudentIdProps){
+export function StudentId({studentId, setStudentId, errors}: StudentIdProps){
   return (
     <div className="space-y-2">
         <Label htmlFor="studentId">학번</Label>
@@ -20,9 +20,9 @@ export function StudentId({studentId, setStudentId, errors, showErrors}: Student
             setStudentId(rawValue);
           }}
           placeholder="32000000"
-          className={errors && showErrors ? "border-red-500" : ""}
+          className={errors ? "border-red-500" : ""} //errors && showErrors 변경
         />
-        {errors && showErrors && (
+        {errors && ( //errors && showErrors 변경
           <p className="text-red-500 text-xs">학번을 입력해주세요</p>
         )}
       </div>
