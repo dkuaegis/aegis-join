@@ -1,6 +1,4 @@
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -19,6 +17,13 @@ import {
   useRef,
   useState,
 } from "react";
+import { Gender } from "@/types/api/member";
+import { StudentName } from "./field/studentName";
+import { StudentBirthDate } from "./field/studentBirthDate";
+import { StudentGender } from "./field/studentGender";
+import { StudentId } from "./field/studentId";
+import { StudentPhoneNumber } from "./field/studentPhoneNumber";
+import { StudentDepartment } from "./field/studentDepartment";
 
 //전화번호 입력 포맷팅 함수
 function formatPhoneNumber(rawValue: string): string {
@@ -38,22 +43,6 @@ function phoneNumberCheck(number: string): boolean {
   return result.test(number);
 }
 
-//학과 필드 배열
-const departments = [
-  { value: "SOFTWARE_ENGINEERING", label: "SW융합대학 소프트웨어학과" },
-  { value: "COMPUTER_ENGINEERING", label: "SW융합대학 컴퓨터공학과" },
-  {
-    value: "MOBILE_SYSTEM_ENGINEERING",
-    label: "SW융합대학 모바일시스템공학과",
-  },
-  { value: "CYBER_SECURITY", label: "SW융합대학 사이버보안학과" },
-  {
-    value: "STATISTICS_DATA_SCIENCE",
-    label: "SW융합대학 통계데이터사이언스학과",
-  },
-  { value: "SW_CONVERGENCE_DIVISION", label: "SW융합대학 SW융합학부" },
-];
-
 //학년 필드 배열
 const grades = [
   { value: "ONE", label: "1학년" },
@@ -70,7 +59,7 @@ function PersonalInfo({
 }) {
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
-  const [gender, setGender] = useState<string>("");
+  const [gender, setGender] = useState<Gender>(Gender.MALE);
   const [studentId, setStudentId] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [department, setDepartment] = useState("");
@@ -187,7 +176,10 @@ function PersonalInfo({
     const fetchMemberData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/member`
+          `${import.meta.env.VITE_API_URL}/api/member`,
+          {
+            credentials: "include",
+          }
         );
         if (response.ok) {
           const data = await response.json();
@@ -218,6 +210,7 @@ function PersonalInfo({
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/api/member`,
             {
+              credentials: "include",
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -272,114 +265,54 @@ function PersonalInfo({
       <h3 className="font-semibold text-lg">기본 인적사항</h3>
 
       {/* 이름 필드 */}
-      <div className="space-y-2">
-        <Label htmlFor="name">이름</Label>
-        <Input
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="홍길동"
-          className={errors.name && showErrors ? "border-red-500" : ""}
-        />
-        {errors.name && showErrors && (
-          <p className="text-red-500 text-xs">이름을 입력해주세요</p>
-        )}
-      </div>
+      <StudentName
+        name={name}
+        setName={setName}
+        errors={errors.name}
+        showErrors={showErrors}
+      />
 
       {/* 생년월일 필드 */}
-      <div className="space-y-2">
-        <Label htmlFor="birthDate">생년월일</Label>
-        <Input
-          id="birthDate"
-          value={birthDate}
-          onChange={(e) => {
-            const rawValue = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
-            setBirthDate(rawValue);
-          }}
-          placeholder="020101"
-          className={errors.birthDate && showErrors ? "border-red-500" : ""}
-        />
-        {errors.birthDate && showErrors && (
-          <p className="text-red-500 text-xs">생년월일을 입력해주세요</p>
-        )}
-      </div>
+      <StudentBirthDate
+        birthDate={birthDate}
+        setBirthDate={setBirthDate}
+        errors={errors.birthDate}
+        showErrors={showErrors}
+      />
 
       {/* 성별 라디오 버튼 */}
-      <div className="space-y-2">
-        <Label>성별</Label>
-        <RadioGroup value={gender} onValueChange={setGender}>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="MALE" id="MALE" />
-            <Label htmlFor="MALE">남자</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="FEMALE" id="FEMALE" />
-            <Label htmlFor="FEMALE">여자</Label>
-          </div>
-        </RadioGroup>
-        {errors.gender && showErrors && (
-          <p className="text-red-500 text-xs">성별을 선택해주세요</p>
-        )}
-      </div>
+      <StudentGender
+        gender={gender}
+        setGender={setGender}
+        errors={errors.gender}
+        showErrors={showErrors}
+      />
 
       {/* 학번 필드 */}
-      <div className="space-y-2">
-        <Label htmlFor="studentId">학번</Label>
-        <Input
-          id="studentId"
-          value={studentId}
-          onChange={(e) => {
-            const rawValue = e.target.value.replace(/[^0-9]/g, "").slice(0, 8);
-            setStudentId(rawValue);
-          }}
-          placeholder="32000000"
-          className={errors.studentId && showErrors ? "border-red-500" : ""}
-        />
-        {errors.studentId && showErrors && (
-          <p className="text-red-500 text-xs">학번을 입력해주세요</p>
-        )}
-      </div>
+      <StudentId 
+        studentId={studentId}
+        setStudentId={setStudentId}
+        errors={errors.studentId}
+        showErrors={showErrors}
+      />
 
       {/* 전화번호 필드 */}
-      <div className="space-y-2">
-        <Label htmlFor="phoneNumber">전화번호</Label>
-        <Input
-          type="tel"
-          id="phoneNumber"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))}
-          placeholder="010-1234-5678"
-          className={errors.phoneNumber && showErrors ? "border-red-500" : ""}
-        />
-        {phoneNumberError && showErrors && (
-          <p className="text-red-500 text-xs">{phoneNumberError}</p>
-        )}
-        {errors.phoneNumber && showErrors && !phoneNumberError && (
-          <p className="text-red-500 text-xs">전화번호를 입력해주세요</p>
-        )}
-      </div>
+      <StudentPhoneNumber
+        phoneNumber={phoneNumber}
+        setPhoneNumber={setPhoneNumber}
+        formatPhoneNumber={formatPhoneNumber}
+        phoneNumberError={phoneNumberError}
+        errors={errors.phoneNumber}
+        showErrors={showErrors}
+      />
 
       {/* 소속 선택 */}
-      <div className="space-y-2">
-        <Label htmlFor="department">소속</Label>
-        <Select value={department} onValueChange={setDepartment}>
-          <SelectTrigger
-            className={errors.department && showErrors ? "border-red-500" : ""}
-          >
-            <SelectValue placeholder="학과 선택" />
-          </SelectTrigger>
-          <SelectContent>
-            {departments.map(({ value, label }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.department && showErrors && (
-          <p className="text-red-500 text-xs">학과를 선택해주세요</p>
-        )}
-      </div>
+      <StudentDepartment
+        department={department}
+        setDepartment={setDepartment}
+        errors={errors.department}
+        showErrors={showErrors}
+      />
 
       {/* 학적 상태 선택 */}
       <div className="space-y-2">

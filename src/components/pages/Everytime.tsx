@@ -7,7 +7,7 @@ import { LoadingState } from "@/types/state/loading";
 import { ValidState } from "@/types/state/valid";
 import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import AlertBox from "./ui/custom/alertbox";
+import AlertBox from "../ui/custom/alertbox";
 
 function Everytime() {
   const [everytimeLink, setEverytimeLink] = useState<string>("");
@@ -41,6 +41,7 @@ function Everytime() {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/everytime`,
         {
+          credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",

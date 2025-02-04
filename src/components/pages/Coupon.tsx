@@ -159,10 +159,10 @@ export default function Coupon() {
     const getCoupon = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/join/coupons`
-          // {
-          //   credentials: "include",
-          // }
+          `${import.meta.env.VITE_API_URL}/api/join/coupons`,
+          {
+            credentials: "include",
+          }
         );
         if (!response.ok) {
           throw new Error("에러남");

@@ -1,13 +1,13 @@
-import Everytime from "@/components/Everytime";
-import LoginPage from "@/components/LoginPage";
-import Payment from "@/components/Payment";
-import PersonalInfo from "@/components/PersonalInfo";
-import Survey from "@/components/Survey";
+import Everytime from "@/components/pages/Everytime";
+import LoginPage from "@/components/pages/LoginPage";
+import Payment from "@/components/pages/Payment";
+import PersonalInfo from "@/components/pages/PersonalInfo";
+import Survey from "@/components/pages/Survey";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useCallback, useEffect, useReducer, useState } from "react";
-import Coupon from "./components/Coupon";
-import Discord from "./components/Discord";
+import Coupon from "./components/pages/Coupon";
+import Discord from "./components/pages/Discord";
 import { startDiscordPolling } from "./lib/api/discordPolling";
 import {
   checkPageValidation,
@@ -143,10 +143,10 @@ function App() {
     const checkAuth = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/check`
-          // {
-          //    credentials: "include",
-          // }
+          `${import.meta.env.VITE_API_URL}/auth/check`,
+          {
+            credentials: "include",
+          }
         );
         if (!response.ok) {
           throw new Error("인증 정보 없음.");

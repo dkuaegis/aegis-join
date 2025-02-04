@@ -5,8 +5,8 @@ import {
   LoaderCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import AlertBox from "./ui/custom/alertbox";
+import { Button } from "../ui/button";
+import AlertBox from "../ui/custom/alertbox";
 
 function Discord({
   setPolling,

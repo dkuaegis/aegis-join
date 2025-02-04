@@ -11,7 +11,7 @@ import {
 } from "@/types/api/survey";
 import { ValidState } from "@/types/state/valid";
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 interface InterestItem {
   id: InterestField;
@@ -190,7 +190,11 @@ function Survey() {
     console.log("MOUNTED");
     const getSurveyData = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`,
+          {
+            credentials: "include",
+          }
+        );
         if (!response.ok) {
           throw new Error("가져오는데 에러");
         }
@@ -224,6 +228,7 @@ function Survey() {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/survey/post`,
             {
+              credentials: "include",
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -308,7 +313,7 @@ function Survey() {
                 </div>
                 <div className="mx-4 mt-2 grid gap-y-4">
                   {fields.map((field) => (
-                    <>
+                    <React.Fragment key={field.id}>
                       <div
                         key={field.id}
                         className="flex items-center space-x-2"
@@ -332,7 +337,7 @@ function Survey() {
                             name={field.id}
                             placeholder="기타 관심 분야를 작성해주세요"
                             maxLength={20}
-                            value={interestEtcField.get(field.id)}
+                            value={interestEtcField.get(field.id)||""}
                             onValueChange={(value) =>
                               handleEtcTextareaChange(field.id, value)
                             }
@@ -352,7 +357,7 @@ function Survey() {
                           기타 분야를 작성해주세요
                         </p>
                       )}
-                    </>
+                    </React.Fragment>
                   ))}
                 </div>
               </div>
