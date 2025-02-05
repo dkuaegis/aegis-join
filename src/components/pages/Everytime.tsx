@@ -6,17 +6,6 @@ import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import AlertBox from "../ui/custom/alertbox";
 import NavigationButtons from "../ui/custom/navigationButton";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-// zod 스키마 정의
-const schema = z.object({
-  timetableLink: z.string().url({ message: "올바른 URL 형식이 아닙니다." }),
-});
-
-// zod 스키마 타입 정의
-type EverytimeValues = z.infer<typeof schema>;
 
 function Everytime({
   onNext,
@@ -83,8 +72,8 @@ function Everytime({
         <div className="flex items-center justify-center pt-4">
           {StatusMessage(loading)}
         </div>
-        <NavigationButtons prev={onPrev} next={() => handleSubmit(onSubmit)()} isValid={true} />
-      </form>
+      </div>
+      <NavigationButtons prev={onPrev} next={onNext} />
     </div>
   );
 }
