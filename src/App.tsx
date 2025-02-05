@@ -9,8 +9,9 @@ import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Coupon from "./components/pages/Coupon";
 import Discord from "./components/pages/Discord";
-import useFunnel from "./lib/funnel/useFunnel";
+import useFunnel from "./hooks/funnel/useFunnel";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
+import useAuth from "./hooks/useAuth";
 
 function App() {
   const [, setSenderName] = useState<string>("");
@@ -19,7 +20,8 @@ function App() {
     expectedDepositAmount: 10000,
     currentDepositAmount: 10000,
   });
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  const { isAuthenticated } = useAuth();
 
   const { currentStep, progress, next, prev } = useFunnel({
     steps: [
@@ -32,28 +34,6 @@ function App() {
     ],
     initialStep: "PersonalInfo",
   });
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/check`,
-          {
-            credentials: "include",
-          }
-        );
-        if (!response.ok) {
-          throw new Error("인증 정보 없음.");
-        }
-        setIsAuthenticated(response.status === 200);
-      } catch (error) {
-        console.error("Auth check error:", error);
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
 
   if (isAuthenticated === null) {
     return null;
@@ -111,18 +91,6 @@ function App() {
         <Route path="*" element={<Navigate to={`/${currentStep}`} replace />} />
       </Routes>
 
-      <div className="fixed right-0 bottom-0 left-0 bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto w-full max-w-md px-4 py-4">
-          <div className="flex justify-between">
-            <Button type="button" onClick={prev}>
-              이전
-            </Button>
-            <Button type="button" onClick={next}>
-              다음
-            </Button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

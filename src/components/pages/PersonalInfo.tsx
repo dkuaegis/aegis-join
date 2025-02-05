@@ -16,6 +16,11 @@ import { StudentDepartment } from "./field/studentDepartment";
 import { StudentAcademicStatus } from "./field/studentAcademicStatus";
 import { StudentGrade } from "./field/studentGrade";
 import { StudentAcademicSemester } from "./field/studentAcademicSemester";
+import NavigationButtons from "../ui/custom/navigationButton";
+
+
+
+
 
 function PersonalInfo({
   setSenderName,
@@ -169,6 +174,8 @@ function PersonalInfo({
         errors={errors.academicSemester}
         // showErrors={showErrors}
       />
+
+      <NavigationButtons prev={onPrev} next={onNext} />
     </div>
   );
 }

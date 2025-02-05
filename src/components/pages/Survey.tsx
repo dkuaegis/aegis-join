@@ -7,6 +7,7 @@ import { InterestField, type PostSurveyForm } from "@/types/api/survey";
 import { ValidState } from "@/types/state/valid";
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import NavigationButtons from "../ui/custom/navigationButton";
 
 interface InterestItem {
   id: InterestField;
@@ -299,6 +300,7 @@ function Survey({
           onValueChange={handleFeedbackTextareaChange}
         />
       </div>
+      <NavigationButtons prev={onPrev} next={onNext} />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import AlertBox from "../ui/custom/alertbox";
+import NavigationButtons from "../ui/custom/navigationButton";
 
 function Discord({
   isValid,
@@ -80,6 +81,7 @@ function Discord({
           </>
         )}
       </div>
+      <NavigationButtons prev={onPrev} next={onNext} />
     </div>
   );
 }

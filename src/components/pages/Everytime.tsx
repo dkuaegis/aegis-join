@@ -5,6 +5,7 @@ import { LoadingState } from "@/types/state/loading";
 import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import AlertBox from "../ui/custom/alertbox";
+import NavigationButtons from "../ui/custom/navigationButton";
 
 function Everytime({
   onNext,
@@ -53,6 +54,7 @@ function Everytime({
           {StatusMessage(loading)}
         </div>
       </div>
+      <NavigationButtons prev={onPrev} next={onNext} />
     </div>
   );
 }
