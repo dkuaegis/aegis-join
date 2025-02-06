@@ -1,27 +1,26 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { forwardRef } from "react";
 
-interface StudentNameProps {
-  name: string;
-  setName: (value: string) => void;
-  errors?: boolean;
-  // showErrors?: boolean;
+interface StudentNameProps extends React.ComponentPropsWithoutRef<"input"> {
+  error?: string;
 }
 
-export function StudentName({ name, setName, errors }: StudentNameProps) {
+export const StudentName = forwardRef<HTMLInputElement, StudentNameProps>(
+  ({ error, ...props }, ref) => {
   return (
     <div className="space-y-2">
       <Label htmlFor="name">이름</Label>
       <Input
         id="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
         placeholder="홍길동"
-        className={errors ? "border-red-500" : ""} //errors && showErrors 변경
+        ref={ref}
+        className={error ? "border-red-500" : ""} //errors && showErrors 변경
+        {...props}
       />
-        {errors && ( //errors && showErrors 변경
+        {error && ( //errors && showErrors 변경
           <p className="text-red-500 text-xs">이름을 입력해주세요</p>
         )}
     </div>
   );
-}
+});

@@ -1,30 +1,26 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { forwardRef } from "react";
 
-interface StudentBirthDateProps {
-  birthDate: string;
-  setBirthDate: (value: string) => void;
-  errors?: boolean; 
-  // showErrors?: boolean;
+interface StudentBirthDateProps extends React.ComponentPropsWithoutRef<"input"> {
+  error?: string; 
 }
 
-export function StudentBirthDate({ birthDate, setBirthDate, errors }: StudentBirthDateProps) {  //errors && showErrors 변경
+export const StudentBirthDate = forwardRef<HTMLInputElement, StudentBirthDateProps>(
+  ({ error, onChange, ...props }, ref) =>{ 
   return(
     <div className="space-y-2">
         <Label htmlFor="birthDate">생년월일</Label>
         <Input
           id="birthDate"
-          value={birthDate}
-          onChange={(e) => {
-            const rawValue = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
-            setBirthDate(rawValue);
-          }}
+          ref={ref}
           placeholder="020101"
-          className={errors ? "border-red-500" : ""}  //errors && showErrors 변경
+          {...props}
+          className={error ? "border-red-500" : ""}  //errors && showErrors 변경
         />
-        {errors && ( //errors && showErrors 변경
+        {error && ( //errors && showErrors 변경
           <p className="text-red-500 text-xs">생년월일을 입력해주세요</p>
         )}
       </div>
   );
-}
+});

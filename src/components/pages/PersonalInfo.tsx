@@ -1,11 +1,4 @@
-import {
-  type Dispatch,
-  type SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { Gender } from "@/types/api/member";
+import { AcademicStatus, Department, Gender, Grade, Semester } from "@/types/api/member";
 import { formatPhoneNumber } from "@/utils/PersonalInfo.helper";
 import { StudentName } from "./field/studentName";
 import { StudentBirthDate } from "./field/studentBirthDate";
@@ -17,119 +10,82 @@ import { StudentAcademicStatus } from "./field/studentAcademicStatus";
 import { StudentGrade } from "./field/studentGrade";
 import { StudentAcademicSemester } from "./field/studentAcademicSemester";
 import NavigationButtons from "../ui/custom/navigationButton";
+import {z} from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
+const personalInfoSchema = z.object({
+  name: z.string().min(1, "이름을 입력해주세요"),
+  birthDate: z.string().length(6, "생년월일을 입력해주세요"),
+  gender: z.nativeEnum(Gender, {
+    errorMap: () => ({ message: "성별을 선택해주세요" }),
+  }),
+  studentId: z.string().min(1, "학번을 입력해주세요"),
+  phoneNumber: z
+    .string()
+    .min(1, "전화번호를 입력해주세요")
+    .refine((val) => {
+      // 하이픈(-) 제거 후 숫자만 남은 값의 길이 검사 (10~11자리)
+      const normalized = val.replace(/-/g, "");
+      const phoneRegex = /^[0-9]{10,11}$/;
+      return phoneRegex.test(normalized);
+    }, "전화번호 형식이 올바르지 않습니다"),
+  department: z.nativeEnum(Department, {
+    errorMap: () => ({ message: "학과를 선택해주세요"}),
+  }),
+  academicStatus: z.nativeEnum(AcademicStatus, {
+    errorMap: () => ({ message: "학적 상태를 선택해주세요"}),
+  }),
+  grade: z.nativeEnum(Grade, {
+    errorMap: () => ({ message: "학년을 선택해주세요"}),
+  }),
+  academicSemester: z.nativeEnum(Semester, {
+    errorMap: () => ({ message: "학기를 선택해주세요"}),
+  }),
+});
 
-
-
+type PersonalInfoFormValues = z.infer<typeof personalInfoSchema>;
 
 function PersonalInfo({
-  setSenderName,
   onNext,
   onPrev,
 }: {
-  setSenderName: Dispatch<SetStateAction<string>>;
   onNext: () => void;
   onPrev: () => void;
 }) {
+
+  const { register, handleSubmit, formState: {errors, isValid} , watch} = useForm<PersonalInfoFormValues>({
+    resolver: zodResolver(personalInfoSchema),
+    mode: "onChange",
+  })
+
+
   console.log(onNext, onPrev);
-  const [name, setName] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [gender, setGender] = useState<Gender>(Gender.MALE);
-  const [studentId, setStudentId] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [department, setDepartment] = useState("");
-  const [academicStatus, setAcademicStatus] = useState("");
-  const [grade, setGrade] = useState("");
-  const [academicSemester, setAcademicSemester] = useState("");
-
-  const [phoneNumberError] = useState<string | null>(null);
-
-  const formValuesRef = useRef({
-    name,
-    birthDate,
-    gender,
-    studentId,
-    phoneNumber,
-    department,
-    academicStatus,
-    grade,
-    academicSemester,
-  });
-
-  const [errors] = useState({
-    name: false,
-    birthDate: false,
-    gender: false,
-    studentId: false,
-    phoneNumber: false,
-    department: false,
-    academicStatus: false,
-    grade: false,
-    academicSemester: false,
-  });
-
-  useEffect(() => {
-    setSenderName(`${name}${studentId.slice(-6)}`);
-  }, [name, studentId, setSenderName]);
-
-  useEffect(() => {
-    // Update the formValuesRef whenever the state changes
-    formValuesRef.current = {
-      name,
-      birthDate,
-      gender,
-      studentId,
-      phoneNumber,
-      department,
-      academicStatus,
-      grade,
-      academicSemester,
-    };
-  }, [
-    name,
-    birthDate,
-    gender,
-    studentId,
-    phoneNumber,
-    department,
-    academicStatus,
-    grade,
-    academicSemester,
-  ]);
 
   return (
-    <div className="space-y-4">
+    <form className="space-y-4" onSubmit={handleSubmit(onNext)}>
+      
       <h3 className="font-semibold text-lg">기본 인적사항</h3>
 
-      {/* 이름 필드 */}
       <StudentName
-        name={name}
-        setName={setName}
-        errors={errors.name}
-        // showErrors={showErrors}
+        {...register("name")}
+        error={errors.name?.message}
       />
 
-      {/* 생년월일 필드 */}
       <StudentBirthDate
-        birthDate={birthDate}
-        setBirthDate={setBirthDate}
-        errors={errors.birthDate}
-        // showErrors={showErrors}
+        {...register("birthDate")}
+        error={errors.birthDate?.message}
       />
 
       {/* 성별 라디오 버튼 */}
-      <StudentGender
-        gender={gender}
-        setGender={setGender}
-        errors={errors.gender}
-        // showErrors={showErrors}
+      <StudentGender 
+        {...register("gender")} 
+        error={errors.gender?.message} 
       />
 
       {/* 학번 필드 */}
       <StudentId 
-        studentId={studentId}
-        setStudentId={setStudentId}
-        errors={errors.studentId}
+        error={errors.studentId}
         // showErrors={showErrors}
       />
 
@@ -175,9 +131,11 @@ function PersonalInfo({
         // showErrors={showErrors}
       />
 
-      <NavigationButtons prev={onPrev} next={onNext} />
-    </div>
+      <NavigationButtons prev={onPrev} next={onNext} isValid={isValid} />
+    </form>
   );
 }
 
 export default PersonalInfo;
+
+ 

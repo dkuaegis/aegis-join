@@ -3,9 +3,8 @@ import LoginPage from "@/components/pages/LoginPage";
 import Payment from "@/components/pages/Payment";
 import PersonalInfo from "@/components/pages/PersonalInfo";
 import Survey from "@/components/pages/Survey";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Coupon from "./components/pages/Coupon";
 import Discord from "./components/pages/Discord";
@@ -14,7 +13,6 @@ import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 import useAuth from "./hooks/useAuth";
 
 function App() {
-  const [, setSenderName] = useState<string>("");
   const [paymentInfo] = useState<GetPaymentInfo>({
     status: PaymentStatus.PENDING,
     expectedDepositAmount: 10000,
@@ -52,7 +50,6 @@ function App() {
           path="/PersonalInfo"
           element={
             <PersonalInfo
-              setSenderName={setSenderName}
               onNext={next}
               onPrev={prev}
             />
