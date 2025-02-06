@@ -2,16 +2,17 @@ import { forwardRef } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Gender } from "@/types/api/member";
+import { useFormContext } from "react-hook-form";
 
-interface StudentGenderProps {
+interface StudentGenderProps extends React.ComponentPropsWithoutRef<typeof RadioGroup> {
   error?: string;
   value?: Gender;
-  onChange?: (value: Gender) => void;
-  isValid: boolean;
 }
 
 export const StudentGender = forwardRef<HTMLDivElement, StudentGenderProps>(
-  ({ error, value, onChange, isValid, ...props }, ref) => {
+  ({ error, value, ...props }, ref) => {
+  const { formState } = useFormContext();
+  const isValid = !formState.errors.gender; // 에러가 없으면 유효함
 
   return(
     <div className="space-y-2">
@@ -20,7 +21,6 @@ export const StudentGender = forwardRef<HTMLDivElement, StudentGenderProps>(
           {...props}
           ref={ref}
           value={value}
-          onValueChange={onChange}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value={Gender.MALE} id="MALE" />

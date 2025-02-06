@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { forwardRef } from "react";
 import type { Semester } from "@/types/api/member";
+import { useFormContext } from "react-hook-form";
 
 interface StudentAcademicSemesterProps {
   error?: string;
@@ -17,12 +18,15 @@ interface StudentAcademicSemesterProps {
 
 export const StudentAcademicSemester = forwardRef<HTMLDivElement, StudentAcademicSemesterProps>(
   ({ error, value, onChange, ...props }, ref)=>{
+    const { formState } = useFormContext();
+    const isValid = !formState.errors.academicSemester;
+
     return(
       <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="academicSemester">모집 학기 기준 학기</Label>
         <Select value={value} onValueChange={onChange}>
           <SelectTrigger
-            className={error ? "border-red-500" : ""}
+            className={error && !isValid ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학기 선택" />
           </SelectTrigger>
@@ -31,7 +35,7 @@ export const StudentAcademicSemester = forwardRef<HTMLDivElement, StudentAcademi
             <SelectItem value="SECOND">2학기</SelectItem>
           </SelectContent>
         </Select>
-        {error && (
+        {error && !isValid && (
           <p className="text-red-500 text-xs">학기를 선택해주세요</p>
         )}
       </div>

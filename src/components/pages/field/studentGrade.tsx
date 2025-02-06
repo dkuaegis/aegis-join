@@ -8,6 +8,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { forwardRef } from "react";
 import type { Grade } from "@/types/api/member";
+import { useFormContext } from "react-hook-form";
 
 //학년 필드 배열
 const grades = [
@@ -26,11 +27,14 @@ interface StudentGradeProps extends React.ComponentPropsWithoutRef<typeof Select
 
 export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
   ({ error, value, onChange, ...props }, ref)=>{
+    const { formState } = useFormContext();
+    const isValid = !formState.errors.grade;
+
   return(
     <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="grade">모집 학기 기준 학년</Label>
         <Select value={value} onValueChange={onChange}>
-          <SelectTrigger className={error ? "border-red-500" : ""}>
+          <SelectTrigger className={error && !isValid ? "border-red-500" : ""}>
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -41,7 +45,7 @@ export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
             ))}
           </SelectContent>
         </Select>
-        {error && (
+        {error && !isValid && (
           <p className="text-red-500 text-xs">학년을 선택해주세요</p>
         )}
       </div>

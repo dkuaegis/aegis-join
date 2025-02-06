@@ -16,6 +16,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { forwardRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Department } from "@/types/api/member";
+import { useFormContext } from "react-hook-form";
 
 interface StudentDepartmentProps {
   error?: string;
@@ -26,6 +27,8 @@ interface StudentDepartmentProps {
 export const StudentDepartment = forwardRef<HTMLDivElement, StudentDepartmentProps>(
   ({ error, onChange, value, ...props }, ref) => {
     const [open, setOpen] = useState(false);
+    const { formState } = useFormContext();
+    const isValid = !formState.errors.department;
 
     const defaultDepartmentLabel =
       departments.find((dept) => dept.value === value)?.label || "학과 선택";
@@ -47,7 +50,7 @@ export const StudentDepartment = forwardRef<HTMLDivElement, StudentDepartmentPro
                 type="button"
                 className={cn(
                   "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                  error ? "border-red-500" : "",
+                  error && !isValid ? "border-red-500" : "",
                   open && "ring-2 ring-ring ring-offset-2"
                 )}
               >
@@ -88,7 +91,7 @@ export const StudentDepartment = forwardRef<HTMLDivElement, StudentDepartmentPro
           </PopoverContent>
         </Popover>
 
-        {error && (
+        {error && !isValid && (
           <p className="text-red-500 text-xs">학과를 선택해주세요</p>
         )}
       </div>

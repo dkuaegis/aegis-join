@@ -11,7 +11,7 @@ import { StudentAcademicSemester } from "./field/studentAcademicSemester";
 import NavigationButtons from "../ui/custom/navigationButton";
 import {z} from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, FormProvider } from "react-hook-form";
 
 const personalInfoSchema = z.object({
   name: z.string().min(1, "이름을 입력해주세요"),
@@ -51,15 +51,15 @@ function PersonalInfo({
   onPrev: () => void;
 }) {
 
-  const { register, handleSubmit, formState: {errors}, control, watch } = useForm<PersonalInfoFormValues>({
+  const methods = useForm<PersonalInfoFormValues>({
     resolver: zodResolver(personalInfoSchema),
     mode: "onChange",
   });
 
-  const genderValue = watch("gender");
-  const isGenderValid = Object.values(Gender).includes(genderValue);
+  const { register, handleSubmit, formState: {errors}, control } = methods;
 
   return (
+    <FormProvider {...methods}>
       <form className="space-y-4" onSubmit={handleSubmit(onNext)}>
         <h3 className="font-semibold text-lg">기본 인적사항</h3>
 
@@ -81,7 +81,6 @@ function PersonalInfo({
                 <StudentGender
                     {...field}
                     error={errors.gender?.message}
-                    isValid={isGenderValid}
                 />
             )}
         />
@@ -156,6 +155,7 @@ function PersonalInfo({
 
         <NavigationButtons prev={onPrev} next={handleSubmit(onNext)} isValid={true} />
       </form>
+    </FormProvider>
   );
 }
 

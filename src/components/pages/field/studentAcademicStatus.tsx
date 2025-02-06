@@ -8,6 +8,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { forwardRef } from "react";
 import { AcademicStatus } from "@/types/api/member";
+import { useFormContext } from "react-hook-form";
 
 interface StudentAcademicStatusProps extends React.ComponentPropsWithoutRef<typeof Select> {
   error?: string;
@@ -17,11 +18,14 @@ interface StudentAcademicStatusProps extends React.ComponentPropsWithoutRef<type
 
 export const StudentAcademicStatus = forwardRef<HTMLDivElement, StudentAcademicStatusProps>(
   ({ error, value, onChange, ...props }, ref) => {
+    const { formState } = useFormContext();
+    const isValid = !formState.errors.academicStatus;
+
     return (
       <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="academicStatus">모집 학기 기준 학적</Label>
         <Select value={value} onValueChange={onChange}>
-          <SelectTrigger id="academicStatus" className={error ? "border-red-500" : ""}>
+          <SelectTrigger id="academicStatus" className={error && !isValid ? "border-red-500" : ""}>
             <SelectValue placeholder="학적 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -30,7 +34,7 @@ export const StudentAcademicStatus = forwardRef<HTMLDivElement, StudentAcademicS
             <SelectItem value={AcademicStatus.GRADUATED}>졸업</SelectItem>
           </SelectContent>
         </Select>
-        {error && <p className="text-red-500 text-xs">학적을 선택해주세요</p>}
+        {error && !isValid && <p className="text-red-500 text-xs">학적을 선택해주세요</p>}
       </div>
     );
   }

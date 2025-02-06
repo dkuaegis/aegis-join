@@ -2,6 +2,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { forwardRef, useCallback, type ChangeEventHandler } from "react";
 import { formatPhoneNumber } from "@/utils/PersonalInfo.helper";
+import { useFormContext } from "react-hook-form";
+
 interface StudentPhoneNumberProps extends React.ComponentPropsWithoutRef<"input"> {
   error?: string;
   onChange: ChangeEventHandler<HTMLInputElement>;  
@@ -9,6 +11,8 @@ interface StudentPhoneNumberProps extends React.ComponentPropsWithoutRef<"input"
 }
 export const StudentPhoneNumber = forwardRef<HTMLInputElement, StudentPhoneNumberProps>(
   ({error, onChange, value, ...props}, ref)=>{
+    const { formState } = useFormContext();
+    const isValid = !formState.errors.phoneNumber;
 
     const handleInputChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => { // 타입 명시
@@ -28,13 +32,13 @@ export const StudentPhoneNumber = forwardRef<HTMLInputElement, StudentPhoneNumbe
         id="phoneNumber"
         placeholder="010-1234-5678"
         ref={ref}
-        className={error ? "border-red-500" : ""}
+        className={error && !isValid ? "border-red-500" : ""}
         value={value}
         onChange={handleInputChange}
         maxLength={13} // 010-1234-5678
         {...props}
       />
-        {error && (
+        {error && !isValid && (
           <p className="text-red-500 text-xs">전화번호를 입력해주세요</p>
         )}
       </div>

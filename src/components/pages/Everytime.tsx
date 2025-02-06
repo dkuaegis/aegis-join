@@ -16,22 +16,22 @@ const schema = z.object({
 });
 
 // zod 스키마 타입 정의
-type FormData = z.infer<typeof schema>;
+type EverytimeValues = z.infer<typeof schema>;
 
 function Everytime({
   onNext,
   onPrev,
 }: {
-  onNext: (data: FormData) => void;
+  onNext: (data: EverytimeValues) => void;
   onPrev: () => void;
 }) {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { control, handleSubmit, formState: { errors } } = useForm<EverytimeValues>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: EverytimeValues) => {
     setLoading(LoadingState.LOADING);
     // TODO: 시간표 링크 제출 로직 구현
     console.log("제출된 링크:", data.timetableLink);
