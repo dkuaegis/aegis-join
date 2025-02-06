@@ -42,7 +42,7 @@ function App() {
   }
 
   return (
-    <div className="mx-auto mb-4 w-full max-w-md px-4 py-8 pb-20">
+    <div className="mx-auto mb-4 w-full max-w-md px-4 py-8 pb-28">
       <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
       <Progress value={progress} className="mt-4 w-full" />
       <Routes>

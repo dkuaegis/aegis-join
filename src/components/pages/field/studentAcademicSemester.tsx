@@ -6,21 +6,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { forwardRef } from "react";
+import type { Semester } from "@/types/api/member";
 
 interface StudentAcademicSemesterProps {
-  academicSemester: string;
-  setAcademicSemester: (value: string) => void;
-  errors?: boolean;
-  // showErrors?: boolean;
+  error?: string;
+  value?: Semester;
+  onChange?: (value: Semester) => void;
 }
 
-export function StudentAcademicSemester({academicSemester, setAcademicSemester, errors}: StudentAcademicSemesterProps){
-  return(
-    <div className="space-y-2">
+export const StudentAcademicSemester = forwardRef<HTMLDivElement, StudentAcademicSemesterProps>(
+  ({ error, value, onChange, ...props }, ref)=>{
+    return(
+      <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="academicSemester">모집 학기 기준 학기</Label>
-        <Select value={academicSemester} onValueChange={setAcademicSemester}>
+        <Select value={value} onValueChange={onChange}>
           <SelectTrigger
-            className={errors ? "border-red-500" : ""}
+            className={error ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학기 선택" />
           </SelectTrigger>
@@ -29,9 +31,9 @@ export function StudentAcademicSemester({academicSemester, setAcademicSemester, 
             <SelectItem value="SECOND">2학기</SelectItem>
           </SelectContent>
         </Select>
-        {errors && (
+        {error && (
           <p className="text-red-500 text-xs">학기를 선택해주세요</p>
         )}
       </div>
   );
-}
+});

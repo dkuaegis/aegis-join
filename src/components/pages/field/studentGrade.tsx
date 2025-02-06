@@ -6,6 +6,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { forwardRef } from "react";
+import type { Grade } from "@/types/api/member";
 
 //학년 필드 배열
 const grades = [
@@ -16,19 +18,19 @@ const grades = [
   { value: "FIVE", label: "5학년" },
 ];
 
-interface StudentGradeProps {
-  grade: string;
-  setGrade: (value: string) => void;
-  errors?: boolean;
-  // showErrors?: boolean;
+interface StudentGradeProps extends React.ComponentPropsWithoutRef<typeof Select>{
+  error?: string;
+  value?: Grade;
+  onChange?: (value: Grade) => void;
 }
 
-export function StudentGrade({grade, setGrade, errors}: StudentGradeProps){
+export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
+  ({ error, value, onChange, ...props }, ref)=>{
   return(
-    <div className="space-y-2">
+    <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="grade">모집 학기 기준 학년</Label>
-        <Select value={grade} onValueChange={setGrade}>
-          <SelectTrigger className={errors ? "border-red-500" : ""}>
+        <Select value={value} onValueChange={onChange}>
+          <SelectTrigger className={error ? "border-red-500" : ""}>
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -39,9 +41,9 @@ export function StudentGrade({grade, setGrade, errors}: StudentGradeProps){
             ))}
           </SelectContent>
         </Select>
-        {errors && (
+        {error && (
           <p className="text-red-500 text-xs">학년을 선택해주세요</p>
         )}
       </div>
   );
-}
+});

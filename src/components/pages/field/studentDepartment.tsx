@@ -13,8 +13,88 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import type { Department } from "@/types/api/member";
+
+interface StudentDepartmentProps {
+  error?: string;
+  onChange?: (value: Department | undefined) => void; // onChange 타입 수정
+  value?: Department;
+}
+
+export const StudentDepartment = forwardRef<HTMLDivElement, StudentDepartmentProps>(
+  ({ error, onChange, value, ...props }, ref) => {
+    const [open, setOpen] = useState(false);
+
+    const defaultDepartmentLabel =
+      departments.find((dept) => dept.value === value)?.label || "학과 선택";
+
+    // CommandItem 스타일(검색창)
+    const commandItemStyle = {
+      whiteSpace: "nowrap", // 텍스트 줄바꿈 방지
+      overflow: "hidden",    // 넘치는 텍스트 숨김
+      textOverflow: "ellipsis", // 말줄임표 표시
+    };
+
+    return (
+      <div className="space-y-2" {...props} ref={ref}>
+        <Label htmlFor="department">소속</Label>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <div className="relative">
+              <button
+                type="button"
+                className={cn(
+                  "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                  error ? "border-red-500" : "",
+                  open && "ring-2 ring-ring ring-offset-2"
+                )}
+              >
+                {defaultDepartmentLabel}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </button>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-[400px] p-0">
+            <Command>
+              <CommandInput
+                placeholder="학과를 검색해주세요."
+              />
+              <CommandList>
+                <CommandEmpty>존재하지 않는 학과입니다.</CommandEmpty>
+                <CommandGroup>
+                  {departments.map((departmentItem) => (
+                    <CommandItem
+                      key={departmentItem.value}
+                      value={departmentItem.value}
+                      onSelect={(currentValue) => {
+                        onChange?.(currentValue as Department);
+                        setOpen(false);
+                      }}
+                      style={commandItemStyle}
+                    >
+                      {value === departmentItem.value ? (
+                        <Check className="mr-2 h-4 w-4" />
+                      ) : (
+                        <div className="mr-2 h-4 w-4" />
+                      )}
+                      {departmentItem.label}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+
+        {error && (
+          <p className="text-red-500 text-xs">학과를 선택해주세요</p>
+        )}
+      </div>
+    );
+  }
+);
 
 // 학과 필드 배열
 const departments = [
@@ -431,86 +511,3 @@ const departments = [
     label: "약학대학 약학과",
   },
 ];
-
-interface StudentDepartmentProps {
-  department: string;
-  setDepartment: (value: string) => void;
-  errors?: boolean;
-  // showErrors?: boolean;
-}
-
-export function StudentDepartment({
-  department,
-  setDepartment,
-  errors,
-  // showErrors,
-}: StudentDepartmentProps) {
-  const [open, setOpen] = useState(false);
-
-  const defaultDepartmentLabel =
-    departments.find((dept) => dept.value === department)?.label || "학과 선택";
-
-  // CommandItem 스타일(검색창)
-  const commandItemStyle = {
-    whiteSpace: "nowrap", // 텍스트 줄바꿈 방지
-    overflow: "hidden",    // 넘치는 텍스트 숨김
-    textOverflow: "ellipsis", // 말줄임표 표시
-  };
-
-  return (
-    <div className="space-y-2">
-      <Label htmlFor="department">소속</Label>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <div className="relative">
-            <button
-              type="button"
-              className={cn(
-                "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                errors ? "border-red-500" : "", //errors && showErrors 변경
-                open && "ring-2 ring-ring ring-offset-2"
-              )}
-            >
-              {defaultDepartmentLabel}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </button>
-          </div>
-        </PopoverTrigger>
-        <PopoverContent className="w-[400px] p-0">
-          <Command>
-            <CommandInput
-                placeholder="학과를 검색해주세요."
-            />
-            <CommandList>
-              <CommandEmpty>No department found.</CommandEmpty>
-              <CommandGroup>
-                {departments.map((departmentItem) => (
-                  <CommandItem
-                    key={departmentItem.value}
-                    value={departmentItem.value}
-                    onSelect={(currentValue) => {
-                      setDepartment(currentValue === department ? "" : currentValue);
-                      setOpen(false);
-                    }}
-                    style={commandItemStyle}
-                  >
-                    {department === departmentItem.value ? (
-                      <Check className="mr-2 h-4 w-4" />
-                    ) : (
-                      <div className="mr-2 h-4 w-4" />
-                    )}
-                    {departmentItem.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-
-      {errors && ( //errors && showErrors 변경
-        <p className="text-red-500 text-xs">학과를 선택해주세요</p>
-      )}
-    </div>
-  );
-}

@@ -9,8 +9,3 @@ export function formatPhoneNumber(rawValue: string): string {
   }
   return `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 7)}-${sanitizedValue.slice(7, 11)}`;
 }
-
-export function phoneNumberCheck(number: string): boolean {
-  const result = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
-  return result.test(number);
-}

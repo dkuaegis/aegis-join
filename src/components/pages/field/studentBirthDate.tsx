@@ -3,23 +3,24 @@ import { Label } from "@/components/ui/label";
 import { forwardRef } from "react";
 
 interface StudentBirthDateProps extends React.ComponentPropsWithoutRef<"input"> {
-  error?: string; 
+  error?: string;
 }
 
 export const StudentBirthDate = forwardRef<HTMLInputElement, StudentBirthDateProps>(
-  ({ error, onChange, ...props }, ref) =>{ 
-  return(
+  ({error, ...props}, ref)=>{
+  return (
     <div className="space-y-2">
-        <Label htmlFor="birthDate">생년월일</Label>
-        <Input
-          id="birthDate"
-          ref={ref}
-          placeholder="020101"
-          {...props}
-          className={error ? "border-red-500" : ""}  //errors && showErrors 변경
-        />
-        {error && ( //errors && showErrors 변경
-          <p className="text-red-500 text-xs">생년월일을 입력해주세요</p>
+      <Label htmlFor="birthDate">생년월일</Label>
+      <Input
+        id="birthDate"
+        placeholder="020101"
+        maxLength={6}
+        ref={ref}          
+        className={error ? "border-red-500" : ""}
+        {...props}
+      />
+        {error && (
+          <p className="text-red-500 text-xs">생년월일을 6자리로 입력해주세요</p>
         )}
       </div>
   );
