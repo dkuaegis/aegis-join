@@ -1,8 +1,8 @@
 import Everytime from "@/components/pages/Everytime";
 import LoginPage from "@/components/pages/LoginPage";
 import Payment from "@/components/pages/Payment";
-import PersonalInfo from "@/components/pages/PersonalInfo/PersonalInfo";
-import Survey from "@/components/pages/Survey";
+import PersonalInfo from "@/components/pages/PersonalInfo";
+import Survey from "@/components/pages/Survey/Survey";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
