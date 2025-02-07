@@ -23,7 +23,7 @@ export function ControlledCheckbox({ id }: { id: InterestField } ) {
               onChange(value.filter((item: InterestField) => item !== id));
             }
           };
-  
+
           return (
             <Checkbox
               id={id}
