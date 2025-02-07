@@ -23,7 +23,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
         mode: "onChange",
     });
 
-    const { register, handleSubmit, formState: { errors } } = methods;
+    const { handleSubmit } = methods;
 
     return (
         <FormProvider {...methods}>
@@ -31,13 +31,11 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
                 <h3 className="font-semibold text-lg">기본 인적사항</h3>
 
                 <StudentName
-                    {...register("name")}
-                    error={errors.name?.message}
+                    name="name"
                 />
 
                 <StudentBirthDate
-                    {...register("birthDate")}
-                    error={errors.birthDate?.message}
+                    name="birthDate"
                 />
 
                 {/* 성별 라디오 버튼 */}
@@ -47,8 +45,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
 
                 {/* 학번 필드 */}
                 <StudentId
-                    {...register("studentId")}
-                    error={errors.studentId?.message}
+                    name="studentId"
                 />
 
                 {/* 전화번호 필드 */}
