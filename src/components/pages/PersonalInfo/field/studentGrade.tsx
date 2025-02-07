@@ -1,3 +1,4 @@
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -5,7 +6,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { forwardRef } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 
@@ -23,11 +23,11 @@ interface StudentGradeProps {
 }
 
 export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
-  ({ name, ...props }, ref)=>{
+  ({ name, ...props }, ref) => {
     const { field, error, isValid } = useControllerField({ name });
 
-  return(
-    <div className="space-y-2" {...props} ref={ref}>
+    return (
+      <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="grade">모집 학기 기준 학년</Label>
         <Select value={field.value} onValueChange={field.onChange}>
           <SelectTrigger className={error && !isValid ? "border-red-500" : ""}>
@@ -45,7 +45,8 @@ export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
           <p className="text-red-500 text-xs">학년을 선택해주세요</p>
         )}
       </div>
-  );
-});
+    );
+  }
+);
 
 StudentGrade.displayName = "StudentGrade";
