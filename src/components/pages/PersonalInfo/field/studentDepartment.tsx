@@ -16,22 +16,19 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { forwardRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Department } from "@/types/api/member";
-import { useFormContext } from "react-hook-form";
+import { useControllerField } from "../PersonalInfo.ControlledField";
 
 interface StudentDepartmentProps {
-  error?: string;
-  onChange?: (value: Department | undefined) => void; // onChange 타입 수정
-  value?: Department;
+  name: string; // name prop 추가
 }
 
 export const StudentDepartment = forwardRef<HTMLDivElement, StudentDepartmentProps>(
-  ({ error, onChange, value, ...props }, ref) => {
+  ({ name, ...props }, ref) => {
     const [open, setOpen] = useState(false);
-    const { formState } = useFormContext();
-    const isValid = !formState.errors.department;
+    const { field, error, isValid } = useControllerField({ name });
 
     const defaultDepartmentLabel =
-      departments.find((dept) => dept.value === value)?.label || "학과 선택";
+      departments.find((dept) => dept.value === field.value)?.label || "학과 선택";
 
     // CommandItem 스타일(검색창)
     const commandItemStyle = {
@@ -72,12 +69,12 @@ export const StudentDepartment = forwardRef<HTMLDivElement, StudentDepartmentPro
                       key={departmentItem.value}
                       value={departmentItem.value}
                       onSelect={(currentValue) => {
-                        onChange?.(currentValue as Department);
+                        field.onChange(currentValue as Department);
                         setOpen(false);
                       }}
                       style={commandItemStyle}
                     >
-                      {value === departmentItem.value ? (
+                      {field.value === departmentItem.value ? (
                         <Check className="mr-2 h-4 w-4" />
                       ) : (
                         <div className="mr-2 h-4 w-4" />
@@ -98,6 +95,8 @@ export const StudentDepartment = forwardRef<HTMLDivElement, StudentDepartmentPro
     );
   }
 );
+
+StudentDepartment.displayName = "StudentDepartment";
 
 // 학과 필드 배열
 const departments = [

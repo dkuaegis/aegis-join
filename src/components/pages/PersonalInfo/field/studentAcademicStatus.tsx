@@ -8,23 +8,20 @@ import {
 import { Label } from "@/components/ui/label";
 import { forwardRef } from "react";
 import { AcademicStatus } from "@/types/api/member";
-import { useFormContext } from "react-hook-form";
+import { useControllerField } from "../PersonalInfo.ControlledField";
 
-interface StudentAcademicStatusProps extends React.ComponentPropsWithoutRef<typeof Select> {
-  error?: string;
-  value?: AcademicStatus;
-  onChange?: (value: AcademicStatus) => void;
+interface StudentAcademicStatusProps {
+  name: string; // name prop 추가
 }
 
 export const StudentAcademicStatus = forwardRef<HTMLDivElement, StudentAcademicStatusProps>(
-  ({ error, value, onChange, ...props }, ref) => {
-    const { formState } = useFormContext();
-    const isValid = !formState.errors.academicStatus;
+  ({ name, ...props }, ref) => {
+    const { field, error, isValid } = useControllerField({ name });
 
     return (
       <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="academicStatus">모집 학기 기준 학적</Label>
-        <Select value={value} onValueChange={onChange}>
+        <Select value={field.value} onValueChange={field.onChange}>
           <SelectTrigger id="academicStatus" className={error && !isValid ? "border-red-500" : ""}>
             <SelectValue placeholder="학적 선택" />
           </SelectTrigger>
@@ -39,3 +36,5 @@ export const StudentAcademicStatus = forwardRef<HTMLDivElement, StudentAcademicS
     );
   }
 );
+
+StudentAcademicStatus.displayName = "StudentAcademicStatus";

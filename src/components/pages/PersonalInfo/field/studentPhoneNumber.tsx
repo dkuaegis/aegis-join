@@ -1,27 +1,24 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { forwardRef, useCallback, type ChangeEventHandler } from "react";
+import { forwardRef, useCallback  } from "react";
 import { formatPhoneNumber } from "@/utils/PersonalInfo.helper";
-import { useFormContext } from "react-hook-form";
+import { useControllerField } from "../PersonalInfo.ControlledField";
 
 interface StudentPhoneNumberProps extends React.ComponentPropsWithoutRef<"input"> {
-  error?: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;  
-  value: string;
+  name: string; // name prop 추가
 }
+
 export const StudentPhoneNumber = forwardRef<HTMLInputElement, StudentPhoneNumberProps>(
-  ({error, onChange, value, ...props}, ref)=>{
-    const { formState } = useFormContext();
-    const isValid = !formState.errors.phoneNumber;
+  ({ name, ...props}, ref)=>{
+    const { field, error, isValid } = useControllerField({ name });
 
     const handleInputChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => { // 타입 명시
           const rawValue = event.target.value;
           const formattedValue = formatPhoneNumber(rawValue);
-          event.target.value = formattedValue; // 포맷된 값을 Input Element에 직접 설정
-          onChange(event); // 이벤트 객체 전달
+          field.onChange(formattedValue)
         },
-        [onChange]
+        [field.onChange]
     );
 
   return (
@@ -33,7 +30,7 @@ export const StudentPhoneNumber = forwardRef<HTMLInputElement, StudentPhoneNumbe
         placeholder="010-1234-5678"
         ref={ref}
         className={error && !isValid ? "border-red-500" : ""}
-        value={value}
+        value={field.value || ""}
         onChange={handleInputChange}
         maxLength={13} // 010-1234-5678
         {...props}
@@ -44,3 +41,5 @@ export const StudentPhoneNumber = forwardRef<HTMLInputElement, StudentPhoneNumbe
       </div>
   );
 });
+
+StudentPhoneNumber.displayName = "StudentPhoneNumber";

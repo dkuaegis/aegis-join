@@ -7,24 +7,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { forwardRef } from "react";
-import type { Semester } from "@/types/api/member";
-import { useFormContext } from "react-hook-form";
+import { useControllerField } from "../PersonalInfo.ControlledField";
 
 interface StudentAcademicSemesterProps {
-  error?: string;
-  value?: Semester;
-  onChange?: (value: Semester) => void;
+  name: string; // name prop 추가
 }
 
 export const StudentAcademicSemester = forwardRef<HTMLDivElement, StudentAcademicSemesterProps>(
-  ({ error, value, onChange, ...props }, ref)=>{
-    const { formState } = useFormContext();
-    const isValid = !formState.errors.academicSemester;
+  ({ name, ...props }, ref)=>{
+    const { field, error, isValid } = useControllerField({ name });
 
     return(
       <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="academicSemester">모집 학기 기준 학기</Label>
-        <Select value={value} onValueChange={onChange}>
+        <Select value={field.value} onValueChange={field.onChange}>
           <SelectTrigger
             className={error && !isValid ? "border-red-500" : ""}
           >
@@ -41,3 +37,5 @@ export const StudentAcademicSemester = forwardRef<HTMLDivElement, StudentAcademi
       </div>
   );
 });
+
+StudentAcademicSemester.displayName = "StudentAcademicSemester";
