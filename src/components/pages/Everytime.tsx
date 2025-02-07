@@ -2,13 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingState } from "@/types/state/loading";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
 import AlertBox from "../ui/custom/alertbox";
 import NavigationButtons from "../ui/custom/navigationButton";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 // zod 스키마 정의
 const schema = z.object({
@@ -25,7 +25,11 @@ function Everytime({
   onNext: (data: EverytimeValues) => void;
   onPrev: () => void;
 }) {
-  const { control, handleSubmit, formState: { errors } } = useForm<EverytimeValues>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EverytimeValues>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
@@ -73,17 +77,27 @@ function Everytime({
               )}
             />
             {errors.timetableLink && (
-              <p className="text-red-500 text-xs">{errors.timetableLink.message}</p>
+              <p className="text-red-500 text-xs">
+                {errors.timetableLink.message}
+              </p>
             )}
           </div>
-          <Button className="inline" type="submit" disabled={loading === LoadingState.LOADING}>
+          <Button
+            className="inline"
+            type="submit"
+            disabled={loading === LoadingState.LOADING}
+          >
             {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
           </Button>
         </div>
         <div className="flex items-center justify-center pt-4">
           {StatusMessage(loading)}
         </div>
-        <NavigationButtons prev={onPrev} next={() => handleSubmit(onSubmit)()} isValid={true} />
+        <NavigationButtons
+          prev={onPrev}
+          next={() => handleSubmit(onSubmit)()}
+          isValid={true}
+        />
       </form>
     </div>
   );
