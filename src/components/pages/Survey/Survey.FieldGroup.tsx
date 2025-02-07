@@ -1,6 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { InterestItem, interestsEtc, interestsSecurity, interestsWeb } from "./Survey.Items";
-import { Checkbox } from "@/components/ui/checkbox";
+import { InterestItem } from "./Survey.Items";
 import { EtcInput } from "@/components/ui/etcinput";
 import React from "react";
 import { isETC, SurveyFormValues } from "./Survey.schema";

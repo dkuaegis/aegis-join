@@ -42,7 +42,7 @@ function Survey({
 
   return (
     <FormProvider {...methods}>
-    <form className="space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
+    <form className="space-y-4" onSubmit={methods.handleSubmit(onNext)}>
       <h3 className="font-semibold text-lg">설문조사</h3>
 
       <div className="space-y-2">
