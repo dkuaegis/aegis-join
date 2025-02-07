@@ -4,6 +4,7 @@ import type { GetPaymentInfo } from "@/types/api/payment";
 import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import AlertBox from "../ui/custom/alertbox";
+import NavigationButtons from "../ui/custom/navigationButton";
 
 const ADMIN_INFO = {
   phoneNumber: import.meta.env.VITE_ADMIN_PHONE,
@@ -171,6 +172,7 @@ function Payment({
           />
         ) : null}
       </div>
+      <NavigationButtons prev={onPrev} next={onNext} />
     </div>
   );
 }

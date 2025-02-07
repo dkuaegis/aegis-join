@@ -75,3 +75,7 @@ body {
   height: 40px;
   display: table-row;
 }
+
+html {
+  overflow-y: scroll;
+}

@@ -6,21 +6,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { forwardRef } from "react";
+import { useControllerField } from "../PersonalInfo.ControlledField";
 
 interface StudentAcademicSemesterProps {
-  academicSemester: string;
-  setAcademicSemester: (value: string) => void;
-  errors?: boolean;
-  // showErrors?: boolean;
+  name: string; // name prop 추가
 }
 
-export function StudentAcademicSemester({academicSemester, setAcademicSemester, errors}: StudentAcademicSemesterProps){
-  return(
-    <div className="space-y-2">
+export const StudentAcademicSemester = forwardRef<HTMLDivElement, StudentAcademicSemesterProps>(
+  ({ name, ...props }, ref)=>{
+    const { field, error, isValid } = useControllerField({ name });
+
+    return(
+      <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="academicSemester">모집 학기 기준 학기</Label>
-        <Select value={academicSemester} onValueChange={setAcademicSemester}>
+        <Select value={field.value} onValueChange={field.onChange}>
           <SelectTrigger
-            className={errors ? "border-red-500" : ""}
+            className={error && !isValid ? "border-red-500" : ""}
           >
             <SelectValue placeholder="학기 선택" />
           </SelectTrigger>
@@ -29,9 +31,11 @@ export function StudentAcademicSemester({academicSemester, setAcademicSemester, 
             <SelectItem value="SECOND">2학기</SelectItem>
           </SelectContent>
         </Select>
-        {errors && (
+        {error && !isValid && (
           <p className="text-red-500 text-xs">학기를 선택해주세요</p>
         )}
       </div>
   );
-}
+});
+
+StudentAcademicSemester.displayName = "StudentAcademicSemester";
