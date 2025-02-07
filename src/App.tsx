@@ -1,4 +1,4 @@
-import Everytime from "@/components/pages/Everytime";
+import Everytime from "@/components/pages/Everytime/Everytime";
 import LoginPage from "@/components/pages/LoginPage";
 import Payment from "@/components/pages/Payment";
 import PersonalInfo from "@/components/pages/PersonalInfo/PersonalInfo";
@@ -6,7 +6,7 @@ import Survey from "@/components/pages/Survey";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Coupon from "./components/pages/Coupon";
+import Coupon from "./components/pages/Coupon/Coupon";
 import Discord from "./components/pages/Discord";
 import useFunnel from "./hooks/funnel/useFunnel";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";

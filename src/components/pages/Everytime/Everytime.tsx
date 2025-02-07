@@ -1,22 +1,16 @@
+// Everytime.tsx
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingState } from "@/types/state/loading";
-import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
+import { ClockAlert, Link } from "lucide-react";
 import { useState } from "react";
-import AlertBox from "../ui/custom/alertbox";
-import NavigationButtons from "../ui/custom/navigationButton";
+import AlertBox from "../../ui/custom/alertbox";
+import NavigationButtons from "../../ui/custom/navigationButton";
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-// zod 스키마 정의
-const schema = z.object({
-  timetableLink: z.string().url({ message: "올바른 URL 형식이 아닙니다." }),
-});
-
-// zod 스키마 타입 정의
-type EverytimeValues = z.infer<typeof schema>;
+import { EverytimeSchema, type EverytimeValues } from "./Everytime.Schema";
+import StatusMessage from "./Everytime.StatusMesasage";
 
 function Everytime({
   onNext,
@@ -26,7 +20,7 @@ function Everytime({
   onPrev: () => void;
 }) {
   const { control, handleSubmit, formState: { errors } } = useForm<EverytimeValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(EverytimeSchema), //스키마
     mode: "onChange",
   });
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
@@ -81,38 +75,12 @@ function Everytime({
           </Button>
         </div>
         <div className="flex items-center justify-center pt-4">
-          {StatusMessage(loading)}
+          <StatusMessage loading={loading} /> {/* StatusMessage 컴포넌트로 빼기 */}
         </div>
         <NavigationButtons prev={onPrev} next={() => handleSubmit(onSubmit)()} isValid={true} />
       </form>
     </div>
   );
 }
-
-const StatusMessage = (loading: LoadingState) => {
-  switch (loading) {
-    case LoadingState.LOADING:
-      return (
-        <>
-          <LoaderCircle
-            className="h-8 w-8 animate-spin text-gray-500"
-            style={{ animation: "spin 3s linear infinite" }}
-          />
-          <p className="pl-4">시간표 정보를 읽는 중 입니다. . .</p>
-        </>
-      );
-
-    case LoadingState.SUCCESS:
-      return (
-        <>
-          <CheckCircleIcon className="h-8 w-8 text-green-400" />
-          <p className="pl-4 text-green-400">제출이 완료되었습니다 !</p>
-        </>
-      );
-
-    default:
-      return null;
-  }
-};
 
 export default Everytime;
