@@ -21,8 +21,6 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
     const methods = useForm<PersonalInfoFormValues>({
         resolver: zodResolver(personalInfoSchema),
         mode: "onChange",
-        shouldUnregister: false,
-        shouldFocusError: false,
     });
 
     const { handleSubmit } = methods;
