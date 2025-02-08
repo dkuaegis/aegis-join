@@ -109,7 +109,6 @@ export enum Department {
   약학대학_약학과 = "약학대학_약학과",
 }
 
-
 export enum AcademicStatus {
   ENROLLED = "ENROLLED",
   LEAVE_OF_ABSENCE = "LEAVE_OF_ABSENCE",

@@ -3,14 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingState } from "@/types/state/loading";
-import { ClockAlert, Link } from "lucide-react";
-import { useState } from "react";
-import AlertBox from "../../ui/custom/alertbox";
-import NavigationButtons from "../../ui/custom/navigationButton";
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EverytimeSchema, type EverytimeValues } from "./Everytime.Schema";
-import StatusMessage from "./Everytime.StatusMesasage";
+import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+import AlertBox from "../ui/custom/alertbox";
+import NavigationButtons from "../ui/custom/navigationButton";
+
+// zod 스키마 정의
+const schema = z.object({
+  timetableLink: z.string().url({ message: "올바른 URL 형식이 아닙니다." }),
+});
+
+// zod 스키마 타입 정의
+type EverytimeValues = z.infer<typeof schema>;
 
 function Everytime({
   onNext,
@@ -19,8 +26,12 @@ function Everytime({
   onNext: (data: EverytimeValues) => void;
   onPrev: () => void;
 }) {
-  const { control, handleSubmit, formState: { errors } } = useForm<EverytimeValues>({
-    resolver: zodResolver(EverytimeSchema), //스키마
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EverytimeValues>({
+    resolver: zodResolver(schema),
     mode: "onChange",
   });
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
@@ -67,17 +78,27 @@ function Everytime({
               )}
             />
             {errors.timetableLink && (
-              <p className="text-red-500 text-xs">{errors.timetableLink.message}</p>
+              <p className="text-red-500 text-xs">
+                {errors.timetableLink.message}
+              </p>
             )}
           </div>
-          <Button className="inline" type="submit" disabled={loading === LoadingState.LOADING}>
+          <Button
+            className="inline"
+            type="submit"
+            disabled={loading === LoadingState.LOADING}
+          >
             {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
           </Button>
         </div>
         <div className="flex items-center justify-center pt-4">
           <StatusMessage loading={loading} /> {/* StatusMessage 컴포넌트로 빼기 */}
         </div>
-        <NavigationButtons prev={onPrev} next={() => handleSubmit(onSubmit)()} isValid={true} />
+        <NavigationButtons
+          prev={onPrev}
+          next={() => handleSubmit(onSubmit)()}
+          isValid={true}
+        />
       </form>
     </div>
   );
