@@ -35,7 +35,7 @@ const EverytimeControlledTimeTableLink = ({
           onChange={onChange}
         />
         {error.timetableLink && (
-          <p className="text-red-500 text-xs">
+          <p className="absolute top-full left-0 text-red-500 text-xs">
             {error.timetableLink.message}
           </p>
         )}

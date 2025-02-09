@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/types/state/loading";
-import EverytimeControlledTimeTableLink from "./Everytime.ControlledTimeTableLink";
+import EverytimeControlledTimeTableLink from "./Everytime.TimeTableLink";
 import type { EverytimeValues } from "./Everytime.Schema";
 import { CheckCircleIcon, LoaderCircle } from "lucide-react";
 import { ClockAlert } from "lucide-react";
@@ -79,7 +79,7 @@ const EverytimeItems = ({
           error={error}
         />
         <div className="mt-4 flex items-center space-x-4">
-          <Button className="inline" type="submit" disabled={loading === LoadingState.LOADING}>
+          <Button className="mt-2 inline" type="submit" disabled={loading === LoadingState.LOADING}>
             {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
           </Button>
           <StatusMessage loading={loading} />
