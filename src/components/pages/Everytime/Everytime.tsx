@@ -6,12 +6,13 @@ import { useState, useCallback } from "react";
 import { ZodError } from "zod";
 
 interface EverytimeProps {
-  onNext: (data: EverytimeValues) => Promise<void>;
+  onNext: () => void;
   onPrev: () => void;
+  onDataSubmit: (data: EverytimeValues) => void; // 데이터 제출 핸들러
 }
 
-function Everytime({ onNext, onPrev }: EverytimeProps) {
-  // 폼의 값들을 관리하는 state
+function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
+  // 폼 상태 관리
   const [everytimeValues, setEverytimeValues] = useState<EverytimeValues>({
     timetableLink: "",
     loading: LoadingState.IDLE,
@@ -32,7 +33,7 @@ function Everytime({ onNext, onPrev }: EverytimeProps) {
   // 폼 유효성 검사 함수
   const validate = useCallback((data: EverytimeValues) => {
     try {
-      EverytimeSchema.parse(data); // Zod 스키마를 사용하여 데이터 검증
+      EverytimeSchema.parse(data); // 데이터 검증
       setError({}); // 기존 에러 초기화
       return true; // 유효성 검사 통과
     } catch (error) {
@@ -63,14 +64,8 @@ function Everytime({ onNext, onPrev }: EverytimeProps) {
     // 예시: 3초 후에 로딩 상태를 SUCCESS로 변경
     await new Promise((resolve) => setTimeout(resolve, 3000)); // await 추가
     setLoading(LoadingState.SUCCESS); // 로딩 상태 성공으로 변경
-  }, [everytimeValues, validate]);
-
-  // 다음 단계로 이동하는 함수
-  const handleNext = useCallback(async () => {
-    if (loading === LoadingState.SUCCESS) {
-      await onNext(everytimeValues); // 다음 단계로 이동
-    }
-  }, [everytimeValues, onNext, loading]);
+    onDataSubmit(everytimeValues); // 데이터 제출
+  }, [everytimeValues, validate, onDataSubmit]);
 
   return (
     <div className="mb-12 space-y-4">
@@ -83,7 +78,7 @@ function Everytime({ onNext, onPrev }: EverytimeProps) {
       />
       <NavigationButtons
         prev={onPrev}
-        next={handleNext}
+        next={onNext} // 다음 버튼 클릭 시 onNext 호출
         isValid={Object.keys(error).length === 0 && loading === LoadingState.SUCCESS}
       />
     </div>

@@ -11,6 +11,7 @@ import Discord from "./components/pages/Discord";
 import useFunnel from "./hooks/funnel/useFunnel";
 import useAuth from "./hooks/useAuth";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
+import type { EverytimeValues } from "./components/pages/Everytime/Everytime.Schema"; // Import the type
 
 function App() {
   const [paymentInfo] = useState<GetPaymentInfo>({
@@ -32,6 +33,16 @@ function App() {
     ],
     initialStep: "PersonalInfo",
   });
+
+  // Everytime 폼 데이터를 저장할 상태
+  const [, setEverytimeData] = useState<EverytimeValues | null>(null);
+
+  // Everytime 폼 데이터를 받을 핸들러
+  const handleEverytimeData = (data: EverytimeValues) => {
+    setEverytimeData(data);
+    console.log("App.tsx에서 Everytime 데이터 수신:", data); // 선택적 로깅
+    // 이제 여기에서 `data`를 사용하여 애플리케이션 상태를 업데이트하거나 API에 전달할 수 있습니다.
+  };
 
   if (isAuthenticated === null) {
     return null;
@@ -56,7 +67,13 @@ function App() {
         />
         <Route
           path="/Everytime"
-          element={<Everytime onNext={next} onPrev={prev} />}
+          element={
+            <Everytime
+              onNext={next}
+              onPrev={prev}
+              onDataSubmit={handleEverytimeData} // 핸들러 전달
+            />
+          }
         />
         <Route
           path="/Discord"

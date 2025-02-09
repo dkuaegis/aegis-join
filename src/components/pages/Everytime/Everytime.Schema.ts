@@ -13,3 +13,5 @@ export const EverytimeSchema = z.object({
 
 // 타입 정의
 export type EverytimeValues = z.infer<typeof EverytimeSchema>;
+export { LoadingState };
+
