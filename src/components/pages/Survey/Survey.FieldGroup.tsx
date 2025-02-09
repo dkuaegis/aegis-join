@@ -17,13 +17,14 @@ export function InterestFieldItem({ id, description }: InterestFieldItemProps) {
     register,
     formState: { errors },
   } = useFormContext<SurveyFormValues>();
+
   const selectedFields = useWatch({ name: "interestFields" });
   const isSelected = selectedFields.includes(id);
 
   return (
     <div key={id} className="flex flex-col justify-center space-y-1 ">
       <div className="flex min-h-[24px] items-center space-x-2">
-        <ControlledCheckbox id={id} {...register("interestFields")} />
+        <ControlledCheckbox id={id} />
         <Label htmlFor={id}>{description}</Label>
         {isETC(id) && isSelected && (
           <EtcInput

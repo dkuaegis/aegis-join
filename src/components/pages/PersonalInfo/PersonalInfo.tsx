@@ -61,7 +61,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
         <NavigationButtons
           prev={onPrev}
           next={handleSubmit(onNext)}
-          isValid={true}
+          isValid={methods.formState.isValid}
         />
       </form>
     </FormProvider>
