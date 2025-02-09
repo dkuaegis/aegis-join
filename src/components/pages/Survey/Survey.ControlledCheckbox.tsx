@@ -13,9 +13,9 @@ export function ControlledCheckbox({ id }: { id: InterestField }) {
       render={({ field: { value, onChange } }) => {
         const isChecked = value.includes(id);
 
-        const handleChange = (checked: boolean) => {
-          if (checked) {
-            onChange([...value, id]);
+        const handleChange = (checked: boolean | "indeterminate") => {
+          if (checked === true) {
+            onChange(Array.from(new Set([...value, id])));
           } else {
             onChange(value.filter((item: InterestField) => item !== id));
           }
