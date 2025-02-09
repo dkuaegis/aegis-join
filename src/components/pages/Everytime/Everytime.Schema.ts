@@ -1,9 +1,15 @@
 import { z } from "zod";
+import { LoadingState } from "@/types/state/loading";
 
-// zod 스키마 정의
 export const EverytimeSchema = z.object({
-  timetableLink: z.string().url({ message: "올바른 URL 형식이 아닙니다." }),
+  timetableLink: z.string().refine(
+    (value) => value.startsWith("https://everytime.kr/@"),
+    {
+      message: "에브리타임 시간표 링크는 'https://everytime.kr/@' 로 시작해야 합니다.",
+    }
+  ),
+  loading: z.nativeEnum(LoadingState).default(LoadingState.IDLE),
 });
 
-// zod 스키마 타입 정의
+// 타입 정의
 export type EverytimeValues = z.infer<typeof EverytimeSchema>;

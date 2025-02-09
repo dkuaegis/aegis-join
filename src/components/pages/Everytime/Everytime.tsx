@@ -1,105 +1,91 @@
-// Everytime.tsx
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import NavigationButtons from "../../ui/custom/navigationButton";
+import { EverytimeSchema, type EverytimeValues } from "./Everytime.Schema";
 import { LoadingState } from "@/types/state/loading";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircleIcon, ClockAlert, Link, LoaderCircle } from "lucide-react";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import AlertBox from "../ui/custom/alertbox";
-import NavigationButtons from "../ui/custom/navigationButton";
+import EverytimeItems from "./Everytime.FieldGroup";
+import { useState, useCallback } from "react";
+import { ZodError } from "zod";
 
-// zod 스키마 정의
-const schema = z.object({
-  timetableLink: z.string().url({ message: "올바른 URL 형식이 아닙니다." }),
-});
-
-// zod 스키마 타입 정의
-type EverytimeValues = z.infer<typeof schema>;
-
-function Everytime({
-  onNext,
-  onPrev,
-}: {
-  onNext: (data: EverytimeValues) => void;
+interface EverytimeProps {
+  onNext: (data: EverytimeValues) => Promise<void>;
   onPrev: () => void;
-}) {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<EverytimeValues>({
-    resolver: zodResolver(schema),
-    mode: "onChange",
+}
+
+function Everytime({ onNext, onPrev }: EverytimeProps) {
+  // 폼의 값들을 관리하는 state
+  const [everytimeValues, setEverytimeValues] = useState<EverytimeValues>({
+    timetableLink: "",
+    loading: LoadingState.IDLE,
   });
+
+  // 에러 관리
+  const [error, setError] = useState<{ timetableLink?: { message?: string } }>({});
+
+  // 로딩 상태 관리
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
 
-  const onSubmit = async (data: EverytimeValues) => {
-    setLoading(LoadingState.LOADING);
-    // TODO: 시간표 링크 제출 로직 구현
-    console.log("제출된 링크:", data.timetableLink);
+  // 입력 값 변경 시 호출되는 콜백
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEverytimeValues((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  // 폼 유효성 검사 함수
+  const validate = useCallback((data: EverytimeValues) => {
+    try {
+      EverytimeSchema.parse(data); // Zod 스키마를 사용하여 데이터 검증
+      setError({}); // 기존 에러 초기화
+      return true; // 유효성 검사 통과
+    } catch (error) {
+      // 유효성 검사 실패 시 에러 처리
+      if (error instanceof ZodError) {
+        const newError: { timetableLink?: { message?: string } } = {};
+        for (const err of error.errors) {
+          if (err.path[0] === "timetableLink") {
+            newError.timetableLink = { message: err.message };
+          }
+        }
+        setError(newError);
+      }
+      return false; // 유효성 검사 실패
+    }
+  }, []);
+
+  // 폼 제출 함수 (콜백으로 메모이제이션)
+  const handleSubmit = useCallback(async () => {
+    if (!validate(everytimeValues)) {
+      // 유효성 검사 실패 시 제출 중단
+      setLoading(LoadingState.IDLE); // 로딩 상태 초기화
+      return;
+    }
+    setLoading(LoadingState.LOADING); // 로딩 상태 시작
+    console.log("제출된 링크:", everytimeValues.timetableLink);
+
     // 예시: 3초 후에 로딩 상태를 SUCCESS로 변경
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    setLoading(LoadingState.SUCCESS);
-    onNext(data); // 다음 단계로 이동
-  };
+    await new Promise((resolve) => setTimeout(resolve, 3000)); // await 추가
+    setLoading(LoadingState.SUCCESS); // 로딩 상태 성공으로 변경
+  }, [everytimeValues, validate]);
+
+  // 다음 단계로 이동하는 함수
+  const handleNext = useCallback(async () => {
+    if (loading === LoadingState.SUCCESS) {
+      await onNext(everytimeValues); // 다음 단계로 이동
+    }
+  }, [everytimeValues, onNext, loading]);
 
   return (
     <div className="mb-12 space-y-4">
-      <h3 className="font-semibold text-lg">에브리타임 시간표 제출</h3>
-      <AlertBox
-        icon={<ClockAlert className="h-4 w-4" />}
-        title="시간표 제출이 왜 필요한가요?"
-        description={[
-          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요.",
-        ]}
+      <EverytimeItems
+        everytimeValues={everytimeValues}
+        error={error}
+        loading={loading}
+        onSubmit={handleSubmit}
+        onChange={handleChange}
       />
-      <form className="my-10 space-y-2" onSubmit={handleSubmit(onSubmit)}>
-        <Label htmlFor="timetableLink">에브리타임 시간표 링크</Label>
-        <div className="items-right flex space-x-4">
-          <div className="relative flex-1">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <Link className="h-4 w-4 text-gray-500" />
-            </div>
-            <Controller
-              name="timetableLink"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="timetableLink"
-                  type="url"
-                  placeholder="https://everytime.kr/timetable/..."
-                  className="pl-10"
-                  {...field}
-                />
-              )}
-            />
-            {errors.timetableLink && (
-              <p className="text-red-500 text-xs">
-                {errors.timetableLink.message}
-              </p>
-            )}
-          </div>
-          <Button
-            className="inline"
-            type="submit"
-            disabled={loading === LoadingState.LOADING}
-          >
-            {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
-          </Button>
-        </div>
-        <div className="flex items-center justify-center pt-4">
-          <StatusMessage loading={loading} /> {/* StatusMessage 컴포넌트로 빼기 */}
-        </div>
-        <NavigationButtons
-          prev={onPrev}
-          next={() => handleSubmit(onSubmit)()}
-          isValid={true}
-        />
-      </form>
+      <NavigationButtons
+        prev={onPrev}
+        next={handleNext}
+        isValid={Object.keys(error).length === 0 && loading === LoadingState.SUCCESS}
+      />
     </div>
   );
 }
