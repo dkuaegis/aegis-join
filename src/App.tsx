@@ -56,7 +56,13 @@ function App() {
         />
         <Route
           path="/Everytime"
-          element={<Everytime onNext={next} onPrev={prev} />}
+          element={
+            <Everytime
+              onNext={next}
+              onPrev={prev}
+              onDataSubmit={()=>{}} // 핸들러 전달
+            />
+          }
         />
         <Route
           path="/Discord"
