@@ -1,32 +1,63 @@
-import * as React from "react";
+import type * as React from "react";
 
 import { cn } from "@/lib/utils";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 
 interface TextareaProps extends React.ComponentProps<"textarea"> {
   onValueChange?: (value: string) => void;
 }
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, onValueChange, ...props }, ref) => {
-    const [value, setValue] = React.useState(props.defaultValue || "");
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, onValueChange, ...props }, forwardedRef) => {
+    const internalRef = useRef<HTMLTextAreaElement>(null);
+
+    useImperativeHandle<HTMLTextAreaElement, HTMLTextAreaElement>(
+      forwardedRef,
+      () => {
+        if (!internalRef.current) {
+          throw new Error("Text area Ref error");
+        }
+        return internalRef.current;
+      },
+      []
+    );
+
+    const adjustHeight = useCallback((e: HTMLTextAreaElement) => {
       requestAnimationFrame(() => {
-        e.target.style.height = "auto";
-        e.target.style.height = `${e.target.scrollHeight}px`;
+        e.style.height = "auto";
+        e.style.height = `${e.scrollHeight}px`;
       });
-      const newValue = e.target.value;
-      setValue(newValue);
-      onValueChange?.(newValue);
-    };
+    }, []);
+
+    const handleChange = useCallback(
+      (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        adjustHeight(e.target);
+        const newValue = e.target.value;
+        onValueChange?.(newValue);
+      },
+      [adjustHeight, onValueChange]
+    );
+
+    useEffect(() => {
+      if (internalRef.current) {
+        adjustHeight(internalRef.current);
+      }
+    }, [adjustHeight]);
+
     return (
       <textarea
         className={cn(
           "flex min-h-[60px] w-full resize-none overflow-hidden rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
           className
         )}
-        value={value}
         onInput={handleChange}
-        ref={ref}
+        ref={internalRef}
         {...props}
       />
     );

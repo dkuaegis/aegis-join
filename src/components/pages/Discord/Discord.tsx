@@ -5,9 +5,9 @@ import {
   LoaderCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import AlertBox from "../ui/custom/alertbox";
-import NavigationButtons from "../ui/custom/navigationButton";
+import { Button } from "../../ui/button";
+import AlertBox from "../../ui/custom/alertbox";
+import NavigationButtons from "../../ui/custom/navigationButton";
 
 function Discord({
   isValid,

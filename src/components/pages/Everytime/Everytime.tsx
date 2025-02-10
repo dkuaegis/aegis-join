@@ -1,13 +1,13 @@
-import NavigationButtons from "../../ui/custom/navigationButton";
-import type { EverytimeValues } from "./Everytime.Schema";
-import { LoadingState } from "@/types/state/loading";
-import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
-import { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { LoadingState } from "@/types/state/loading";
 import { CheckCircleIcon, LoaderCircle } from "lucide-react";
 import { ClockAlert } from "lucide-react";
-import AlertBox from "../../ui/custom/alertbox";
+import { useCallback, useEffect, useState } from "react";
 import type React from "react";
+import AlertBox from "../../ui/custom/alertbox";
+import NavigationButtons from "../../ui/custom/navigationButton";
+import type { EverytimeValues } from "./Everytime.Schema";
+import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
 import { useEverytimeStore } from "@/stores/useEverytimeStore";
 
@@ -48,12 +48,13 @@ const StatusMessage = ({ loading }: StatusMessageProps) => {
 };
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
-
   const [formValues, setFormValues] = useState<EverytimeValues>({
     timetableLink: "",
     loading: LoadingState.IDLE,
   });
-  const [error, setError] = useState<{ timetableLink?: { message?: string } }>({});
+  const [error, setError] = useState<{ timetableLink?: { message?: string } }>(
+    {}
+  );
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
   const [isValid, setIsValid] = useState(false);
   const [hasInput, setHasInput] = useState(false);
@@ -80,7 +81,6 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
     console.log("제출된 링크:", formValues.timetableLink);
 
     await new Promise((resolve) => setTimeout(resolve, 3000)); // 3초 후 성공
-    
 
     setLoading(LoadingState.SUCCESS);
     onDataSubmit(formValues);
@@ -126,20 +126,29 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
       <AlertBox
         icon={<ClockAlert className="h-4 w-4" />}
         title="시간표 제출이 왜 필요한가요?"
-        description={["활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요."]}
+        description={[
+          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요.",
+        ]}
       />
-      <form className="my-10 space-y-2" onSubmit={(e) => {
-        e.preventDefault();
-        
-        handleSubmit();
-      }}>
+      <form
+        className="my-10 space-y-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          handleSubmit();
+        }}
+      >
         <EverytimeTimeTableLink
           timetableLink={formValues.timetableLink}
           onChange={handleChange}
           error={error}
         />
         <div className="mt-4 flex items-center space-x-4">
-          <Button className="mt-2 inline" type="submit" disabled={isSubmitButtonDisabled}>
+          <Button
+            className="mt-2 inline"
+            type="submit"
+            disabled={isSubmitButtonDisabled}
+          >
             {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
           </Button>
           <StatusMessage loading={loading} />
