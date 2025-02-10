@@ -14,6 +14,7 @@ import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
 import { StudentName } from "./field/studentName";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
+import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
 
 interface PersonalInfoProps {
   onNext: (data: PersonalInfoFormValues) => void;
@@ -27,41 +28,45 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
   });
 
   const { handleSubmit } = methods;
+  const { setPersonalInfoData, setIsPersonalInfoSubmitted, isPersonalInfoSubmitted } = usePersonalInfoStore();
+
+  // 폼 제출을 처리
+  const onSubmit = (data: PersonalInfoFormValues) => {
+    setPersonalInfoData(data);
+    console.log("인적사항 제출!", data);
+    setIsPersonalInfoSubmitted(true);
+
+    // 다음 단계로 진행
+    onNext(data);
+  };
 
   return (
     <FormProvider {...methods}>
-      <form className="space-y-4" onSubmit={handleSubmit(onNext)}>
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <h3 className="font-semibold text-lg">기본 인적사항</h3>
 
         <StudentName name="name" />
 
         <StudentBirthDate name="birthDate" />
 
-        {/* 성별 라디오 버튼 */}
         <StudentGender name="gender" />
 
-        {/* 학번 필드 */}
         <StudentId name="studentId" />
 
-        {/* 전화번호 필드 */}
         <StudentPhoneNumber name="phoneNumber" />
 
-        {/* 소속 선택 */}
         <StudentDepartment name="department" />
 
-        {/* 학적 상태 선택 */}
         <StudentAcademicStatus name="academicStatus" />
 
-        {/* 학년 선택 */}
         <StudentGrade name="grade" />
 
-        {/* 학기 선택 */}
         <StudentAcademicSemester name="academicSemester" />
 
         <NavigationButtons
           prev={onPrev}
-          next={handleSubmit(onNext)}
-          isValid={methods.formState.isValid}
+          next={handleSubmit(onSubmit)}
+          isValid={methods.formState.isValid && isPersonalInfoSubmitted}
         />
       </form>
     </FormProvider>

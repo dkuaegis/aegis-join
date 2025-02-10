@@ -1,27 +1,16 @@
 import { create } from "zustand";
+import type { PersonalInfoFormValues } from "@/components/pages/PersonalInfo/PersonalInfo.schema";
 
 interface PersonalInfoState {
-  name: string;
-  birthDate: string;
-  gender: string;
-  studentId: string;
-  phoneNumber: string;
-  department: string;
-  academicStatus: string;
-  grade: string;
-  academicSemester: string;
-  setField: (field: keyof PersonalInfoState, value: string) => void;
+  personalInfoData: PersonalInfoFormValues | null;
+  setPersonalInfoData: (data: PersonalInfoFormValues) => void;
+  isPersonalInfoSubmitted: boolean;
+  setIsPersonalInfoSubmitted: (submitted: boolean) => void;
 }
 
 export const usePersonalInfoStore = create<PersonalInfoState>((set) => ({
-  name: "",
-  birthDate: "",
-  gender: "",
-  studentId: "",
-  phoneNumber: "",
-  department: "",
-  academicStatus: "",
-  grade: "",
-  academicSemester: "",
-  setField: (field, value) => set((state) => ({ ...state, [field]: value })),
+  personalInfoData: null,
+  setPersonalInfoData: (data: PersonalInfoFormValues) => set({ personalInfoData: data }),
+  isPersonalInfoSubmitted: false, // 기본값 false로 설정
+  setIsPersonalInfoSubmitted: (submitted: boolean) => set({ isPersonalInfoSubmitted: submitted }),
 }));

@@ -40,7 +40,7 @@ function Survey({
 
   const onSubmit = (data: SurveyFormValues) => {
     //validation logic
-    console.log("submit!", data);
+    console.log("설문조사 제출!", data);
     onNext();
   };
 
