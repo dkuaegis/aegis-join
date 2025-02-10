@@ -15,6 +15,12 @@ import {
 } from "./Survey.Items";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
+import { useSurveyStore } from "@/stores/useSurveyStore";
+import { useEffect } from "react";
+import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
+
+
+
 
 function Survey({
   onNext,
@@ -23,30 +29,50 @@ function Survey({
   onNext: () => void;
   onPrev: () => void;
 }) {
-  console.log(onNext, onPrev);
+
+  const { interestFields, interestEtc, joinReason, feedBack, isInitial, setFormValues, setNotInitial } = useSurveyStore();
 
   const methods = useForm<SurveyFormValues>({
     resolver: zodResolver(surveySchema),
     mode: "onChange",
     defaultValues: {
-      interestFields: [],
-      interestEtc: {},
-      joinReason: "",
-      feedBack: "",
+      interestFields: interestFields,
+      interestEtc: interestEtc,
+      joinReason: joinReason,
+      feedBack: feedBack,
     },
   });
 
-  console.log(methods.getValues());
+  useEffect(() => {
+    if (isInitial) {
+      fetchSurveyData()
+        .then((data) => {
+          // Form 에 받은 데이터를 넣어주고, useForm 의 상태를 초기화 해주고, 받아왔으니 처음이 아닌 상태로.
+          setFormValues(data);
+          methods.reset(data);
+          setNotInitial();
+        })
+        .catch((error) => {
+          console.log("please error",error);
+        })
+    }
+    return () => {
+      // 언마운트 시에 FormValue 를 업데이트 해줌.
+      setFormValues(methods.getValues());
+    }
+  }, [isInitial])
+
 
   const onSubmit = (data: SurveyFormValues) => {
-    //validation logic
+
     console.log("submit!", data);
+    submitSurveyData(data);
     onNext();
   };
 
   return (
     <FormProvider {...methods}>
-      <form className="space-y-4" onSubmit={methods.handleSubmit(onNext)}>
+      <form className="space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
         <h3 className="font-semibold text-lg">설문조사</h3>
 
         <Container>
@@ -83,6 +109,7 @@ function Survey({
         <Container>
           <FeedBack />
         </Container>
+
         <NavigationButtons
           prev={onPrev}
           next={methods.handleSubmit(onSubmit)}

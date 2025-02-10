@@ -7,8 +7,8 @@ import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Coupon from "./components/pages/Coupon/Coupon";
-import Discord from "./components/pages/Discord";
-import useFunnel from "./hooks/funnel/useFunnel";
+import Discord from "./components/pages/Discord/Discord";
+import useFunnel from "./hooks/useFunnel";
 import useAuth from "./hooks/useAuth";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 

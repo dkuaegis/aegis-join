@@ -26,7 +26,7 @@ export default function JoinReason() {
       <Textarea
         id="joinReason"
         placeholder="동아리에서 어떤 활동을 하고 싶으신가요?"
-        maxLength={511}
+        maxLength={510}
         {...register("joinReason")}
       />
     </div>
