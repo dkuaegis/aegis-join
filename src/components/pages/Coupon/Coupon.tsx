@@ -19,7 +19,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
-import NavigationButtons from "../ui/custom/navigationButton";
+import NavigationButtons from "../../ui/custom/navigationButton";
 
 // 컬럼 정의
 export const columns: ColumnDef<CouponData>[] = [

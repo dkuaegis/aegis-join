@@ -1,4 +1,4 @@
-import Everytime from "@/components/pages/Everytime";
+import Everytime from "@/components/pages/Everytime/Everytime";
 import LoginPage from "@/components/pages/LoginPage";
 import Payment from "@/components/pages/Payment";
 import PersonalInfo from "@/components/pages/PersonalInfo/PersonalInfo";
@@ -6,7 +6,7 @@ import Survey from "@/components/pages/Survey/Survey";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Coupon from "./components/pages/Coupon";
+import Coupon from "./components/pages/Coupon/Coupon";
 import Discord from "./components/pages/Discord";
 import useFunnel from "./hooks/funnel/useFunnel";
 import useAuth from "./hooks/useAuth";
@@ -56,7 +56,13 @@ function App() {
         />
         <Route
           path="/Everytime"
-          element={<Everytime onNext={next} onPrev={prev} />}
+          element={
+            <Everytime
+              onNext={next}
+              onPrev={prev}
+              onDataSubmit={()=>{}} // 핸들러 전달
+            />
+          }
         />
         <Route
           path="/Discord"
