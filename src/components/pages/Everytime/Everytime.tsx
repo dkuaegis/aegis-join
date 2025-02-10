@@ -129,6 +129,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
       />
       <form className="my-10 space-y-2" onSubmit={(e) => {
         e.preventDefault();
+        
         handleSubmit();
       }}>
         <EverytimeTimeTableLink
