@@ -3,8 +3,11 @@ import { Label } from "@/components/ui/label";
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
 import NavigationButtons from "../../ui/custom/navigationButton";
 
+import { useSurveyStore } from "@/stores/useSurveyStore";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
 import FeedBack from "./Survey.FeedBack";
 import { InterestFieldGroup } from "./Survey.FieldGroup";
 import {
@@ -15,12 +18,6 @@ import {
 } from "./Survey.Items";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
-import { useSurveyStore } from "@/stores/useSurveyStore";
-import { useEffect } from "react";
-import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
-
-
-
 
 function Survey({
   onNext,
@@ -29,8 +26,15 @@ function Survey({
   onNext: () => void;
   onPrev: () => void;
 }) {
-
-  const { interestFields, interestEtc, joinReason, feedBack, isInitial, setFormValues, setNotInitial } = useSurveyStore();
+  const {
+    interestFields,
+    interestEtc,
+    joinReason,
+    feedBack,
+    isInitial,
+    setFormValues,
+    setNotInitial,
+  } = useSurveyStore();
 
   const methods = useForm<SurveyFormValues>({
     resolver: zodResolver(surveySchema),
@@ -53,18 +57,22 @@ function Survey({
           setNotInitial();
         })
         .catch((error) => {
-          console.log("please error",error);
-        })
+          console.log("please error", error);
+        });
     }
     return () => {
       // 언마운트 시에 FormValue 를 업데이트 해줌.
       setFormValues(methods.getValues());
-    }
-  }, [isInitial])
-
+    };
+  }, [
+    isInitial,
+    methods.getValues,
+    methods.reset,
+    setFormValues,
+    setNotInitial,
+  ]);
 
   const onSubmit = (data: SurveyFormValues) => {
-
     console.log("submit!", data);
     submitSurveyData(data);
     onNext();

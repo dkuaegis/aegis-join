@@ -8,8 +8,8 @@ import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Coupon from "./components/pages/Coupon/Coupon";
 import Discord from "./components/pages/Discord/Discord";
-import useFunnel from "./hooks/useFunnel";
 import useAuth from "./hooks/useAuth";
+import useFunnel from "./hooks/useFunnel";
 import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 
 function App() {
@@ -60,7 +60,7 @@ function App() {
             <Everytime
               onNext={next}
               onPrev={prev}
-              onDataSubmit={()=>{}} // 핸들러 전달
+              onDataSubmit={() => {}} // 핸들러 전달
             />
           }
         />

@@ -1,37 +1,54 @@
-import * as React from "react";
+import type * as React from "react";
 
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { cn } from "@/lib/utils";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 
 interface TextareaProps extends React.ComponentProps<"textarea"> {
   onValueChange?: (value: string) => void;
 }
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, onValueChange, ...props }, ref) => {
-
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, onValueChange, ...props }, forwardedRef) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
 
-    useImperativeHandle(ref, () => internalRef.current!);
+    useImperativeHandle<HTMLTextAreaElement, HTMLTextAreaElement>(
+      forwardedRef,
+      () => {
+        if (!internalRef.current) {
+          throw new Error("Text area Ref error");
+        }
+        return internalRef.current;
+      },
+      []
+    );
 
-    const adjustHeight = (e: HTMLTextAreaElement) => {
+    const adjustHeight = useCallback((e: HTMLTextAreaElement) => {
       requestAnimationFrame(() => {
         e.style.height = "auto";
         e.style.height = `${e.scrollHeight}px`;
       });
-    } 
+    }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      adjustHeight(e.target);
-      const newValue = e.target.value;
-      onValueChange?.(newValue);
-    };
+    const handleChange = useCallback(
+      (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        adjustHeight(e.target);
+        const newValue = e.target.value;
+        onValueChange?.(newValue);
+      },
+      [adjustHeight, onValueChange]
+    );
 
     useEffect(() => {
       if (internalRef.current) {
         adjustHeight(internalRef.current);
       }
-    }, [props.value, props.defaultValue]);
+    }, [adjustHeight]);
 
     return (
       <textarea
