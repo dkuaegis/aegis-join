@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Link } from "lucide-react";
 import type React from "react";
 
-interface ControlledTimeTableLinkProps {
+interface TimeTableLinkProps {
   timetableLink: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error: {
@@ -13,11 +13,11 @@ interface ControlledTimeTableLinkProps {
   };
 }
 
-const EverytimeControlledTimeTableLink = ({
+const EverytimeTimeTableLink = ({
   timetableLink,
   onChange,
   error,
-}: ControlledTimeTableLinkProps) => {
+}: TimeTableLinkProps) => {
   return (
     <>
       <Label htmlFor="timetableLink">에브리타임 시간표 링크</Label>
@@ -44,4 +44,4 @@ const EverytimeControlledTimeTableLink = ({
   );
 };
 
-export default EverytimeControlledTimeTableLink;
+export default EverytimeTimeTableLink;
