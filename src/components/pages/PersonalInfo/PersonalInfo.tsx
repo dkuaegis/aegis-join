@@ -40,7 +40,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
   useEffect(() => {
     if (isInitial) {
       fetchPersonalInfoData()
-        .then((data) => {
+        .then((data: PersonalInfoFormValues) => {
           setPersonalInfoData(data);
           methods.reset(data);
           setNotInitial();
@@ -54,9 +54,15 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
   }, [isInitial, methods, setNotInitial, setPersonalInfoData]);
 
   const onSubmit = (data: PersonalInfoFormValues) => {
-    submitPersonalInfoData(data);
-    setPersonalInfoData(data);
-    onNext(data);
+    submitPersonalInfoData(data)
+    .then(() => {
+      setPersonalInfoData(data);
+      onNext(data);
+    })
+    .catch((error) => {
+      console.error('제출 중 오류가 발생했습니다:', error);
+      // TODO: 사용자에게 에러 메시지 표시
+    });
   };
 
   return (
