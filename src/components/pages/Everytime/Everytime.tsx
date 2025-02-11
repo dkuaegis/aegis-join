@@ -9,6 +9,7 @@ import NavigationButtons from "../../ui/custom/navigationButton";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
+import { useEverytimeStore } from "@/stores/useEverytimeStore";
 
 interface EverytimeProps {
   onNext: () => void;
@@ -56,8 +57,9 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   );
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
   const [isValid, setIsValid] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [hasInput, setHasInput] = useState(false);
+
+  const { setIsEverytimeSubmitted, isEverytimeSubmitted } = useEverytimeStore();
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -82,26 +84,25 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
 
     setLoading(LoadingState.SUCCESS);
     onDataSubmit(formValues);
-    setIsSubmitted(true);
     setIsValid(true);
-  }, [formValues, onDataSubmit]);
 
-  // useCallback: Reset Flags
+    setIsEverytimeSubmitted(true);
+  }, [formValues, onDataSubmit, setIsEverytimeSubmitted]);
+
   const resetFlags = useCallback(() => {
-    setIsSubmitted(false);
+    setIsEverytimeSubmitted(false);
     setIsValid(false);
     setHasInput(true);
-  }, []);
+  }, [setIsEverytimeSubmitted]);
 
-  // useCallback: Next Button Handler
   const handleNext = useCallback(() => {
-    if (isValid && isSubmitted) {
+    if (isValid && isEverytimeSubmitted) {
       setError({});
       onNext();
     } else {
       setError(validateEverytime(formValues).error || {});
     }
-  }, [isValid, isSubmitted, onNext, formValues]);
+  }, [isValid, isEverytimeSubmitted, onNext, formValues]);
 
   useEffect(() => {
     if (hasInput) {

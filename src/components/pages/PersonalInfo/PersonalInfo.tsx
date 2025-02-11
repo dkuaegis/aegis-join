@@ -14,6 +14,9 @@ import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
 import { StudentName } from "./field/studentName";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
+import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
+import { useEffect } from "react";
+import { fetchPersonalInfoData, submitPersonalInfoData } from "./PersonalInfo.Api";
 
 interface PersonalInfoProps {
   onNext: (data: PersonalInfoFormValues) => void;
@@ -21,46 +24,66 @@ interface PersonalInfoProps {
 }
 
 function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
+  const {
+    personalInfoData,
+    setPersonalInfoData,
+    isInitial,
+    setNotInitial,
+  } = usePersonalInfoStore();
+
   const methods = useForm<PersonalInfoFormValues>({
     resolver: zodResolver(personalInfoSchema),
     mode: "onChange",
+    defaultValues: personalInfoData || {},
   });
 
-  const { handleSubmit } = methods;
+  useEffect(() => {
+    if (isInitial) {
+      fetchPersonalInfoData()
+        .then((data: PersonalInfoFormValues) => {
+          setPersonalInfoData(data);
+          methods.reset(data);
+          setNotInitial();
+        })
+        .catch(console.error);
+    }
+
+    return () => {
+      setPersonalInfoData(methods.getValues());
+    };
+  }, [isInitial, methods, setNotInitial, setPersonalInfoData]);
+
+  const onSubmit = (data: PersonalInfoFormValues) => {
+    submitPersonalInfoData(data)
+    .then(() => {
+      setPersonalInfoData(data);
+      onNext(data);
+    })
+    .catch((error) => {
+      console.error('제출 중 오류가 발생했습니다:', error);
+      // TODO: 사용자에게 에러 메시지 표시
+    });
+  };
 
   return (
     <FormProvider {...methods}>
-      <form className="space-y-4" onSubmit={handleSubmit(onNext)}>
+      <form className="space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
         <h3 className="font-semibold text-lg">기본 인적사항</h3>
-
         <StudentName name="name" />
-
         <StudentBirthDate name="birthDate" />
-
-        {/* 성별 라디오 버튼 */}
         <StudentGender name="gender" />
-
-        {/* 학번 필드 */}
         <StudentId name="studentId" />
-
-        {/* 전화번호 필드 */}
         <StudentPhoneNumber name="phoneNumber" />
-
-        {/* 소속 선택 */}
         <StudentDepartment name="department" />
-
-        {/* 학적 상태 선택 */}
         <StudentAcademicStatus name="academicStatus" />
-
-        {/* 학년 선택 */}
         <StudentGrade name="grade" />
-
-        {/* 학기 선택 */}
         <StudentAcademicSemester name="academicSemester" />
-
         <NavigationButtons
-          prev={onPrev}
-          next={handleSubmit(onNext)}
+          prev={() => {
+            setPersonalInfoData(methods.getValues());
+            onPrev();
+          }}
+          next={methods.handleSubmit(onSubmit)}
           isValid={methods.formState.isValid}
         />
       </form>
