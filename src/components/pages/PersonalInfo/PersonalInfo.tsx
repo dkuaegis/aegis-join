@@ -16,7 +16,7 @@ import { StudentName } from "./field/studentName";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
 import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
 import { useEffect } from "react";
-import { fetchPersonalInfoData, submitPersonalInfoData } from "./PersonalInfo.api";
+import { fetchPersonalInfoData, submitPersonalInfoData } from "./PersonalInfo.Api";
 
 interface PersonalInfoProps {
   onNext: (data: PersonalInfoFormValues) => void;
