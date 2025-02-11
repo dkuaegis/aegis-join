@@ -4,13 +4,15 @@ import type { PersonalInfoFormValues } from "@/components/pages/PersonalInfo/Per
 interface PersonalInfoState {
   personalInfoData: PersonalInfoFormValues | null;
   setPersonalInfoData: (data: PersonalInfoFormValues) => void;
-  isPersonalInfoSubmitted: boolean;
-  setIsPersonalInfoSubmitted: (submitted: boolean) => void;
+  isInitial: boolean;
+  setNotInitial: () => void;
 }
 
 export const usePersonalInfoStore = create<PersonalInfoState>((set) => ({
   personalInfoData: null,
-  setPersonalInfoData: (data: PersonalInfoFormValues) => set({ personalInfoData: data }),
-  isPersonalInfoSubmitted: false, // 기본값 false로 설정
-  setIsPersonalInfoSubmitted: (submitted: boolean) => set({ isPersonalInfoSubmitted: submitted }),
+  setPersonalInfoData: (data: PersonalInfoFormValues) => set((state) => ({ ...state, personalInfoData: data })),
+  isInitial: true,
+  setNotInitial: () => {
+    set({ isInitial: false });
+  },
 }));

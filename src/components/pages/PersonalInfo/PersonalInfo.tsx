@@ -15,6 +15,8 @@ import { StudentId } from "./field/studentId";
 import { StudentName } from "./field/studentName";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
 import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
+import { useEffect } from "react";
+import { fetchPersonalInfoData, submitPersonalInfoData } from "./PersonalInfo.Api";
 
 interface PersonalInfoProps {
   onNext: (data: PersonalInfoFormValues) => void;
@@ -22,51 +24,67 @@ interface PersonalInfoProps {
 }
 
 function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
+  const {
+    personalInfoData,
+    setPersonalInfoData,
+    isInitial,
+    setNotInitial,
+  } = usePersonalInfoStore();
+
   const methods = useForm<PersonalInfoFormValues>({
     resolver: zodResolver(personalInfoSchema),
     mode: "onChange",
+    defaultValues: personalInfoData || {},
   });
 
-  const { handleSubmit } = methods;
-  const { setPersonalInfoData, setIsPersonalInfoSubmitted, isPersonalInfoSubmitted } = usePersonalInfoStore();
+  useEffect(() => {
+    if (isInitial) {
+      fetchPersonalInfoData()
+        .then((data: PersonalInfoFormValues) => {
+          setPersonalInfoData(data);
+          methods.reset(data);
+          setNotInitial();
+        })
+        .catch(console.error);
+    }
 
-  // 폼 제출을 처리
+    return () => {
+      setPersonalInfoData(methods.getValues());
+    };
+  }, [isInitial, methods, setNotInitial, setPersonalInfoData]);
+
   const onSubmit = (data: PersonalInfoFormValues) => {
-    setPersonalInfoData(data);
-    console.log("인적사항 제출!", data);
-    setIsPersonalInfoSubmitted(true);
-
-    // 다음 단계로 진행
-    onNext(data);
+    submitPersonalInfoData(data)
+    .then(() => {
+      setPersonalInfoData(data);
+      onNext(data);
+    })
+    .catch((error) => {
+      console.error('제출 중 오류가 발생했습니다:', error);
+      // TODO: 사용자에게 에러 메시지 표시
+    });
   };
 
   return (
     <FormProvider {...methods}>
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
         <h3 className="font-semibold text-lg">기본 인적사항</h3>
-
         <StudentName name="name" />
-
         <StudentBirthDate name="birthDate" />
-
         <StudentGender name="gender" />
-
         <StudentId name="studentId" />
-
         <StudentPhoneNumber name="phoneNumber" />
-
         <StudentDepartment name="department" />
-
         <StudentAcademicStatus name="academicStatus" />
-
         <StudentGrade name="grade" />
-
         <StudentAcademicSemester name="academicSemester" />
-
         <NavigationButtons
-          prev={onPrev}
-          next={handleSubmit(onSubmit)}
-          isValid={methods.formState.isValid && isPersonalInfoSubmitted}
+          prev={() => {
+            setPersonalInfoData(methods.getValues());
+            onPrev();
+          }}
+          next={methods.handleSubmit(onSubmit)}
+          isValid={methods.formState.isValid}
         />
       </form>
     </FormProvider>
