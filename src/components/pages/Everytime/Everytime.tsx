@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useEverytimeStore } from "@/stores/useEverytimeStore";
 import { LoadingState } from "@/types/state/loading";
 import { CheckCircleIcon, LoaderCircle } from "lucide-react";
 import { ClockAlert } from "lucide-react";
@@ -9,7 +10,6 @@ import NavigationButtons from "../../ui/custom/navigationButton";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
-import { useEverytimeStore } from "@/stores/useEverytimeStore";
 
 interface EverytimeProps {
   onNext: () => void;
@@ -48,14 +48,17 @@ const StatusMessage = ({ loading }: StatusMessageProps) => {
 };
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
-  const { everytimeData, setEverytimeData, isInitial, setNotInitial } = useEverytimeStore();
+  const { everytimeData, setEverytimeData, isInitial, setNotInitial } =
+    useEverytimeStore();
 
   const [formValues, setFormValues] = useState<EverytimeValues>({
     timetableLink: everytimeData?.timetableLink || "",
     loading: everytimeData?.loading || LoadingState.IDLE,
   });
 
-  const [error, setError] = useState<{ timetableLink?: { message?: string } }>({});
+  const [error, setError] = useState<{ timetableLink?: { message?: string } }>(
+    {}
+  );
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
   const [isValid, setIsValid] = useState<boolean>(false); // isValid 상태 분리
 
@@ -82,19 +85,25 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   }, [formValues, setEverytimeData]);
 
   // 입력 값 변경 시 유효성 검사
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormValues((prev) => ({ ...prev, [name]: value }));
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormValues((prev) => ({ ...prev, [name]: value }));
 
-    // 유효성 검사
-    const validationResult = validateEverytime({ ...formValues, [name]: value });
-    if (validationResult.success) {
-      setError({}); // 유효하면 에러 초기화
-    } else {
-      setError(validationResult.error || {}); // 유효하지 않으면 에러 업데이트
-    }
-    setIsValid(false); // 입력 변경 시 isValid를 false로 설정
-  }, [formValues]);
+      // 유효성 검사
+      const validationResult = validateEverytime({
+        ...formValues,
+        [name]: value,
+      });
+      if (validationResult.success) {
+        setError({}); // 유효하면 에러 초기화
+      } else {
+        setError(validationResult.error || {}); // 유효하지 않으면 에러 업데이트
+      }
+      setIsValid(false); // 입력 변경 시 isValid를 false로 설정
+    },
+    [formValues]
+  );
 
   const handleSubmit = useCallback(async () => {
     const validationResult = validateEverytime(formValues);
@@ -138,7 +147,9 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
       <AlertBox
         icon={<ClockAlert className="h-4 w-4" />}
         title="시간표 제출이 왜 필요한가요?"
-        description={[ "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요." ]}
+        description={[
+          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요.",
+        ]}
       />
       <form
         className="my-10 space-y-2"

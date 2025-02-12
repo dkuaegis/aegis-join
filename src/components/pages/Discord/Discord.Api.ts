@@ -1,6 +1,8 @@
 export const fetchDiscordCode = async (): Promise<string> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/discord/code`);
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}api/discord/code`
+    );
     if (!response.ok) {
       throw new Error(`HTTP ERROR! status: ${response.status}`);
     }
@@ -18,9 +20,10 @@ export const startDiscordPolling = async (): Promise<boolean> => {
 
   return new Promise((resolve) => {
     const poll = async () => {
-
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/discord/check`);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/discord/check`
+        );
 
         if (!response.ok) {
           throw new Error(`ERROR on polling: ${response.status}`);
