@@ -1,6 +1,6 @@
 export const fetchDiscordCode = async (): Promise<string> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}api/discord/code`);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/discord/code`);
     if (!response.ok) {
       throw new Error(`HTTP ERROR! status: ${response.status}`);
     }

@@ -1,4 +1,3 @@
-// CopyToClipboard.tsx
 import { Copy } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useCallback } from "react";
