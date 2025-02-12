@@ -1,6 +1,12 @@
+import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NavigationButtons from "../../ui/custom/navigationButton";
+import {
+  fetchPersonalInfoData,
+  submitPersonalInfoData,
+} from "./PersonalInfo.Api";
 import {
   type PersonalInfoFormValues,
   personalInfoSchema,
@@ -14,9 +20,6 @@ import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
 import { StudentName } from "./field/studentName";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
-import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
-import { useEffect } from "react";
-import { fetchPersonalInfoData, submitPersonalInfoData } from "./PersonalInfo.Api";
 
 interface PersonalInfoProps {
   onNext: (data: PersonalInfoFormValues) => void;
@@ -24,12 +27,8 @@ interface PersonalInfoProps {
 }
 
 function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
-  const {
-    personalInfoData,
-    setPersonalInfoData,
-    isInitial,
-    setNotInitial,
-  } = usePersonalInfoStore();
+  const { personalInfoData, setPersonalInfoData, isInitial, setNotInitial } =
+    usePersonalInfoStore();
 
   const methods = useForm<PersonalInfoFormValues>({
     resolver: zodResolver(personalInfoSchema),
@@ -55,14 +54,14 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
 
   const onSubmit = (data: PersonalInfoFormValues) => {
     submitPersonalInfoData(data)
-    .then(() => {
-      setPersonalInfoData(data);
-      onNext(data);
-    })
-    .catch((error) => {
-      console.error('제출 중 오류가 발생했습니다:', error);
-      // TODO: 사용자에게 에러 메시지 표시
-    });
+      .then(() => {
+        setPersonalInfoData(data);
+        onNext(data);
+      })
+      .catch((error) => {
+        console.error("제출 중 오류가 발생했습니다:", error);
+        // TODO: 사용자에게 에러 메시지 표시
+      });
   };
 
   return (
