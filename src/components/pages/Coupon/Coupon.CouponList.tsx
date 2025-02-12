@@ -17,6 +17,7 @@ export function CouponList({coupons, selectedCoupons, setSelectedCoupons}: Coupo
         <div className="space-y-3 p-4">
             {coupons.map((coupon) => (
                 <CouponItem 
+                    key={coupon.id}
                     coupon={coupon}
                     isSelected={selectedCoupons.includes(coupon.id)}
                     setSelect={handleCouponSelect}

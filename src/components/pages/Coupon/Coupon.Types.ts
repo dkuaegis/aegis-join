@@ -18,3 +18,7 @@ export interface CouponListProps {
   setSelectedCoupons: (value: React.SetStateAction<string[]>) => void
 }
 
+export interface TotalAmountProps {
+coupons: Coupon[]
+selectedCoupons: string[]
+}
