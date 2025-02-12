@@ -1,7 +1,7 @@
 // CopyToClipboard.tsx
 import { Copy } from "lucide-react";
-import { Button } from "../../ui/button";
 import { useCallback } from "react";
+import { Button } from "../../ui/button";
 
 interface CopyToClipboardProps {
   code: string;
@@ -9,7 +9,11 @@ interface CopyToClipboardProps {
   setMessageType: (type: "success" | "error" | null) => void;
 }
 
-const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ code, setCopyMessage, setMessageType }) => {
+const CopyToClipboard: React.FC<CopyToClipboardProps> = ({
+  code,
+  setCopyMessage,
+  setMessageType,
+}) => {
   const copyToClipboard = useCallback(() => {
     navigator.clipboard
       .writeText(code)
@@ -24,7 +28,12 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ code, setCopyMessage,
   }, [code, setCopyMessage, setMessageType]);
 
   return (
-    <Button variant="secondary" size="icon" onClick={copyToClipboard} disabled={!code}>
+    <Button
+      variant="secondary"
+      size="icon"
+      onClick={copyToClipboard}
+      disabled={!code}
+    >
       <Copy className="h-4 w-4" />
     </Button>
   );
