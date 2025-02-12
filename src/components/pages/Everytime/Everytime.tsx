@@ -48,24 +48,53 @@ const StatusMessage = ({ loading }: StatusMessageProps) => {
 };
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
+  const { everytimeData, setEverytimeData, isInitial, setNotInitial } = useEverytimeStore();
+
   const [formValues, setFormValues] = useState<EverytimeValues>({
-    timetableLink: "",
-    loading: LoadingState.IDLE,
+    timetableLink: everytimeData?.timetableLink || "",
+    loading: everytimeData?.loading || LoadingState.IDLE,
   });
-  const [error, setError] = useState<{ timetableLink?: { message?: string } }>(
-    {}
-  );
+
+  const [error, setError] = useState<{ timetableLink?: { message?: string } }>({});
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
-  const [isValid, setIsValid] = useState(false);
-  const [hasInput, setHasInput] = useState(false);
+  const [isValid, setIsValid] = useState<boolean>(false); // isValid 상태 분리
 
-  const { setIsEverytimeSubmitted, isEverytimeSubmitted } = useEverytimeStore();
+  useEffect(() => {
+    if (isInitial && everytimeData) {
+      setFormValues({
+        timetableLink: everytimeData.timetableLink || "",
+        loading: everytimeData.loading || LoadingState.IDLE,
+      });
+      setNotInitial();
+      // 이미 제출된 데이터가 있다면, isValid를 true로 설정
+      if (everytimeData.loading === LoadingState.SUCCESS) {
+        setIsValid(true);
+      }
+    }
+  }, [isInitial, everytimeData, setNotInitial]);
 
+  useEffect(() => {
+    return () => {
+      if (formValues) {
+        setEverytimeData(formValues);
+      }
+    };
+  }, [formValues, setEverytimeData]);
+
+  // 입력 값 변경 시 유효성 검사
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
-    resetFlags();
-  }, []);
+
+    // 유효성 검사
+    const validationResult = validateEverytime({ ...formValues, [name]: value });
+    if (validationResult.success) {
+      setError({}); // 유효하면 에러 초기화
+    } else {
+      setError(validationResult.error || {}); // 유효하지 않으면 에러 업데이트
+    }
+    setIsValid(false); // 입력 변경 시 isValid를 false로 설정
+  }, [formValues]);
 
   const handleSubmit = useCallback(async () => {
     const validationResult = validateEverytime(formValues);
@@ -73,49 +102,32 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
     if (!validationResult.success) {
       setError(validationResult.error || {});
       setLoading(LoadingState.IDLE);
-      resetFlags();
       return;
     }
 
     setLoading(LoadingState.LOADING);
     console.log("제출된 링크:", formValues.timetableLink);
 
-    await new Promise((resolve) => setTimeout(resolve, 3000)); // 3초 후 성공
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     setLoading(LoadingState.SUCCESS);
+    setEverytimeData(formValues);
     onDataSubmit(formValues);
-    setIsValid(true);
-
-    setIsEverytimeSubmitted(true);
-  }, [formValues, onDataSubmit, setIsEverytimeSubmitted]);
-
-  const resetFlags = useCallback(() => {
-    setIsEverytimeSubmitted(false);
-    setIsValid(false);
-    setHasInput(true);
-  }, [setIsEverytimeSubmitted]);
+    setNotInitial();
+    setIsValid(true); // 제출 성공 시  isValid를 true로 설정
+  }, [formValues, onDataSubmit, setNotInitial, setEverytimeData]);
 
   const handleNext = useCallback(() => {
-    if (isValid && isEverytimeSubmitted) {
-      setError({});
+    if (isValid) {
+      setEverytimeData(formValues);
       onNext();
     } else {
-      setError(validateEverytime(formValues).error || {});
-    }
-  }, [isValid, isEverytimeSubmitted, onNext, formValues]);
-
-  useEffect(() => {
-    if (hasInput) {
       const validationResult = validateEverytime(formValues);
-      if (validationResult.success) {
-        setError({});
-      } else {
+      if (!validationResult.success) {
         setError(validationResult.error || {});
       }
-    } else {
-      setError({});
     }
-  }, [formValues, hasInput]);
+  }, [onNext, formValues, setEverytimeData, isValid]);
 
   const isSubmitButtonDisabled = loading === LoadingState.LOADING;
   const navigationButtonsValid = isValid && loading !== LoadingState.LOADING;
@@ -126,15 +138,12 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
       <AlertBox
         icon={<ClockAlert className="h-4 w-4" />}
         title="시간표 제출이 왜 필요한가요?"
-        description={[
-          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요.",
-        ]}
+        description={[ "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요." ]}
       />
       <form
         className="my-10 space-y-2"
         onSubmit={(e) => {
           e.preventDefault();
-
           handleSubmit();
         }}
       >
@@ -155,7 +164,10 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         </div>
       </form>
       <NavigationButtons
-        prev={onPrev}
+        prev={() => {
+          setEverytimeData(formValues);
+          onPrev();
+        }}
         next={handleNext}
         isValid={navigationButtonsValid}
       />
