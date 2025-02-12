@@ -66,7 +66,7 @@ function App() {
         />
         <Route
           path="/Discord"
-          element={<Discord isValid={true} onNext={next} onPrev={prev} />}
+          element={<Discord onNext={next} onPrev={prev} />}
         />
         <Route
           path="/Coupon"

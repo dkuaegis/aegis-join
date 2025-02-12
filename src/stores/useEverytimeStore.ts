@@ -4,13 +4,13 @@ import type { EverytimeValues } from "../components/pages/Everytime/Everytime.Sc
 interface EverytimeState {
   everytimeData: EverytimeValues | null;
   setEverytimeData: (data: EverytimeValues) => void;
-  isEverytimeSubmitted: boolean; // Add isSubmitted state
-  setIsEverytimeSubmitted: (isSubmitted: boolean) => void; // Add setIsSubmitted action
+  isInitial: boolean;
+  setNotInitial: () => void;
 }
 
 export const useEverytimeStore = create<EverytimeState>((set) => ({
   everytimeData: null,
   setEverytimeData: (data: EverytimeValues) => set({ everytimeData: data }),
-  isEverytimeSubmitted: false,
-  setIsEverytimeSubmitted: (isSubmitted: boolean) => set({ isEverytimeSubmitted: isSubmitted }),
+  isInitial: true,
+  setNotInitial: () => set({ isInitial: false }),
 }));
