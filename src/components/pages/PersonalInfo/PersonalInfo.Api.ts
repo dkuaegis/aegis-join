@@ -2,7 +2,7 @@ import type { PersonalInfoFormValues } from "./PersonalInfo.schema";
 
 export const fetchPersonalInfoData =
   async (): Promise<PersonalInfoFormValues> => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/member`,{
+    const response = await fetch("http://localhost:3001/api/member",{
       // credentials: "include",
     });
 
@@ -13,7 +13,7 @@ export const fetchPersonalInfoData =
   };
 
 export const submitPersonalInfoData = async (data: PersonalInfoFormValues) => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/member`, {
+  const response = await fetch("http://localhost:3001/api/member", {
     // credentials: "include",
     method: "POST",
     headers: {

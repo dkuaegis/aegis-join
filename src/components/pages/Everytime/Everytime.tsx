@@ -39,6 +39,10 @@ const StatusMessage = ({ loading }: { loading: LoadingState }) => {
   }
 };
 
+interface TimetableError {
+  timetableLink?: { message?: string };
+}
+
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   const { everytimeData, setEverytimeData, isInitial, setNotInitial } = useEverytimeStore();
 
@@ -47,7 +51,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
     loading: everytimeData?.loading || LoadingState.IDLE,
   });
 
-  const [error, setError] = useState<{ timetableLink?: { message?: string } }>({});
+  const [error, setError] = useState<TimetableError>({});
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [isTouched, setIsTouched] = useState(false);
@@ -85,28 +89,46 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
     } else {
       setError(validationResult.error || {});
     }
+    setIsValid(validationResult.success);
   }, [formValues, isTouched]);
 
-  const handleSubmit = useCallback(async () => {
-    const validationResult = validateEverytime(formValuesRef.current);
-    if (!validationResult.success) {
-      setError(validationResult.error || {});
-      return;
-    }
-    setLoading(LoadingState.LOADING);
-    const success = await postTimetableData(formValuesRef.current.timetableLink);
+  const handleSubmit = useCallback(
+    async (values: EverytimeValues) => {
+      try {
+        const validationResult = validateEverytime(values);
+        if (!validationResult.success) {
+          setError(validationResult.error || {});
+          setLoading(LoadingState.IDLE);
+          return;
+        }
 
-    if (!success) {
-      setLoading(LoadingState.IDLE);
-      return;
-    }
+        setLoading(LoadingState.LOADING);
+        console.log("제출된 링크:", values.timetableLink);
 
-    setLoading(LoadingState.SUCCESS);
-    setEverytimeData(formValuesRef.current);
-    onDataSubmit(formValuesRef.current);
-    setNotInitial();
-    setIsValid(true);
-  }, [onDataSubmit, setNotInitial, setEverytimeData]);
+        const success = await postTimetableData(values.timetableLink);
+
+        if (!success) {
+          throw new Error("시간표 데이터 제출 실패");
+        }
+
+        setLoading(LoadingState.SUCCESS);
+        setEverytimeData(values);
+        onDataSubmit(values);
+        setNotInitial();
+        setIsValid(true);
+      } catch (error) {
+        console.error("Error in handleSubmit:", error);
+        setLoading(LoadingState.IDLE);
+        if (error instanceof Error) {
+            setError({ timetableLink: { message: error.message || "시간표 제출 중 오류가 발생했습니다." } });
+        } else {
+            setError({ timetableLink: { message: "알 수 없는 오류가 발생했습니다." } });
+        }
+      }
+    },
+    [onDataSubmit, setNotInitial, setEverytimeData]
+  );
+
 
   const handleNext = useCallback(() => {
     if (!isValid || loading !== LoadingState.SUCCESS) return;
@@ -126,7 +148,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         className="my-10 space-y-2"
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit();
+          handleSubmit(formValues);
         }}
       >
         <EverytimeTimeTableLink timetableLink={formValues.timetableLink} onChange={handleChange} error={error} />
