@@ -1,6 +1,6 @@
 import Everytime from "@/components/pages/Everytime/Everytime";
 import LoginPage from "@/components/pages/LoginPage";
-import Payment from "@/components/pages/Payment";
+import Payment from "@/components/pages/Payment/Payment";
 import PersonalInfo from "@/components/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/components/pages/Survey/Survey";
 import { Progress } from "@/components/ui/progress";
@@ -78,10 +78,7 @@ function App() {
             <Payment
               onNext={next}
               onPrev={prev}
-              isValid={true}
-              isOverpaid={true}
               payInfo={paymentInfo}
-              senderName="hi"
             />
           }
         />
