@@ -4,20 +4,13 @@ import Payment from "@/components/pages/Payment/Payment";
 import PersonalInfo from "@/components/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/components/pages/Survey/Survey";
 import { Progress } from "@/components/ui/progress";
-import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Coupon from "./components/pages/Coupon/Coupon";
 import Discord from "./components/pages/Discord/Discord";
 import useAuth from "./hooks/useAuth";
 import useFunnel from "./hooks/useFunnel";
-import { type GetPaymentInfo, PaymentStatus } from "./types/api/payment";
 
 function App() {
-  const [paymentInfo] = useState<GetPaymentInfo>({
-    status: PaymentStatus.PENDING,
-    expectedDepositAmount: 10000,
-    currentDepositAmount: 10000,
-  });
 
   const { isAuthenticated } = useAuth();
 
@@ -78,7 +71,6 @@ function App() {
             <Payment
               onNext={next}
               onPrev={prev}
-              payInfo={paymentInfo}
             />
           }
         />
