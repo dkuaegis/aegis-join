@@ -2,7 +2,9 @@ import type { PersonalInfoFormValues } from "./PersonalInfo.schema";
 
 export const fetchPersonalInfoData =
   async (): Promise<PersonalInfoFormValues> => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/member`);
+    const response = await fetch("http://localhost:3001/api/member",{
+      // credentials: "include",
+    });
 
     if (!response.ok) {
       throw new Error("데이터를 가져오는데 실패");
@@ -11,7 +13,8 @@ export const fetchPersonalInfoData =
   };
 
 export const submitPersonalInfoData = async (data: PersonalInfoFormValues) => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/member`, {
+  const response = await fetch("http://localhost:3001/api/member", {
+    // credentials: "include",
     method: "POST",
     headers: {
       "Content-Type": "application/json",

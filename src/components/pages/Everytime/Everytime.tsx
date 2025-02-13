@@ -3,13 +3,14 @@ import { useEverytimeStore } from "@/stores/useEverytimeStore";
 import { LoadingState } from "@/types/state/loading";
 import { CheckCircleIcon, LoaderCircle } from "lucide-react";
 import { ClockAlert } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import AlertBox from "../../ui/custom/alertbox";
 import NavigationButtons from "../../ui/custom/navigationButton";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
+import { fetchTimetableData, postTimetableData } from "./Everytime.Api";
 
 interface EverytimeProps {
   onNext: () => void;
@@ -17,129 +18,101 @@ interface EverytimeProps {
   onDataSubmit: (data: EverytimeValues) => void;
 }
 
-interface StatusMessageProps {
-  loading: LoadingState;
-}
-
-const StatusMessage = ({ loading }: StatusMessageProps) => {
+const StatusMessage = ({ loading }: { loading: LoadingState }) => {
   switch (loading) {
     case LoadingState.LOADING:
       return (
         <>
-          <LoaderCircle
-            className="h-8 w-8 animate-spin text-gray-500"
-            style={{ animation: "spin 3s linear infinite" }}
-          />
+          <LoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
           <p className="pl-4">시간표 정보를 읽고 있습니다...</p>
         </>
       );
-
     case LoadingState.SUCCESS:
       return (
         <>
           <CheckCircleIcon className="h-8 w-8 text-green-400" />
-          <p className="pl-4 text-green-400">제출이 완료되었습니다 !</p>
+          <p className="pl-4 text-green-400">제출이 완료되었습니다!</p>
         </>
       );
-
     default:
       return null;
   }
 };
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
-  const { everytimeData, setEverytimeData, isInitial, setNotInitial } =
-    useEverytimeStore();
+  const { everytimeData, setEverytimeData, isInitial, setNotInitial } = useEverytimeStore();
 
   const [formValues, setFormValues] = useState<EverytimeValues>({
     timetableLink: everytimeData?.timetableLink || "",
     loading: everytimeData?.loading || LoadingState.IDLE,
   });
 
-  const [error, setError] = useState<{ timetableLink?: { message?: string } }>(
-    {}
-  );
+  const [error, setError] = useState<{ timetableLink?: { message?: string } }>({});
   const [loading, setLoading] = useState<LoadingState>(LoadingState.IDLE);
-  const [isValid, setIsValid] = useState<boolean>(false); // isValid 상태 분리
+  const [isValid, setIsValid] = useState<boolean>(false);
+  const [isTouched, setIsTouched] = useState(false);
+
+  const formValuesRef = useRef(formValues);
 
   useEffect(() => {
-    if (isInitial && everytimeData) {
-      setFormValues({
-        timetableLink: everytimeData.timetableLink || "",
-        loading: everytimeData.loading || LoadingState.IDLE,
-      });
+    formValuesRef.current = formValues;
+  }, [formValues]);
+
+  useEffect(() => {
+    if (isInitial) {
+      const loadData = async () => {
+        const data = await fetchTimetableData();
+        if (data?.timetableLink) {
+          setFormValues((prev) => ({ ...prev, timetableLink: data.timetableLink }));
+        }
+      };
+      loadData();
       setNotInitial();
-      // 이미 제출된 데이터가 있다면, isValid를 true로 설정
-      if (everytimeData.loading === LoadingState.SUCCESS) {
-        setIsValid(true);
-      }
     }
-  }, [isInitial, everytimeData, setNotInitial]);
+  }, [isInitial, setNotInitial]);
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setIsTouched(true);
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
   useEffect(() => {
-    return () => {
-      if (formValues) {
-        setEverytimeData(formValues);
-      }
-    };
-  }, [formValues, setEverytimeData]);
-
-  // 입력 값 변경 시 유효성 검사
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setFormValues((prev) => ({ ...prev, [name]: value }));
-
-      // 유효성 검사
-      const validationResult = validateEverytime({
-        ...formValues,
-        [name]: value,
-      });
-      if (validationResult.success) {
-        setError({}); // 유효하면 에러 초기화
-      } else {
-        setError(validationResult.error || {}); // 유효하지 않으면 에러 업데이트
-      }
-      setIsValid(false); // 입력 변경 시 isValid를 false로 설정
-    },
-    [formValues]
-  );
+    if (!isTouched) return;
+    const validationResult = validateEverytime(formValues);
+    if (validationResult.success) {
+      setError({});
+    } else {
+      setError(validationResult.error || {});
+    }
+  }, [formValues, isTouched]);
 
   const handleSubmit = useCallback(async () => {
-    const validationResult = validateEverytime(formValues);
-
+    const validationResult = validateEverytime(formValuesRef.current);
     if (!validationResult.success) {
       setError(validationResult.error || {});
+      return;
+    }
+    setLoading(LoadingState.LOADING);
+    const success = await postTimetableData(formValuesRef.current.timetableLink);
+
+    if (!success) {
       setLoading(LoadingState.IDLE);
       return;
     }
 
-    setLoading(LoadingState.LOADING);
-    console.log("제출된 링크:", formValues.timetableLink);
-
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     setLoading(LoadingState.SUCCESS);
-    setEverytimeData(formValues);
-    onDataSubmit(formValues);
+    setEverytimeData(formValuesRef.current);
+    onDataSubmit(formValuesRef.current);
     setNotInitial();
-    setIsValid(true); // 제출 성공 시  isValid를 true로 설정
-  }, [formValues, onDataSubmit, setNotInitial, setEverytimeData]);
+    setIsValid(true);
+  }, [onDataSubmit, setNotInitial, setEverytimeData]);
 
   const handleNext = useCallback(() => {
-    if (isValid) {
-      setEverytimeData(formValues);
-      onNext();
-    } else {
-      const validationResult = validateEverytime(formValues);
-      if (!validationResult.success) {
-        setError(validationResult.error || {});
-      }
-    }
-  }, [onNext, formValues, setEverytimeData, isValid]);
-
-  const isSubmitButtonDisabled = loading === LoadingState.LOADING;
-  const navigationButtonsValid = isValid && loading !== LoadingState.LOADING;
+    if (!isValid || loading !== LoadingState.SUCCESS) return;
+    setEverytimeData(formValuesRef.current);
+    onNext();
+  }, [onNext, isValid, loading, setEverytimeData]);
 
   return (
     <div className="mb-12 space-y-4">
@@ -147,9 +120,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
       <AlertBox
         icon={<ClockAlert className="h-4 w-4" />}
         title="시간표 제출이 왜 필요한가요?"
-        description={[
-          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요.",
-        ]}
+        description={["활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요."]}
       />
       <form
         className="my-10 space-y-2"
@@ -158,30 +129,15 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
           handleSubmit();
         }}
       >
-        <EverytimeTimeTableLink
-          timetableLink={formValues.timetableLink}
-          onChange={handleChange}
-          error={error}
-        />
+        <EverytimeTimeTableLink timetableLink={formValues.timetableLink} onChange={handleChange} error={error} />
         <div className="mt-4 flex items-center space-x-4">
-          <Button
-            className="mt-2 inline"
-            type="submit"
-            disabled={isSubmitButtonDisabled}
-          >
+          <Button className="mt-2 inline" type="submit" disabled={loading === LoadingState.LOADING}>
             {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
           </Button>
           <StatusMessage loading={loading} />
         </div>
       </form>
-      <NavigationButtons
-        prev={() => {
-          setEverytimeData(formValues);
-          onPrev();
-        }}
-        next={handleNext}
-        isValid={navigationButtonsValid}
-      />
+      <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid && loading === LoadingState.SUCCESS} />
     </div>
   );
 }
