@@ -1,26 +1,23 @@
+import { useCallback, useEffect, useState } from "react";
 import {
   CheckCircleIcon,
   CircleHelp,
+  Copy,
   ExternalLink,
   LoaderCircle,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import AlertBox from "../../ui/custom/alertbox";
 import NavigationButtons from "../../ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
-import CopyToClipboard from "./Discord.Copy";
-
-function Discord({
-  onNext,
-  onPrev,
-}: { onNext: () => void; onPrev: () => void }) {
+import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+function Discord({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
   const [code, setCode] = useState<string>("");
-  const [copyMessage, setCopyMessage] = useState<string | null>(null);
+  const [isValid, setIsValid] = useState<boolean>(false);
+  const { copyMessage, copyToClipboard } = useCopyToClipboard(); // Use the hook
   const [messageType, setMessageType] = useState<"success" | "error" | null>(
     null
   );
-  const [isValid, setIsValid] = useState<boolean>(false);
 
   useEffect(() => {
     const getDiscordCode = async () => {
@@ -52,12 +49,19 @@ function Discord({
     if (isValid) onNext();
   }, [isValid, onNext]);
 
+  const handleCopyToClipboard = useCallback(() => {
+    copyToClipboard(code, "discord");
+  }, [code, copyToClipboard]);
+
   useEffect(() => {
-    if (copyMessage) {
-      const timer = setTimeout(() => setCopyMessage(null), 1500);
-      return () => clearTimeout(timer);
+    if (copyMessage.discord === "클립보드에 복사했습니다!") {
+      setMessageType("success");
+    } else if (copyMessage.discord === "복사에 실패했습니다.") {
+      setMessageType("error");
+    } else {
+      setMessageType(null);
     }
-  }, [copyMessage]);
+  }, [copyMessage.discord]);
 
   return (
     <div className="space-y-4">
@@ -74,13 +78,14 @@ function Discord({
               <span className="truncate font-extrabold text-2xl text-primary">
                 {code || "코드 불러오는 중..."}
               </span>
-              {code && (
-                <CopyToClipboard
-                  code={code}
-                  setCopyMessage={setCopyMessage}
-                  setMessageType={setMessageType}
-                />
-              )}
+              <Button
+                variant="secondary"
+                size="icon"
+                onClick={handleCopyToClipboard} // Use the new function
+                disabled={!code}
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
             </div>
             <Button
               variant="secondary"
@@ -90,12 +95,14 @@ function Discord({
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          <div className=" flex w-full items-center justify-center">
-            {copyMessage && (
+          <div className="w-full text-left">
+            {copyMessage.discord && (
               <p
-                className={`text-xs ${messageType === "success" ? "text-green-500" : "text-red-500"}`}
+                className={`ml-8 text-xs ${
+                  messageType === "success" ? "text-green-500" : "text-red-500"
+                }`}
               >
-                {copyMessage}
+                {copyMessage.discord}
               </p>
             )}
           </div>
