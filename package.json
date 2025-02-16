@@ -23,7 +23,6 @@
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-table": "^8.20.6",
     "@use-funnel/react-router-dom": "^0.0.9",
-    "aegis-join": "file:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

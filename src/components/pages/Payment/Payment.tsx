@@ -13,7 +13,7 @@ import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 const ADMIN_INFO = {
   phoneNumber: import.meta.env.VITE_ADMIN_PHONE,
   kakaoId: import.meta.env.VITE_ADMIN_KAKAO,
-  accountNumber: import.meta.env.VITE_ADMIN_ACCOUNTNUMBER,
+  accountNumber: import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER,
 };
 
 function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {

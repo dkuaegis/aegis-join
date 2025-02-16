@@ -1,7 +1,9 @@
 import type { SurveyFormValues } from "./Survey.schema";
 
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`);
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`,{
+    credentials: "include"
+  });
 
   if (!response.ok) {
     throw new Error("데이터를 가져오는데 실패");
@@ -11,6 +13,7 @@ export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
 
 export const submitSurveyData = async (data: SurveyFormValues) => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`, {
+    credentials: "include",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
