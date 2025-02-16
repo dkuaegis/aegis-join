@@ -1,7 +1,9 @@
 import type { Coupon } from "./Coupon.Types";
 
 export const fetchCoupon = async (): Promise<Coupon[]> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/coupon`);
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/coupon`,{
+    credentials: "include"
+  });
   if (!response.ok) {
     throw new Error("fetch error: COUPON");
   }
@@ -13,7 +15,7 @@ export const submitCoupon = async (selectedCoupons: string[]) => {
   const payload = selectedCoupons;
 
   const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payments`, {
-    // credentials: "include",
+    credentials: "include",
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -8,7 +8,9 @@ interface PaymentPollingResult {
 // Payment Status 폴링 함수
 export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/status`);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/status`,{
+      credentials: "include"
+    });
 
     if (!response.ok) {
       throw new Error(`ERROR on polling: ${response.status}`);

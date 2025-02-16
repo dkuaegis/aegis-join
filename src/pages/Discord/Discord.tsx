@@ -6,9 +6,9 @@ import {
   ExternalLink,
   LoaderCircle,
 } from "lucide-react";
-import { Button } from "../../ui/button";
-import AlertBox from "../../ui/custom/alertbox";
-import NavigationButtons from "../../ui/custom/navigationButton";
+import { Button } from "../../components/ui/button";
+import AlertBox from "../../components/ui/custom/alertbox";
+import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 function Discord({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {

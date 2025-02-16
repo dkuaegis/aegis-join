@@ -1,12 +1,12 @@
-import Everytime from "@/components/pages/Everytime/Everytime";
-import LoginPage from "@/components/pages/LoginPage";
-import Payment from "@/components/pages/Payment/Payment";
-import PersonalInfo from "@/components/pages/PersonalInfo/PersonalInfo";
-import Survey from "@/components/pages/Survey/Survey";
+import Everytime from "@/pages/Everytime/Everytime";
+import LoginPage from "@/pages/LoginPage";
+import Payment from "@/pages/Payment/Payment";
+import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
+import Survey from "@/pages/Survey/Survey";
 import { Progress } from "@/components/ui/progress";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Coupon from "./components/pages/Coupon/Coupon";
-import Discord from "./components/pages/Discord/Discord";
+import Coupon from "./pages/Coupon/Coupon";
+import Discord from "./pages/Discord/Discord";
 import useAuth from "./hooks/useAuth";
 import useFunnel from "./hooks/useFunnel";
 
