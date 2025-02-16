@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { EverytimeValues } from "../components/pages/Everytime/Everytime.Schema";
+import type { EverytimeValues } from "../pages/Everytime/Everytime.Schema";
 import { shallow } from 'zustand/shallow';
 
 interface EverytimeState {

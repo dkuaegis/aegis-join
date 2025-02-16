@@ -1,4 +1,4 @@
-import type { SurveyFormValues } from "@/components/pages/Survey/Survey.schema";
+import type { SurveyFormValues } from "@/pages/Survey/Survey.schema";
 import type { InterestField } from "@/types/api/survey";
 import { create } from "zustand";
 
