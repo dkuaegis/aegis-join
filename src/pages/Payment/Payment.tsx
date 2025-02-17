@@ -4,16 +4,16 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
-import AlertBox from "../../ui/custom/alertbox";
-import NavigationButtons from "../../ui/custom/navigationButton";
+import AlertBox from "../../components/ui/custom/alertbox";
+import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { startPaymentPolling } from "./Payment.Api"; // 폴링 로직을 가져옴
 import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 
 const ADMIN_INFO = {
-  phoneNumber: import.meta.env.VITE_ADMIN_PHONE,
-  kakaoId: import.meta.env.VITE_ADMIN_KAKAO,
-  accountNumber: import.meta.env.VITE_ADMIN_ACCOUNTNUMBER,
+  phoneNumber: import.meta.env.VITE_ADMIN_PHONE ?? "환경변수가 설정되지 않았습니다.",
+  kakaoId: import.meta.env.VITE_ADMIN_KAKAO ?? "환경변수가 설정되지 않았습니다.",
+  accountNumber: import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER ?? "환경변수가 설정되지 않았습니다.",
 };
 
 function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {

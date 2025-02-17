@@ -1,4 +1,4 @@
-import type { PersonalInfoFormValues } from "@/components/pages/PersonalInfo/PersonalInfo.schema";
+import type { PersonalInfoFormValues } from "@/pages/PersonalInfo/PersonalInfo.schema";
 import { create } from "zustand";
 
 interface PersonalInfoState {

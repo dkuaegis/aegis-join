@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import NavigationButtons from "../../ui/custom/navigationButton";
+import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { fetchCoupon, submitCoupon } from "./Coupon.Api";
 import { CouponList } from "./Coupon.CouponList";
 import { TotalAmount } from "./Coupon.TotalAmount";

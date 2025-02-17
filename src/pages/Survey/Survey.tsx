@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
-import NavigationButtons from "../../ui/custom/navigationButton";
+import NavigationButtons from "../../components/ui/custom/navigationButton";
 
 import { useSurveyStore } from "@/stores/useSurveyStore";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -1,7 +1,7 @@
 export const fetchTimetableData = async (): Promise<{ timetableLink: string } | null> => {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/everytime`,{
-      // credentials: "include",
+      credentials: "include",
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return await response.json();
@@ -14,7 +14,7 @@ export const fetchTimetableData = async (): Promise<{ timetableLink: string } | 
 export const postTimetableData = async (timetableLink: string): Promise<boolean> => {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/everytime`, {
-      // credentials: "include",
+      credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ timetableLink }),
