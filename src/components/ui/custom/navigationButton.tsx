@@ -1,8 +1,5 @@
-import { Suspense, lazy, useEffect, useState } from "react";
-
-const Button = lazy(() =>
-  import("@/components/ui/button").then((module) => ({ default: module.Button }))
-);
+import { Button } from "@/components/ui/button";
+import { useLayoutEffect, useState } from "react";
 
 export default function NavigationButtons({
   prev,
@@ -15,10 +12,8 @@ export default function NavigationButtons({
 }) {
   const [buttonVariant, setButtonVariant] = useState<"default" | "secondary">("default");
 
-  useEffect(() => {
-    if (isValid !== undefined) {
-      setButtonVariant(isValid ? "default" : "secondary");
-    }
+  useLayoutEffect(() => {
+    setButtonVariant(isValid ? "default" : "secondary");
   }, [isValid]);
 
   return (
@@ -27,12 +22,9 @@ export default function NavigationButtons({
         <Button type="button" onClick={prev}>
           이전
         </Button>
-
-        <Suspense fallback={<button type="button" className="rounded bg-primary px-4 py-2">다음</button>}>
-          <Button type="button" onClick={next} variant={buttonVariant}>
-            다음
-          </Button>
-        </Suspense>
+        <Button onClick={next} variant={buttonVariant}>
+          다음
+        </Button>
       </div>
     </div>
   );
