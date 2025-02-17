@@ -73,6 +73,10 @@ function Survey({
     onNext();
   };
 
+  const submit = () => {
+    fetchSurveyData();
+  }
+
   return (
     <FormProvider {...methods}>
       <form className="space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
@@ -105,11 +109,13 @@ function Survey({
 
         <Container>
           <JoinReason />
+          <button type="button" className="h-[100px]" onClick={submit}>hi </button>
         </Container>
-
+        
         <Container>
           <Feedback />
         </Container>
+        
 
         <NavigationButtons
           prev={onPrev}
