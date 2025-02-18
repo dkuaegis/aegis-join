@@ -14,7 +14,7 @@ import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 function Discord({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
-  const { copyMessage, copyToClipboard } = useCopyToClipboard(); // Use the hook
+  const { copyMessage, copyToClipboard } = useCopyToClipboard();
   const [messageType, setMessageType] = useState<"success" | "error" | null>(
     null
   );
@@ -81,7 +81,7 @@ function Discord({ onNext, onPrev }: { onNext: () => void; onPrev: () => void })
               <Button
                 variant="secondary"
                 size="icon"
-                onClick={handleCopyToClipboard} // Use the new function
+                onClick={handleCopyToClipboard}
                 disabled={!code}
               >
                 <Copy className="h-4 w-4" />

@@ -6,7 +6,7 @@ export function CouponList({
   selectedCoupons,
   setSelectedCoupons,
 }: CouponListProps) {
-  const handleCouponSelect = (id: string) => {
+  const handleCouponSelect = (id: number) => {
     setSelectedCoupons((prev) => {
       if (prev.includes(id)) {
         return prev.filter((couponID) => couponID !== id);
@@ -19,9 +19,9 @@ export function CouponList({
     <div className="space-y-3 p-4">
       {coupons.map((coupon) => (
         <CouponItem
-          key={coupon.id}
+          key={coupon.couponId}
           coupon={coupon}
-          isSelected={selectedCoupons.includes(coupon.id)}
+          isSelected={selectedCoupons.includes(coupon.couponId)}
           setSelect={handleCouponSelect}
         />
       ))}

@@ -11,7 +11,7 @@ export const fetchCoupon = async (): Promise<Coupon[]> => {
   return response.json();
 };
 
-export const submitCoupon = async (selectedCoupons: string[]) => {
+export const submitCoupon = async (selectedCoupons: number[]) => {
   const payload = selectedCoupons;
 
   const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payments`, {

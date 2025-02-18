@@ -5,7 +5,6 @@ interface PaymentPollingResult {
   paymentInfo?: GetPaymentInfo;
 }
 
-// Payment Status 폴링 함수
 export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/status`,{
@@ -25,7 +24,6 @@ export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
   }
 };
 
-// 폴링 로직을 실행하는 함수
 export const startPaymentPolling = (
   setIsValid: React.Dispatch<React.SetStateAction<boolean>>,
   setPayInfo: React.Dispatch<React.SetStateAction<GetPaymentInfo | null>>,

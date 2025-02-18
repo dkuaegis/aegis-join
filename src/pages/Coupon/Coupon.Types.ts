@@ -1,25 +1,25 @@
 import type * as React from "react";
 
 export interface Coupon {
-  id: string;
-  amount: number;
-  description: string;
+  couponId: number;
+  discountAmount: number;
+  couponName: string;
 }
 
 export interface CouponItemProps
   extends React.HTMLAttributes<HTMLButtonElement> {
   coupon: Coupon;
   isSelected: boolean;
-  setSelect: (id: string) => void;
+  setSelect: (id: number) => void;
 }
 
 export interface CouponListProps {
   coupons: Coupon[];
-  selectedCoupons: string[];
-  setSelectedCoupons: (value: React.SetStateAction<string[]>) => void;
+  selectedCoupons: number[];
+  setSelectedCoupons: (value: React.SetStateAction<number[]>) => void;
 }
 
 export interface TotalAmountProps {
   coupons: Coupon[];
-  selectedCoupons: string[];
+  selectedCoupons: number[];
 }
