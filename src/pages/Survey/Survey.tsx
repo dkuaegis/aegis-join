@@ -8,13 +8,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
-import FeedBack from "./Survey.FeedBack";
+import Feedback from "./Survey.FeedBack";
 import { InterestFieldGroup } from "./Survey.FieldGroup";
 import {
-  interestsEtc,
-  interestsGame,
-  interestsSecurity,
-  interestsWeb,
+  etcList,
+  gameList,
+  securityList,
+  webList,
 } from "./Survey.Items";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
@@ -27,10 +27,10 @@ function Survey({
   onPrev: () => void;
 }) {
   const {
-    interestFields,
-    interestEtc,
+    interests,
+    interestsEtc,
     joinReason,
-    feedBack,
+    feedback,
     isInitial,
     setFormValues,
     setNotInitial,
@@ -40,10 +40,10 @@ function Survey({
     resolver: zodResolver(surveySchema),
     mode: "onChange",
     defaultValues: {
-      interestFields: interestFields,
-      interestEtc: interestEtc,
+      interests: interests,
+      interestsEtc: interestsEtc,
       joinReason: joinReason,
-      feedBack: feedBack,
+      feedback: feedback,
     },
   });
 
@@ -87,27 +87,27 @@ function Survey({
           <Label>관심분야 (다중 선택 가능)</Label>
           <InterestFieldGroup
             name="보안"
-            interestField={interestsSecurity}
+            interestField={securityList}
             Icon={GlobeLock}
           />
           <InterestFieldGroup
             name="웹"
-            interestField={interestsWeb}
+            interestField={webList}
             Icon={CodeXml}
           />
           <InterestFieldGroup
             name="게임"
-            interestField={interestsGame}
+            interestField={gameList}
             Icon={Gamepad2}
           />
           <InterestFieldGroup
             name="기타"
-            interestField={interestsEtc}
+            interestField={etcList}
             Icon={Ellipsis}
           />
         </Container>
         <EtcErrorMessage
-          error={methods.formState.errors.interestFields?.message}
+          error={methods.formState.errors.interests?.message}
         />
 
         <Container>
@@ -115,7 +115,7 @@ function Survey({
         </Container>
 
         <Container>
-          <FeedBack />
+          <Feedback />
         </Container>
 
         <NavigationButtons

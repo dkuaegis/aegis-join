@@ -3,10 +3,10 @@ import type { InterestField } from "@/types/api/survey";
 import { create } from "zustand";
 
 interface SurveyState {
-  interestFields: InterestField[];
-  interestEtc: Partial<Record<InterestField, string | undefined>>;
+  interests: InterestField[];
+  interestsEtc: Partial<Record<InterestField, string | undefined>>;
   joinReason: string;
-  feedBack: string;
+  feedback: string;
 
   isInitial: boolean;
 
@@ -15,10 +15,10 @@ interface SurveyState {
 }
 
 export const useSurveyStore = create<SurveyState>((set) => ({
-  interestFields: [],
-  interestEtc: {},
+  interests: [],
+  interestsEtc: {},
   joinReason: "",
-  feedBack: "",
+  feedback: "",
 
   setFormValues: (values) =>
     set((state) => ({

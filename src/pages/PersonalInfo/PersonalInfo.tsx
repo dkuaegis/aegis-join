@@ -11,7 +11,7 @@ import {
   type PersonalInfoFormValues,
   personalInfoSchema,
 } from "./PersonalInfo.schema";
-import { StudentAcademicSemester } from "./field/studentAcademicSemester";
+import { StudentSemester } from "./field/studentSemester";
 import { StudentAcademicStatus } from "./field/studentAcademicStatus";
 import { StudentBirthDate } from "./field/studentBirthDate";
 import { StudentDepartment } from "./field/studentDepartment";
@@ -76,7 +76,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
         <StudentDepartment name="department" />
         <StudentAcademicStatus name="academicStatus" />
         <StudentGrade name="grade" />
-        <StudentAcademicSemester name="academicSemester" />
+        <StudentSemester name="semester" />
         <NavigationButtons
           prev={() => {
             setPersonalInfoData(methods.getValues());

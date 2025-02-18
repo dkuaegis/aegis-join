@@ -1,7 +1,7 @@
 import type { Coupon } from "./Coupon.Types";
 
 export const fetchCoupon = async (): Promise<Coupon[]> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/coupon`,{
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/coupons/issued/me`,{
     credentials: "include"
   });
   if (!response.ok) {
@@ -14,7 +14,7 @@ export const fetchCoupon = async (): Promise<Coupon[]> => {
 export const submitCoupon = async (selectedCoupons: number[]) => {
   const payload = selectedCoupons;
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payments`, {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/payments`, {
     credentials: "include",
     method: "POST",
     headers: {

@@ -8,7 +8,7 @@ export function ControlledCheckbox({ id }: { id: InterestField }) {
 
   return (
     <Controller
-      name="interestFields"
+      name="interests"
       control={control}
       render={({ field: { value, onChange } }) => {
         const isChecked = value.includes(id);
