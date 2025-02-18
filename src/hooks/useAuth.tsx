@@ -9,7 +9,7 @@ export default function useAuth() {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/auth/check`,
             {
-              credentials: "include",
+              //credentials: "include",
             }
         );
         if (!response.ok) {

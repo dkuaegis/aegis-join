@@ -40,14 +40,14 @@ const StatusMessage = ({ loading }: { loading: LoadingState }) => {
 };
 
 interface TimetableError {
-  timetableLink?: { message?: string };
+  url?: { message?: string };
 }
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   const { everytimeData, setEverytimeData, isInitial, setNotInitial } = useEverytimeStore();
 
   const [formValues, setFormValues] = useState<EverytimeValues>({
-    timetableLink: everytimeData?.timetableLink || "",
+    url: everytimeData?.url || "",
     loading: everytimeData?.loading || LoadingState.IDLE,
   });
 
@@ -66,8 +66,8 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
     if (isInitial) {
       const loadData = async () => {
         const data = await fetchTimetableData();
-        if (data?.timetableLink) {
-          setFormValues((prev) => ({ ...prev, timetableLink: data.timetableLink }));
+        if (data?.url) {
+          setFormValues((prev) => ({ ...prev, url: data.url }));
         }
       };
       loadData();
@@ -103,9 +103,9 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         }
 
         setLoading(LoadingState.LOADING);
-        console.log("제출된 링크:", values.timetableLink);
+        console.log("제출된 링크:", values.url);
 
-        const success = await postTimetableData(values.timetableLink);
+        const success = await postTimetableData(values.url);
 
         if (!success) {
           throw new Error("시간표 데이터 제출 실패");
@@ -120,9 +120,9 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         console.error("Error in handleSubmit:", error);
         setLoading(LoadingState.IDLE);
         if (error instanceof Error) {
-            setError({ timetableLink: { message: error.message || "시간표 제출 중 오류가 발생했습니다." } });
+            setError({ url: { message: error.message || "시간표 제출 중 오류가 발생했습니다." } });
         } else {
-            setError({ timetableLink: { message: "알 수 없는 오류가 발생했습니다." } });
+            setError({ url: { message: "알 수 없는 오류가 발생했습니다." } });
         }
       }
     },
@@ -151,7 +151,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
           handleSubmit(formValues);
         }}
       >
-        <EverytimeTimeTableLink timetableLink={formValues.timetableLink} onChange={handleChange} error={error} />
+        <EverytimeTimeTableLink url={formValues.url} onChange={handleChange} error={error} />
         <div className="mt-4 flex items-center space-x-4">
           <Button className="mt-2 inline" type="submit" disabled={loading === LoadingState.LOADING}>
             {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
