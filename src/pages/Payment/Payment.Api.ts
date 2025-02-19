@@ -46,7 +46,6 @@ export const startPaymentPolling = (
       setIsValid(result.isSuccess);
       setPayInfo(result.paymentInfo ?? null);
 
-      // remainingAmount 계산하여 setRemainingAmount 호출
       if (result.paymentInfo) {
         const remainingAmount =
           result.paymentInfo.expectedDepositAmount -
