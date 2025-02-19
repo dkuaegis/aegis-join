@@ -25,5 +25,4 @@ export const submitSurveyData = async (data: SurveyFormValues) => {
     throw new Error("Failed to submit");
   }
 
-  return response.json();
 };

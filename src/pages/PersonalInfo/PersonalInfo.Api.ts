@@ -25,6 +25,4 @@ export const submitPersonalInfoData = async (data: PersonalInfoFormValues) => {
   if (!response.ok) {
     throw new Error("Failed to submit");
   }
-
-  return response.json();
 };
