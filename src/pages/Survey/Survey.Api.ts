@@ -24,5 +24,4 @@ export const submitSurveyData = async (data: SurveyFormValues) => {
   if (!response.ok) {
     throw new Error("Failed to submit");
   }
-
 };

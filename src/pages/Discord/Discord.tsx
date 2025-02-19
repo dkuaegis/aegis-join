@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+import { useDiscordStore } from "@/stores/useDiscordStore";
 import {
   CheckCircleIcon,
   CircleHelp,
@@ -6,12 +7,11 @@ import {
   ExternalLink,
   LoaderCircle,
 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import AlertBox from "../../components/ui/custom/alertbox";
 import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
-import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
-import { useDiscordStore } from "@/stores/useDiscordStore";
 
 interface DiscordProps {
   onNext: () => void;
