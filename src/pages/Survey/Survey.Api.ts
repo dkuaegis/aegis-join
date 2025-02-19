@@ -2,16 +2,14 @@ import type { SurveyFormValues } from "./Survey.schema";
 import fetchingWithToast from "@/lib/customFetch";
 
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`, {
-    credentials: "include",
+  const response = await fetchingWithToast(`${import.meta.env.VITE_API_URL}/survey`, {
   });
 
   return response.json();
 };
 
 export const submitSurveyData = async (data: SurveyFormValues) => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`, {
-    credentials: "include",
+  const response = await fetchingWithToast(`${import.meta.env.VITE_API_URL}/survey`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

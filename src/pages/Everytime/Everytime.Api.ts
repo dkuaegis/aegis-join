@@ -1,8 +1,8 @@
+import fetchingWithToast from "@/lib/customFetch";
+
 export const fetchTimetableData = async (): Promise<{ url: string } | null> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/timetables`, {
-      credentials: "include",
-    });
+    const response = await fetchingWithToast(`${import.meta.env.VITE_API_URL}/timetables`);
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return await response.json();
   } catch (error) {
@@ -13,8 +13,7 @@ export const fetchTimetableData = async (): Promise<{ url: string } | null> => {
 
 export const postTimetableData = async (url: string): Promise<boolean> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/timetables`, {
-      credentials: "include",
+    const response = await fetchingWithToast(`${import.meta.env.VITE_API_URL}/timetables`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url }),
