@@ -6,7 +6,7 @@ export interface InterestItem {
 }
 
 // 보안 항목들
-const interestsSecurity: InterestItem[] = [
+const securityList: InterestItem[] = [
   { id: InterestField.SECURITY_WEBHACKING, description: "웹해킹" },
   { id: InterestField.SECURITY_SYSTEMHACKING, description: "시스템해킹" },
   { id: InterestField.SECURITY_REVERSING, description: "리버싱" },
@@ -21,7 +21,7 @@ const interestsSecurity: InterestItem[] = [
 ];
 
 // 웹 항목들
-const interestsWeb: InterestItem[] = [
+const webList: InterestItem[] = [
   { id: InterestField.WEB_FRONTEND, description: "프론트엔드" },
   { id: InterestField.WEB_BACKEND, description: "백엔드" },
   {
@@ -32,7 +32,7 @@ const interestsWeb: InterestItem[] = [
 ];
 
 // 게임 항목들
-const interestsGame: InterestItem[] = [
+const gameList: InterestItem[] = [
   { id: InterestField.GAME_CLIENT, description: "클라이언트" },
   { id: InterestField.GAME_SERVER, description: "서버" },
   {
@@ -43,7 +43,7 @@ const interestsGame: InterestItem[] = [
 ];
 
 // 기타 항목들
-const interestsEtc: InterestItem[] = [
+const etcList: InterestItem[] = [
   { id: InterestField.APP, description: "앱" },
   { id: InterestField.DEVOPS, description: "DevOps" },
   { id: InterestField.AI, description: "인공지능" },
@@ -51,4 +51,4 @@ const interestsEtc: InterestItem[] = [
   { id: InterestField.ETC, description: "기타" },
 ];
 
-export { interestsSecurity, interestsGame, interestsWeb, interestsEtc };
+export { securityList, gameList, webList, etcList };

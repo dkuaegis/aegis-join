@@ -6,7 +6,7 @@ import type { GetPaymentInfo } from "@/types/api/payment";
 import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import AlertBox from "../../components/ui/custom/alertbox";
 import NavigationButtons from "../../components/ui/custom/navigationButton";
-import { startPaymentPolling } from "./Payment.Api"; // 폴링 로직을 가져옴
+import { startPaymentPolling } from "./Payment.Api";
 import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 
@@ -23,7 +23,7 @@ function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void })
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
 
-  const { copyMessage, copyToClipboard } = useCopyToClipboard(); // Use the hook
+  const { copyMessage, copyToClipboard } = useCopyToClipboard();
 
   useEffect(() => {
     const fetchData = async () => {

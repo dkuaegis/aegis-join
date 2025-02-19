@@ -13,7 +13,7 @@ export default function Coupon({
   onPrev: () => void;
 }) {
   const [coupons, setCoupons] = useState<CouponType[]>([]);
-  const [selectedCoupons, setSelectedCoupons] = useState<string[]>([]);
+  const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
 
   useEffect(() => {
     fetchCoupon()

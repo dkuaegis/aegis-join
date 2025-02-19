@@ -18,7 +18,7 @@ export function InterestFieldItem({ id, description }: InterestFieldItemProps) {
     formState: { errors },
   } = useFormContext<SurveyFormValues>();
 
-  const selectedFields = useWatch({ name: "interestFields" });
+  const selectedFields = useWatch({ name: "interests" });
   const isSelected = selectedFields.includes(id);
 
   return (
@@ -31,19 +31,19 @@ export function InterestFieldItem({ id, description }: InterestFieldItemProps) {
             className="ml-6"
             placeholder="기타 관심 분야를 작성해주세요"
             maxLength={20}
-            {...register(`interestEtc.${id}`)}
+            {...register(`interestsEtc.${id}`)}
           />
         )}
       </div>
       {isETC(id) && (
         <p
           className={`pl-6 text-red-500 text-xs ${
-            errors.interestEtc?.[id] && isSelected
+            errors.interestsEtc?.[id] && isSelected
               ? "visible opacity-100"
               : "invisible opacity-0"
           }`}
         >
-          {errors.interestEtc?.[id]?.message || "😀"}
+          {errors.interestsEtc?.[id]?.message || "😀"}
         </p>
       )}
     </div>

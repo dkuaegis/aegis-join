@@ -2,7 +2,7 @@ import { LoadingState } from "@/types/state/loading";
 import { z } from "zod";
 
 export const EverytimeSchema = z.object({
-  timetableLink: z
+  url: z
     .string()
     .refine((value) => value.startsWith("https://everytime.kr/@"), {
       message:

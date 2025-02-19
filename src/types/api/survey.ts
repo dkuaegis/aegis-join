@@ -30,10 +30,10 @@ export enum InterestField {
 }
 
 export interface SurveyForm {
-  interestFields: InterestField[];
-  interestEtc: Record<InterestField, string>;
+  interests: InterestField[];
+  interestsEtc: Record<InterestField, string>;
   registrationReason: string;
-  feedBack: string;
+  feedback: string;
 }
 
 export interface GetSurveyForm extends SurveyForm {}

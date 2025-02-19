@@ -30,7 +30,7 @@ export const personalInfoSchema = z.object({
   grade: z.nativeEnum(Grade, {
     errorMap: () => ({ message: "학년을 선택해주세요" }),
   }),
-  academicSemester: z.nativeEnum(Semester, {
+  semester: z.nativeEnum(Semester, {
     errorMap: () => ({ message: "학기를 선택해주세요" }),
   }),
 });

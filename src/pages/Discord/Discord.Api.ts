@@ -1,7 +1,7 @@
 export const fetchDiscordCode = async (): Promise<string> => {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/discord/code`,{
+      `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,{
         credentials: "include",
       }
     );
