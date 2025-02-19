@@ -73,10 +73,6 @@ function Survey({
     onNext();
   };
 
-  const submit = () => {
-    fetchSurveyData();
-  };
-
   return (
     <FormProvider {...methods}>
       <form className="space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
