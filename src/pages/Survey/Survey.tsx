@@ -35,10 +35,10 @@ function Survey({
     resolver: zodResolver(surveySchema),
     mode: "onChange",
     defaultValues: {
-      interests: interests,
-      interestsEtc: interestsEtc,
-      joinReason: joinReason,
-      feedback: feedback,
+      interests: interests || [],
+      interestsEtc: interestsEtc || {},
+      joinReason: joinReason || "",
+      feedback: feedback || "",
     },
   });
 

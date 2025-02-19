@@ -19,7 +19,7 @@ export function InterestFieldItem({ id, description }: InterestFieldItemProps) {
   } = useFormContext<SurveyFormValues>();
 
   const selectedFields = useWatch({ name: "interests" });
-  const isSelected = selectedFields.includes(id);
+  const isSelected = Array.isArray(selectedFields) && selectedFields.includes(id);
 
   return (
     <div key={id} className="flex flex-col justify-center space-y-1 ">

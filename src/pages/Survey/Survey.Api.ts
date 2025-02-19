@@ -3,8 +3,7 @@ import type { SurveyFormValues } from "./Survey.schema";
 
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
   const response = await fetchingWithToast(
-    `${import.meta.env.VITE_API_URL}/survey`,
-    {}
+    `${import.meta.env.VITE_API_URL}/survey`
   );
 
   return response.json();
