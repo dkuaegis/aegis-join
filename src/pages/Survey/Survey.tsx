@@ -75,7 +75,7 @@ function Survey({
 
   const submit = () => {
     fetchSurveyData();
-  }
+  };
 
   return (
     <FormProvider {...methods}>
@@ -109,13 +109,14 @@ function Survey({
 
         <Container>
           <JoinReason />
-          <button type="button" className="h-[100px]" onClick={submit}>hi </button>
+          <button type="button" className="h-[100px]" onClick={submit}>
+            hi{" "}
+          </button>
         </Container>
-        
+
         <Container>
           <Feedback />
         </Container>
-        
 
         <NavigationButtons
           prev={onPrev}

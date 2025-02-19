@@ -3,7 +3,9 @@ import type { PersonalInfoFormValues } from "./PersonalInfo.schema";
 
 export const fetchPersonalInfoData =
   async (): Promise<PersonalInfoFormValues> => {
-    const response = await fetchingWithToast(`${import.meta.env.VITE_API_URL}/members`);
+    const response = await fetchingWithToast(
+      `${import.meta.env.VITE_API_URL}/members`
+    );
 
     if (!response.ok) {
       throw new Error("데이터를 가져오는데 실패");
@@ -12,13 +14,16 @@ export const fetchPersonalInfoData =
   };
 
 export const submitPersonalInfoData = async (data: PersonalInfoFormValues) => {
-  const response = await fetchingWithToast(`${import.meta.env.VITE_API_URL}/members`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  const response = await fetchingWithToast(
+    `${import.meta.env.VITE_API_URL}/members`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to submit");

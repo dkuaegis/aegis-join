@@ -3,7 +3,7 @@ import fetchingWithToast from "@/lib/customFetch";
 export const fetchDiscordCode = async (): Promise<string> => {
   try {
     const response = await fetchingWithToast(
-      `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,
+      `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`
     );
     if (!response.ok) {
       throw new Error(`HTTP ERROR! status: ${response.status}`);
