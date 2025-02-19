@@ -22,7 +22,7 @@ export const surveySchema = z
 
     joinReason: z
       .string()
-      .min(1, "가입 이유를 작성해주세요!")
+      .min(5, "가입 이유를 작성해주세요!")
       .max(511, "511자를 초과할 수 없습니다!"),
     feedback: z.string().max(511, "511자를 초과할 수 없습니다!").optional(),
   })

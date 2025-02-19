@@ -68,9 +68,15 @@ function Survey({
   ]);
 
   const onSubmit = (data: SurveyFormValues) => {
-    console.log("submit!", data);
-    submitSurveyData(data);
-    onNext();
+    submitSurveyData(data)
+      .then(() => {
+        setFormValues(data);
+        onNext();
+      })
+      .catch((error) => {
+        console.error("제출 중 오류가 발생했습니다:", error);
+      });
+    
   };
 
   return (
