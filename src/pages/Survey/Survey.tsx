@@ -109,9 +109,6 @@ function Survey({
 
         <Container>
           <JoinReason />
-          <button type="button" className="h-[100px]" onClick={submit}>
-            hi{" "}
-          </button>
         </Container>
 
         <Container>
