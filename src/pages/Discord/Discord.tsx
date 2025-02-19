@@ -1,4 +1,4 @@
-import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+import { useCallback, useEffect, useState } from "react";
 import {
   CheckCircleIcon,
   CircleHelp,
@@ -6,15 +6,12 @@ import {
   ExternalLink,
   LoaderCircle,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import AlertBox from "../../components/ui/custom/alertbox";
 import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
-function Discord({
-  onNext,
-  onPrev,
-}: { onNext: () => void; onPrev: () => void }) {
+import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+function Discord({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
   const { copyMessage, copyToClipboard } = useCopyToClipboard();
@@ -82,6 +79,7 @@ function Discord({
                 {code || "코드 불러오는 중..."}
               </span>
               <Button
+              className="border-2 border-gray-600"
                 variant="secondary"
                 size="icon"
                 onClick={handleCopyToClipboard}
@@ -91,6 +89,7 @@ function Discord({
               </Button>
             </div>
             <Button
+              className="border-2 border-gray-600"
               variant="secondary"
               onClick={() => window.open("https://discord.com", "_blank")}
             >

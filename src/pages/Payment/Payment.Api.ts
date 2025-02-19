@@ -7,8 +7,7 @@ interface PaymentPollingResult {
 
 export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/payments/status`,
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/status`,
       {
         credentials: "include",
       }
@@ -46,7 +45,6 @@ export const startPaymentPolling = (
       setIsValid(result.isSuccess);
       setPayInfo(result.paymentInfo ?? null);
 
-      // remainingAmount 계산하여 setRemainingAmount 호출
       if (result.paymentInfo) {
         const remainingAmount =
           result.paymentInfo.expectedDepositAmount -
