@@ -10,7 +10,9 @@ export default function NavigationButtons({
   next: () => void;
   isValid?: boolean;
 }) {
-  const [buttonVariant, setButtonVariant] = useState<"default" | "secondary">("default");
+  const [buttonVariant, setButtonVariant] = useState<"default" | "secondary">(
+    "default"
+  );
 
   useLayoutEffect(() => {
     setButtonVariant(isValid ? "default" : "secondary");

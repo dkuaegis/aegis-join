@@ -6,7 +6,7 @@ type CopyMessageType = {
   discord?: string | null;
 };
 
-type CopyType = 'account' | 'sender' | 'discord';
+type CopyType = "account" | "sender" | "discord";
 
 interface UseCopyToClipboard {
   copyMessage: CopyMessageType;
@@ -17,14 +17,24 @@ function useCopyToClipboard(): UseCopyToClipboard {
   const [copyMessage, setCopyMessage] = useState<CopyMessageType>({});
 
   const copyToClipboard = useCallback((text: string, type: CopyType) => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => {
-        setCopyMessage(prev => ({ ...prev, [type]: "클립보드에 복사했습니다!" }));
-        setTimeout(() => setCopyMessage(prev => ({ ...prev, [type]: null })), 1500);
+        setCopyMessage((prev) => ({
+          ...prev,
+          [type]: "클립보드에 복사했습니다!",
+        }));
+        setTimeout(
+          () => setCopyMessage((prev) => ({ ...prev, [type]: null })),
+          1500
+        );
       })
       .catch(() => {
-        setCopyMessage(prev => ({ ...prev, [type]: "복사에 실패했습니다." }));
-        setTimeout(() => setCopyMessage(prev => ({ ...prev, [type]: null })), 1500);
+        setCopyMessage((prev) => ({ ...prev, [type]: "복사에 실패했습니다." }));
+        setTimeout(
+          () => setCopyMessage((prev) => ({ ...prev, [type]: null })),
+          1500
+        );
       });
   }, []);
 

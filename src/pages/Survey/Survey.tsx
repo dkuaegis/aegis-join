@@ -10,12 +10,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
 import Feedback from "./Survey.FeedBack";
 import { InterestFieldGroup } from "./Survey.FieldGroup";
-import {
-  etcList,
-  gameList,
-  securityList,
-  webList,
-} from "./Survey.Items";
+import { etcList, gameList, securityList, webList } from "./Survey.Items";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
 
@@ -106,9 +101,7 @@ function Survey({
             Icon={Ellipsis}
           />
         </Container>
-        <EtcErrorMessage
-          error={methods.formState.errors.interests?.message}
-        />
+        <EtcErrorMessage error={methods.formState.errors.interests?.message} />
 
         <Container>
           <JoinReason />

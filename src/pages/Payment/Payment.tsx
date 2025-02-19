@@ -1,22 +1,29 @@
-import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 import AlertBox from "../../components/ui/custom/alertbox";
 import NavigationButtons from "../../components/ui/custom/navigationButton";
-import { startPaymentPolling } from "./Payment.Api";
 import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
-import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+import { startPaymentPolling } from "./Payment.Api";
 
 const ADMIN_INFO = {
-  phoneNumber: import.meta.env.VITE_ADMIN_PHONE ?? "환경변수가 설정되지 않았습니다.",
-  kakaoId: import.meta.env.VITE_ADMIN_KAKAO ?? "환경변수가 설정되지 않았습니다.",
-  accountNumber: import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER ?? "환경변수가 설정되지 않았습니다.",
+  phoneNumber:
+    import.meta.env.VITE_ADMIN_PHONE ?? "환경변수가 설정되지 않았습니다.",
+  kakaoId:
+    import.meta.env.VITE_ADMIN_KAKAO ?? "환경변수가 설정되지 않았습니다.",
+  accountNumber:
+    import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER ??
+    "환경변수가 설정되지 않았습니다.",
 };
 
-function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
+function Payment({
+  onNext,
+  onPrev,
+}: { onNext: () => void; onPrev: () => void }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isValid, setIsValid] = useState(false);
   const [senderName, setSenderName] = useState("로딩 중...");
@@ -42,7 +49,11 @@ function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void })
   }, []);
 
   useEffect(() => {
-    const cleanupPolling = startPaymentPolling(setIsValid, setPayInfo, setRemainingAmount);
+    const cleanupPolling = startPaymentPolling(
+      setIsValid,
+      setPayInfo,
+      setRemainingAmount
+    );
 
     return () => {
       cleanupPolling();
@@ -51,7 +62,9 @@ function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void })
 
   useEffect(() => {
     if (payInfo) {
-      setRemainingAmount(payInfo.expectedDepositAmount - payInfo.currentDepositAmount);
+      setRemainingAmount(
+        payInfo.expectedDepositAmount - payInfo.currentDepositAmount
+      );
     }
   }, [payInfo]);
 
@@ -68,7 +81,9 @@ function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void })
                 variant="ghost"
                 size="icon"
                 className="ml-2"
-                onClick={() => copyToClipboard(ADMIN_INFO.accountNumber ?? "", "account")}
+                onClick={() =>
+                  copyToClipboard(ADMIN_INFO.accountNumber ?? "", "account")
+                }
               >
                 <Copy className="h-4 w-4" />
               </Button>
@@ -76,7 +91,9 @@ function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void })
             {copyMessage.account && (
               <p
                 className={`text-xs ${
-                  copyMessage.account.includes("클립보드에 복사했습니다!") ? "text-green-500" : "text-red-500"
+                  copyMessage.account.includes("클립보드에 복사했습니다!")
+                    ? "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 {copyMessage.account}
@@ -98,14 +115,23 @@ function Payment({ onNext, onPrev }: { onNext: () => void; onPrev: () => void })
             {copyMessage.sender && (
               <p
                 className={`text-xs ${
-                  copyMessage.sender.includes("클립보드에 복사했습니다!") ? "text-green-500" : "text-red-500"
+                  copyMessage.sender.includes("클립보드에 복사했습니다!")
+                    ? "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 {copyMessage.sender}
               </p>
             )}
           </div>
-          <div>송금할 금액: {isLoading ? "로딩 중..." : payInfo ? `${remainingAmount.toLocaleString()}원` : "정보를 불러오는 중..."}</div>
+          <div>
+            송금할 금액:{" "}
+            {isLoading
+              ? "로딩 중..."
+              : payInfo
+                ? `${remainingAmount.toLocaleString()}원`
+                : "정보를 불러오는 중..."}
+          </div>
           <div>예금주명: 윤성민</div>
         </AlertDescription>
       </Alert>

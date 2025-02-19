@@ -7,10 +7,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import AlertBox from "../../components/ui/custom/alertbox";
 import NavigationButtons from "../../components/ui/custom/navigationButton";
+import { fetchTimetableData, postTimetableData } from "./Everytime.Api";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
-import { fetchTimetableData, postTimetableData } from "./Everytime.Api";
 
 interface EverytimeProps {
   onNext: () => void;
@@ -44,7 +44,8 @@ interface TimetableError {
 }
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
-  const { everytimeData, setEverytimeData, isInitial, setNotInitial } = useEverytimeStore();
+  const { everytimeData, setEverytimeData, isInitial, setNotInitial } =
+    useEverytimeStore();
 
   const [formValues, setFormValues] = useState<EverytimeValues>({
     url: everytimeData?.url || "",
@@ -120,15 +121,18 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         console.error("Error in handleSubmit:", error);
         setLoading(LoadingState.IDLE);
         if (error instanceof Error) {
-            setError({ url: { message: error.message || "시간표 제출 중 오류가 발생했습니다." } });
+          setError({
+            url: {
+              message: error.message || "시간표 제출 중 오류가 발생했습니다.",
+            },
+          });
         } else {
-            setError({ url: { message: "알 수 없는 오류가 발생했습니다." } });
+          setError({ url: { message: "알 수 없는 오류가 발생했습니다." } });
         }
       }
     },
     [onDataSubmit, setNotInitial, setEverytimeData]
   );
-
 
   const handleNext = useCallback(() => {
     if (!isValid || loading !== LoadingState.SUCCESS) return;
@@ -142,7 +146,9 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
       <AlertBox
         icon={<ClockAlert className="h-4 w-4" />}
         title="시간표 제출이 왜 필요한가요?"
-        description={["활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요."]}
+        description={[
+          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요.",
+        ]}
       />
       <form
         className="my-10 space-y-2"
@@ -151,15 +157,27 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
           handleSubmit(formValues);
         }}
       >
-        <EverytimeTimeTableLink url={formValues.url} onChange={handleChange} error={error} />
+        <EverytimeTimeTableLink
+          url={formValues.url}
+          onChange={handleChange}
+          error={error}
+        />
         <div className="mt-4 flex items-center space-x-4">
-          <Button className="mt-2 inline" type="submit" disabled={loading === LoadingState.LOADING}>
+          <Button
+            className="mt-2 inline"
+            type="submit"
+            disabled={loading === LoadingState.LOADING}
+          >
             {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
           </Button>
           <StatusMessage loading={loading} />
         </div>
       </form>
-      <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid && loading === LoadingState.SUCCESS} />
+      <NavigationButtons
+        prev={onPrev}
+        next={handleNext}
+        isValid={isValid && loading === LoadingState.SUCCESS}
+      />
     </div>
   );
 }
