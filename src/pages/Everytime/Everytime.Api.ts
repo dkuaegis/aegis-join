@@ -1,6 +1,7 @@
 export const fetchTimetableData = async (): Promise<{ url: string } | null> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/timetables`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/timetables`, 
+    {
       credentials: "include",
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -13,7 +14,8 @@ export const fetchTimetableData = async (): Promise<{ url: string } | null> => {
 
 export const postTimetableData = async (url: string): Promise<boolean> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/timetables`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/timetables`, 
+    {
       credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
