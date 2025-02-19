@@ -1,9 +1,10 @@
 export const fetchDiscordCode = async (): Promise<string> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,
       {
         credentials: "include",
-        method: "POST"
+        method: "POST",
       }
     );
     if (!response.ok) {
@@ -20,11 +21,11 @@ export const fetchDiscordCode = async (): Promise<string> => {
 export const startDiscordPolling = async (): Promise<boolean> => {
   const interval = 2000;
   let attempts = 0;
-
   return new Promise((resolve) => {
     const poll = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/discord/myid`,
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/discord/myid`,
           {
             credentials: "include",
           }
@@ -36,7 +37,7 @@ export const startDiscordPolling = async (): Promise<boolean> => {
 
         const data = await response.json();
 
-        if (data.discordId.length !== null) {
+        if (data.discordId !== null) {
           resolve(true);
           return;
         }

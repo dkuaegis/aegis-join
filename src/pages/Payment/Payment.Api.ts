@@ -7,7 +7,8 @@ interface PaymentPollingResult {
 
 export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/status`,
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/payments/status`,
       {
         credentials: "include",
       }
