@@ -8,9 +8,9 @@ export default function useAuth() {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/auth/check`,
-            {
-              credentials: "include",
-            }
+          {
+            credentials: "include",
+          }
         );
         if (!response.ok) {
           throw new Error("인증 정보 없음.");

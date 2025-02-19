@@ -1,7 +1,8 @@
 export const fetchDiscordCode = async (): Promise<string> => {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,{
+      `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,
+      {
         credentials: "include",
       }
     );
@@ -24,7 +25,8 @@ export const startDiscordPolling = async (): Promise<boolean> => {
     const poll = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/discord/check`,{
+          `${import.meta.env.VITE_API_URL}/api/discord/check`,
+          {
             credentials: "include",
           }
         );
