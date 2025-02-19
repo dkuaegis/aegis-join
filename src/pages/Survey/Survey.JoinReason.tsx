@@ -20,7 +20,7 @@ export default function JoinReason() {
               : "visibility-hidden opacity-0"
           }`}
         >
-          *필수 항목입니다
+          *필수 항목입니다(5자 이상)
         </span>
       </Label>
       <Textarea
