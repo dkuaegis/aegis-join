@@ -11,39 +11,52 @@ import AlertBox from "../../components/ui/custom/alertbox";
 import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
-function Discord({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
+import { useDiscordStore } from "@/stores/useDiscordStore";
+
+interface DiscordProps {
+  onNext: () => void;
+  onPrev: () => void;
+}
+
+function Discord({ onNext, onPrev }: DiscordProps) {
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
   const { copyMessage, copyToClipboard } = useCopyToClipboard();
   const [messageType, setMessageType] = useState<"success" | "error" | null>(
     null
   );
+  const { isPolling, setIsPolling } = useDiscordStore();
 
   useEffect(() => {
-    const getDiscordCode = async () => {
-      try {
-        const fetchedCode = await fetchDiscordCode();
-        setCode(fetchedCode);
-      } catch (err: unknown) {
-        console.error("Failed to fetch Discord code:", err);
-      }
-    };
+    if (isPolling) {
+      const getDiscordCode = async () => {
+        try {
+          const fetchedCode = await fetchDiscordCode();
+          setCode(fetchedCode);
+        } catch (err: unknown) {
+          console.error("Failed to fetch Discord code:", err);
+        }
+      };
 
-    getDiscordCode();
-  }, []);
+      getDiscordCode();
+    }
+  }, [isPolling]);
 
   useEffect(() => {
     const pollDiscordStatus = async () => {
       try {
         const joined = await startDiscordPolling();
         setIsValid(joined);
+        if (joined) {
+          setIsPolling(false);
+        }
       } catch (error) {
         console.error("Discord polling failed:", error);
       }
     };
 
     pollDiscordStatus();
-  }, []);
+  }, [setIsPolling]);
 
   const handleNext = useCallback(() => {
     if (isValid) onNext();
@@ -76,17 +89,19 @@ function Discord({ onNext, onPrev }: { onNext: () => void; onPrev: () => void })
           <div className="flex items-center justify-center gap-x-4">
             <div className="flex items-center gap-2">
               <span className="truncate font-extrabold text-2xl text-primary">
-                {code || "코드 불러오는 중..."}
+                {isPolling ? code || "코드 불러오는 중..." : "연동 완료"}
               </span>
-              <Button
-              className="border-2 border-gray-600"
-                variant="secondary"
-                size="icon"
-                onClick={handleCopyToClipboard}
-                disabled={!code}
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
+              {isPolling && (
+                <Button
+                  className="border-2 border-gray-600"
+                  variant="secondary"
+                  size="icon"
+                  onClick={handleCopyToClipboard}
+                  disabled={!code}
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+              )}
             </div>
             <Button
               className="border-2 border-gray-600"
