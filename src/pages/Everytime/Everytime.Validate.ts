@@ -9,7 +9,7 @@ interface ValidationResult {
 const validateEverytime = (data: EverytimeValues): ValidationResult => {
   try {
     EverytimeSchema.parse(data);
-    return { success: true }; 
+    return { success: true };
   } catch (error) {
     if (error instanceof ZodError) {
       const newError: { url?: { message?: string } } = {};

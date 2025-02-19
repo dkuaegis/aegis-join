@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 import {
   CheckCircleIcon,
   CircleHelp,
@@ -6,12 +6,15 @@ import {
   ExternalLink,
   LoaderCircle,
 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import AlertBox from "../../components/ui/custom/alertbox";
 import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
-import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
-function Discord({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
+function Discord({
+  onNext,
+  onPrev,
+}: { onNext: () => void; onPrev: () => void }) {
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
   const { copyMessage, copyToClipboard } = useCopyToClipboard();

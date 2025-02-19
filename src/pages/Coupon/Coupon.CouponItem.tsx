@@ -21,7 +21,9 @@ const CouponItem = ({
       {...props}
     >
       <div className="space-y-1">
-        <p className="font-bold text-2xl">{coupon.discountAmount.toLocaleString()}원</p>
+        <p className="font-bold text-2xl">
+          {coupon.discountAmount.toLocaleString()}원
+        </p>
         <p className="text-muted-foreground text-sm">{coupon.couponName}</p>
       </div>
     </button>

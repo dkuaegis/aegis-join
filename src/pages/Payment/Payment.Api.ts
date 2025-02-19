@@ -7,9 +7,12 @@ interface PaymentPollingResult {
 
 export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/status`,{
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/payments/status`,
+      {
+        credentials: "include",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`ERROR on polling: ${response.status}`);
@@ -17,7 +20,10 @@ export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
 
     const data: GetPaymentInfo = await response.json();
 
-    return { isSuccess: ["COMPLETE", "OVERPAID"].includes(data.status), paymentInfo: data };
+    return {
+      isSuccess: ["COMPLETE", "OVERPAID"].includes(data.status),
+      paymentInfo: data,
+    };
   } catch (err) {
     console.error("송금 폴링 중 오류 발생:", err);
     throw err;
@@ -42,11 +48,16 @@ export const startPaymentPolling = (
 
       // remainingAmount 계산하여 setRemainingAmount 호출
       if (result.paymentInfo) {
-        const remainingAmount = result.paymentInfo.expectedDepositAmount - result.paymentInfo.currentDepositAmount;
+        const remainingAmount =
+          result.paymentInfo.expectedDepositAmount -
+          result.paymentInfo.currentDepositAmount;
         setRemainingAmount(remainingAmount);
       }
 
-      if (result.paymentInfo && ["COMPLETE", "OVERPAID"].includes(result.paymentInfo.status)) {
+      if (
+        result.paymentInfo &&
+        ["COMPLETE", "OVERPAID"].includes(result.paymentInfo.status)
+      ) {
         pollingActive = false;
         clearInterval(pollingInterval);
       }
