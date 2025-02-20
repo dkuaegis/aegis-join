@@ -60,7 +60,7 @@ function Discord({ onNext, onPrev }: DiscordProps) {
   }, [isValid, onNext]);
 
   const handleCopyToClipboard = useCallback(() => {
-    copyToClipboard(code, "discord");
+    copyToClipboard(code);
   }, [code, copyToClipboard]);
 
   return (

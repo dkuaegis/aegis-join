@@ -10,7 +10,7 @@ import { fetchTimetableData, postTimetableData } from "./Everytime.Api";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
-import { cssTransition, toast } from "react-toastify";
+import { cssTransition, toast, type ToastOptions } from "react-toastify";
 
 const fadeInOut = cssTransition({
   enter: "fade-in",
@@ -26,6 +26,25 @@ interface EverytimeProps {
 interface TimetableError {
   url?: { message?: string };
 }
+
+// Default toast options
+const defaultToastOptions: ToastOptions = {
+  transition: fadeInOut,
+  position: "bottom-center",
+  autoClose: 1000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: false,
+  draggable: false,
+  theme: "colored",
+  style: {
+    marginBottom: "50%",
+    width: "84%",
+    fontFamily: "Roboto, sans-serif",
+    textAlign: "center",
+  },
+  className: "rounded-lg shadow-lg p-4",
+};
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   const { everytimeData, setEverytimeData, isInitial, setNotInitial } =
@@ -107,22 +126,8 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
 
         if (!toast.isActive(toastId)) {
           toast.success("시간표가 제출되었습니다!", {
+            ...defaultToastOptions,
             toastId, // 고유 ID 적용
-            transition: fadeInOut,
-            position: "bottom-center", // 중앙 정렬
-            autoClose: 1500,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
-            theme: "colored",
-            style: {
-              width: "84%",
-              marginBottom: "50%",
-              fontFamily: "Roboto, sans-serif",
-              textAlign: "center", // 텍스트 중앙 정렬
-            },
-            className: "rounded-lg shadow-lg p-4",
           });
         }
       } catch (error) {
@@ -143,29 +148,16 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
 
         if (!toast.isActive(toastId)) {
           toast.error("시간표 제출 실패", {
+            ...defaultToastOptions,
             toastId, // 고유 ID 적용
-            transition: fadeInOut,
-            position: "bottom-right",
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
-            theme: "colored",
-            style: {
-              width: "90%",
-              marginBottom: "50%",
-              fontFamily: "Roboto, sans-serif",
-              textAlign: "center", // 텍스트 중앙 정렬
-            },
-            className: "rounded-lg shadow-lg p-4",
+            autoClose: 1000, //Override the default autoclose
           });
         }
       }
     },
     [onDataSubmit, setNotInitial, setEverytimeData]
   );
-  
+
   const handleNext = useCallback(() => {
     if (!isValid || loading !== LoadingState.SUCCESS) return;
     setEverytimeData(formValuesRef.current);

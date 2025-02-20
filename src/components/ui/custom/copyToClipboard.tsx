@@ -6,10 +6,9 @@ const fadeInOut = cssTransition({
   exit: "fade-out",
 });
 
-type CopyType = "account" | "sender" | "discord";
 
 interface UseCopyToClipboard {
-  copyToClipboard: (text: string, type: CopyType) => void;
+  copyToClipboard: (text: string) => void;
 }
 
 function useCopyToClipboard(): UseCopyToClipboard {
