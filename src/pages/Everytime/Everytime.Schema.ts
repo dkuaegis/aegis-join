@@ -5,8 +5,7 @@ export const EverytimeSchema = z.object({
   url: z
     .string()
     .refine((value) => value.startsWith("https://everytime.kr/@"), {
-      message:
-        "에브리타임 시간표 링크는 'https://everytime.kr/@' 로 시작해야 합니다.",
+      message: "시간표 링크는 'https://everytime.kr/@' 로 시작해야 합니다.",
     }),
   loading: z.nativeEnum(LoadingState).default(LoadingState.IDLE),
 });

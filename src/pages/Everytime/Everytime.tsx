@@ -3,14 +3,19 @@ import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { useEverytimeStore } from "@/stores/useEverytimeStore";
 import { LoadingState } from "@/types/state/loading";
-import { CheckCircleIcon, LoaderCircle } from "lucide-react";
 import { ClockAlert } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
-import { fetchTimetableData, postTimetableData } from "./Everytime.Api";
+import { type ToastOptions, cssTransition, toast } from "react-toastify";
+import { postTimetableData } from "./Everytime.Api";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
+
+const fadeInOut = cssTransition({
+  enter: "fade-in",
+  exit: "fade-out",
+});
 
 interface EverytimeProps {
   onNext: () => void;
@@ -18,33 +23,31 @@ interface EverytimeProps {
   onDataSubmit: (data: EverytimeValues) => void;
 }
 
-const StatusMessage = ({ loading }: { loading: LoadingState }) => {
-  switch (loading) {
-    case LoadingState.LOADING:
-      return (
-        <>
-          <LoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
-          <p className="pl-4">시간표 정보를 읽고 있습니다...</p>
-        </>
-      );
-    case LoadingState.SUCCESS:
-      return (
-        <>
-          <CheckCircleIcon className="h-8 w-8 text-green-400" />
-          <p className="pl-4 text-green-400">제출이 완료되었습니다!</p>
-        </>
-      );
-    default:
-      return null;
-  }
-};
-
 interface TimetableError {
   url?: { message?: string };
 }
 
+// Default toast options
+const defaultToastOptions: ToastOptions = {
+  transition: fadeInOut,
+  position: "bottom-center",
+  autoClose: 1000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: false,
+  draggable: false,
+  theme: "colored",
+  style: {
+    marginBottom: "50%",
+    width: "84%",
+    fontFamily: "sans-serif",
+    textAlign: "center",
+  },
+  className: "rounded-lg shadow-lg p-4",
+};
+
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
-  const { everytimeData, setEverytimeData, isInitial, setNotInitial } =
+  const { everytimeData, setEverytimeData, setNotInitial } =
     useEverytimeStore();
 
   const [formValues, setFormValues] = useState<EverytimeValues>({
@@ -62,19 +65,6 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   useEffect(() => {
     formValuesRef.current = formValues;
   }, [formValues]);
-
-  useEffect(() => {
-    if (isInitial) {
-      const loadData = async () => {
-        const data = await fetchTimetableData();
-        if (data?.url) {
-          setFormValues((prev) => ({ ...prev, url: data.url }));
-        }
-      };
-      loadData();
-      setNotInitial();
-    }
-  }, [isInitial, setNotInitial]);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -117,6 +107,15 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         onDataSubmit(values);
         setNotInitial();
         setIsValid(true);
+
+        const toastId = "timetable-toast";
+
+        if (!toast.isActive(toastId)) {
+          toast.success("시간표가 제출되었습니다!", {
+            ...defaultToastOptions,
+            toastId,
+          });
+        }
       } catch (error) {
         console.error("Error in handleSubmit:", error);
         setLoading(LoadingState.IDLE);
@@ -128,6 +127,16 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
           });
         } else {
           setError({ url: { message: "알 수 없는 오류가 발생했습니다." } });
+        }
+
+        const toastId = "timetable-toast-error";
+
+        if (!toast.isActive(toastId)) {
+          toast.error("시간표 제출 실패", {
+            ...defaultToastOptions,
+            toastId, // 고유 ID 적용
+            autoClose: 1000,
+          });
         }
       }
     },
@@ -164,13 +173,14 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         />
         <div className="mt-4 flex items-center space-x-4">
           <Button
-            className="mt-2 inline"
+            className="mx-auto mt-6 flex w-11/12 items-center"
             type="submit"
             disabled={loading === LoadingState.LOADING}
           >
-            {loading === LoadingState.LOADING ? "제출 중..." : "제출"}
+            {loading === LoadingState.LOADING
+              ? "제출 중..."
+              : "시간표 링크 제출하기"}
           </Button>
-          <StatusMessage loading={loading} />
         </div>
       </form>
       <NavigationButtons
