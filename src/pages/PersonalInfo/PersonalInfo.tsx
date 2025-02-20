@@ -84,6 +84,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
           }}
           next={methods.handleSubmit(onSubmit)}
           isValid={methods.formState.isValid}
+          first={true}
         />
       </form>
     </FormProvider>

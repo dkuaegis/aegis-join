@@ -173,7 +173,7 @@ function Payment({
         )}
       </div>
 
-      <NavigationButtons prev={onPrev} next={onNext} />
+      <NavigationButtons prev={onPrev} next={onNext} last={true} />
     </div>
   );
 }
