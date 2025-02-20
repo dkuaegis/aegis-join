@@ -109,7 +109,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
           toast.success("시간표가 제출되었습니다!", {
             toastId, // 고유 ID 적용
             transition: fadeInOut,
-            position: "bottom-right",
+            position: "bottom-center", // 중앙 정렬
             autoClose: 1500,
             hideProgressBar: true,
             closeOnClick: true,
@@ -119,8 +119,8 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
             style: {
               width: "84%",
               marginBottom: "50%",
-              marginRight: "8%",
               fontFamily: "Roboto, sans-serif",
+              textAlign: "center", // 텍스트 중앙 정렬
             },
             className: "rounded-lg shadow-lg p-4",
           });
@@ -153,10 +153,10 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
             draggable: false,
             theme: "colored",
             style: {
-              width: "92%",
+              width: "90%",
               marginBottom: "50%",
-              marginRight: "4%",
               fontFamily: "Roboto, sans-serif",
+              textAlign: "center", // 텍스트 중앙 정렬
             },
             className: "rounded-lg shadow-lg p-4",
           });

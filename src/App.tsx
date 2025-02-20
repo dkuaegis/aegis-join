@@ -9,6 +9,7 @@ import useAuth from "./hooks/useAuth";
 import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -35,6 +36,11 @@ function App() {
 
   return (
     <div className="mx-auto mb-4 w-full max-w-md px-4 py-8 pb-28">
+      <ToastContainer
+        position="top-center"
+        draggable={true}
+        pauseOnFocusLoss={false}
+      />
       <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
       <Progress value={progress} className="mt-3 mb-3 w-full" />
       <Routes>

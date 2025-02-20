@@ -20,31 +20,31 @@ function useCopyToClipboard(): UseCopyToClipboard {
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          toast.success("클립보드에 복사했습니다!", {
+          toast.success("클립보드에 복사되었습니다!", {
             toastId, // 고유 ID 적용
             transition: fadeInOut,
-            position: "bottom-right",
-            autoClose: 600,
+            position: "bottom-center", // 중앙 정렬
+            autoClose: 1500,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: false,
             draggable: false,
             theme: "colored",
             style: {
-              width: "84%",
+              width: "90%",
               marginBottom: "50%",
-              marginRight: "8%",
               fontFamily: "Roboto, sans-serif",
+              textAlign: "center", // 텍스트 중앙 정렬
             },
             className: "rounded-lg shadow-lg p-4",
           });
         })
         .catch(() => {
           toast.error("복사에 실패했습니다.", {
-            toastId,
+            toastId, // 고유 ID 적용
             transition: fadeInOut,
-            position: "bottom-right",
-            autoClose: 600,
+            position: "bottom-center", // 중앙 정렬
+            autoClose: 1500,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: false,
@@ -53,8 +53,8 @@ function useCopyToClipboard(): UseCopyToClipboard {
             style: {
               width: "84%",
               marginBottom: "50%",
-              marginRight: "8%",
               fontFamily: "Roboto, sans-serif",
+              textAlign: "center", // 텍스트 중앙 정렬
             },
             className: "rounded-lg shadow-lg p-4",
           });
