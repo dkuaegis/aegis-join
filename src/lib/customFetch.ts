@@ -20,7 +20,7 @@ async function fetchingWithToast(
 
   try {
     const response = await fetch(url, {
-      //credentials: "include",
+      credentials: "include",
       signal: controller.signal,
       ...options,
     });
