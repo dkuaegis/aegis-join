@@ -30,7 +30,7 @@ function Payment({
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
 
-  const { copyMessage, copyToClipboard } = useCopyToClipboard();
+  const { copyToClipboard } = useCopyToClipboard();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,55 +74,29 @@ function Payment({
       <Label className="space-y-2 text-base">송금 안내</Label>
       <Alert>
         <AlertDescription className="space-y-2 text-base">
-          <div>
-            <div className="flex items-center">
-              <span>계좌번호: {ADMIN_INFO.accountNumber}</span>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="ml-2"
-                onClick={() =>
-                  copyToClipboard(ADMIN_INFO.accountNumber ?? "", "account")
-                }
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
-            </div>
-            {copyMessage.account && (
-              <p
-                className={`text-xs ${
-                  copyMessage.account.includes("클립보드에 복사했습니다!")
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
-              >
-                {copyMessage.account}
-              </p>
-            )}
+          <div className="flex items-center">
+            <span>계좌번호: {ADMIN_INFO.accountNumber}</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="ml-2"
+              onClick={() =>
+                copyToClipboard(ADMIN_INFO.accountNumber, "account")
+              }
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
           </div>
-          <div>
-            <div className="flex items-center">
-              <span>송금자명: {senderName}</span>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="ml-2"
-                onClick={() => copyToClipboard(senderName, "sender")}
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
-            </div>
-            {copyMessage.sender && (
-              <p
-                className={`text-xs ${
-                  copyMessage.sender.includes("클립보드에 복사했습니다!")
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
-              >
-                {copyMessage.sender}
-              </p>
-            )}
+          <div className="flex items-center">
+            <span>송금자명: {senderName}</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="ml-2"
+              onClick={() => copyToClipboard(senderName, "sender")}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
           </div>
           <div>
             송금할 금액:{" "}

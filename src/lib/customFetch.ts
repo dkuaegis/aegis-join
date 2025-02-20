@@ -2,6 +2,9 @@ import { toast } from "react-toastify";
 
 const errorToastStyle = {
   theme: "colored",
+  style: {
+    fontFamily: "Roboto, sans-serif",
+  },
   className: "bg-red-300 text-white rounded-lg shadow-lg p-4",
 };
 
@@ -17,7 +20,7 @@ async function fetchingWithToast(
 
   try {
     const response = await fetch(url, {
-      credentials: "include",
+      //credentials: "include",
       signal: controller.signal,
       ...options,
     });

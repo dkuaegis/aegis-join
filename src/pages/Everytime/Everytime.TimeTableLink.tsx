@@ -35,7 +35,7 @@ const EverytimeTimeTableLink = ({
           onChange={onChange}
         />
         {error.url && (
-          <p className="absolute top-full left-0 text-red-500 text-xs">
+          <p className="absolute top-full left-0 text-red-500 text-sm">
             {error.url.message}
           </p>
         )}

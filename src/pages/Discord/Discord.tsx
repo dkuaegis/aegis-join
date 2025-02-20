@@ -21,10 +21,7 @@ interface DiscordProps {
 function Discord({ onNext, onPrev }: DiscordProps) {
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
-  const { copyMessage, copyToClipboard } = useCopyToClipboard();
-  const [messageType, setMessageType] = useState<"success" | "error" | null>(
-    null
-  );
+  const { copyToClipboard } = useCopyToClipboard();
   const { isPolling, setIsPolling } = useDiscordStore();
 
   useEffect(() => {
@@ -33,7 +30,7 @@ function Discord({ onNext, onPrev }: DiscordProps) {
         try {
           const fetchedCode = await fetchDiscordCode();
           setCode(fetchedCode);
-        } catch (err: unknown) {
+        } catch (err) {
           console.error("Failed to fetch Discord code:", err);
         }
       };
@@ -65,16 +62,6 @@ function Discord({ onNext, onPrev }: DiscordProps) {
   const handleCopyToClipboard = useCallback(() => {
     copyToClipboard(code, "discord");
   }, [code, copyToClipboard]);
-
-  useEffect(() => {
-    if (copyMessage.discord === "클립보드에 복사했습니다!") {
-      setMessageType("success");
-    } else if (copyMessage.discord === "복사에 실패했습니다.") {
-      setMessageType("error");
-    } else {
-      setMessageType(null);
-    }
-  }, [copyMessage.discord]);
 
   return (
     <div className="space-y-4">
@@ -112,25 +99,14 @@ function Discord({ onNext, onPrev }: DiscordProps) {
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          <div className="w-full text-left">
-            {copyMessage.discord && (
-              <p
-                className={`ml-8 text-xs ${
-                  messageType === "success" ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {copyMessage.discord}
-              </p>
-            )}
-          </div>
         </div>
       </div>
 
       <div className="flex items-center justify-center">
         {isValid ? (
           <>
-            <CheckCircleIcon className="h-8 w-8 text-green-400" />
-            <p className="pl-4 text-green-400">가입 확인이 완료되었습니다!</p>
+            <CheckCircleIcon className="h-8 w-8 text-green-600" />
+            <p className="pl-4 text-green-600">가입 확인이 완료되었습니다!</p>
           </>
         ) : (
           <>
