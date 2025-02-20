@@ -1,7 +1,7 @@
 import AlertBox from "@/components/ui/custom/alertbox";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { CircleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
-import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { fetchCoupon, submitCoupon } from "./Coupon.Api";
 import { CouponList } from "./Coupon.CouponList";
 import { TotalAmount } from "./Coupon.TotalAmount";

@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 
-import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
 
 import { useSurveyStore } from "@/stores/useSurveyStore";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -76,7 +76,6 @@ function Survey({
       .catch((error) => {
         console.error("제출 중 오류가 발생했습니다:", error);
       });
-    
   };
 
   return (

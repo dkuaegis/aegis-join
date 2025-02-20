@@ -1,12 +1,12 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import AlertBox from "@/components/ui/custom/alertbox";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import AlertBox from "@/components/ui/custom/alertbox";
-import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import { startPaymentPolling } from "./Payment.Api";
 
