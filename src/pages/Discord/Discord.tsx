@@ -1,4 +1,7 @@
+import { Button } from "@/components/ui/button";
+import AlertBox from "@/components/ui/custom/alertbox";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { useDiscordStore } from "@/stores/useDiscordStore";
 import {
   CheckCircleIcon,
@@ -8,9 +11,6 @@ import {
   LoaderCircle,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "../../components/ui/button";
-import AlertBox from "../../components/ui/custom/alertbox";
-import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
 
 interface DiscordProps {
