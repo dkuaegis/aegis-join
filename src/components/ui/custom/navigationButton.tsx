@@ -9,6 +9,10 @@ interface NavigationButtonsProps {
   last?: boolean
 }
 
+function navigationButtonStyle(visible: boolean) {
+  return `w-[40%] ${visible ? "invisible" : ""}`
+}
+
 export default function NavigationButtons({
   prev,
   next,
@@ -27,10 +31,10 @@ export default function NavigationButtons({
   return (
     <div className="fixed right-0 bottom-0 left-0 flex justify-center bg-background/80 p-4 backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-md justify-between px-4 py-4">
-        <Button type="button" onClick={prev} className={first ? "invisible" : ""}>
+        <Button type="button" onClick={prev} className={navigationButtonStyle(first)}>
           이전
         </Button>
-        <Button onClick={next} variant={buttonVariant} className={last ? "invisible" : ""}>
+        <Button onClick={next} variant={buttonVariant} className={navigationButtonStyle(last)}>
           다음
         </Button>
       </div>

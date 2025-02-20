@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 
 import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
-import NavigationButtons from "../../components/ui/custom/navigationButton";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 
 import { useSurveyStore } from "@/stores/useSurveyStore";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,7 +52,7 @@ function Survey({
           setNotInitial();
         })
         .catch((error) => {
-          console.log("please error", error);
+          console.log("설문조사 정보 가져오는데 오류발생.", error);
         });
     }
     return () => {
