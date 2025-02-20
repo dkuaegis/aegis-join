@@ -30,7 +30,7 @@ export default function NavigationButtons({
 
   return (
     <div className="fixed right-0 bottom-0 left-0 flex justify-center bg-background/80 p-4 backdrop-blur-sm">
-      <div className="mx-auto flex w-full max-w-md justify-between px-4 py-4">
+      <div className="mx-auto flex w-full max-w-md justify-between  py-4">
         <Button type="button" onClick={prev} className={navigationButtonStyle(first)}>
           이전
         </Button>
