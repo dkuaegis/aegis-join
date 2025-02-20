@@ -80,9 +80,7 @@ function Payment({
               variant="ghost"
               size="icon"
               className="ml-2"
-              onClick={() =>
-                copyToClipboard(ADMIN_INFO.accountNumber, "account")
-              }
+              onClick={() => copyToClipboard(ADMIN_INFO.accountNumber)}
             >
               <Copy className="h-4 w-4" />
             </Button>
@@ -93,7 +91,7 @@ function Payment({
               variant="ghost"
               size="icon"
               className="ml-2"
-              onClick={() => copyToClipboard(senderName, "sender")}
+              onClick={() => copyToClipboard(senderName)}
             >
               <Copy className="h-4 w-4" />
             </Button>

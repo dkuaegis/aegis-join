@@ -1,11 +1,10 @@
 import { useCallback } from "react";
-import { toast, cssTransition } from "react-toastify";
+import { cssTransition, toast } from "react-toastify";
 
 const fadeInOut = cssTransition({
   enter: "fade-in",
   exit: "fade-out",
 });
-
 
 interface UseCopyToClipboard {
   copyToClipboard: (text: string) => void;
@@ -23,7 +22,7 @@ function useCopyToClipboard(): UseCopyToClipboard {
             toastId, // 고유 ID 적용
             transition: fadeInOut,
             position: "bottom-center", // 중앙 정렬
-            autoClose: 1500,
+            autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: false,
@@ -32,7 +31,7 @@ function useCopyToClipboard(): UseCopyToClipboard {
             style: {
               width: "90%",
               marginBottom: "50%",
-              fontFamily: "Roboto, sans-serif",
+              fontFamily: "sans-serif",
               textAlign: "center", // 텍스트 중앙 정렬
             },
             className: "rounded-lg shadow-lg p-4",
@@ -43,7 +42,7 @@ function useCopyToClipboard(): UseCopyToClipboard {
             toastId, // 고유 ID 적용
             transition: fadeInOut,
             position: "bottom-center", // 중앙 정렬
-            autoClose: 1500,
+            autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: false,
@@ -52,8 +51,8 @@ function useCopyToClipboard(): UseCopyToClipboard {
             style: {
               width: "84%",
               marginBottom: "50%",
-              fontFamily: "Roboto, sans-serif",
-              textAlign: "center", // 텍스트 중앙 정렬
+              fontFamily: "sans-serif",
+              textAlign: "center",
             },
             className: "rounded-lg shadow-lg p-4",
           });

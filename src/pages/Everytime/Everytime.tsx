@@ -6,11 +6,11 @@ import { LoadingState } from "@/types/state/loading";
 import { ClockAlert } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
-import { fetchTimetableData, postTimetableData } from "./Everytime.Api";
+import { type ToastOptions, cssTransition, toast } from "react-toastify";
+import { postTimetableData } from "./Everytime.Api";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
-import { cssTransition, toast, type ToastOptions } from "react-toastify";
 
 const fadeInOut = cssTransition({
   enter: "fade-in",
@@ -40,14 +40,14 @@ const defaultToastOptions: ToastOptions = {
   style: {
     marginBottom: "50%",
     width: "84%",
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: "sans-serif",
     textAlign: "center",
   },
   className: "rounded-lg shadow-lg p-4",
 };
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
-  const { everytimeData, setEverytimeData, isInitial, setNotInitial } =
+  const { everytimeData, setEverytimeData, setNotInitial } =
     useEverytimeStore();
 
   const [formValues, setFormValues] = useState<EverytimeValues>({
@@ -65,19 +65,6 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   useEffect(() => {
     formValuesRef.current = formValues;
   }, [formValues]);
-
-  useEffect(() => {
-    if (isInitial) {
-      const loadData = async () => {
-        const data = await fetchTimetableData();
-        if (data?.url) {
-          setFormValues((prev) => ({ ...prev, url: data.url }));
-        }
-      };
-      loadData();
-      setNotInitial();
-    }
-  }, [isInitial, setNotInitial]);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -121,13 +108,12 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         setNotInitial();
         setIsValid(true);
 
-        // ✅ 중복 방지 토스트 ID 설정
         const toastId = "timetable-toast";
 
         if (!toast.isActive(toastId)) {
           toast.success("시간표가 제출되었습니다!", {
             ...defaultToastOptions,
-            toastId, // 고유 ID 적용
+            toastId,
           });
         }
       } catch (error) {
@@ -143,14 +129,13 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
           setError({ url: { message: "알 수 없는 오류가 발생했습니다." } });
         }
 
-        // ✅ 중복 방지 토스트 ID 설정
         const toastId = "timetable-toast-error";
 
         if (!toast.isActive(toastId)) {
           toast.error("시간표 제출 실패", {
             ...defaultToastOptions,
             toastId, // 고유 ID 적용
-            autoClose: 1000, //Override the default autoclose
+            autoClose: 1000,
           });
         }
       }
