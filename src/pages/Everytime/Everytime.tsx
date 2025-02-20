@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
+import AlertBox from "@/components/ui/custom/alertbox";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { useEverytimeStore } from "@/stores/useEverytimeStore";
 import { LoadingState } from "@/types/state/loading";
 import { CheckCircleIcon, LoaderCircle } from "lucide-react";
 import { ClockAlert } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
-import AlertBox from "../../components/ui/custom/alertbox";
-import NavigationButtons from "../../components/ui/custom/navigationButton";
 import { fetchTimetableData, postTimetableData } from "./Everytime.Api";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";

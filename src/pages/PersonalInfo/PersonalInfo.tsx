@@ -1,8 +1,8 @@
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import NavigationButtons from "../../components/ui/custom/navigationButton";
 import {
   fetchPersonalInfoData,
   submitPersonalInfoData,
@@ -84,6 +84,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
           }}
           next={methods.handleSubmit(onSubmit)}
           isValid={methods.formState.isValid}
+          first={true}
         />
       </form>
     </FormProvider>
