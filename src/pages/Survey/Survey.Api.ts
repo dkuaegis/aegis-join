@@ -1,6 +1,6 @@
 import fetchingWithToast from "@/lib/customFetch";
-import type { SurveyFormValues } from "./Survey.schema";
 import type { InterestField } from "@/types/api/survey";
+import type { SurveyFormValues } from "./Survey.schema";
 
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
   const response = await fetchingWithToast(
@@ -30,12 +30,12 @@ export const submitSurveyData = async (data: SurveyFormValues) => {
 
 function transformSurveyData(data: SurveyFormValues) {
   const filteredInterestsEtc = Object.keys(data.interestsEtc).reduce(
-    (acc,key) => {
+    (acc, key) => {
       const fieldKey = key as InterestField;
       if (data.interests.includes(fieldKey)) {
         acc[fieldKey] = data.interestsEtc[fieldKey];
       }
-      return acc
+      return acc;
     },
     {} as Record<InterestField, string | undefined>
   );

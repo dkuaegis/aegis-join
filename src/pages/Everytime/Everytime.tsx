@@ -126,7 +126,6 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
     },
     [onDataSubmit, setEverytimeData]
   );
-  
 
   const handleNext = useCallback(() => {
     if (!isValid || loading !== LoadingState.SUCCESS) return;

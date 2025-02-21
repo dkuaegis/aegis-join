@@ -1,4 +1,4 @@
-import { toast, cssTransition } from "react-toastify";
+import { cssTransition, toast } from "react-toastify";
 
 const fadeInOut = cssTransition({
   enter: "fade-in",
