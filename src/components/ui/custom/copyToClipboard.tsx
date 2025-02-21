@@ -21,7 +21,26 @@ function useCopyToClipboard(): UseCopyToClipboard {
           toast.success("클립보드에 복사되었습니다!", {
             toastId, // 고유 ID 적용
             transition: fadeInOut,
-            position: "bottom-center", // 중앙 정렬
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            theme: "colored",
+            style: {
+              marginBottom: "50%",
+              fontFamily: "sans-serif",
+              textAlign: "center",
+            },
+            className: "rounded-lg shadow-lg p-4 w-11/12 sm:w-full", // 모바일에서는 84%, PC에서는 100%
+          });
+        })
+        .catch(() => {
+          toast.error("복사에 실패했습니다.", {
+            toastId, // 고유 ID 적용
+            transition: fadeInOut,
+            position: "bottom-center",
             autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
@@ -30,27 +49,8 @@ function useCopyToClipboard(): UseCopyToClipboard {
             theme: "colored",
             style: {
               width: "90%",
-              marginBottom: "50%",
-              fontFamily: "sans-serif",
-              textAlign: "center", // 텍스트 중앙 정렬
-            },
-            className: "rounded-lg shadow-lg p-4",
-          });
-        })
-        .catch(() => {
-          toast.error("복사에 실패했습니다.", {
-            toastId, // 고유 ID 적용
-            transition: fadeInOut,
-            position: "bottom-center", // 중앙 정렬
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
-            theme: "colored",
-            style: {
-              width: "84%",
-              marginBottom: "50%",
+              maxWidth: "400px", // 최대 너비 설정
+              margin: "0 auto 10vh", // 상하 여백 조정
               fontFamily: "sans-serif",
               textAlign: "center",
             },
@@ -64,3 +64,4 @@ function useCopyToClipboard(): UseCopyToClipboard {
 }
 
 export default useCopyToClipboard;
+

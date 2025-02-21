@@ -51,7 +51,7 @@ async function fetchingWithToast(
           transition: fadeInOut,
           style: {
             marginBottom: "50%",
-            width: "90%",
+            width: "84%",
             fontFamily: "sans-serif",
             textAlign: "center",
           },

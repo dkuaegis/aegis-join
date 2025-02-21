@@ -38,12 +38,12 @@ const defaultToastOptions: ToastOptions = {
   theme: "colored",
   style: {
     marginBottom: "50%",
-    width: "84%",
     fontFamily: "sans-serif",
     textAlign: "center",
   },
-  className: "rounded-lg shadow-lg p-4",
+  className: "rounded-lg shadow-lg p-4 w-11/12 sm:w-full", // 모바일에서는 84%, PC에서는 100%
 };
+
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   const { everytimeData, setEverytimeData } = useEverytimeStore();
