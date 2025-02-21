@@ -73,38 +73,45 @@ function Payment({
       <h3 className="font-semibold text-lg">회비 납부</h3>
       <Label className="space-y-2 text-base">송금 안내</Label>
       <Alert>
-        <AlertDescription className="space-y-2 text-base">
-          <div className="flex items-center">
-            <span>계좌번호: {ADMIN_INFO.accountNumber}</span>
+        <AlertDescription className="space-y-3 text-base">
+          <div className="flex h-8 items-center">
+            <span className="w-24 font-medium">계좌번호:</span>
+            <span className="mr-2">{ADMIN_INFO.accountNumber}</span>
             <Button
               variant="ghost"
               size="icon"
-              className="ml-2"
+              className="h-8 w-8 p-0"
               onClick={() => copyToClipboard(ADMIN_INFO.accountNumber)}
             >
               <Copy className="h-4 w-4" />
             </Button>
           </div>
-          <div className="flex items-center">
-            <span>송금자명: {senderName}</span>
+          <div className="flex h-8 items-center">
+            <span className="w-24 font-medium">송금자명:</span>
+            <span className="mr-2">{senderName}</span>
             <Button
               variant="ghost"
               size="icon"
-              className="ml-2"
+              className="h-8 w-8 p-0"
               onClick={() => copyToClipboard(senderName)}
             >
               <Copy className="h-4 w-4" />
             </Button>
           </div>
-          <div>
-            송금할 금액:{" "}
-            {isLoading
-              ? "로딩 중..."
-              : payInfo
-                ? `${remainingAmount.toLocaleString()}원`
-                : "정보를 불러오는 중..."}
+          <div className="flex h-8 items-center">
+            <span className="w-24 font-medium">송금할 금액:</span>
+            <span>
+              {isLoading
+                ? "로딩 중..."
+                : payInfo
+                  ? `${remainingAmount.toLocaleString()}원`
+                  : "정보를 불러오는 중..."}
+            </span>
           </div>
-          <div>예금주명: 윤성민</div>
+          <div className="flex h-8 items-center">
+            <span className="w-24 font-medium">예금주명:</span>
+            <span>윤성민</span>
+          </div>
         </AlertDescription>
       </Alert>
 
@@ -151,3 +158,4 @@ function Payment({
 }
 
 export default Payment;
+
