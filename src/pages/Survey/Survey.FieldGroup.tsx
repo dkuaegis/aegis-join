@@ -24,7 +24,7 @@ export function InterestFieldItem({ id, description }: InterestFieldItemProps) {
 
   return (
     <div key={id} className="flex flex-col justify-center space-y-1 ">
-      <div className="flex min-h-[24px] items-center space-x-2">
+      <div className="flex min-h-[24px] items-center space-x-2 text-xs">
         <ControlledCheckbox id={id} />
         <Label htmlFor={id}>{description}</Label>
         {isETC(id) && isSelected && (
@@ -68,7 +68,7 @@ export function InterestFieldGroup({
         <Icon />
         <Label className="pl-2 font-medium text-xl">{name}</Label>
       </div>
-      <div className="mx-4 mt-2 grid gap-y-4">
+      <div className="mx-4 mt-2 grid gap-y-4 text-base">
         {interestField.map((field) => (
           <InterestFieldItem
             key={field.id}
