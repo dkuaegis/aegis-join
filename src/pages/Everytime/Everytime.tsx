@@ -27,7 +27,6 @@ interface TimetableError {
   url?: { message?: string };
 }
 
-// Default toast options
 const defaultToastOptions: ToastOptions = {
   transition: fadeInOut,
   position: "bottom-center",
@@ -47,8 +46,7 @@ const defaultToastOptions: ToastOptions = {
 };
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
-  const { everytimeData, setEverytimeData, setNotInitial } =
-    useEverytimeStore();
+  const { everytimeData, setEverytimeData } = useEverytimeStore();
 
   const [formValues, setFormValues] = useState<EverytimeValues>({
     url: everytimeData?.url || "",
@@ -88,8 +86,6 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
       try {
         const validationResult = validateEverytime(values);
         if (!validationResult.success) {
-          setError(validationResult.error || {});
-          setLoading(LoadingState.IDLE);
           return;
         }
 
@@ -105,11 +101,9 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         setLoading(LoadingState.SUCCESS);
         setEverytimeData(values);
         onDataSubmit(values);
-        setNotInitial();
         setIsValid(true);
 
         const toastId = "timetable-toast";
-
         if (!toast.isActive(toastId)) {
           toast.success("시간표가 제출되었습니다!", {
             ...defaultToastOptions,
@@ -119,28 +113,18 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
       } catch (error) {
         console.error("Error in handleSubmit:", error);
         setLoading(LoadingState.IDLE);
-        if (error instanceof Error) {
-          setError({
-            url: {
-              message: error.message || "시간표 제출 중 오류가 발생했습니다.",
-            },
-          });
-        } else {
-          setError({ url: { message: "알 수 없는 오류가 발생했습니다." } });
-        }
 
         const toastId = "timetable-toast-error";
-
         if (!toast.isActive(toastId)) {
           toast.error("시간표 제출 실패", {
             ...defaultToastOptions,
-            toastId, // 고유 ID 적용
+            toastId,
             autoClose: 1000,
           });
         }
       }
     },
-    [onDataSubmit, setNotInitial, setEverytimeData]
+    [onDataSubmit, setEverytimeData]
   );
 
   const handleNext = useCallback(() => {
