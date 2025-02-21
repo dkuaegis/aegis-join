@@ -24,12 +24,14 @@ export function InterestFieldItem({ id, description }: InterestFieldItemProps) {
 
   return (
     <div key={id} className="flex flex-col justify-center space-y-1">
-      <div className="flex min-h-[24px] items-center space-x-2 text-[14px] sm:text-[14px]">
+      <div className="flex min-h-[24px] items-center space-x-2">
         <ControlledCheckbox id={id} />
-        <Label htmlFor={id}>{description}</Label>
+        <Label htmlFor={id} className="text-sm sm:text-base">
+          {description}
+        </Label>
         {isETC(id) && isSelected && (
           <EtcInput
-            className="ml-6 text-[14px] sm:text-[14px]" // 입력 필드 내 텍스트 크기 고정
+            className="ml-6 text-sm sm:text-base"
             placeholder="기타 관심 분야를 작성해주세요"
             maxLength={20}
             {...register(`interestsEtc.${id}`)}
@@ -38,7 +40,7 @@ export function InterestFieldItem({ id, description }: InterestFieldItemProps) {
       </div>
       {isETC(id) && (
         <p
-          className={`pl-6 text-[10px] text-red-500 sm:text-[10px] ${
+          className={`pl-6 text-red-500 text-xs ${
             errors.interestsEtc?.[id] && isSelected
               ? "visible opacity-100"
               : "invisible opacity-0"
@@ -64,11 +66,11 @@ export function InterestFieldGroup({
 }: InterestFieldProps) {
   return (
     <div className="mt-4">
-      <div className="flex">
+      <div className="flex items-center">
         <Icon />
-        <Label className="pl-2 font-medium text-xl">{name}</Label>
+        <Label className="pl-2 font-medium text-lg sm:text-xl">{name}</Label>
       </div>
-      <div className="mx-4 mt-2 grid gap-y-4 text-[16px] sm:text-[16px]">
+      <div className="mx-4 mt-2 grid gap-y-4">
         {interestField.map((field) => (
           <InterestFieldItem
             key={field.id}
@@ -80,3 +82,4 @@ export function InterestFieldGroup({
     </div>
   );
 }
+
