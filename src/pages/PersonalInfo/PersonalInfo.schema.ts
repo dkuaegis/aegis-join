@@ -13,7 +13,13 @@ export const personalInfoSchema = z.object({
   gender: z.nativeEnum(Gender, {
     errorMap: () => ({ message: "성별을 선택해주세요" }),
   }),
-  studentId: z.string().length(8, "학번을 입력해주세요"),
+  studentId: z
+    .string()
+    .length(8, "학번은 8자리여야 합니다")
+    .refine(
+      (val) => /^32\d{6}$/.test(val),
+      "학번은 32로 시작하는 8자리 숫자여야 합니다"
+    ),
   phoneNumber: z
     .string()
     .min(1, "전화번호를 입력해주세요")
