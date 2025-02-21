@@ -1,6 +1,6 @@
 import fetchingWithToast from "@/lib/customFetch";
 import type { SurveyFormValues } from "./Survey.schema";
-import { InterestField } from "@/types/api/survey";
+import type { InterestField } from "@/types/api/survey";
 
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
   const response = await fetchingWithToast(
