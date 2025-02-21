@@ -1,14 +1,17 @@
-import { toast } from "react-toastify";
+import { toast, cssTransition } from "react-toastify";
+
+const fadeInOut = cssTransition({
+  enter: "fade-in",
+  exit: "fade-out",
+});
 
 const errorToastStyle = {
   theme: "colored",
-  style: {
-    fontFamily: "sans-serif",
-  },
-  className: "bg-red-300 text-white rounded-lg shadow-lg p-4",
+  className: "rounded-lg shadow-lg p-4 bg-red-300 text-white",
 };
 
 const TIMEOUT_MS = 5000;
+const TOAST_ID = "fetch-error-toast";
 
 // promise 를 반환하는 함수. 미들웨어 패턴을 위한 함수라고 생각하면 된다.
 async function fetchingWithToast(
@@ -36,7 +39,24 @@ async function fetchingWithToast(
         errorMessage = "알 수 없는 에러가 발생하였습니다! 다시 시도해 주세요";
       }
 
-      toast.error(`${response.status} 에러!  ${errorMessage}`, errorToastStyle);
+      if (!toast.isActive(TOAST_ID)) {
+        toast.error(`${response.status} 에러!  ${errorMessage}`, {
+          ...errorToastStyle,
+          toastId: TOAST_ID,
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          position: "bottom-center",
+          transition: fadeInOut,
+          style: {
+            marginBottom: "50%",
+            width: "90%",
+            fontFamily: "sans-serif",
+            textAlign: "center",
+          },
+        });
+      }
       throw new Error(errorMessage);
     }
 
@@ -44,10 +64,27 @@ async function fetchingWithToast(
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.name === "AbortError") {
-        toast.error(
-          `요청이 ${TIMEOUT_MS / 1000}초 후에 타임아웃 되었습니다!. `,
-          errorToastStyle
-        );
+        if (!toast.isActive(TOAST_ID)) {
+          toast.error(
+            `요청이 ${TIMEOUT_MS / 1000}초 후에 타임아웃 되었습니다!. `,
+            {
+              ...errorToastStyle,
+              toastId: TOAST_ID,
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: false,
+              position: "bottom-center",
+              transition: fadeInOut,
+              style: {
+                marginBottom: "50%",
+                width: "84%",
+                fontFamily: "sans-serif",
+                textAlign: "center",
+              },
+            }
+          );
+        }
         throw new Error("요청 시간 초과");
       }
       throw error;

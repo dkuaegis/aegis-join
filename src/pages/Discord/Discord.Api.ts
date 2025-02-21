@@ -5,7 +5,7 @@ export const fetchDiscordCode = async (): Promise<string> => {
     const response = await fetchingWithToast(
       `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,
       {
-        //credentials: "include",
+        credentials: "include",
         method: "POST",
       }
     );
@@ -26,12 +26,9 @@ export const startDiscordPolling = async (): Promise<boolean> => {
   return new Promise((resolve) => {
     const poll = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/discord/myid`,
-          {
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/discord/myid`, {
+          credentials: "include",
+        });
 
         if (!response.ok) {
           throw new Error(`ERROR on polling: ${response.status}`);
