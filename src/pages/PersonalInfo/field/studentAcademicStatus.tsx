@@ -23,7 +23,7 @@ export const StudentAcademicStatus = forwardRef<
   return (
     <div className="space-y-2" {...props} ref={ref}>
       <Label htmlFor="academicStatus">모집 학기 기준 학적</Label>
-      <Select value={field.value} onValueChange={field.onChange}>
+      <Select value={field.value ?? ""} onValueChange={field.onChange}>
         <SelectTrigger
           id="academicStatus"
           className={error && !isValid ? "border-red-500" : ""}
