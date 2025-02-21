@@ -4,18 +4,27 @@ import { forwardRef, useCallback } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 
 interface StudentIdProps {
-  name: string; // name prop 추가
+  name: string;
 }
-
 export const StudentId = forwardRef<HTMLInputElement, StudentIdProps>(
   ({ name, ...props }, ref) => {
     const { field, error, isValid } = useControllerField({ name });
 
-    // 숫자만 입력 가능하도록 처리하는 함수
     const handleInputChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value.replace(/[^0-9]/g, ""); // 숫자 이외의 문자 제거
-        field.onChange(value); // 변경된 값을 field.onChange에 전달
+        let value = event.target.value.replace(/[^0-9]/g, "");
+
+        if (!value.startsWith("32")) {
+          // 32로 시작하도록 강제
+          value = "32";
+        }
+
+        if (value.length > 8) {
+          // 8자리까지만 허용
+          value = value.slice(0, 8);
+        }
+
+        field.onChange(value); // 변경된 값 적용
       },
       [field.onChange]
     );
@@ -24,22 +33,22 @@ export const StudentId = forwardRef<HTMLInputElement, StudentIdProps>(
       <div className="space-y-2">
         <Label htmlFor="studentId">학번</Label>
         <Input
-          type="text" // type을 "number"에서 "text"로 변경 (type number는 0으로 시작하는 숫자 입력이 안됨)
+          type="text"
           id="studentId"
           placeholder="32000000"
           maxLength={8}
           ref={ref}
           className={error && !isValid ? "border-red-500" : ""}
           value={field.value || ""}
-          onChange={handleInputChange} // handleInputChange 함수 연결
+          onChange={handleInputChange}
           {...props}
         />
         {error && !isValid && (
-          <p className="text-red-500 text-xs">학번을 입력해주세요</p>
+          <p className="text-red-500 text-xs">
+            학번은 32로 시작하는 8자리 숫자여야 합니다
+          </p>
         )}
       </div>
     );
   }
 );
-
-StudentId.displayName = "StudentId";
