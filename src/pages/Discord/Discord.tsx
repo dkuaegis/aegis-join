@@ -69,10 +69,10 @@ function Discord({ onNext, onPrev }: DiscordProps) {
       <AlertBox
         icon={<CircleHelp className="h-4 w-4" />}
         title="디스코드 연동이 왜 필요한가요?"
-        description={["어쩌구 저쩌구"]}
+        description={["디스코드는 주제별 채널로 대화를 체계화하고, 알림 관리와 음성 채팅 기능을 통해 더 효율적인 소통을 제공해요! 또한, 카카오톡과는 달리 연락처를 제공하고 초대하는 과정을 생략할 수 있어요."]}
       />
       <div className="space-y-2">
-        <div className="flex flex-col items-center justify-center gap-y-4 rounded-lg bg-secondary p-6">
+        <div className="flex flex-col items-center justify-center rounded-lg bg-secondary p-6">
           <div className="flex items-center justify-center gap-x-4">
             <div className="flex items-center gap-2">
               <span className="truncate font-extrabold text-2xl text-primary">
