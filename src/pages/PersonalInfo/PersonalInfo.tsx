@@ -60,7 +60,6 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
       })
       .catch((error) => {
         console.error("제출 중 오류가 발생했습니다:", error);
-        // TODO: 사용자에게 에러 메시지 표시
       });
   };
 

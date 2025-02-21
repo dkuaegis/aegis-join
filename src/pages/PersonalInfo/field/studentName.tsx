@@ -18,6 +18,7 @@ export const StudentName = forwardRef<HTMLInputElement, StudentNameProps>(
           id="name"
           placeholder="홍길동"
           ref={ref}
+          disabled
           className={error && !isValid ? "border-red-500" : ""}
           value={field.value || ""} // field.value 연결
           onChange={field.onChange} // field.onChange 연결
