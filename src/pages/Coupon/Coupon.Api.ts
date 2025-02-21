@@ -13,7 +13,7 @@ export const fetchCoupon = async (): Promise<Coupon[]> => {
 };
 
 export const submitCoupon = async (selectedCoupons: number[]) => {
-  const payload = selectedCoupons;
+  const payload = { issuedCouponIds: selectedCoupons };
 
   const response = await fetchingWithToast(
     `${import.meta.env.VITE_API_URL}/payments`,
