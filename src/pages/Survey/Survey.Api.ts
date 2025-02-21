@@ -2,6 +2,7 @@ import fetchingWithToast from "@/lib/customFetch";
 import type { InterestField } from "@/types/api/survey";
 import type { SurveyFormValues } from "./Survey.schema";
 
+
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
   const response = await fetchingWithToast(
     `${import.meta.env.VITE_API_URL}/survey`
