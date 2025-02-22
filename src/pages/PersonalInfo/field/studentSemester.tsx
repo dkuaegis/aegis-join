@@ -20,7 +20,7 @@ export const StudentSemester = forwardRef<HTMLDivElement, StudentSemesterProps>(
     return (
       <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="semester">모집 학기 기준 학기</Label>
-        <Select value={field.value} onValueChange={field.onChange}>
+        <Select value={field.value ?? ""} onValueChange={field.onChange}>
           <SelectTrigger className={error && !isValid ? "border-red-500" : ""}>
             <SelectValue placeholder="학기 선택" />
           </SelectTrigger>
