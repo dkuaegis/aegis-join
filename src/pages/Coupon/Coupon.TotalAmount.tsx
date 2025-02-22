@@ -2,7 +2,7 @@ import type { Coupon, TotalAmountProps } from "./Coupon.Types";
 
 const totalAmount = (coupons: Coupon[], selectedCoupons: number[]) =>
   coupons.reduce((sum, coupon) => {
-    if (selectedCoupons.includes(coupon.couponId)) {
+    if (selectedCoupons.includes(coupon.issuedCouponId)) {
       return sum + coupon.discountAmount;
     }
     return sum;

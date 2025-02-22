@@ -21,7 +21,7 @@ export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
     const data: GetPaymentInfo = await response.json();
 
     return {
-      isSuccess: ["COMPLETE", "OVERPAID"].includes(data.status),
+      isSuccess: ["COMPLETED", "OVERPAID"].includes(data.status),
       paymentInfo: data,
     };
   } catch (err) {
@@ -55,7 +55,7 @@ export const startPaymentPolling = (
 
       if (
         result.paymentInfo &&
-        ["COMPLETE", "OVERPAID"].includes(result.paymentInfo.status)
+        ["COMPLETED", "OVERPAID"].includes(result.paymentInfo.status)
       ) {
         pollingActive = false;
         clearInterval(pollingInterval);

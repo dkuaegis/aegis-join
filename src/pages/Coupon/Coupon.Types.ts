@@ -1,7 +1,7 @@
 import type * as React from "react";
 
 export interface Coupon {
-  couponId: number;
+  issuedCouponId: number;
   discountAmount: number;
   couponName: string;
 }
