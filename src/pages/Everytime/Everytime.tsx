@@ -11,6 +11,7 @@ import { postTimetableData } from "./Everytime.Api";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
+import HowtoDo from "./Everytime.HowtoDo";
 
 const fadeInOut = cssTransition({
   enter: "fade-in",
@@ -167,6 +168,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
           </Button>
         </div>
       </form>
+      <HowtoDo />
       <NavigationButtons
         prev={onPrev}
         next={handleNext}

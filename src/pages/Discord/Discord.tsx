@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
+import HowtoDo from "./Discord.HowToDo";
 
 interface DiscordProps {
   onNext: () => void;
@@ -104,6 +105,8 @@ function Discord({ onNext, onPrev }: DiscordProps) {
           </>
         )}
       </div>
+
+      <HowtoDo />
 
       <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />
     </div>

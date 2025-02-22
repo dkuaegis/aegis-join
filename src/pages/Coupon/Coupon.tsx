@@ -6,6 +6,7 @@ import { fetchCoupon, submitCoupon } from "./Coupon.Api";
 import { CouponList } from "./Coupon.CouponList";
 import { TotalAmount } from "./Coupon.TotalAmount";
 import type { Coupon as CouponType } from "./Coupon.Types";
+import InputCouponCode from "./Coupon.InputCouponCode";
 
 export default function Coupon({
   onNext,
@@ -36,6 +37,7 @@ export default function Coupon({
   return (
     <div className="space-y-4">
       <h3 className="font-semibold text-lg">쿠폰을 선택해주세요 !</h3>
+      <div>
       {coupons.length === 0 ? (
         <AlertBox
           icon={<CircleAlert className="h-4 w-4" />}
@@ -52,6 +54,8 @@ export default function Coupon({
           <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
         </div>
       )}
+      </div>
+      <InputCouponCode setCoupons={setCoupons}/>
       <NavigationButtons prev={onPrev} next={onSubmit} isValid={true} />
     </div>
   );
