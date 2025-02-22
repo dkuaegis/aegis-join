@@ -13,6 +13,45 @@ const errorToastStyle = {
 const TIMEOUT_MS = 5000;
 const TOAST_ID = "fetch-error-toast";
 
+async function errorHandlingWithToast(response: Response) {
+
+  let errorMessage = "";
+  try {
+    const error = await response.json();
+    errorMessage =
+    error.name ||
+      "알 수 없는 에러가 발생하였습니다! 다시 시도해 주세요";
+  } catch {
+    errorMessage = "알 수 없는 에러가 발생하였습니다! 다시 시도해 주세요";
+  }
+
+  if (response.status === 404) {
+    return response;
+  }
+
+
+  if (!toast.isActive(TOAST_ID)) {
+    toast.error(`${response.status} 에러!  ${errorMessage}`, {
+      ...errorToastStyle,
+      toastId: TOAST_ID,
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      position: "bottom-center",
+      transition: fadeInOut,
+      style: {
+        marginBottom: "50%",
+        width: "84%",
+        fontFamily: "sans-serif",
+        textAlign: "center",
+      },
+    });
+  }
+
+  throw new Error(errorMessage);
+}
+
 // promise 를 반환하는 함수. 미들웨어 패턴을 위한 함수라고 생각하면 된다.
 async function fetchingWithToast(
   url: string,
@@ -29,41 +68,11 @@ async function fetchingWithToast(
     });
 
     if (!response.ok) {
-      if (response.status === 404) {
-        return response;
-      }
-      let errorMessage = "";
-      try {
-        const data = await response.json();
-        errorMessage =
-          data.message ||
-          "알 수 없는 에러가 발생하였습니다! 다시 시도해 주세요";
-      } catch {
-        errorMessage = "알 수 없는 에러가 발생하였습니다! 다시 시도해 주세요";
-      }
-
-      if (!toast.isActive(TOAST_ID)) {
-        toast.error(`${response.status} 에러!  ${errorMessage}`, {
-          ...errorToastStyle,
-          toastId: TOAST_ID,
-          autoClose: 1000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          position: "bottom-center",
-          transition: fadeInOut,
-          style: {
-            marginBottom: "50%",
-            width: "84%",
-            fontFamily: "sans-serif",
-            textAlign: "center",
-          },
-        });
-      }
-      throw new Error(errorMessage);
+      await errorHandlingWithToast(response);
     }
 
     return response;
+
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.name === "AbortError") {
