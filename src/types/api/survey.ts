@@ -1,7 +1,7 @@
 export enum InterestField {
   // 보안 분야
-  SECURITY_WEBHACKING = "SECURITY_WEBHACKING",
-  SECURITY_SYSTEMHACKING = "SECURITY_SYSTEMHACKING",
+  SECURITY_WEB_HACKING = "SECURITY_WEB_HACKING",
+  SECURITY_SYSTEM_HACKING = "SECURITY_SYSTEM_HACKING",
   SECURITY_REVERSING = "SECURITY_REVERSING",
   SECURITY_FORENSIC = "SECURITY_FORENSIC",
   SECURITY_MALWARE = "SECURITY_MALWARE",
@@ -28,14 +28,3 @@ export enum InterestField {
   NOT_SURE = "NOT_SURE",
   ETC = "ETC",
 }
-
-export interface SurveyForm {
-  interests: InterestField[];
-  interestsEtc: Record<InterestField, string>;
-  registrationReason: string;
-  feedback: string;
-}
-
-export interface GetSurveyForm extends SurveyForm {}
-
-export interface PostSurveyForm extends SurveyForm {}
