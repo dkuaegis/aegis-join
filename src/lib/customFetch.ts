@@ -29,6 +29,9 @@ async function fetchingWithToast(
     });
 
     if (!response.ok) {
+      if (response.status === 404) {
+        return response;
+      }
       let errorMessage = "";
       try {
         const data = await response.json();

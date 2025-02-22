@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import AlertBox from "@/components/ui/custom/alertbox";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
-import { useDiscordStore } from "@/stores/useDiscordStore";
 import {
   CheckCircleIcon,
   CircleHelp,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
+import HowtoDo from "./Discord.HowtoDo";
 
 interface DiscordProps {
   onNext: () => void;
@@ -22,38 +22,28 @@ function Discord({ onNext, onPrev }: DiscordProps) {
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
   const { copyToClipboard } = useCopyToClipboard();
-  const { isPolling, setIsPolling } = useDiscordStore();
 
+  // 컴포넌트 마운트 시 한 번 Discord 코드를 불러옵니다.
   useEffect(() => {
-    if (isPolling) {
-      const getDiscordCode = async () => {
-        try {
-          const fetchedCode = await fetchDiscordCode();
-          setCode(fetchedCode);
-        } catch (err) {
-          console.error("Failed to fetch Discord code:", err);
-        }
-      };
-
-      getDiscordCode();
-    }
-  }, [isPolling]);
-
-  useEffect(() => {
-    const pollDiscordStatus = async () => {
+    const getDiscordCode = async () => {
       try {
-        const joined = await startDiscordPolling();
-        setIsValid(joined);
-        if (joined) {
-          setIsPolling(false);
-        }
-      } catch (error) {
-        console.error("Discord polling failed:", error);
+        const fetchedCode = await fetchDiscordCode();
+        setCode(fetchedCode);
+      } catch (err) {
+        console.error("Failed to fetch Discord code:", err);
       }
     };
 
-    pollDiscordStatus();
-  }, [setIsPolling]);
+    getDiscordCode();
+  }, []);
+
+  // 디스코드 가입 여부 폴링
+  useEffect(() => {
+    const cleanupPolling = startDiscordPolling(setIsValid);
+    return () => {
+      cleanupPolling();
+    };
+  }, []);
 
   const handleNext = useCallback(() => {
     if (isValid) onNext();
@@ -78,9 +68,9 @@ function Discord({ onNext, onPrev }: DiscordProps) {
           <div className="flex items-center justify-center gap-x-4">
             <div className="flex items-center gap-2">
               <span className="truncate font-extrabold text-2xl text-primary">
-                {isPolling ? code || "코드 불러오는 중..." : "연동 완료"}
+                {isValid ? "연동 완료" : code || "코드 불러오는 중..."}
               </span>
-              {isPolling && (
+              {!isValid && (
                 <Button
                   className="border-2 border-gray-600"
                   variant="secondary"
@@ -117,6 +107,8 @@ function Discord({ onNext, onPrev }: DiscordProps) {
           </>
         )}
       </div>
+
+      <HowtoDo />
 
       <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />
     </div>
