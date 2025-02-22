@@ -31,21 +31,37 @@ export const submitCoupon = async (selectedCoupons: number[]) => {
   return response.json();
 };
 
-export const submitCouponCode = async (couponCode: number) => {
-  const payload = couponCode;
+export const submitAndFetchCouponCode = async (couponCode: string) => {
 
-  const response = await fetchingWithToast(
-    `${import.meta.env.VITE_API_URL}/payments`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+  try {
+    const payload = { code: couponCode };
+
+    const postResponse = await fetchingWithToast(
+      `${import.meta.env.VITE_API_URL}/coupons/code`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+    if (!postResponse.ok) {
+      throw new Error("Error at submit COUPON CODE !");
     }
-  );
-  if (!response.ok) {
-    throw new Error("Error at submit COUPON !");
+
+    const getResponse = await fetchingWithToast(
+      `${import.meta.env.VITE_API_URL}/coupons/issued/me`);
+
+    if (!getResponse.ok) {
+      throw new Error("Error at fetch COUPONS !");
+    }
+
+    const result = await getResponse.json();
+    return result;
+  } catch (error: unknown) {
+    console.log("에러 발생", error);
+    throw error;
   }
-  return response.json();
+
 };

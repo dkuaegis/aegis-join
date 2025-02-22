@@ -22,6 +22,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import CouponForm from "./Coupon.CouponForm";
 import type { Coupon } from "./Coupon.Types";
+import { submitAndFetchCouponCode } from "./Coupon.Api";
 
 interface InputCouponCodeProps {
   setCoupons: React.Dispatch<React.SetStateAction<Coupon[]>>;
@@ -50,19 +51,13 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
     (e: React.FormEvent) => {
       e.preventDefault();
       // 여기에 쿠폰 등록 로직을 구현하세요
-      console.log("Submitted coupon code:", couponCode);
-      setCoupons([
-        {
-          issuedCouponId: 1,
-          discountAmount: 2,
-          couponName: "적용됨",
-        },
-        {
-          issuedCouponId: 2,
-          discountAmount: 26,
-          couponName: "ㄴㄴ",
-        },
-      ]);
+      submitAndFetchCouponCode(couponCode)
+        .then((data) => {
+          setCoupons(data);
+        })
+        .catch((error) => {
+          console.log("please error", error);
+        });
       setOpen(false);
       setCouponCode("");
     },
