@@ -7,8 +7,8 @@ export interface InterestItem {
 
 // 보안 항목들
 const securityList: InterestItem[] = [
-  { id: InterestField.SECURITY_WEBHACKING, description: "웹해킹" },
-  { id: InterestField.SECURITY_SYSTEMHACKING, description: "시스템해킹" },
+  { id: InterestField.SECURITY_WEB_HACKING, description: "웹해킹" },
+  { id: InterestField.SECURITY_SYSTEM_HACKING, description: "시스템해킹" },
   { id: InterestField.SECURITY_REVERSING, description: "리버싱" },
   { id: InterestField.SECURITY_FORENSIC, description: "포렌식" },
   { id: InterestField.SECURITY_MALWARE, description: "악성코드분석" },
