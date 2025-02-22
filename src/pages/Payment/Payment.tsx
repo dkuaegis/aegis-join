@@ -152,7 +152,12 @@ function Payment({
         )}
       </div>
 
-      <NavigationButtons prev={onPrev} next={onNext} last={true} />
+      <NavigationButtons
+        prev={onPrev}
+        next={onNext}
+        showNext={true}
+        showPrev={isValid}
+      />
     </div>
   );
 }
