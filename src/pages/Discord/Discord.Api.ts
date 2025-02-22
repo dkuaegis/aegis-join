@@ -20,34 +20,67 @@ export const fetchDiscordCode = async (): Promise<string> => {
   }
 };
 
-export const startDiscordPolling = async (): Promise<boolean> => {
-  const interval = 2000;
-  let attempts = 0;
-  return new Promise((resolve) => {
-    const poll = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/discord/myid`, {
-          credentials: "include",
-        });
+interface DiscordResponse {
+  discordId: string | null;
+}
 
-        if (!response.ok) {
-          throw new Error(`ERROR on polling: ${response.status}`);
-        }
+interface DiscordPollingResult {
+  isSuccess: boolean;
+  discordInfo?: DiscordResponse;
+}
 
-        const data = await response.json();
-
-        if (data.discordId !== null) {
-          resolve(true);
-          return;
-        }
-      } catch (err) {
-        console.error("디스코드 폴링 중 오류 발생:", err);
+export const pollDiscordStatus = async (): Promise<DiscordPollingResult> => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/discord/myid`,
+      {
+        credentials: "include",
       }
+    );
 
-      attempts++;
-      setTimeout(poll, interval);
+    if (!response.ok) {
+      throw new Error(`ERROR on polling: ${response.status}`);
+    }
+
+    const data: DiscordResponse = await response.json();
+
+    return {
+      isSuccess: data.discordId !== null,
+      discordInfo: data,
     };
+  } catch (err) {
+    console.error("디스코드 폴링 중 오류 발생:", err);
+    throw err;
+  }
+};
 
-    poll();
-  });
+export const startDiscordPolling = (
+  setIsValid: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  let pollingActive = true;
+  const interval = 2000;
+
+  const pollDiscordStatusInterval = async () => {
+    try {
+      const result = await pollDiscordStatus();
+      if (!pollingActive) return;
+
+      setIsValid(result.isSuccess);
+
+      if (result.isSuccess) {
+        pollingActive = false;
+        clearInterval(pollingInterval);
+      }
+    } catch (error) {
+      console.error("디스코드 폴링 실패:", error);
+    }
+  };
+
+  const pollingInterval = setInterval(pollDiscordStatusInterval, interval);
+  pollDiscordStatusInterval();
+
+  return () => {
+    pollingActive = false;
+    clearInterval(pollingInterval);
+  };
 };
