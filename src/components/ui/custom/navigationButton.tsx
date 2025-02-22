@@ -5,20 +5,20 @@ interface NavigationButtonsProps {
   prev: () => void;
   next: () => void;
   isValid?: boolean;
-  first?: boolean;
-  last?: boolean;
+  showPrev?: boolean;
+  showNext?: boolean;
 }
 
 function navigationButtonStyle(visible: boolean) {
-  return `w-[42.5%]  ${visible ? "invisible" : ""}`;
+  return `w-[42.5%] ${visible ? "invisible" : ""}`;
 }
 
 export default function NavigationButtons({
   prev,
   next,
   isValid,
-  first = false,
-  last = false,
+  showPrev = false,
+  showNext = false,
 }: NavigationButtonsProps) {
   const [buttonVariant, setButtonVariant] = useState<"default" | "secondary">(
     "default"
@@ -36,7 +36,7 @@ export default function NavigationButtons({
           variant="outline"
           onClick={prev}
           size="lg"
-          className={navigationButtonStyle(first)}
+          className={navigationButtonStyle(showPrev)}
         >
           이전
         </Button>
@@ -44,7 +44,7 @@ export default function NavigationButtons({
           onClick={next}
           variant={buttonVariant}
           size="lg"
-          className={navigationButtonStyle(last)}
+          className={navigationButtonStyle(showNext)}
         >
           다음
         </Button>
