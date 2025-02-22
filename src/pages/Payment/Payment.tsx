@@ -78,9 +78,7 @@ function Payment({
         <AlertDescription className="space-y-2 text-sm sm:text-base">
           <div className="flex items-center">
             <span className="trunum w-20 font-medi">계좌번호:</span>
-            <span className="mr-1 flex-growcate pr-0">
-              {ADMIN_INFO.accountNumber}
-            </span>
+            <span className="mr-1 pr-0">{ADMIN_INFO.accountNumber}</span>
             <Button
               variant="ghost"
               size="sm"
@@ -92,7 +90,7 @@ function Payment({
           </div>
           <div className="flex items-center">
             <span className="w-20 font-medium">송금자명:</span>
-            <span className="mr-1 flex-growcate pr-0">{senderName}</span>
+            <span className="mr-1 pr-0">{senderName}</span>
             <Button
               variant="ghost"
               size="sm"
