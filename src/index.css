@@ -106,8 +106,6 @@ html {
   animation: fadeOut 0.3s ease-out forwards;
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -62,4 +62,3 @@ function useCopyToClipboard(): UseCopyToClipboard {
 }
 
 export default useCopyToClipboard;
-

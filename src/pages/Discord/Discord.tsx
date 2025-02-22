@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
-import HowtoDo from "./Discord.HowToDo";
+import HowtoDo from "./Discord.HowtoDo";
 
 interface DiscordProps {
   onNext: () => void;
@@ -59,7 +59,9 @@ function Discord({ onNext, onPrev }: DiscordProps) {
       <AlertBox
         icon={<CircleHelp className="h-4 w-4" />}
         title="디스코드 연동이 왜 필요한가요?"
-        description={["디스코드는 주제별 채널로 대화를 체계화하고, 알림 관리와 음성 채팅 기능을 통해 더 효율적인 소통을 제공해요! 또한, 카카오톡과는 달리 연락처를 제공하고 초대하는 과정을 생략할 수 있어요."]}
+        description={[
+          "디스코드는 주제별 채널로 대화를 체계화하고, 알림 관리와 음성 채팅 기능을 통해 더 효율적인 소통을 제공해요! 또한, 카카오톡과는 달리 연락처를 제공하고 초대하는 과정을 생략할 수 있어요.",
+        ]}
       />
       <div className="space-y-2">
         <div className="flex flex-col items-center justify-center rounded-lg bg-secondary p-6">

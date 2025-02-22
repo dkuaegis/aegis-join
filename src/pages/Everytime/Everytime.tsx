@@ -8,10 +8,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import { type ToastOptions, cssTransition, toast } from "react-toastify";
 import { postTimetableData } from "./Everytime.Api";
+import HowtoDo from "./Everytime.HowtoDo";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
-import HowtoDo from "./Everytime.HowtoDo";
 
 const fadeInOut = cssTransition({
   enter: "fade-in",
@@ -44,7 +44,6 @@ const defaultToastOptions: ToastOptions = {
   },
   className: "rounded-lg shadow-lg p-4 w-11/12 sm:w-full", // 모바일에서는 84%, PC에서는 100%
 };
-
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   const { everytimeData, setEverytimeData } = useEverytimeStore();
