@@ -20,7 +20,6 @@ import Discord from "./pages/Discord/Discord";
 
 function App() {
   const { isAuthenticated } = useAuth();
-  console.log(isAuthenticated);
   const { currentStep, progress, next, prev, goto } = useFunnel({
     steps: [
       "PersonalInfo",
