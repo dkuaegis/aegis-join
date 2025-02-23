@@ -4,16 +4,16 @@ import LoginPage from "@/pages/LoginPage";
 import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import useAuth from "./hooks/useAuth";
 import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
+import { useEffect } from "react";
 
 function App() {
   const { isAuthenticated } = useAuth();
-
   const { currentStep, progress, next, prev } = useFunnel({
     steps: [
       "PersonalInfo",
@@ -25,6 +25,21 @@ function App() {
     ],
     initialStep: "PersonalInfo",
   });
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    window.history.pushState(null, '', location.pathname);
+
+    const handlePopState = () => {
+      navigate(location.pathname, { replace: true });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [location, navigate]);
 
   if (isAuthenticated === null) {
     return null;

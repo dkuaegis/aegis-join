@@ -7,9 +7,32 @@ import {
 } from "@/types/api/member";
 import { z } from "zod";
 
+// 생년월일 유효성 검사 함수 (YYMMDD 형식, 월/일 범위만 체크)
+const isValidBirthDate = (birthDate: string): boolean => {
+  if (!/^\d{6}$/.test(birthDate)) {
+    return false; // 형식이 YYMMDD가 아니면 false
+  }
+
+  const month = Number.parseInt(birthDate.substring(2, 4));
+  const day = Number.parseInt(birthDate.substring(4, 6));
+
+  if (month < 1 || month > 12) {
+    return false; // 월이 1~12 범위를 벗어나면 false
+  }
+
+  if (day < 1 || day > 31) {
+    return false; // 일이 1~31 범위를 벗어나면 false
+  }
+
+  return true; // 유효한 YYMMDD 형식이고 월/일이 범위 내에 있으면 true
+};
+
 export const personalInfoSchema = z.object({
   name: z.string().min(1, "이름을 입력해주세요"),
-  birthDate: z.string().length(6, "생년월일을 입력해주세요"),
+  birthDate: z
+    .string()
+    .length(6, "생년월일을 6자리로 입력해주세요 (YYMMDD)")
+    .refine(isValidBirthDate, "유효하지 않은 생년월일입니다 (월/일 범위: 1~12, 1~31)"), // 유효성 검사 메시지 수정
   gender: z.nativeEnum(Gender, {
     errorMap: () => ({ message: "성별을 선택해주세요" }),
   }),
