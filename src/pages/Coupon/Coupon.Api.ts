@@ -32,7 +32,6 @@ export const submitCoupon = async (selectedCoupons: number[]) => {
 };
 
 export const submitAndFetchCouponCode = async (couponCode: string) => {
-
   try {
     const payload = { code: couponCode };
 
@@ -51,7 +50,8 @@ export const submitAndFetchCouponCode = async (couponCode: string) => {
     }
 
     const getResponse = await fetchingWithToast(
-      `${import.meta.env.VITE_API_URL}/coupons/issued/me`);
+      `${import.meta.env.VITE_API_URL}/coupons/issued/me`
+    );
 
     if (!getResponse.ok) {
       throw new Error("Error at fetch COUPONS !");
@@ -63,5 +63,4 @@ export const submitAndFetchCouponCode = async (couponCode: string) => {
     console.log("에러 발생", error);
     throw error;
   }
-
 };

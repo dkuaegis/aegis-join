@@ -32,7 +32,10 @@ export const personalInfoSchema = z.object({
   birthDate: z
     .string()
     .length(6, "생년월일을 6자리로 입력해주세요 (YYMMDD)")
-    .refine(isValidBirthDate, "유효하지 않은 생년월일입니다 (월/일 범위: 1~12, 1~31)"), // 유효성 검사 메시지 수정
+    .refine(
+      isValidBirthDate,
+      "유효하지 않은 생년월일입니다 (월/일 범위: 1~12, 1~31)"
+    ), // 유효성 검사 메시지 수정
   gender: z.nativeEnum(Gender, {
     errorMap: () => ({ message: "성별을 선택해주세요" }),
   }),

@@ -36,7 +36,7 @@ export default function Coupon({
 
   return (
     <div className="space-y-4">
-      <h3 className="font-semibold text-lg">쿠폰을 선택해주세요 !</h3>
+      <h3 className="font-semibold text-lg">쿠폰 선택</h3>
       <div>
         {coupons.length === 0 ? (
           <AlertBox

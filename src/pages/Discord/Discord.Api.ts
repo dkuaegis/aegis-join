@@ -58,7 +58,7 @@ export const startDiscordPolling = (
   setIsValid: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   let pollingActive = true;
-  const interval = 2000;
+  const interval = 5000;
 
   const pollDiscordStatusInterval = async () => {
     try {

@@ -94,7 +94,7 @@ function Discord({ onNext, onPrev }: DiscordProps) {
         </div>
       </div>
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center py-4">
         {isValid ? (
           <>
             <CheckCircleIcon className="h-8 w-8 text-green-600" />
@@ -108,6 +108,7 @@ function Discord({ onNext, onPrev }: DiscordProps) {
         )}
       </div>
 
+      <h4 className="font-semibold text-lg">연동 방법</h4>
       <HowtoDo />
 
       <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />

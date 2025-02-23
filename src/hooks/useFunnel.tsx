@@ -42,7 +42,7 @@ function useFunnel({ steps, initialStep }: UseFunnelConfig) {
     }
   };
 
-  const goTo = (step: string) => {
+  const goto = (step: string) => {
     if (steps.includes(step)) {
       navigate(`/${step}`);
     }
@@ -54,7 +54,7 @@ function useFunnel({ steps, initialStep }: UseFunnelConfig) {
     progress,
     next,
     prev,
-    goTo,
+    goto,
   };
 }
 

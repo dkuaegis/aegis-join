@@ -36,7 +36,7 @@ export const startPaymentPolling = (
   setRemainingAmount: React.Dispatch<React.SetStateAction<number>>
 ) => {
   let pollingActive = true;
-  const interval = 2000;
+  const interval = 5000;
 
   const pollPaymentStatusInterval = async () => {
     try {
