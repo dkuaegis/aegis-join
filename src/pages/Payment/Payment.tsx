@@ -152,7 +152,7 @@ function Payment({
           </>
         )}
       </div>
-      <h4 className="font-semibold text-lg pt-8">납부 방법</h4>
+      <h4 className="pt-8 font-semibold text-lg">납부 방법</h4>
       <HowtoDo />
       <NavigationButtons
         prev={onPrev}

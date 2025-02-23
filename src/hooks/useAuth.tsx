@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 
+export enum AuthStatus {
+  UNAUTHORIZED = "UNAUTHORIZED", // 인증 안됨 (401)
+  NOT_COMPLETED = "NOT_COMPLETED", // 가입 완료 안됨
+  COMPLETED = "COMPLETED", // 가입 완료
+  LOADING = "LOADING",
+}
+
 export default function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthenticated, setAuthenticated] = useState<AuthStatus>(
+    AuthStatus.LOADING
+  );
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -12,13 +21,23 @@ export default function useAuth() {
             credentials: "include"
           }
         );
-        if (!response.ok) {
-          throw new Error("인증 정보 없음.");
+
+        if (response.status === 401) {
+          setAuthenticated(AuthStatus.UNAUTHORIZED);
+          return;
         }
-        setIsAuthenticated(response.status === 200);
+        if (!response.ok) {
+          throw new Error("알 수 없는 에러 발생.");
+        }
+        const data = await response.json();
+        if (data.status === "COMPLETE" || data.status === "OVERPAID") {
+          setAuthenticated(AuthStatus.COMPLETED);
+        } else {
+          setAuthenticated(AuthStatus.NOT_COMPLETED);
+        }
       } catch (error) {
-        console.error("Auth check error:", error);
-        setIsAuthenticated(false);
+        console.log("Auth check error:", error);
+        setAuthenticated(AuthStatus.UNAUTHORIZED);
       }
     };
 

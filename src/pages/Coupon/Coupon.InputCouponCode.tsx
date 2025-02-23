@@ -20,9 +20,9 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useCallback, useEffect, useState } from "react";
+import { submitAndFetchCouponCode } from "./Coupon.Api";
 import CouponForm from "./Coupon.CouponForm";
 import type { Coupon } from "./Coupon.Types";
-import { submitAndFetchCouponCode } from "./Coupon.Api";
 
 interface InputCouponCodeProps {
   setCoupons: React.Dispatch<React.SetStateAction<Coupon[]>>;

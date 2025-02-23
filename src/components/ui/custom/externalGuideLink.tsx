@@ -1,9 +1,9 @@
-import type React from "react"
-import { ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react";
+import type React from "react";
 
 interface NotionLinkProps {
-  href: string
-  children: React.ReactNode
+  href: string;
+  children: React.ReactNode;
 }
 
 export default function ExternalGuideLink({ href, children }: NotionLinkProps) {
@@ -17,6 +17,5 @@ export default function ExternalGuideLink({ href, children }: NotionLinkProps) {
       <ExternalLink className="h-5 w-5 text-muted-foreground" />
       <span className="font-medium">{children}</span>
     </a>
-  )
+  );
 }
-

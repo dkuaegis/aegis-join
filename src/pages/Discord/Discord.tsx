@@ -107,10 +107,9 @@ function Discord({ onNext, onPrev }: DiscordProps) {
           </>
         )}
       </div>
-      
+
       <h4 className="font-semibold text-lg">연동 방법</h4>
       <HowtoDo />
-      
 
       <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />
     </div>
