@@ -16,7 +16,7 @@ export default function useAuth() {
     const checkAuth = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/payments/status`,
+          `${import.meta.env.VITE_API_URL}/auth/check`,
           {
             credentials: "include"
           }
