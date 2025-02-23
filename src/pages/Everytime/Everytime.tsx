@@ -167,6 +167,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
           </Button>
         </div>
       </form>
+      <h4 className="font-semibold text-lg pt-8">제출 방법</h4>
       <HowtoDo />
       <NavigationButtons
         prev={onPrev}

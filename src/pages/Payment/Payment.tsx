@@ -9,6 +9,7 @@ import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import { startPaymentPolling } from "./Payment.Api";
+import HowtoDo from "./Payment.HowtoDo";
 
 const ADMIN_INFO = {
   phoneNumber:
@@ -138,7 +139,7 @@ function Payment({
         />
       )}
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center py-4">
         {isValid ? (
           <>
             <CheckCircleIcon className="h-8 w-8 text-green-400" />
@@ -151,7 +152,8 @@ function Payment({
           </>
         )}
       </div>
-
+      <h4 className="font-semibold text-lg pt-8">납부 방법</h4>
+      <HowtoDo />
       <NavigationButtons
         prev={onPrev}
         next={onNext}
