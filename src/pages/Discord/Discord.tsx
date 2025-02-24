@@ -85,7 +85,9 @@ function Discord({ onNext, onPrev }: DiscordProps) {
             <Button
               className="border-2 border-gray-600"
               variant="secondary"
-              onClick={() => window.open(`${import.meta.env.VITE_DISCORD_INVITE_URL}`)}
+              onClick={() =>
+                window.open(`${import.meta.env.VITE_DISCORD_INVITE_URL}`)
+              }
             >
               디스코드
               <ExternalLink className="ml-2 h-4 w-4" />
