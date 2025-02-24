@@ -72,7 +72,7 @@ function Payment({
   return (
     <div className="space-y-4">
       <h3 className="font-semibold text-lg">회비 납부</h3>
-      <Label className="text-base">송금 안내</Label>
+      <Label className="text-base">입금 안내</Label>
       <Alert>
         <AlertDescription className="space-y-2 text-sm sm:text-base">
           <div className="flex items-center">
@@ -88,7 +88,7 @@ function Payment({
             </Button>
           </div>
           <div className="flex items-center">
-            <span className="w-20 font-medium">송금자명:</span>
+            <span className="w-20 font-medium">입금자명:</span>
             <span className="mr-1 pr-0">{senderName}</span>
             <Button
               variant="ghost"
@@ -100,7 +100,7 @@ function Payment({
             </Button>
           </div>
           <div className="flex items-center">
-            <span className="w-20 font-medium">송금할 금액:</span>
+            <span className="w-20 font-medium">입금할 금액:</span>
             <span>
               {isLoading
                 ? "로딩 중..."
