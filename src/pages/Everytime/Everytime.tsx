@@ -135,7 +135,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         />
         <div className="mt-4 flex items-center space-x-4">
           <Button
-            className="mx-auto mt-6 flex w-11/12 items-center"
+            className="mx-auto mt-6 flex w-full items-center"
             type="submit"
             disabled={loading === LoadingState.LOADING}
           >

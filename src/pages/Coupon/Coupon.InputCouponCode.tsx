@@ -68,8 +68,7 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
           <DrawerTrigger asChild>
             <Button
               size="lg"
-              className=" w-10/12 items-center"
-              variant="outline"
+              className=" w-full items-center"
             >
               쿠폰 등록하기
             </Button>
