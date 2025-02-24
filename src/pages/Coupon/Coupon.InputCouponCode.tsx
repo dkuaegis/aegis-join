@@ -19,7 +19,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { submitAndFetchCouponCode } from "./Coupon.Api";
 import CouponForm from "./Coupon.CouponForm";
 import type { Coupon } from "./Coupon.Types";
@@ -33,10 +33,7 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
   const [open, setOpen] = useState(false);
   const [couponCode, setCouponCode] = useState("");
 
-  console.log("rerender");
-
   useEffect(() => {
-    console.log("wtf");
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -47,22 +44,17 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
-  const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-      // 여기에 쿠폰 등록 로직을 구현하세요
-      submitAndFetchCouponCode(couponCode)
-        .then((data) => {
-          setCoupons(data);
-        })
-        .catch((error) => {
-          console.log("please error", error);
-        });
-      setOpen(false);
-      setCouponCode("");
-    },
-    [couponCode, setCoupons]
-  );
+      try {
+        const data = await submitAndFetchCouponCode(couponCode)
+        setCoupons(data);
+        setOpen(false);
+        setCouponCode("");
+      }  catch(error: unknown) {
+        console.log("쿠폰 코드 적용하는데 에러", error);
+      }
+    }
 
   if (isMobile) {
     return (
