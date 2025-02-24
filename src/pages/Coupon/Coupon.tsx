@@ -19,19 +19,25 @@ export default function Coupon({
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
 
   useEffect(() => {
-    fetchCoupon()
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchCoupon();
         setCoupons(data);
-      })
-      .catch((error) => {
-        console.log("please error", error);
-      });
+      } catch (error) {
+        console.error("쿠폰 불러오는데 오류 발생:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const onSubmit = () => {
-    submitCoupon(selectedCoupons);
-    console.log("쿠폰 제출", selectedCoupons);
-    onNext();
+  const onSubmit = async () => {
+    try {
+      await submitCoupon(selectedCoupons);
+      onNext();
+    } catch (error: unknown) {
+      console.error("제출 중 오류 발생:", error);
+    }
   };
 
   return (
