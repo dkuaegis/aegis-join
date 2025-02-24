@@ -28,7 +28,7 @@ export const submitCoupon = async (selectedCoupons: number[]) => {
 export const submitAndFetchCouponCode = async (couponCode: string) => {
   const payload = { code: couponCode };
 
-  await fetchingWithToast(`${import.meta.env.VITE_API_URL}/coupons/code`, {
+  const postResponse = await fetchingWithToast(`${import.meta.env.VITE_API_URL}/coupons/code`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -36,6 +36,9 @@ export const submitAndFetchCouponCode = async (couponCode: string) => {
     body: JSON.stringify(payload),
   });
 
+  if(!postResponse.ok) {
+    throw new Error("쿠폰 코드 제출에 실패했습니다.");
+  }
   const getResponse = fetchCoupon();
 
   return getResponse;
