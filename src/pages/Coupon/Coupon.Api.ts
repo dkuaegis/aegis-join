@@ -8,6 +8,7 @@ export const fetchCoupon = async (): Promise<Coupon[]> => {
 
   return await response.json();
 };
+
 export const submitCoupon = async (selectedCoupons: number[]) => {
   const payload = { issuedCouponIds: selectedCoupons };
 
@@ -22,7 +23,7 @@ export const submitCoupon = async (selectedCoupons: number[]) => {
     }
   );
 
-  return await response.json();
+  return response.headers.get("content-length") !== "0" ? await response.json() : null;
 };
 
 export const submitAndFetchCouponCode = async (couponCode: string) => {
