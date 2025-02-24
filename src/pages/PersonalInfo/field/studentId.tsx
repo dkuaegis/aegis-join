@@ -12,15 +12,11 @@ export const StudentId = forwardRef<HTMLInputElement, StudentIdProps>(
 
     const handleInputChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
+        // 숫자만 입력받도록 처리
         let value = event.target.value.replace(/[^0-9]/g, "");
 
-        if (!value.startsWith("32")) {
-          // 32로 시작하도록 강제
-          value = "32";
-        }
-
+        // 최대 8자리까지만 허용
         if (value.length > 8) {
-          // 8자리까지만 허용
           value = value.slice(0, 8);
         }
 
