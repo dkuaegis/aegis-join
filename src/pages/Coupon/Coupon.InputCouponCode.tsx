@@ -47,7 +47,12 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = await submitAndFetchCouponCode(couponCode);
+      const trimmedCouponCode = couponCode.trim();
+      if(!trimmedCouponCode) {
+        console.log("쿠폰 코드를 입력해주세요");
+        return;
+      }
+      const data = await submitAndFetchCouponCode(trimmedCouponCode);
       setCoupons(data);
       setOpen(false);
       setCouponCode("");
