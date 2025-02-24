@@ -22,12 +22,12 @@ export default function Coupon({
     const fetchData = async () => {
       try {
         const data = await fetchCoupon();
-        setCoupons(data); 
+        setCoupons(data);
       } catch (error) {
-        console.error("쿠폰 불러오는데 오류 발생:", error); 
+        console.error("쿠폰 불러오는데 오류 발생:", error);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -36,7 +36,7 @@ export default function Coupon({
       await submitCoupon(selectedCoupons);
       onNext();
     } catch (error: unknown) {
-      console.error("제출 중 오류 발생:", error)
+      console.error("제출 중 오류 발생:", error);
     }
   };
 

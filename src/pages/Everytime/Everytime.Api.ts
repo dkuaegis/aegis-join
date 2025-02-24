@@ -8,12 +8,12 @@ export const postTimetableData = async (url: string): Promise<boolean> => {
     });
     if (response.status === 409) {
       throw new Error("이미 제출된 시간표입니다.");
-    } 
-    if (response.status)
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    if (!response.ok) {
+      throw new Error(`시간표 제출 중 알 수 없는 에러 발생 ${response.status}`);
+    }
     return true;
   } catch (error) {
-    
     return false;
   }
 };

@@ -2,18 +2,20 @@ import { Button } from "@/components/ui/button";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { useEverytimeStore } from "@/stores/useEverytimeStore";
+import {
+  defaultToastId,
+  defaultToastOptions,
+} from "@/toast/defaultToastOption";
 import { LoadingState } from "@/types/state/loading";
 import { ClockAlert } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
-import { type ToastOptions, cssTransition, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { postTimetableData } from "./Everytime.Api";
 import HowtoDo from "./Everytime.HowtoDo";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
-import { defaultToastId, defaultToastOptions } from "@/toast/defaultToastOption";
-
 
 interface EverytimeProps {
   onNext: () => void;
@@ -72,16 +74,18 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         }
 
         setLoading(LoadingState.LOADING);
-        // console.log("제출된 링크:", values.url);
 
-        // const response = await postTimetableData(values.url);
+        const success = await postTimetableData(values.url);
 
+        if (!success) {
+          throw new Error("시간표 데이터 제출 실패");
+        }
 
         setLoading(LoadingState.SUCCESS);
         setEverytimeData(values);
         onDataSubmit(values);
         setIsValid(true);
-        
+
         if (!toast.isActive(TOAST_ID)) {
           toast.success("시간표가 제출되었습니다!", {
             ...defaultToastOptions,
@@ -102,7 +106,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   );
 
   const handleNext = useCallback(() => {
-    if (!isValid ||  loading !== LoadingState.SUCCESS) return;
+    if (!isValid || loading !== LoadingState.SUCCESS) return;
     setEverytimeData(formValuesRef.current);
     onNext();
   }, [onNext, isValid, loading, setEverytimeData]);

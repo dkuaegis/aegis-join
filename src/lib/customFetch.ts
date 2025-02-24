@@ -1,4 +1,7 @@
-import { defaultToastId, defaultToastOptions } from "@/toast/defaultToastOption";
+import {
+  defaultToastId,
+  defaultToastOptions,
+} from "@/toast/defaultToastOption";
 import { toast } from "react-toastify";
 
 const TIMEOUT_MS = 5000;
@@ -11,12 +14,15 @@ const showErrorToast = (message: string) => {
 };
 
 async function errorHandlingWithToast(response: Response): Promise<never> {
-  let errorMessage = "알 수 없는 에러가 발생하였습니다! 다시 시도해 주세요";
+  let errorMessage = `${response.status} 에러! 알 수 없는 에러가 발생하였습니다. 다시 시도해 주세요`;
+
   try {
     const errorData = await response.json();
-    errorMessage = errorData?.name || errorMessage;
+    if (errorData?.name) {
+      errorMessage = `${response.status} 에러! ${errorData.name}`;
+    }
   } catch {
-    errorMessage = "에러 메세지를 파싱하는데 문제가 발생하였습니다! 다시 시도해 주세요";
+    errorMessage = `${response.status} 에러! 에러 메시지를 파싱하는데 문제가 발생하였습니다.`;
   }
 
   throw new Error(errorMessage);
@@ -36,10 +42,9 @@ async function fetchingWithToast(
       ...options,
     });
 
-    
     if (!response.ok) {
       // 404 Not Found 는 통과.
-      if(response.status === 404) {
+      if (response.status === 404) {
         return response;
       }
       await errorHandlingWithToast(response);
@@ -47,11 +52,12 @@ async function fetchingWithToast(
 
     return response;
   } catch (error: unknown) {
-
     if (error instanceof Error) {
       if (error.name === "AbortError") {
         if (!toast.isActive(TOAST_ID)) {
-          showErrorToast(`요청이 ${TIMEOUT_MS / 1000}초 후에 타임아웃 되었습니다!. `);
+          showErrorToast(
+            `요청이 ${TIMEOUT_MS / 1000}초 후에 타임아웃 되었습니다!. `
+          );
         }
         throw new Error("요청 시간 초과");
       }
@@ -60,7 +66,6 @@ async function fetchingWithToast(
     }
     showErrorToast("알 수 없는 에러 발생");
     throw new Error("알 수 없는 에러 발생");
-
   } finally {
     clearTimeout(timeoutId);
   }

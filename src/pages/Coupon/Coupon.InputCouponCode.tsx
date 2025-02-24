@@ -45,16 +45,16 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      try {
-        const data = await submitAndFetchCouponCode(couponCode)
-        setCoupons(data);
-        setOpen(false);
-        setCouponCode("");
-      }  catch(error: unknown) {
-        console.log("쿠폰 코드 적용하는데 에러", error);
-      }
+    e.preventDefault();
+    try {
+      const data = await submitAndFetchCouponCode(couponCode);
+      setCoupons(data);
+      setOpen(false);
+      setCouponCode("");
+    } catch (error: unknown) {
+      console.log("쿠폰 코드 적용하는데 에러", error);
     }
+  };
 
   if (isMobile) {
     return (
