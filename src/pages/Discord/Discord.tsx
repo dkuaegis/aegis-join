@@ -8,6 +8,7 @@ import {
   Copy,
   ExternalLink,
   LoaderCircle,
+  RefreshCcw,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
@@ -23,19 +24,22 @@ function Discord({ onNext, onPrev }: DiscordProps) {
   const [isValid, setIsValid] = useState<boolean>(false);
   const { copyToClipboard } = useCopyToClipboard();
 
+  const getDiscordCode = async () => {
+    try {
+      const fetchedCode = await fetchDiscordCode();
+      setCode(fetchedCode);
+    } catch (err) {
+      console.error("Failed to fetch Discord code:", err);
+    }
+  };
   // 컴포넌트 마운트 시 한 번 Discord 코드를 불러옵니다.
   useEffect(() => {
-    const getDiscordCode = async () => {
-      try {
-        const fetchedCode = await fetchDiscordCode();
-        setCode(fetchedCode);
-      } catch (err) {
-        console.error("Failed to fetch Discord code:", err);
-      }
-    };
-
     getDiscordCode();
   }, []);
+
+  const handleRefresh = useCallback(() => {
+    getDiscordCode();
+  }, [])
 
   // 디스코드 가입 여부 폴링
   useEffect(() => {
@@ -68,18 +72,28 @@ function Discord({ onNext, onPrev }: DiscordProps) {
           <div className="flex items-center justify-center gap-x-4">
             <div className="flex items-center gap-2">
               <span className="truncate font-extrabold text-2xl text-primary">
-                {isValid ? "연동 완료" : code || "코드 불러오는 중..."}
+                {isValid ? "연동 완료" : code || "불러오는 중..."}
               </span>
               {!isValid && (
+                <>
                 <Button
-                  className="border-2 border-gray-600"
+                  className="border-2 border-gray-600 mr-2"
                   variant="secondary"
                   size="icon"
                   onClick={handleCopyToClipboard}
                   disabled={!code}
                 >
                   <Copy className="h-4 w-4" />
+                  </Button>
+                  <Button
+                  className="border-2 border-gray-600"
+                  variant="secondary"
+                  size="icon"
+                  onClick={handleRefresh}
+                >
+                  <RefreshCcw className="h-4 w-4" />
                 </Button>
+              </>
               )}
             </div>
             <Button
@@ -88,7 +102,7 @@ function Discord({ onNext, onPrev }: DiscordProps) {
               onClick={() => window.open(`${import.meta.env.VITE_DISCORD_INVITE_URL}`)}
             >
               디스코드
-              <ExternalLink className="ml-2 h-4 w-4" />
+              <ExternalLink className="h-4 w-4" />
             </Button>
           </div>
         </div>
