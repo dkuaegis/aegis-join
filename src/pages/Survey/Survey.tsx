@@ -47,9 +47,9 @@ function Survey({
       fetchSurveyData()
         .then((data) => {
           // Form 에 받은 데이터를 넣어주고, useForm 의 상태를 초기화 해주고, 받아왔으니 처음이 아닌 상태로.
-          setFormValues(data);
-          methods.reset(data);
-          setNotInitial();
+          setFormValues(data);  
+          methods.reset(data);  
+          setNotInitial();      
         })
         .catch((error) => {
           console.log("설문조사 정보 가져오는데 오류발생.", error);

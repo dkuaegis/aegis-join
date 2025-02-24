@@ -3,9 +3,17 @@ import type { InterestField } from "@/types/api/survey";
 import type { SurveyFormValues } from "./Survey.schema";
 
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
-  const response = await fetchingWithToast(
-    `${import.meta.env.VITE_API_URL}/survey`
+
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/survey`,
+    {
+      credentials: "include",
+    }
   );
+
+  if (!response.ok) {
+    throw new Error("시간표 가져오는데 에러");
+  }
 
   return response.json();
 };
