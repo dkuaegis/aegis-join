@@ -51,13 +51,11 @@ export default function Coupon({
             description={["다음 버튼을 눌러주세요."]}
           />
         ) : (
-
           <CouponList
             coupons={coupons}
             selectedCoupons={selectedCoupons}
             setSelectedCoupons={setSelectedCoupons}
           />
-
         )}
       </div>
       <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />

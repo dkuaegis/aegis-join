@@ -48,7 +48,7 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
     e.preventDefault();
     try {
       const trimmedCouponCode = couponCode.trim();
-      if(!trimmedCouponCode) {
+      if (!trimmedCouponCode) {
         console.log("쿠폰 코드를 입력해주세요");
         return;
       }
@@ -66,10 +66,7 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
       <div className="flex justify-center">
         <Drawer open={open} onOpenChange={setOpen} modal={false}>
           <DrawerTrigger asChild>
-            <Button
-              size="lg"
-              className=" w-full items-center"
-            >
+            <Button size="lg" className=" w-full items-center">
               쿠폰 등록하기
             </Button>
           </DrawerTrigger>

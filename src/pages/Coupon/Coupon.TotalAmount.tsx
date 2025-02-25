@@ -16,10 +16,8 @@ export const TotalAmount = ({ coupons, selectedCoupons }: TotalAmountProps) => {
 
   return (
     <div className="mt-2 p-2 text-center">
-      <p
-        className="font-bold text-2xl"
-      >
-        회비: {Math.max(finalDues,0).toLocaleString()}원
+      <p className="font-bold text-2xl">
+        회비: {Math.max(finalDues, 0).toLocaleString()}원
       </p>
     </div>
   );

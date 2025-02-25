@@ -24,22 +24,22 @@ function Discord({ onNext, onPrev }: DiscordProps) {
   const [isValid, setIsValid] = useState<boolean>(false);
   const { copyToClipboard } = useCopyToClipboard();
 
-  const getDiscordCode = async () => {
+  const getDiscordCode = useCallback(async () => {
     try {
       const fetchedCode = await fetchDiscordCode();
       setCode(fetchedCode);
     } catch (err) {
       console.error("Failed to fetch Discord code:", err);
     }
-  };
+  }, []);
   // 컴포넌트 마운트 시 한 번 Discord 코드를 불러옵니다.
   useEffect(() => {
     getDiscordCode();
-  }, []);
+  }, [getDiscordCode]);
 
   const handleRefresh = useCallback(() => {
     getDiscordCode();
-  }, [])
+  }, [getDiscordCode]);
 
   // 디스코드 가입 여부 폴링
   useEffect(() => {
@@ -76,24 +76,24 @@ function Discord({ onNext, onPrev }: DiscordProps) {
               </span>
               {!isValid && (
                 <>
-                <Button
-                  className="border-2 border-gray-600 mr-2"
-                  variant="secondary"
-                  size="icon"
-                  onClick={handleCopyToClipboard}
-                  disabled={!code}
-                >
-                  <Copy className="h-4 w-4" />
+                  <Button
+                    className="mr-2 border-2 border-gray-600"
+                    variant="secondary"
+                    size="icon"
+                    onClick={handleCopyToClipboard}
+                    disabled={!code}
+                  >
+                    <Copy className="h-4 w-4" />
                   </Button>
                   <Button
-                  className="border-2 border-gray-600"
-                  variant="secondary"
-                  size="icon"
-                  onClick={handleRefresh}
-                >
-                  <RefreshCcw className="h-4 w-4" />
-                </Button>
-              </>
+                    className="border-2 border-gray-600"
+                    variant="secondary"
+                    size="icon"
+                    onClick={handleRefresh}
+                  >
+                    <RefreshCcw className="h-4 w-4" />
+                  </Button>
+                </>
               )}
             </div>
             <Button
