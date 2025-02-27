@@ -12,19 +12,17 @@ const isValidBirthDate = (birthDate: string): boolean => {
   if (!/^\d{6}$/.test(birthDate)) {
     return false; // 형식이 YYMMDD가 아니면 false
   }
+  const year = Number.parseInt(birthDate.substring(0, 2), 10);
+  const month = Number.parseInt(birthDate.substring(2, 4), 10);
+  const day = Number.parseInt(birthDate.substring(4, 6), 10);
 
-  const month = Number.parseInt(birthDate.substring(2, 4));
-  const day = Number.parseInt(birthDate.substring(4, 6));
+  const fullYear = (year >= 50) ? 1900 + year : 2000 + year; 
 
-  if (month < 1 || month > 12) {
-    return false; // 월이 1~12 범위를 벗어나면 false
-  }
+  const date = new Date(fullYear, month - 1, day);
 
-  if (day < 1 || day > 31) {
-    return false; // 일이 1~31 범위를 벗어나면 false
-  }
-
-  return true; // 유효한 YYMMDD 형식이고 월/일이 범위 내에 있으면 true
+  return date.getFullYear() === fullYear && 
+         date.getMonth() + 1 === month &&
+         date.getDate() === day; 
 };
 
 export const personalInfoSchema = z.object({
@@ -56,11 +54,13 @@ export const personalInfoSchema = z.object({
   department: z.nativeEnum(Department, {
     errorMap: () => ({ message: "학과를 선택해주세요" }),
   }),
+
   fresh: z
     .boolean()
     .refine((val) => val !== null, {
       message: "재등록 여부를 선택해주세요",
     }),
+
   academicStatus: z.nativeEnum(AcademicStatus, {
     errorMap: () => ({ message: "학적 상태를 선택해주세요" }),
   }),
