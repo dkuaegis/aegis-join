@@ -10,14 +10,14 @@ import { Info } from "lucide-react"; // i 아이콘 추가
 import { forwardRef, useState } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 
-interface ReRegistrationStatusProps
+interface FreshProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroup> {
   name: string;
 }
 
-export const StudentReRegistrationStatus = forwardRef<
+export const StudentFresh = forwardRef<
   HTMLDivElement,
-  ReRegistrationStatusProps
+  FreshProps
 >(({ name, ...props }, ref) => {
   const { field, error, isValid } = useControllerField({ name });
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -25,7 +25,7 @@ export const StudentReRegistrationStatus = forwardRef<
   return (
     <div className="space-y-2">
       <div className="flex items-center space-x-1">
-        <Label>재등록/신규 회원 여부</Label>
+        <Label>신규/재등록 회원 여부</Label>
         <TooltipProvider>
           <Tooltip open={isTooltipOpen}>
             <TooltipTrigger asChild>
@@ -53,12 +53,12 @@ export const StudentReRegistrationStatus = forwardRef<
         onValueChange={(val) => field.onChange(val === "true")}
       >
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="true" id="reRegistration" />
-          <Label htmlFor="reRegistration">재등록 회원</Label>
+          <RadioGroupItem value="true" id="fresh" />
+          <Label htmlFor="fresh">신규 회원</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="false" id="newMember" />
-          <Label htmlFor="newMember">신규 회원</Label>
+          <RadioGroupItem value="false" id="fresh" />
+          <Label htmlFor="newMember">재등록 회원</Label>
         </div>
       </RadioGroup>
 
@@ -69,4 +69,4 @@ export const StudentReRegistrationStatus = forwardRef<
   );
 });
 
-StudentReRegistrationStatus.displayName = "StudentReRegistrationStatus";
+StudentFresh.displayName = "StudentFresh";
