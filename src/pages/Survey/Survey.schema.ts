@@ -1,4 +1,5 @@
 import { InterestField } from "@/types/api/survey";
+import { AcquisitionType } from "@/types/api/survey";
 import { z } from "zod";
 
 export function isETC(field: InterestField): boolean {
@@ -25,6 +26,9 @@ export const surveySchema = z
       .min(5, "가입 이유를 작성해주세요!")
       .max(511, "511자를 초과할 수 없습니다!"),
     feedback: z.string().max(511, "511자를 초과할 수 없습니다!").optional(),
+    acquisitionType: z.nativeEnum(AcquisitionType, {
+      errorMap: () => ({ message: "유입 경로를 선택해주세요" }),
+    }),
   })
   .superRefine((data, ctx) => {
     for (const field of data.interests) {

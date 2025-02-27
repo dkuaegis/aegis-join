@@ -19,6 +19,7 @@ import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
 import { StudentName } from "./field/studentName";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
+// import { StudentReRegistrationStatus } from "./field/studentReRegistration";
 import { StudentSemester } from "./field/studentSemester";
 
 interface PersonalInfoProps {
@@ -73,6 +74,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
         <StudentPhoneNumber name="phoneNumber" />
         <StudentId name="studentId" />
         <StudentDepartment name="department" />
+        {/* <StudentReRegistrationStatus name="reRegistration"/> */}
         <StudentAcademicStatus name="academicStatus" />
         <StudentGrade name="grade" />
         <StudentSemester name="semester" />

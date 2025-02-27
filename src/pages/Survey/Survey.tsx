@@ -7,6 +7,7 @@ import { useSurveyStore } from "@/stores/useSurveyStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { AcquisitionType } from "./Survey.AcquisitionType";
 import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
 import Feedback from "./Survey.FeedBack";
 import { InterestFieldGroup } from "./Survey.FieldGroup";
@@ -26,6 +27,7 @@ function Survey({
     interestsEtc,
     joinReason,
     feedback,
+    acquisitionType,
     isInitial,
     setFormValues,
     setNotInitial,
@@ -39,6 +41,7 @@ function Survey({
       interestsEtc: interestsEtc || {},
       joinReason: joinReason || "",
       feedback: feedback || "",
+      acquisitionType: acquisitionType || undefined,
     },
   });
 
@@ -110,6 +113,10 @@ function Survey({
 
         <Container>
           <JoinReason />
+        </Container>
+
+        <Container>
+          <AcquisitionType />
         </Container>
 
         <Container>

@@ -28,3 +28,12 @@ export enum InterestField {
   NOT_SURE = "NOT_SURE",
   ETC = "ETC",
 }
+
+export enum AcquisitionType {
+  KAKAOTALK = "KAKAOTALK",
+  INSTAGRAM = "INSTAGRAM",
+  EVERYTIME = "EVERYTIME",
+  FRIEND = "FRIEND",
+  CLUB_FAIR = "CLUB_FAIR",
+  ETC = "ETC",
+}
