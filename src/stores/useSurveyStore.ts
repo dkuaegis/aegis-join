@@ -1,5 +1,5 @@
 import type { SurveyFormValues } from "@/pages/Survey/Survey.schema";
-import type { AcquisitionType, InterestField } from "@/types/api/survey";
+import { AcquisitionType, type InterestField } from "@/types/api/survey";
 import { create } from "zustand";
 
 interface SurveyState {
@@ -25,8 +25,11 @@ export const useSurveyStore = create<SurveyState>((set) => ({
     set((state) => ({
       ...state,
       ...values,
-      acquisitionType: values.acquisitionType as AcquisitionType | undefined,
+      acquisitionType: Object.values(AcquisitionType).includes(values.acquisitionType as AcquisitionType)
+        ? (values.acquisitionType as AcquisitionType)
+        : undefined,
     })),
+  
 
   isInitial: true,
   setNotInitial: () => set({ isInitial: false }),
