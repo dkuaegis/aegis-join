@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import type React from "react"
 
 import { Label } from "@/components/ui/label"
@@ -17,7 +16,6 @@ export const StudentFresh = forwardRef<HTMLDivElement, FreshProps>(({ name, ...p
   const [isTooltipOpen, setIsTooltipOpen] = useState(false)
   const tooltipRef = useRef<HTMLDivElement>(null)
 
-  // Add click outside listener to close tooltip
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isTooltipOpen && tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
@@ -30,31 +28,7 @@ export const StudentFresh = forwardRef<HTMLDivElement, FreshProps>(({ name, ...p
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [isTooltipOpen])
-=======
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Info } from "lucide-react"; // i 아이콘 추가
-import { forwardRef, useState } from "react";
-import { useControllerField } from "../PersonalInfo.ControlledField";
 
-interface FreshProps
-  extends React.ComponentPropsWithoutRef<typeof RadioGroup> {
-  name: string;
-}
-
-export const StudentFresh = forwardRef<
-  HTMLDivElement,
-  FreshProps
->(({ name, ...props }, ref) => {
-  const { field, error, isValid } = useControllerField({ name });
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
->>>>>>> 6b5f46b650f8ca438525544c1d0423f67763e9fd
 
   return (
     <div className="space-y-2">
@@ -63,25 +37,13 @@ export const StudentFresh = forwardRef<
         <TooltipProvider>
           <Tooltip open={isTooltipOpen}>
             <TooltipTrigger asChild>
-<<<<<<< HEAD
               <button type="button" onClick={() => setIsTooltipOpen((prev) => !prev)}>
-=======
-              <button
-                type="button"
-                onClick={() => setIsTooltipOpen((prev) => !prev)}
-              >
->>>>>>> 6b5f46b650f8ca438525544c1d0423f67763e9fd
                 <Info className="h-4 w-4 cursor-pointer text-gray-500" />
               </button>
             </TooltipTrigger>
             {isTooltipOpen && (
-<<<<<<< HEAD
               <TooltipContent ref={tooltipRef} side="right" className="w-44 max-w-xs break-words p-4 text-sm">
                 <p className="mb-2">재등록 회원: 기존에 가입한 적이 있는 회원</p>
-=======
-              <TooltipContent side="right">
-                <p>재등록 회원: 기존에 가입한 적이 있는 회원</p>
->>>>>>> 6b5f46b650f8ca438525544c1d0423f67763e9fd
                 <p>신규 회원: 처음 가입하는 회원</p>
               </TooltipContent>
             )}
@@ -100,7 +62,6 @@ export const StudentFresh = forwardRef<
           <Label htmlFor="fresh">신규 회원</Label>
         </div>
         <div className="flex items-center space-x-2">
-<<<<<<< HEAD
           <RadioGroupItem value="false" id="reregister" />
           <Label htmlFor="reregister">재등록 회원</Label>
         </div>
@@ -112,19 +73,3 @@ export const StudentFresh = forwardRef<
 })
 
 StudentFresh.displayName = "StudentFresh"
-
-=======
-          <RadioGroupItem value="false" id="fresh" />
-          <Label htmlFor="newMember">재등록 회원</Label>
-        </div>
-      </RadioGroup>
-
-      {error && !isValid && (
-        <p className="text-red-500 text-xs">재등록 여부를 선택해주세요</p>
-      )}
-    </div>
-  );
-});
-
-StudentFresh.displayName = "StudentFresh";
->>>>>>> 6b5f46b650f8ca438525544c1d0423f67763e9fd
