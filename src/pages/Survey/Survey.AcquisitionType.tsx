@@ -40,7 +40,7 @@ export const AcquisitionType = () => {
         <SelectTrigger
           className={errors.acquisitionType ? "border-red-500" : ""}
         >
-          <SelectValue placeholder="유입 경로 선택" />
+          <SelectValue placeholder="알게된 경로 선택" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value={AcquisitionTypeEnum.INSTAGRAM}>
