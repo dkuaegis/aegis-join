@@ -56,11 +56,13 @@ export const personalInfoSchema = z.object({
   department: z.nativeEnum(Department, {
     errorMap: () => ({ message: "학과를 선택해주세요" }),
   }),
-  // reRegistration: z
-  //   .boolean()
-  //   .refine((val) => val !== null, {
-  //     message: "재등록 여부를 선택해주세요",
-  //   }),
+
+  fresh: z
+    .boolean()
+    .refine((val) => val !== null, {
+      message: "재등록 여부를 선택해주세요",
+    }),
+
   academicStatus: z.nativeEnum(AcademicStatus, {
     errorMap: () => ({ message: "학적 상태를 선택해주세요" }),
   }),
