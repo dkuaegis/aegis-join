@@ -2,21 +2,20 @@ import { Button } from "@/components/ui/button";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { useEverytimeStore } from "@/stores/useEverytimeStore";
+import {
+  defaultToastId,
+  defaultToastOptions,
+} from "@/toast/defaultToastOption";
 import { LoadingState } from "@/types/state/loading";
 import { ClockAlert } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
-import { type ToastOptions, cssTransition, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { postTimetableData } from "./Everytime.Api";
 import HowtoDo from "./Everytime.HowtoDo";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
-
-const fadeInOut = cssTransition({
-  enter: "fade-in",
-  exit: "fade-out",
-});
 
 interface EverytimeProps {
   onNext: () => void;
@@ -28,22 +27,7 @@ interface TimetableError {
   url?: { message?: string };
 }
 
-const defaultToastOptions: ToastOptions = {
-  transition: fadeInOut,
-  position: "bottom-center",
-  autoClose: 1000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: false,
-  draggable: false,
-  theme: "colored",
-  style: {
-    marginBottom: "50%",
-    fontFamily: "sans-serif",
-    textAlign: "center",
-  },
-  className: "rounded-lg shadow-lg p-4 w-11/12 sm:w-full", // 모바일에서는 84%, PC에서는 100%
-};
+const TOAST_ID = defaultToastId;
 
 function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   const { everytimeData, setEverytimeData } = useEverytimeStore();
@@ -90,7 +74,6 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         }
 
         setLoading(LoadingState.LOADING);
-        console.log("제출된 링크:", values.url);
 
         const success = await postTimetableData(values.url);
 
@@ -103,23 +86,18 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         onDataSubmit(values);
         setIsValid(true);
 
-        const toastId = "timetable-toast";
-        if (!toast.isActive(toastId)) {
+        if (!toast.isActive(TOAST_ID)) {
           toast.success("시간표가 제출되었습니다!", {
             ...defaultToastOptions,
-            toastId,
           });
         }
       } catch (error) {
         console.error("Error in handleSubmit:", error);
         setLoading(LoadingState.IDLE);
 
-        const toastId = "timetable-toast-error";
-        if (!toast.isActive(toastId)) {
+        if (!toast.isActive(TOAST_ID)) {
           toast.error("시간표 제출 실패", {
             ...defaultToastOptions,
-            toastId,
-            autoClose: 1000,
           });
         }
       }
@@ -157,7 +135,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         />
         <div className="mt-4 flex items-center space-x-4">
           <Button
-            className="mx-auto mt-6 flex w-11/12 items-center"
+            className="mx-auto mt-6 flex w-full items-center"
             type="submit"
             disabled={loading === LoadingState.LOADING}
           >

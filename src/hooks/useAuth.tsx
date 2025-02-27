@@ -30,7 +30,7 @@ export default function useAuth() {
           throw new Error("알 수 없는 에러 발생.");
         }
         const data = await response.json();
-        if (data.status === "COMPLETE" || data.status === "OVERPAID") {
+        if (data.status === "COMPLETED" || data.status === "OVERPAID") {
           setAuthenticated(AuthStatus.COMPLETED);
         } else {
           setAuthenticated(AuthStatus.NOT_COMPLETED);
