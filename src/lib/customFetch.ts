@@ -37,7 +37,7 @@ async function fetchingWithToast(
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
     const response = await fetch(url, {
-      //credentials: "include",
+      credentials: "include",
       signal: controller.signal,
       ...options,
     });
