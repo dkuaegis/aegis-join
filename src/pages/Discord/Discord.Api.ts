@@ -15,7 +15,7 @@ export const fetchDiscordCode = async (): Promise<string> => {
     const data = await response.json();
     return data.code;
   } catch (err: unknown) {
-    console.error("Failed to fetch Discord code:", err);
+    console.error("디스코드 인증코드 에러:", err);
     throw err;
   }
 };

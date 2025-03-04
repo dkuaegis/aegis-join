@@ -16,13 +16,15 @@ const isValidBirthDate = (birthDate: string): boolean => {
   const month = Number.parseInt(birthDate.substring(2, 4), 10);
   const day = Number.parseInt(birthDate.substring(4, 6), 10);
 
-  const fullYear = (year >= 50) ? 1900 + year : 2000 + year; 
+  const fullYear = year >= 50 ? 1900 + year : 2000 + year;
 
   const date = new Date(fullYear, month - 1, day);
 
-  return date.getFullYear() === fullYear && 
+  return (
+    date.getFullYear() === fullYear &&
     date.getMonth() + 1 === month &&
-    date.getDate() === day; 
+    date.getDate() === day
+  );
 };
 
 export const personalInfoSchema = z.object({
@@ -55,11 +57,9 @@ export const personalInfoSchema = z.object({
     errorMap: () => ({ message: "학과를 선택해주세요" }),
   }),
 
-  fresh: z
-    .boolean()
-    .refine((val) => val !== null, {
-      message: "재등록 여부를 선택해주세요",
-    }),
+  fresh: z.boolean().refine((val) => val !== null, {
+    message: "재등록 여부를 선택해주세요",
+  }),
 
   academicStatus: z.nativeEnum(AcademicStatus, {
     errorMap: () => ({ message: "학적 상태를 선택해주세요" }),

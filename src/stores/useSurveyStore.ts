@@ -25,11 +25,12 @@ export const useSurveyStore = create<SurveyState>((set) => ({
     set((state) => ({
       ...state,
       ...values,
-      acquisitionType: Object.values(AcquisitionType).includes(values.acquisitionType as AcquisitionType)
+      acquisitionType: Object.values(AcquisitionType).includes(
+        values.acquisitionType as AcquisitionType
+      )
         ? (values.acquisitionType as AcquisitionType)
         : undefined,
     })),
-  
 
   isInitial: true,
   setNotInitial: () => set({ isInitial: false }),

@@ -11,12 +11,12 @@ import { ClockAlert } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import { toast } from "react-toastify";
+import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import { postTimetableData } from "./Everytime.Api";
 import HowtoDo from "./Everytime.HowtoDo";
 import type { EverytimeValues } from "./Everytime.Schema";
 import EverytimeTimeTableLink from "./Everytime.TimeTableLink";
 import validateEverytime from "./Everytime.Validate";
-import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 
 interface EverytimeProps {
   onNext: () => void;
@@ -70,27 +70,30 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
     const fetchData = async () => {
       try {
         const data = await fetchPersonalInfoData();
-        if (data.academicStatus === "LEAVE_OF_ABSENCE" || data.academicStatus === "GRADUATED") {
+        if (
+          data.academicStatus === "LEAVE_OF_ABSENCE" ||
+          data.academicStatus === "GRADUATED"
+        ) {
           setIsValid(true);
           setLoading(LoadingState.SUCCESS);
           toast.success(
             <>
-              휴학생 및 졸업생은 다음 버튼을<br />눌러주세요!
+              휴학생 및 졸업생은 다음 버튼을
+              <br />
+              눌러주세요!
             </>,
             {
               ...defaultToastOptions,
             }
           );
-          
         }
       } catch (error) {
         console.error("Failed to fetch personal info:", error);
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
   const handleSubmit = useCallback(
     async (values: EverytimeValues) => {

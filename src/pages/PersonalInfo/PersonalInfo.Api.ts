@@ -8,7 +8,7 @@ export const fetchPersonalInfoData =
     );
 
     if (!response.ok) {
-      throw new Error("데이터를 가져오는데 실패");
+      throw new Error("인적사항을 가져오는데 실패했습니다.");
     }
     return response.json();
   };
@@ -26,6 +26,6 @@ export const submitPersonalInfoData = async (data: PersonalInfoFormValues) => {
   );
 
   if (!response.ok) {
-    throw new Error("Failed to submit");
+    throw new Error("인적사항 제출에 실패했습니다.");
   }
 };

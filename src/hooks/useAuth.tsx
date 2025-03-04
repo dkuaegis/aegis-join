@@ -36,7 +36,7 @@ export default function useAuth() {
           setAuthenticated(AuthStatus.NOT_COMPLETED);
         }
       } catch (error) {
-        console.log("Auth check error:", error);
+        console.log("로그인 인증 에러:", error);
         setAuthenticated(AuthStatus.UNAUTHORIZED);
       }
     };
