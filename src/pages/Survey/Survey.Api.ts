@@ -4,7 +4,7 @@ import type { SurveyFormValues } from "./Survey.schema";
 
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/survey`, {
-    //credentials: "include",
+    credentials: "include",
   });
 
   if (!response.ok) {
