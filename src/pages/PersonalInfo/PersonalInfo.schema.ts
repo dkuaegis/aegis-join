@@ -21,8 +21,8 @@ const isValidBirthDate = (birthDate: string): boolean => {
   const date = new Date(fullYear, month - 1, day);
 
   return date.getFullYear() === fullYear && 
-         date.getMonth() + 1 === month &&
-         date.getDate() === day; 
+    date.getMonth() + 1 === month &&
+    date.getDate() === day; 
 };
 
 export const personalInfoSchema = z.object({
