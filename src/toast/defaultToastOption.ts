@@ -22,5 +22,5 @@ export const defaultToastOptions: ToastOptions = {
     fontFamily: "sans-serif",
     textAlign: "center",
   },
-  className: "rounded-lg shadow-lg p-4 w-11/12 sm:w-full", // 모바일에서는 84%, PC에서는 100%
+  className: "rounded-lg shadow-lg p-4 w-11/12 sm:w-full line-breaks", // 모바일에서는 84%, PC에서는 100%
 };
