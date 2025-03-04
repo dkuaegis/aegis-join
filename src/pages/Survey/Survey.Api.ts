@@ -8,7 +8,7 @@ export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
   });
 
   if (!response.ok) {
-    throw new Error("시간표 가져오는데 에러");
+    throw new Error("설문조사를 가져오는데 실패했습니다.");
   }
 
   return response.json();
@@ -28,7 +28,7 @@ export const submitSurveyData = async (data: SurveyFormValues) => {
   );
 
   if (!response.ok) {
-    throw new Error("Failed to submit");
+    throw new Error("설문조사 제출에 실패했습니다.");
   }
 };
 

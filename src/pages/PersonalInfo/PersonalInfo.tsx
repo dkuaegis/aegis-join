@@ -14,12 +14,12 @@ import {
 import { StudentAcademicStatus } from "./field/studentAcademicStatus";
 import { StudentBirthDate } from "./field/studentBirthDate";
 import { StudentDepartment } from "./field/studentDepartment";
+import { StudentFresh } from "./field/studentFresh";
 import { StudentGender } from "./field/studentGender";
 import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
 import { StudentName } from "./field/studentName";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
-import { StudentFresh } from "./field/studentFresh";
 import { StudentSemester } from "./field/studentSemester";
 
 interface PersonalInfoProps {
@@ -78,7 +78,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
         <StudentAcademicStatus name="academicStatus" />
         <StudentGrade name="grade" />
         <StudentSemester name="semester" />
-        <StudentFresh name="fresh"/>
+        <StudentFresh name="fresh" />
         <NavigationButtons
           prev={() => {
             setPersonalInfoData(methods.getValues());
