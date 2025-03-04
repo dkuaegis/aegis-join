@@ -48,7 +48,7 @@ export default function Coupon({
           <AlertBox
             icon={<CircleAlert className="h-4 w-4" />}
             title="쿠폰이 없습니다."
-            description={["다음 버튼을 눌러주세요."]}
+            description={["등록할 쿠폰이 없으면 '다음' 버튼을 눌러주세요."]}
           />
         ) : (
           <CouponList

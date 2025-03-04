@@ -16,7 +16,7 @@ const AlertBox = ({ icon, title, description }: AlertBoxProps) => {
       {icon}
       <AlertTitle>{title}</AlertTitle>
       {description.map((desc) => (
-        <AlertDescription key={desc}>{desc}</AlertDescription>
+        <AlertDescription style={{ whiteSpace: "pre-line" }} key={desc}>{desc}</AlertDescription>
       ))}
     </Alert>
   );
