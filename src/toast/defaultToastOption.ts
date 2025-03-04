@@ -19,7 +19,7 @@ export const defaultToastOptions: ToastOptions = {
   theme: "colored",
   style: {
     marginBottom: "50%",
-    fontFamily: "sans-serif",
+    fontFamily: "SUIT",
     textAlign: "center",
   },
   className: "rounded-lg shadow-lg p-4 w-11/12 sm:w-full line-breaks", // 모바일에서는 84%, PC에서는 100%
