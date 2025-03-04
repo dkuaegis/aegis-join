@@ -148,7 +148,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
         icon={<ClockAlert className="h-4 w-4" />}
         title="시간표 제출이 왜 필요한가요?"
         description={[
-          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 \n시간표가 필요해요. 이 점 너른 양해 부탁드립니다.",
+          "활동을 계획할 때 수업과 겹치지 않게 계획하기 위해서 시간표가 필요해요. 이 점 너른 양해 부탁드립니다.",
         ]}
       />
       <form
