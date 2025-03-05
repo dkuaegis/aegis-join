@@ -7,7 +7,7 @@ export default function JoinComplete() {
   return (
     <AlignCenter>
       <Wrapper>
-        <Confetti recycle={false} numberOfPieces={1000} />
+        <Confetti recycle={false} numberOfPieces={500} />
         <h1 className="font-bold text-4xl tracking-tight">
           가입을 축하합니다! 🎉
         </h1>
@@ -20,7 +20,7 @@ export default function JoinComplete() {
           이루어집니다. Aegis와 함께 성장해 나가요!
         </p>
 
-        <div className="pt-4">
+        {/* <div className="pt-4">
           <p className="mb-4 text-muted-foreground">
             카카오톡 채팅방에서도 공지를 확인할 수 있습니다.
           </p>
@@ -34,7 +34,7 @@ export default function JoinComplete() {
               카카오톡 채팅방 참여하기
             </a>
           </Button>
-        </div>
+        </div> */}
       </Wrapper>
     </AlignCenter>
   );
