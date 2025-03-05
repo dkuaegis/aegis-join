@@ -5,8 +5,8 @@ import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
-import { CheckCircleIcon, CircleAlert, Copy, LoaderCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CircleAlert, Copy, LoaderCircle } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import { startPaymentPolling } from "./Payment.Api";
 import HowtoDo from "./Payment.HowtoDo";
@@ -68,6 +68,11 @@ function Payment({
       );
     }
   }, [payInfo]);
+
+  const handleNext = useCallback(() => {
+      if (!isValid || payInfo?.status === "PENDING") return;
+      onNext();
+    }, [onNext, isValid, payInfo?.status]);
 
   return (
     <div className="space-y-4">
@@ -138,28 +143,22 @@ function Payment({
           ]}
         />
       )}
+      {!isValid && (
+        <div className="flex items-center justify-center py-4">
+          <LoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
+          <p className="pl-4">회비를 납부해주세요.</p>
+        </div>
+      )}
 
-      <div className="flex items-center justify-center py-4">
-        {isValid ? (
-          <>
-            <CheckCircleIcon className="h-8 w-8 text-green-400" />
-            <p className="pl-4 text-green-400">동아리 가입이 완료되었습니다!</p>
-          </>
-        ) : (
-          <>
-            <LoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
-            <p className="pl-4">회비를 납부해주세요.</p>
-          </>
-        )}
-      </div>
-      <h4 className="pt-8 font-semibold text-lg">납부 방법</h4>
+      <h4 className="font-semibold text-lg">납부 방법</h4>
       <HowtoDo />
       <NavigationButtons
-        prev={onPrev}
-        next={onNext}
-        showNext={true}
-        showPrev={isValid}
-      />
+      prev={onPrev}
+      next={handleNext}
+      isValid={isValid}
+      showPrev={isValid}
+/>
+
     </div>
   );
 }
