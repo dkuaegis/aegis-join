@@ -109,10 +109,6 @@ const departments = [
     label: "SW융합대학 컴퓨터공학과",
   },
   {
-    value: "SW융합대학_모바일시스템공학과",
-    label: "SW융합대학 모바일시스템공학과",
-  },
-  {
     value: "SW융합대학_사이버보안학과",
     label: "SW융합대학 사이버보안학과",
   },
