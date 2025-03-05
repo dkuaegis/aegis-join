@@ -50,7 +50,17 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
-  		}
+  		},
+		keyframes: {
+		'emoji-rotate': {
+			'0%': { transform: 'rotate(20deg)' },
+			'50%': { transform: 'rotate(-20deg)' },
+			'100%': { transform: 'rotate(20deg)' },
+			},
+		},
+		animation: {
+		'emoji-rotate': 'emoji-rotate 3s ease-in-out infinite',
+		},
   	}
   },
   plugins: [require("tailwindcss-animate")],

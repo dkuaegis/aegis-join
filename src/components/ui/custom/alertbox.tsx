@@ -16,7 +16,9 @@ const AlertBox = ({ icon, title, description }: AlertBoxProps) => {
       {icon}
       <AlertTitle>{title}</AlertTitle>
       {description.map((desc) => (
-        <AlertDescription className="line-breaks" key={desc}>{desc}</AlertDescription>      
+        <AlertDescription className="line-breaks" key={desc}>
+          {desc}
+        </AlertDescription>
       ))}
     </Alert>
   );
