@@ -17,6 +17,7 @@ import useAuth, { AuthStatus } from "./hooks/useAuth";
 import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
+import JoinComplete from "./pages/JoinComplete/JoinComplete";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -28,6 +29,7 @@ function App() {
       "Discord",
       "Coupon",
       "Payment",
+      "JoinComplete",
     ],
     initialStep: "PersonalInfo",
   });
@@ -51,12 +53,12 @@ function App() {
     return null;
   }
 
-  if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
-    return <LoginPage />;
-  }
+  // if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
+  //   return <LoginPage />;
+  // }
 
   if (isAuthenticated === AuthStatus.COMPLETED) {
-    goto("Payment");
+    goto("JoinComplete");
   }
 
   return (
@@ -98,6 +100,10 @@ function App() {
         <Route
           path="/Payment"
           element={<Payment onNext={next} onPrev={prev} />}
+        />
+        <Route
+          path="/JoinComplete"
+          element={<JoinComplete />}
         />
 
         <Route path="*" element={<Navigate to={`/${currentStep}`} replace />} />
