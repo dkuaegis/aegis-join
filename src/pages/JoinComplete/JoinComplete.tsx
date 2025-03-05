@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { MessageCircle } from "lucide-react";
 import Confetti from "react-confetti";
 import CenterLogo from "./JoinComplete.Centerlogo";
 
