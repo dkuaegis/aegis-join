@@ -58,7 +58,7 @@ function Discord({ onNext, onPrev }: DiscordProps) {
   }, [code, copyToClipboard]);
 
   return (
-    <div className="space-y-4">
+    <div className="line-breaks space-y-4">
       <h3 className="font-semibold text-lg">디스코드 연동</h3>
       <AlertBox
         icon={<CircleHelp className="h-4 w-4" />}
