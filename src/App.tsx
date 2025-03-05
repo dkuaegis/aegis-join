@@ -53,9 +53,9 @@ function App() {
     return null;
   }
 
-  // if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
-  //   return <LoginPage />;
-  // }
+  if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
+    return <LoginPage />;
+  }
 
   if (isAuthenticated === AuthStatus.COMPLETED) {
     goto("JoinComplete");
