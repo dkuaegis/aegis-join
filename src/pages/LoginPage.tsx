@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 function LoginPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+    <div className="line-breaks flex min-h-screen flex-col items-center justify-center bg-background">
       <div className="w-full max-w-[400px] space-y-6 p-4">
         <div className="flex flex-col space-y-2 text-center">
           <img
