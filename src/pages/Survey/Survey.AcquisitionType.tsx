@@ -19,7 +19,7 @@ export const AcquisitionType = () => {
   return (
     <div className="space-y-2">
       <Label htmlFor="acquisitionType" className="flex items-end text-xl">
-        유입 경로{" "}
+        알게된 경로{" "}
         <span
           className={`pb-1 pl-2 text-red-500 text-xs ${
             errors.acquisitionType

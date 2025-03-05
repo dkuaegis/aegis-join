@@ -66,7 +66,7 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
 
   return (
     <FormProvider {...methods}>
-      <form className="space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
+      <form className="line-breaks space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
         <h3 className="font-semibold text-lg">기본 인적사항</h3>
         <StudentName name="name" />
         <StudentBirthDate name="birthDate" />

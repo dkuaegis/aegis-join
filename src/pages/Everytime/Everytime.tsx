@@ -142,7 +142,7 @@ function Everytime({ onNext, onPrev, onDataSubmit }: EverytimeProps) {
   }, [onNext, isValid, loading, setEverytimeData]);
 
   return (
-    <div className="mb-12 space-y-4">
+    <div className="line-breaks mb-12 space-y-4">
       <h3 className="font-semibold text-lg">에브리타임 시간표 제출</h3>
       <AlertBox
         icon={<ClockAlert className="h-4 w-4" />}

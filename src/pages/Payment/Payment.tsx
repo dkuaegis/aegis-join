@@ -75,7 +75,7 @@ function Payment({
     }, [onNext, isValid, payInfo?.status]);
 
   return (
-    <div className="space-y-4">
+    <div className="line-breaks space-y-4">
       <h3 className="font-semibold text-lg">회비 납부</h3>
       <Label className="text-base">입금 안내</Label>
       <Alert>
