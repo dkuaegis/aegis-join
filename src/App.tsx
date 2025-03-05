@@ -101,10 +101,7 @@ function App() {
           path="/Payment"
           element={<Payment onNext={next} onPrev={prev} />}
         />
-        <Route
-          path="/JoinComplete"
-          element={<JoinComplete />}
-        />
+        <Route path="/JoinComplete" element={<JoinComplete />} />
 
         <Route path="*" element={<Navigate to={`/${currentStep}`} replace />} />
       </Routes>
