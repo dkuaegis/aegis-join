@@ -13,7 +13,7 @@ export default function JoinComplete() {
             <h1 className="text-4xl font-bold tracking-tight">가입을 축하합니다! 🎉</h1>
             <p className="text-xl text-muted-foreground">성공적으로 가입이 완료되었습니다.</p>
             <CenterLogo />
-            <p className="text-lg line-breaks  "> 
+            <p className="text-lg line-breaks"> 
               앞으로의 모든 활동과 소통은 <strong>디스코드</strong>에서 이루어집니다. Aegis와 함께 성장해 나가요!
             </p>
 
