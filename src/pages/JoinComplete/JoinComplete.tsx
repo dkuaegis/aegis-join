@@ -1,16 +1,17 @@
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 // import { MessageCircle } from "lucide-react";
 import Confetti from "react-confetti";
 import CenterLogo from "./JoinComplete.Centerlogo";
+import DiscordIcon from "@/assets/discordIcon.svg";
 
 export default function JoinComplete() {
   return (
     <AlignCenter>
       <Wrapper>
         <Confetti recycle={false} numberOfPieces={500} />
-        <h1 className="font-bold text-4xl tracking-tight">
+        <h2 className="font-bold text-3xl tracking-tight">
           가입을 축하합니다! 🎉
-        </h1>
+        </h2>
         <p className="text-muted-foreground text-xl">
           성공적으로 가입이 완료되었습니다.
         </p>
@@ -20,11 +21,32 @@ export default function JoinComplete() {
           이루어집니다. Aegis와 함께 성장해 나가요!
         </p>
 
-        {/* <div className="pt-4">
-          <p className="mb-4 text-muted-foreground">
-            카카오톡 채팅방에서도 공지를 확인할 수 있습니다.
+        <div className="line-breaks pt-8">
+          <Button
+            size="lg"
+            className="w-full bg-discord-blue py-6 text-lg text-white hover:bg-blue-800"
+            asChild
+          >
+            <a
+              href={import.meta.env.VITE_DISCORD_NOTICE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={DiscordIcon} alt="Discord Icon" className="mr-2 h-5 w-5" />
+              디스코드 공지방 확인하기
+            </a>
+          </Button>
+        </div>
+
+        {/* <div className="line-breaks pt-8">
+          <p className="mb-1 text-muted-foreground">
+            오픈채팅방에서도 공지를 확인할 수 있습니다.
           </p>
-          <Button size="lg" className="w-full py-6 text-lg" asChild>
+          <Button
+            size="lg"
+            className="w-full bg-yellow-400 py-6 text-black text-lg hover:bg-yellow-600"
+            asChild
+          >
             <a
               href={import.meta.env.VITE_KAKAO_CHATROOM_URL}
               target="_blank"

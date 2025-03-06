@@ -74,7 +74,6 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
         <StudentPhoneNumber name="phoneNumber" />
         <StudentId name="studentId" />
         <StudentDepartment name="department" />
-        {/* <StudentReRegistrationStatus name="reRegistration"/> */}
         <StudentAcademicStatus name="academicStatus" />
         <StudentGrade name="grade" />
         <StudentSemester name="semester" />
