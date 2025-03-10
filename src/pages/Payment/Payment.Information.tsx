@@ -42,6 +42,7 @@ const Information = ({
                 copyToClipboard(ADMIN_INFO.accountNumber);
                 setCopyStep("SenderName");
               }}
+              aria-label="계좌번호 복사하기"
             >
               <Copy className="h-3 w-3" />
             </Button>
@@ -58,6 +59,7 @@ const Information = ({
                 copyToClipboard(senderName);
                 setCopyStep("End");
               }}
+              aria-label="입금자명 복사하기"
             >
               <Copy className="h-3 w-3" />
             </Button>
