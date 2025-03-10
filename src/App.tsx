@@ -1,6 +1,4 @@
 import { Progress } from "@/components/ui/progress";
-// import Everytime from "@/pages/Everytime/Everytime";
-import LoginPage from "@/pages/LoginPage";
 import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
@@ -18,6 +16,7 @@ import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   const { isAuthenticated } = useAuth();

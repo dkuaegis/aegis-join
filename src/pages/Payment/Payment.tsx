@@ -79,23 +79,25 @@ function Payment({
           </AlertTitle>
         </Alert>
       )}
-
-      <Alert className="relative animate-shimmer border-amber-300 bg-[length:200%_100%] bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50">
-        <AlertTitle className="font-bold text-amber-800">⚠️ 주의 ⚠️</AlertTitle>
-        <AlertDescription className="text-amber-700">
-          반드시 위에 표시된 <strong>입금자명</strong>을 정확하게 사용해주세요.
-          다른 이름으로 입금 시 확인이 어렵습니다. 입금자명을 잘못 기입했다면{" "}
-          <a
-            href={import.meta.env.VITE_PAYMENT_GUIDE_URL}
-            target="_blank"
-            className="font-semibold text-amber-900 underline hover:text-amber-600"
-            rel="noreferrer"
-          >
-            납부 상세 가이드
-          </a>
-          를 참고해주세요.
-        </AlertDescription>
-      </Alert>
+      {payInfo && payInfo.status === "PENDING" && (
+        <Alert className="relative animate-shimmer border-amber-300 bg-[length:200%_100%] bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50">
+          <AlertTitle className="font-bold text-amber-800">⚠️ 주의 ⚠️</AlertTitle>
+          <AlertDescription className="text-amber-700">
+            반드시 위에 표시된 <strong>입금자명</strong>을 정확하게
+            사용해주세요. 다른 이름으로 입금 시 확인이 어렵습니다. 입금자명을
+            잘못 기입했다면{" "}
+            <a
+              href={import.meta.env.VITE_PAYMENT_GUIDE_URL}
+              target="_blank"
+              className="font-semibold text-amber-900 underline hover:text-amber-600"
+              rel="noreferrer"
+            >
+              납부 상세 가이드
+            </a>
+            를 참고해주세요.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {isValid === false && payInfo && payInfo.currentDepositAmount > 0 && (
         <AlertBox
