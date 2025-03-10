@@ -8,8 +8,6 @@ import { Copy } from "lucide-react";
 import { useState } from "react";
 import { ADMIN_INFO } from "./Payment.Config";
 
-
-
 interface InformationProps {
   senderName: string;
   isLoading: boolean;
