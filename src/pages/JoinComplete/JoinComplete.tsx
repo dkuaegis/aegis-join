@@ -1,4 +1,4 @@
-import Confetti from "react-confetti";
+// import Confetti from "react-confetti";
 import CenterLogo from "./JoinComplete.Centerlogo";
 import DiscordNotice from "./JoinComplete.DiscordNotice";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
@@ -7,7 +7,7 @@ export default function JoinComplete() {
   return (
     <AlignCenter>
       <Wrapper>
-        <Confetti recycle={false} numberOfPieces={500} />
+        {/* <Confetti recycle={false} numberOfPieces={500} /> */}
         <h2 className="font-bold text-3xl tracking-tight">
           가입을 축하합니다! 🎉
         </h2>
@@ -23,7 +23,7 @@ export default function JoinComplete() {
 }
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
-  return <div className="space-y-2">{children}</div>;
+  return <div className="space-y-4">{children}</div>;
 };
 
 const AlignCenter = ({ children }: { children: React.ReactNode }) => {
