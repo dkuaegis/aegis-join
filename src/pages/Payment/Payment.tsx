@@ -2,22 +2,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import type { GetPaymentInfo } from "@/types/api/payment";
-import { CircleAlert, LoaderCircle } from "lucide-react";
+import { CircleAlert, CircleCheckBig, LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import { startPaymentPolling } from "./Payment.Api";
 import HowtoDo from "./Payment.HowtoDo";
 import Information from "./Payment.Information";
+import { ADMIN_INFO } from "./Payment.Config";
 
-const ADMIN_INFO = {
-  phoneNumber:
-    import.meta.env.VITE_ADMIN_PHONE ?? "환경변수가 설정되지 않았습니다.",
-  kakaoId:
-    import.meta.env.VITE_ADMIN_KAKAO ?? "환경변수가 설정되지 않았습니다.",
-  accountNumber:
-    import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER ??
-    "환경변수가 설정되지 않았습니다.",
-};
 
 function Payment({
   onNext,
@@ -73,18 +65,33 @@ function Payment({
   return (
     <div className="line-breaks space-y-4">
       <h3 className="font-semibold text-lg">회비 납부</h3>
-      <Information
+      {(payInfo && payInfo.status === "PENDING") ?
+        <Information
         senderName={senderName}
         isLoading={isLoading}
         payInfo={payInfo}
         remainingAmount={remainingAmount}
-      />
+        /> : 
+        <Alert className="bg-green-50 border-green-200 text-green-800 shadow-sm">
+        <CircleCheckBig size={24} color="#166534"  />
+        <AlertTitle className="text-lg font-semibold">입금이 완료되었습니다</AlertTitle>
+        </Alert>
+      }
+
 
       <Alert className="relative animate-shimmer border-amber-300 bg-[length:200%_100%] bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50">
         <AlertTitle className="font-bold text-amber-800">⚠️ 주의 ⚠️</AlertTitle>
         <AlertDescription className="text-amber-700">
           반드시 위에 표시된 <strong>입금자명</strong>을 정확하게 사용해주세요.
           다른 이름으로 입금 시 확인이 어렵습니다.
+          입금자명을 잘못 기입했다면 {" "}
+          <a
+      href={import.meta.env.VITE_PAYMENT_GUIDE_URL}
+      target="_blank"
+      className="text-amber-900 font-semibold underline hover:text-amber-600"
+    >
+      납부 상세 가이드
+    </a>를 참고해주세요.
         </AlertDescription>
       </Alert>
 
