@@ -58,9 +58,14 @@ export default {
 			'50%': { transform: 'rotate(-20deg)' },
 			'100%': { transform: 'rotate(20deg)' },
 			},
+		shimmer: {
+			"0%": { backgroundPosition: "200% 0" },
+			"100%": { backgroundPosition: "0% 0" },
+			},
 		},
 		animation: {
 		'emoji-rotate': 'emoji-rotate 3s ease-in-out infinite',
+		shimmer: "shimmer 3s infinite linear",
 		},
   	}
   },

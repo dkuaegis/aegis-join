@@ -83,9 +83,11 @@ function Survey({
 
   return (
     <FormProvider {...methods}>
-      <form className="line-breaks space-y-4" onSubmit={methods.handleSubmit(onSubmit)}>
+      <form
+        className="line-breaks space-y-4"
+        onSubmit={methods.handleSubmit(onSubmit)}
+      >
         <h3 className="font-semibold text-lg">설문조사</h3>
-
         <Container>
           <Label>관심분야 (다중 선택 가능)</Label>
           <InterestFieldGroup
