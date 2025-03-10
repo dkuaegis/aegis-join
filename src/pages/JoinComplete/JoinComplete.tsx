@@ -1,8 +1,8 @@
+import DiscordIcon from "@/assets/discordIcon.svg";
 import { Button } from "@/components/ui/button";
 // import { MessageCircle } from "lucide-react";
 import Confetti from "react-confetti";
 import CenterLogo from "./JoinComplete.Centerlogo";
-import DiscordIcon from "@/assets/discordIcon.svg";
 
 export default function JoinComplete() {
   return (
@@ -32,7 +32,11 @@ export default function JoinComplete() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src={DiscordIcon} alt="Discord Icon" className="mr-2 h-5 w-5" />
+              <img
+                src={DiscordIcon}
+                alt="Discord Icon"
+                className="mr-2 h-5 w-5"
+              />
               디스코드 공지방 확인하기
             </a>
           </Button>

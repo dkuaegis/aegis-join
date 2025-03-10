@@ -1,15 +1,13 @@
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import AlertBox from "@/components/ui/custom/alertbox";
-import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
-import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
-import { CircleAlert, Copy, LoaderCircle } from "lucide-react";
+import { CircleAlert, LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import { startPaymentPolling } from "./Payment.Api";
 import HowtoDo from "./Payment.HowtoDo";
+import Information from "./Payment.Information";
 
 const ADMIN_INFO = {
   phoneNumber:
@@ -30,8 +28,6 @@ function Payment({
   const [senderName, setSenderName] = useState("로딩 중...");
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
-
-  const { copyToClipboard } = useCopyToClipboard();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,54 +66,25 @@ function Payment({
   }, [payInfo]);
 
   const handleNext = useCallback(() => {
-      if (!isValid || payInfo?.status === "PENDING") return;
-      onNext();
-    }, [onNext, isValid, payInfo?.status]);
+    if (!isValid || payInfo?.status === "PENDING") return;
+    onNext();
+  }, [onNext, isValid, payInfo?.status]);
 
   return (
     <div className="line-breaks space-y-4">
       <h3 className="font-semibold text-lg">회비 납부</h3>
-      <Label className="text-base">입금 안내</Label>
-      <Alert>
-        <AlertDescription className="space-y-2 text-sm sm:text-base">
-          <div className="flex items-center">
-            <span className="trunum w-20 font-medi">계좌번호:</span>
-            <span className="mr-1 pr-0">{ADMIN_INFO.accountNumber}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-6 w-6 flex-shrink-0 p-0"
-              onClick={() => copyToClipboard(ADMIN_INFO.accountNumber)}
-            >
-              <Copy className="h-3 w-3" />
-            </Button>
-          </div>
-          <div className="flex items-center">
-            <span className="w-20 font-medium">입금자명:</span>
-            <span className="mr-1 pr-0">{senderName}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-6 w-6 flex-shrink-0 p-0"
-              onClick={() => copyToClipboard(senderName)}
-            >
-              <Copy className="h-3 w-3" />
-            </Button>
-          </div>
-          <div className="flex items-center">
-            <span className="w-20 font-medium">입금할 금액:</span>
-            <span>
-              {isLoading
-                ? "로딩 중..."
-                : payInfo
-                  ? `${remainingAmount.toLocaleString()}원`
-                  : "정보를 불러오는 중..."}
-            </span>
-          </div>
-          <div className="flex items-center">
-            <span className="w-20 font-medium">예금주명:</span>
-            <span>윤성민</span>
-          </div>
+      <Information
+        senderName={senderName}
+        isLoading={isLoading}
+        payInfo={payInfo}
+        remainingAmount={remainingAmount}
+      />
+
+      <Alert className="relative animate-shimmer border-amber-300 bg-[length:200%_100%] bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50">
+        <AlertTitle className="font-bold text-amber-800">⚠️ 주의 ⚠️</AlertTitle>
+        <AlertDescription className="text-amber-700">
+          반드시 위에 표시된 <strong>입금자명</strong>을 정확하게 사용해주세요.
+          다른 이름으로 입금 시 확인이 어렵습니다.
         </AlertDescription>
       </Alert>
 
@@ -153,12 +120,11 @@ function Payment({
       <h4 className="font-semibold text-lg">납부 방법</h4>
       <HowtoDo />
       <NavigationButtons
-      prev={onPrev}
-      next={handleNext}
-      isValid={isValid}
-      showPrev={isValid}
-/>
-
+        prev={onPrev}
+        next={handleNext}
+        isValid={isValid}
+        showPrev={isValid}
+      />
     </div>
   );
 }
