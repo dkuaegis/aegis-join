@@ -1,11 +1,7 @@
-import DiscordIcon from "@/assets/discordIcon.svg";
-import { Button } from "@/components/ui/button";
 import Confetti from "react-confetti";
 import CenterLogo from "./JoinComplete.Centerlogo";
-import { MessageCircle } from "lucide-react";
-import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 import DiscordNotice from "./JoinComplete.DiscordNotice";
-import KakaoIcon from "./KakaoIcon";
+import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 
 export default function JoinComplete() {
   return (

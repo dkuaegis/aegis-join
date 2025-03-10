@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 interface KakaoIconProps {
   className?: string;
@@ -12,10 +12,11 @@ const KakaoIcon: React.FC<KakaoIconProps> = ({ className = "" }) => (
     viewBox="0 0 48 48"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="kakao-icon-title"
   >
-    {/* 배경 사각형: 카카오 공식 노란색 */}
+    <title id="kakao-icon-title">카카오톡 아이콘</title>
     <rect width="48" height="48" fill="var(--kakao-bg, #FEE500)" />
-    {/* 내부 아이콘(예시: 말풍선 모양 혹은 간단한 로고) */}
     <path
       fillRule="evenodd"
       clipRule="evenodd"
