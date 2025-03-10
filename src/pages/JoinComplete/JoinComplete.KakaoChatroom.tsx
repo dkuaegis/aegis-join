@@ -26,7 +26,7 @@ const KakaoChatroom = () => {
       </p>
       <Button
         size="lg"
-        className="w-full bg-[#FEE500] text-black hover:bg-[#FEE500] hover:text-black"
+        className="w-full bg-[#FEE500] text-black hover:bg-[#FEE500] hover:text-black active:scale-95 transition-transform duration-100"
         asChild
       >
         <a
@@ -41,8 +41,8 @@ const KakaoChatroom = () => {
             {openChatStep === "copyCode"
               ? "비밀번호 복사하기"
               : openChatStep === "copied"
-                ? "복사되었습니다!!"
-                : "오픈채팅방 참여하기"}
+              ? "복사되었습니다!"
+              : "오픈채팅방 참여하기!!"}
           </span>
         </a>
       </Button>

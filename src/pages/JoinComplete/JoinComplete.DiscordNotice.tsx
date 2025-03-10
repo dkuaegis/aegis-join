@@ -10,7 +10,7 @@ const DiscordNotice = () => {
       </p>
       <Button
         size="lg"
-        className="w-full bg-discord-blue text-white hover:bg-discord-blue"
+        className="w-full bg-discord-blue text-white hover:bg-discord-blue active:scale-95 transition-transform duration-100"
         asChild
       >
         <a
