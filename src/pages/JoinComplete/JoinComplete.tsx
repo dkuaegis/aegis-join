@@ -1,7 +1,9 @@
+
 import Confetti from "react-confetti";
 import CenterLogo from "./JoinComplete.Centerlogo";
 import DiscordNotice from "./JoinComplete.DiscordNotice";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
+
 
 export default function JoinComplete() {
   return (
