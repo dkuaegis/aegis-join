@@ -14,7 +14,7 @@ function LoginPage() {
             Aegis 회원 가입
           </h1>
           <p className="text-muted-foreground text-sm">
-            구글 계정으로 로그인해주세요
+            단국대학교 구글 계정으로 로그인해주세요
           </p>
         </div>
         <Button className="w-full" asChild>
