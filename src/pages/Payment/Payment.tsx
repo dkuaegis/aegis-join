@@ -4,36 +4,19 @@ import NavigationButtons from "@/components/ui/custom/navigationButton";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import { CircleAlert, CircleCheckBig, LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { fetchPersonalInfoData } from "../PersonalInfo/PersonalInfo.Api";
 import { startPaymentPolling } from "./Payment.Api";
 import { ADMIN_INFO } from "./Payment.Config";
-import HowtoDo from "./Payment.HowtoDo";
+// import HowtoDo from "./Payment.HowtoDo";
 import Information from "./Payment.Information";
 
 function Payment({
   onNext,
   onPrev,
 }: { onNext: () => void; onPrev: () => void }) {
-  const [isLoading, setIsLoading] = useState(true);
   const [isValid, setIsValid] = useState(false);
-  const [senderName, setSenderName] = useState("로딩 중...");
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchPersonalInfoData();
-        setSenderName(`${data.name}`);
-      } catch (error) {
-        console.error("Failed to fetch personal info:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const cleanupPolling = startPaymentPolling(
@@ -65,8 +48,6 @@ function Payment({
       <h3 className="font-semibold text-lg">회비 납부</h3>
       {payInfo && payInfo.status === "PENDING" ? (
         <Information
-          senderName={senderName}
-          isLoading={isLoading}
           payInfo={payInfo}
           remainingAmount={remainingAmount}
         />
@@ -108,8 +89,7 @@ function Payment({
         </div>
       )}
 
-      <h4 className="font-semibold text-lg">납부 방법</h4>
-      <HowtoDo />
+      {/* <HowtoDo /> */}
       <NavigationButtons
         prev={onPrev}
         next={handleNext}

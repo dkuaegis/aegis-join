@@ -8,16 +8,12 @@ import { Copy } from "lucide-react";
 import { ADMIN_INFO } from "./Payment.Config";
 
 interface InformationProps {
-  senderName: string;
-  isLoading: boolean;
   payInfo: GetPaymentInfo | null;
   remainingAmount: number;
 }
 
 
 const Information = ({
-  senderName,
-  isLoading,
   payInfo,
   remainingAmount,
 }: InformationProps) => {
@@ -42,25 +38,9 @@ const Information = ({
             </Button>
           </div>
           <div className="flex items-center">
-            <span className="w-20 font-medium">입금자명:</span>
-            <span className="mr-1 pr-0">{senderName}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                copyToClipboard(senderName);
-              }}
-              aria-label="입금자명 복사하기"
-            >
-              <Copy className="h-3 w-3" />
-            </Button>
-          </div>
-          <div className="flex items-center">
             <span className="w-20 font-medium">입금할 금액:</span>
             <span>
-              {isLoading
-                ? "로딩 중..."
-                : payInfo
+              { payInfo
                   ? `${remainingAmount.toLocaleString()}원`
                   : "정보를 불러오는 중..."}
             </span>
