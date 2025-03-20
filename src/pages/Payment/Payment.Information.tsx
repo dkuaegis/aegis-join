@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
 
 import { Copy } from "lucide-react";
-import { useState } from "react";
 import { ADMIN_INFO } from "./Payment.Config";
 
 interface InformationProps {
@@ -15,7 +14,6 @@ interface InformationProps {
   remainingAmount: number;
 }
 
-type CopyStep = "AccountNumber" | "SenderName" | "End";
 
 const Information = ({
   senderName,
@@ -23,7 +21,6 @@ const Information = ({
   payInfo,
   remainingAmount,
 }: InformationProps) => {
-  const [copyStep, setCopyStep] = useState<CopyStep>("AccountNumber");
   const { copyToClipboard } = useCopyToClipboard();
   return (
     <>
@@ -36,11 +33,8 @@ const Information = ({
             <Button
               variant="ghost"
               size="sm"
-              className={`h-6 w-6 flex-shrink-0 p-0 ${copyStep === "AccountNumber" ? "animate-pulse border border-amber-300 bg-amber-50 text-amber-700 shadow-sm hover:bg-amber-100 hover:shadow" : ""}
-                  `}
               onClick={() => {
                 copyToClipboard(ADMIN_INFO.accountNumber);
-                setCopyStep("SenderName");
               }}
               aria-label="계좌번호 복사하기"
             >
@@ -53,11 +47,8 @@ const Information = ({
             <Button
               variant="ghost"
               size="sm"
-              className={`h-6 w-6 flex-shrink-0 p-0 ${copyStep === "SenderName" ? "animate-pulse border border-amber-300 bg-amber-50 text-amber-700 shadow-sm hover:bg-amber-100 hover:shadow" : ""}
-                  `}
               onClick={() => {
                 copyToClipboard(senderName);
-                setCopyStep("End");
               }}
               aria-label="입금자명 복사하기"
             >

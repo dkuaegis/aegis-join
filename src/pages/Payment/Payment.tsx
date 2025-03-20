@@ -1,4 +1,4 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import type { GetPaymentInfo } from "@/types/api/payment";
@@ -24,8 +24,7 @@ function Payment({
     const fetchData = async () => {
       try {
         const data = await fetchPersonalInfoData();
-        const lastSixStudentId = data.studentId.slice(-6);
-        setSenderName(`${data.name}${lastSixStudentId}`);
+        setSenderName(`${data.name}`);
       } catch (error) {
         console.error("Failed to fetch personal info:", error);
       } finally {
@@ -77,25 +76,6 @@ function Payment({
           <AlertTitle className="font-semibold text-lg">
             입금이 완료되었습니다
           </AlertTitle>
-        </Alert>
-      )}
-      {payInfo && payInfo.status === "PENDING" && (
-        <Alert className="relative animate-shimmer border-amber-300 bg-[length:200%_100%] bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50">
-          <AlertTitle className="font-bold text-amber-800">⚠️ 주의 ⚠️</AlertTitle>
-          <AlertDescription className="text-amber-700">
-            반드시 위에 표시된 <strong>입금자명</strong>을 정확하게
-            사용해주세요. 다른 이름으로 입금 시 확인이 어렵습니다. 입금자명을
-            잘못 기입했다면{" "}
-            <a
-              href={import.meta.env.VITE_PAYMENT_GUIDE_URL}
-              target="_blank"
-              className="font-semibold text-amber-900 underline hover:text-amber-600"
-              rel="noreferrer"
-            >
-              납부 상세 가이드
-            </a>
-            를 참고해주세요.
-          </AlertDescription>
         </Alert>
       )}
 
