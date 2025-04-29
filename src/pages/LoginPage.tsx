@@ -17,13 +17,13 @@ function LoginPage() {
             단국대학교 구글 계정으로 로그인해주세요
           </p>
         </div>
-        <Button className="w-full" asChild>
+        {/*<Button className="w-full">
           <a
             href={`${import.meta.env.VITE_API_URL}/oauth2/authorization/google`}
           >
             Google로 로그인
           </a>
-        </Button>
+        </Button>*/}
         <Button className="w-full" asChild>
           <a href="https://sites.google.com/dankook.ac.kr/help">
             단국대 Gmail 생성 가이드
