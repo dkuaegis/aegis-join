@@ -26,7 +26,7 @@ function LoginPage() {
             단국대학교 구글 계정으로 로그인해주세요
           </p>
         </div>
-        <Dialog>
+        <Dialog defaultOpen>
           <DialogTrigger asChild>
             <Button className="w-full">가입이 일시적으로 불가합니다</Button>
           </DialogTrigger>
