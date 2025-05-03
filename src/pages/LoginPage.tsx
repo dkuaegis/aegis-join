@@ -17,7 +17,7 @@ function LoginPage() {
             단국대학교 구글 계정으로 로그인해주세요
           </p>
         </div>
-        <Button className="w-full">
+        <Button className="w-full" asChild>
           <a
             href={`${import.meta.env.VITE_API_URL}/oauth2/authorization/google`}
           >
