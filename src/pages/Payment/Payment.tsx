@@ -17,7 +17,6 @@ function Payment({
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
 
-
   useEffect(() => {
     const cleanupPolling = startPaymentPolling(
       setIsValid,
@@ -47,10 +46,7 @@ function Payment({
     <div className="line-breaks space-y-4">
       <h3 className="font-semibold text-lg">회비 납부</h3>
       {payInfo && payInfo.status === "PENDING" ? (
-        <Information
-          payInfo={payInfo}
-          remainingAmount={remainingAmount}
-        />
+        <Information payInfo={payInfo} remainingAmount={remainingAmount} />
       ) : (
         <Alert className="border-green-200 bg-green-50 text-green-800 shadow-sm">
           <CircleCheckBig size={24} color="#166534" />
