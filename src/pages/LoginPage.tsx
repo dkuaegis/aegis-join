@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+//import {
+//  Dialog,
+//  DialogContent,
+//  DialogFooter,
+//  DialogHeader,
+//  DialogTrigger,
+//  DialogTitle,
+//  DialogDescription,
+//} from "@/components/ui/dialog";
 
 function LoginPage() {
   return (
@@ -26,7 +26,7 @@ function LoginPage() {
             단국대학교 구글 계정으로 로그인해주세요
           </p>
         </div>
-        <Dialog defaultOpen>
+        {/*<Dialog defaultOpen>
           <DialogTrigger asChild>
             <Button className="w-full">가입이 일시적으로 불가합니다</Button>
           </DialogTrigger>
@@ -46,14 +46,14 @@ function LoginPage() {
               </Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
-        {/*<Button className="w-full">
+        </Dialog>*/}
+        <Button className="w-full">
           <a
             href={`${import.meta.env.VITE_API_URL}/oauth2/authorization/google`}
           >
             Google로 로그인
           </a>
-        </Button>*/}
+        </Button>
         <Button className="w-full" asChild>
           <a href="https://sites.google.com/dankook.ac.kr/help">
             단국대 Gmail 생성 가이드
