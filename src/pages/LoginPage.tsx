@@ -1,13 +1,4 @@
 import { Button } from "@/components/ui/button";
-//import {
-//  Dialog,
-//  DialogContent,
-//  DialogFooter,
-//  DialogHeader,
-//  DialogTrigger,
-//  DialogTitle,
-//  DialogDescription,
-//} from "@/components/ui/dialog";
 
 function LoginPage() {
   return (
@@ -26,27 +17,6 @@ function LoginPage() {
             단국대학교 구글 계정으로 로그인해주세요
           </p>
         </div>
-        {/*<Dialog defaultOpen>
-          <DialogTrigger asChild>
-            <Button className="w-full">가입이 일시적으로 불가합니다</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>가입이 일시적으로 불가합니다</DialogTitle>
-              <DialogDescription>
-                기업은행의 전산시스템 이전작업으로 5.3일(토) 00시~5.5일(월)
-                24시까지 금융거래가 일시 중단되어 동아리 가입이 불가합니다.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button className="w-full" asChild>
-                <a href="https://www.ibk.co.kr/cyber/newibkDetailCyber.ibk?pageId=IR04010200&srno=316118">
-                  기업은행 공지사항 확인하기
-                </a>
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>*/}
         <Button className="w-full">
           <a
             href={`${import.meta.env.VITE_API_URL}/oauth2/authorization/google`}
