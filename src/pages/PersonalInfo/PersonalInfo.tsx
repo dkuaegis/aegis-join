@@ -51,7 +51,13 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
     return () => {
       setPersonalInfoData(methods.getValues());
     };
-  }, [isInitial, methods, setNotInitial, setPersonalInfoData]);
+  }, [
+    isInitial,
+    methods.reset,
+    methods.getValues,
+    setNotInitial,
+    setPersonalInfoData,
+  ]);
 
   const onSubmit = (data: PersonalInfoFormValues) => {
     submitPersonalInfoData(data)
