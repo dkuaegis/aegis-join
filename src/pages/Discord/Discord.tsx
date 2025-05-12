@@ -32,22 +32,19 @@ function Discord({ onNext, onPrev }: DiscordProps) {
       console.error("디스코드 인증코드 에러:", err);
     }
   }, []);
-  // 컴포넌트 마운트 시 한 번 Discord 코드를 불러옵니다.
-  useEffect(() => {
-    getDiscordCode();
-  }, [getDiscordCode]);
 
   const handleRefresh = useCallback(() => {
     getDiscordCode();
   }, [getDiscordCode]);
 
-  // 디스코드 가입 여부 폴링
   useEffect(() => {
+    getDiscordCode();
+
     const cleanupPolling = startDiscordPolling(setIsValid);
     return () => {
       cleanupPolling();
     };
-  }, []);
+  }, [getDiscordCode]);
 
   const handleNext = useCallback(() => {
     if (isValid) onNext();
