@@ -1,4 +1,5 @@
 import fetchingWithToast from "@/lib/customFetch";
+import type { InterestField } from "@/types/api/survey";
 import type { SurveyFormValues } from "./Survey.schema";
 
 export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
@@ -14,7 +15,7 @@ export const fetchSurveyData = async (): Promise<SurveyFormValues> => {
 };
 
 export const submitSurveyData = async (data: SurveyFormValues) => {
-  const transformedData = data;
+  const transformedData = transformSurveyData(data);
   const response = await fetchingWithToast(
     `${import.meta.env.VITE_API_URL}/survey`,
     {
@@ -30,3 +31,20 @@ export const submitSurveyData = async (data: SurveyFormValues) => {
     throw new Error("설문조사 제출에 실패했습니다.");
   }
 };
+
+function transformSurveyData(data: SurveyFormValues) {
+  const filteredInterestsEtc = Object.keys(data.interestsEtc).reduce(
+    (acc, key) => {
+      const fieldKey = key as InterestField;
+      if (data.interests.includes(fieldKey)) {
+        acc[fieldKey] = data.interestsEtc[fieldKey];
+      }
+      return acc;
+    },
+    {} as Record<InterestField, string | undefined>
+  );
+  return {
+    ...data,
+    interestsEtc: filteredInterestsEtc,
+  };
+}
