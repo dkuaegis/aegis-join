@@ -24,7 +24,6 @@ function App() {
     steps: [
       "PersonalInfo",
       "Survey",
-      // "Everytime",
       "Discord",
       "Coupon",
       "Payment",
@@ -78,16 +77,6 @@ function App() {
           path="/Survey"
           element={<Survey onNext={next} onPrev={prev} />}
         />
-        {/* <Route
-          path="/Everytime"
-          element={
-            <Everytime
-              onNext={next}
-              onPrev={prev}
-              onDataSubmit={() => {}} // 핸들러 전달
-            />
-          }
-        /> */}
         <Route
           path="/Discord"
           element={<Discord onNext={next} onPrev={prev} />}
