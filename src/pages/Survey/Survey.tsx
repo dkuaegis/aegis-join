@@ -88,41 +88,13 @@ function Survey({
         onSubmit={methods.handleSubmit(onSubmit)}
       >
         <h3 className="font-semibold text-lg">설문조사</h3>
-        <Container>
-          <Label>관심분야 (다중 선택 가능)</Label>
-          <InterestFieldGroup
-            name="보안"
-            interestField={securityList}
-            Icon={GlobeLock}
-          />
-          <InterestFieldGroup
-            name="웹"
-            interestField={webList}
-            Icon={CodeXml}
-          />
-          <InterestFieldGroup
-            name="게임"
-            interestField={gameList}
-            Icon={Gamepad2}
-          />
-          <InterestFieldGroup
-            name="기타"
-            interestField={etcList}
-            Icon={Ellipsis}
-          />
-        </Container>
-        <EtcErrorMessage error={methods.formState.errors.interests?.message} />
-
-        <Container>
-          <JoinReason />
-        </Container>
 
         <Container>
           <AcquisitionType />
         </Container>
 
         <Container>
-          <Feedback />
+          <JoinReason />
         </Container>
 
         <NavigationButtons
