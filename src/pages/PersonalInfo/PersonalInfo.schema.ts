@@ -1,7 +1,4 @@
-import {
-  Department,
-  Grade,
-} from "@/types/api/member";
+import { Department, Grade } from "@/types/api/member";
 import { z } from "zod";
 
 // 생년월일 유효성 검사 함수 (YYMMDD 형식, 월/일 범위만 체크)
@@ -53,7 +50,6 @@ export const personalInfoSchema = z.object({
   grade: z.nativeEnum(Grade, {
     errorMap: () => ({ message: "학년을 선택해주세요" }),
   }),
-
 });
 
 export type PersonalInfoFormValues = z.infer<typeof personalInfoSchema>;
