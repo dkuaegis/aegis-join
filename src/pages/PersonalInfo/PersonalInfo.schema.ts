@@ -1,10 +1,4 @@
-import {
-  AcademicStatus,
-  Department,
-  Gender,
-  Grade,
-  Semester,
-} from "@/types/api/member";
+import { Department, Grade } from "@/types/api/member";
 import { z } from "zod";
 
 // 생년월일 유효성 검사 함수 (YYMMDD 형식, 월/일 범위만 체크)
@@ -28,7 +22,6 @@ const isValidBirthDate = (birthDate: string): boolean => {
 };
 
 export const personalInfoSchema = z.object({
-  name: z.string().min(1, "이름을 입력해주세요"),
   birthDate: z
     .string()
     .length(6, "생년월일을 6자리로 입력해주세요 (YYMMDD)")
@@ -36,9 +29,6 @@ export const personalInfoSchema = z.object({
       isValidBirthDate,
       "유효하지 않은 생년월일입니다 (월/일 범위: 1~12, 1~31)"
     ),
-  gender: z.nativeEnum(Gender, {
-    errorMap: () => ({ message: "성별을 선택해주세요" }),
-  }),
   studentId: z
     .string()
     .length(8, "학번은 8자리여야 합니다")
@@ -57,18 +47,8 @@ export const personalInfoSchema = z.object({
     errorMap: () => ({ message: "학과를 선택해주세요" }),
   }),
 
-  fresh: z.boolean().refine((val) => val !== null, {
-    message: "재등록 여부를 선택해주세요",
-  }),
-
-  academicStatus: z.nativeEnum(AcademicStatus, {
-    errorMap: () => ({ message: "학적 상태를 선택해주세요" }),
-  }),
   grade: z.nativeEnum(Grade, {
     errorMap: () => ({ message: "학년을 선택해주세요" }),
-  }),
-  semester: z.nativeEnum(Semester, {
-    errorMap: () => ({ message: "학기를 선택해주세요" }),
   }),
 });
 

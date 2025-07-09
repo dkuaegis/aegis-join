@@ -1,7 +1,4 @@
-import { Label } from "@/components/ui/label";
-
 import NavigationButtons from "@/components/ui/custom/navigationButton";
-import { CodeXml, Ellipsis, Gamepad2, GlobeLock } from "lucide-react";
 
 import { useSurveyStore } from "@/stores/useSurveyStore";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,9 +6,6 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { AcquisitionType } from "./Survey.AcquisitionType";
 import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
-import Feedback from "./Survey.FeedBack";
-import { InterestFieldGroup } from "./Survey.FieldGroup";
-import { etcList, gameList, securityList, webList } from "./Survey.Items";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
 
@@ -23,10 +17,7 @@ function Survey({
   onPrev: () => void;
 }) {
   const {
-    interests,
-    interestsEtc,
     joinReason,
-    feedback,
     acquisitionType,
     isInitial,
     setFormValues,
@@ -37,10 +28,7 @@ function Survey({
     resolver: zodResolver(surveySchema),
     mode: "onChange",
     defaultValues: {
-      interests: interests || [],
-      interestsEtc: interestsEtc || {},
       joinReason: joinReason || "",
-      feedback: feedback || "",
       acquisitionType: acquisitionType || undefined,
     },
   });
@@ -88,41 +76,13 @@ function Survey({
         onSubmit={methods.handleSubmit(onSubmit)}
       >
         <h3 className="font-semibold text-lg">설문조사</h3>
-        <Container>
-          <Label>관심분야 (다중 선택 가능)</Label>
-          <InterestFieldGroup
-            name="보안"
-            interestField={securityList}
-            Icon={GlobeLock}
-          />
-          <InterestFieldGroup
-            name="웹"
-            interestField={webList}
-            Icon={CodeXml}
-          />
-          <InterestFieldGroup
-            name="게임"
-            interestField={gameList}
-            Icon={Gamepad2}
-          />
-          <InterestFieldGroup
-            name="기타"
-            interestField={etcList}
-            Icon={Ellipsis}
-          />
-        </Container>
-        <EtcErrorMessage error={methods.formState.errors.interests?.message} />
-
-        <Container>
-          <JoinReason />
-        </Container>
 
         <Container>
           <AcquisitionType />
         </Container>
 
         <Container>
-          <Feedback />
+          <JoinReason />
         </Container>
 
         <NavigationButtons
@@ -137,11 +97,6 @@ function Survey({
 
 const Container = ({ children }: { children: React.ReactNode }) => {
   return <div className="space-y-2">{children}</div>;
-};
-
-const EtcErrorMessage = ({ error }: { error?: string }) => {
-  if (!error) return null;
-  return <p className="text-red-500 text-xs duration-200 ">{error}</p>;
 };
 
 export default Survey;
