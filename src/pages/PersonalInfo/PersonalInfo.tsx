@@ -11,12 +11,16 @@ import {
   type PersonalInfoFormValues,
   personalInfoSchema,
 } from "./PersonalInfo.schema";
-
+import { StudentAcademicStatus } from "./field/studentAcademicStatus";
 import { StudentBirthDate } from "./field/studentBirthDate";
 import { StudentDepartment } from "./field/studentDepartment";
+import { StudentFresh } from "./field/studentFresh";
+import { StudentGender } from "./field/studentGender";
 import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
+import { StudentName } from "./field/studentName";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
+import { StudentSemester } from "./field/studentSemester";
 
 interface PersonalInfoProps {
   onNext: (data: PersonalInfoFormValues) => void;
@@ -73,11 +77,16 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
         onSubmit={methods.handleSubmit(onSubmit)}
       >
         <h3 className="font-semibold text-lg">기본 인적사항</h3>
+        <StudentName name="name" />
         <StudentBirthDate name="birthDate" />
+        <StudentGender name="gender" />
         <StudentPhoneNumber name="phoneNumber" />
         <StudentId name="studentId" />
         <StudentDepartment name="department" />
+        <StudentAcademicStatus name="academicStatus" />
         <StudentGrade name="grade" />
+        <StudentSemester name="semester" />
+        <StudentFresh name="fresh" />
         <NavigationButtons
           prev={() => {
             setPersonalInfoData(methods.getValues());

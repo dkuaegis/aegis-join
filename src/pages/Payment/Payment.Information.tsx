@@ -2,9 +2,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 import { Label } from "@/components/ui/label";
-import type { GetPaymentInfo } from "@/types/api/payment";
 import { Copy } from "lucide-react";
 import { ADMIN_INFO } from "./Payment.Config";
+import type { GetPaymentInfo } from "@/types/api/payment";
 
 interface InformationProps {
   payInfo: GetPaymentInfo | null;
