@@ -8,17 +8,11 @@ import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
+import { JOIN_STEPS } from "./constants/joinSteps";
 
 function App() {
   const { currentStep, progress, next, prev } = useFunnel({
-    steps: [
-      "PersonalInfo",
-      "Survey",
-      "Discord",
-      "Coupon",
-      "Payment",
-      "JoinComplete",
-    ]
+    steps: JOIN_STEPS,
   });
 
   return (
