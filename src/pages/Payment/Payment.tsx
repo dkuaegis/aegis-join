@@ -48,7 +48,7 @@ function Payment({
       {payInfo && payInfo.status === "PENDING" ? (
         <Information payInfo={payInfo} remainingAmount={remainingAmount} />
       ) : (
-        <Alert className="border-green-200 bg-green-50 text-green-800 shadow-sm">
+        <Alert className="border-green-200 bg-green-50 text-green-800 shadow-xs">
           <CircleCheckBig size={24} color="#166534" />
           <AlertTitle className="font-semibold text-lg">
             입금이 완료되었습니다
