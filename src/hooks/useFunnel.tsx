@@ -13,24 +13,17 @@ function useFunnel({ steps }: useFunnelProps) {
   const currentIndex = steps.indexOf(currentStep);
 
   useEffect(() => {
-    if (currentIndex === -1 && currentStep !== "JoinComplete") {
-      navigate(`/${steps[0]}`);
+    if (currentIndex === -1) {
+      navigate(`/${steps[0]}`, { replace: true });
     }
-  }, [currentIndex, currentStep, navigate, steps]);
+  }, [currentIndex, navigate, steps]);
 
-
-
-  const progress =
-    currentStep === "JoinComplete"
-      ? 100
-      : ((currentIndex + 1) / steps.length) * 100;
+  const progress = currentIndex > -1 ? ((currentIndex + 1) / steps.length) * 100 : 0;
 
   const next = () => {
     const nextStepIndex = currentIndex + 1;
     if (nextStepIndex < steps.length) {
       navigate(`/${steps[nextStepIndex]}`);
-    } else {
-      navigate("/JoinComplete");
     }
   };
 
@@ -42,12 +35,13 @@ function useFunnel({ steps }: useFunnelProps) {
   };
 
   const goto = (step: string) => {
-    if (steps.includes(step) || step === "JoinComplete") {
+    if (steps.includes(step)) {
       navigate(`/${step}`);
     }
   };
 
   return {
+    steps,
     currentStep,
     currentIndex,
     progress,
