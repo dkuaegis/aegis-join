@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export interface useFunnelProps {
@@ -11,9 +12,13 @@ function useFunnel({ steps }: useFunnelProps) {
   const currentStep = location.pathname.substring(1);
   const currentIndex = steps.indexOf(currentStep);
 
-  if (currentIndex === -1 && currentStep !== "JoinComplete") {
-    navigate(`/${steps[0]}`);
-  }
+  useEffect(() => {
+    if (currentIndex === -1 && currentStep !== "JoinComplete") {
+      navigate(`/${steps[0]}`);
+    }
+  }, [currentIndex, currentStep, navigate, steps]);
+
+
 
   const progress =
     currentStep === "JoinComplete"
