@@ -4,12 +4,15 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App.tsx";
+import Authentication from "./components/auth/authentication.tsx";
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Authentication>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Authentication>
   </StrictMode>
 );
