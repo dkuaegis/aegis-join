@@ -29,21 +29,6 @@ function App() {
     initialStep: "PersonalInfo",
   });
 
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    window.history.pushState(null, "", location.pathname);
-
-    const handlePopState = () => {
-      navigate(location.pathname, { replace: true });
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, [location, navigate]);
-
   return (
     <div className="mx-auto mb-4 w-full max-w-md px-4 py-8 pb-28">
       <ToastContainer

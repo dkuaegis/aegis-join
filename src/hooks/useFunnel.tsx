@@ -1,49 +1,43 @@
-import { useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export interface UseFunnelConfig {
-  steps: string[];
-  initialStep: string;
+export interface useFunnelProps {
+  steps: readonly string[];
 }
 
-function useFunnel({ steps, initialStep }: UseFunnelConfig) {
+function useFunnel({ steps }: useFunnelProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const stepFromUrl = location.pathname.replace("/", "") || initialStep;
+  const currentStep = location.pathname.substring(1);
+  const currentIndex = steps.indexOf(currentStep);
 
-  const currentStep = useMemo(() => {
-    return steps.includes(stepFromUrl) ? stepFromUrl : initialStep;
-  }, [stepFromUrl, steps, initialStep]);
+  if (currentIndex === -1 && currentStep !== 'JoinComplete') {
+    navigate(`/${steps[0]}`);
+  }
 
-  const currentIndex = useMemo(() => {
-    return steps.indexOf(currentStep);
-  }, [currentStep, steps]);
-
-  const progress = useMemo(() => {
-    return ((currentIndex + 1) / steps.length) * 100;
-  }, [currentIndex, steps.length]);
-
-  useEffect(() => {
-    if (!steps.includes(stepFromUrl)) {
-      navigate(`/${initialStep}`, { replace: true });
-    }
-  }, [stepFromUrl, steps, initialStep, navigate]);
+  const progress = 
+    currentStep === "JoinComplete"
+      ? 100
+      : ((currentIndex + 1) / steps.length) * 100;
 
   const next = () => {
-    if (currentIndex < steps.length - 1) {
-      navigate(`/${steps[currentIndex + 1]}`);
+    const nextStepIndex = currentIndex + 1;
+    if (nextStepIndex < steps.length) {
+      navigate(`/${steps[nextStepIndex]}`);
+    } else {
+      navigate("/JoinComplete");
     }
   };
 
   const prev = () => {
-    if (currentIndex > 0) {
-      navigate(`/${steps[currentIndex - 1]}`);
+    const prevStepIndex = currentIndex - 1;
+    if (prevStepIndex >= 0) {
+      navigate(`/${steps[prevStepIndex]}`);
     }
   };
 
-  const goto = (step: string) => {
-    if (steps.includes(step)) {
+ const goto = (step: string) => {
+    if (steps.includes(step) || step === "JoinComplete") {
       navigate(`/${step}`);
     }
   };
