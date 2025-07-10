@@ -1,16 +1,14 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
 import useAuth, { AuthStatus } from "@/hooks/useAuth";
-import LoginPage from "@/pages/LoginPage";
 import JoinComplete from "@/pages/JoinComplete/JoinComplete";
+import LoginPage from "@/pages/LoginPage";
+import type React from "react";
 
 interface AuthenticationProps {
   children: React.ReactNode;
 }
 
-function Authentication({ children } : AuthenticationProps) {
-    const { isAuthenticated } = useAuth();
-
+function Authentication({ children }: AuthenticationProps) {
+  const { isAuthenticated } = useAuth();
 
   if (isAuthenticated === AuthStatus.LOADING) {
     return null;
@@ -19,7 +17,7 @@ function Authentication({ children } : AuthenticationProps) {
   if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
     return <LoginPage />;
   }
-  
+
   if (isAuthenticated === AuthStatus.COMPLETED) {
     return <JoinComplete />;
   }

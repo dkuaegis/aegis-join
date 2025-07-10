@@ -2,14 +2,7 @@ import { Progress } from "@/components/ui/progress";
 import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
-import { useEffect } from "react";
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
@@ -17,7 +10,7 @@ import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
 
 function App() {
-  const { currentStep, progress, next, prev, goto } = useFunnel({
+  const { currentStep, progress, next, prev } = useFunnel({
     steps: [
       "PersonalInfo",
       "Survey",
@@ -25,8 +18,7 @@ function App() {
       "Coupon",
       "Payment",
       "JoinComplete",
-    ],
-    initialStep: "PersonalInfo",
+    ]
   });
 
   return (

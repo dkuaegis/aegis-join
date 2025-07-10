@@ -11,11 +11,11 @@ function useFunnel({ steps }: useFunnelProps) {
   const currentStep = location.pathname.substring(1);
   const currentIndex = steps.indexOf(currentStep);
 
-  if (currentIndex === -1 && currentStep !== 'JoinComplete') {
+  if (currentIndex === -1 && currentStep !== "JoinComplete") {
     navigate(`/${steps[0]}`);
   }
 
-  const progress = 
+  const progress =
     currentStep === "JoinComplete"
       ? 100
       : ((currentIndex + 1) / steps.length) * 100;
@@ -36,7 +36,7 @@ function useFunnel({ steps }: useFunnelProps) {
     }
   };
 
- const goto = (step: string) => {
+  const goto = (step: string) => {
     if (steps.includes(step) || step === "JoinComplete") {
       navigate(`/${step}`);
     }
