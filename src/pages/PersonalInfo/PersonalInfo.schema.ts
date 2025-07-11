@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import { Department, Grade } from "@/types/api/member";
 
 // 생년월일 유효성 검사 함수 (YYMMDD 형식, 월/일 범위만 체크)

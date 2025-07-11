@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import { AcquisitionType } from "@/types/api/survey";
 
 export const surveySchema = z.object({
