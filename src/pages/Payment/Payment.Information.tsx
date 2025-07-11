@@ -1,9 +1,9 @@
+import { Copy } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 import { Label } from "@/components/ui/label";
 import type { GetPaymentInfo } from "@/types/api/payment";
-import { Copy } from "lucide-react";
 import { ADMIN_INFO } from "./Payment.Config";
 
 interface InformationProps {
@@ -15,7 +15,11 @@ const InfoRow = ({
   label,
   value,
   onCopy,
-}: { label: string; value: string; onCopy?: () => void }) => (
+}: {
+  label: string;
+  value: string;
+  onCopy?: () => void;
+}) => (
   <div className="flex items-center">
     <span className="w-20 font-medium">{label}:</span>
     <span>{value}</span>

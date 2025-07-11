@@ -1,3 +1,4 @@
+import { useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -7,7 +8,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AcquisitionType as AcquisitionTypeEnum } from "@/types/api/survey"; // AcquisitionType enum import, enum 이름 충돌 방지를 위해 AcquisitionTypeEnum 으로 alias
-import { useFormContext } from "react-hook-form";
 import type { SurveyFormValues } from "./Survey.schema";
 
 export const AcquisitionType = () => {

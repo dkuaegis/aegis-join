@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import KakaoIcon from "./KakaoIcon"; // 직접 만든 SVG 컴포넌트
 
 type OpenChatStep = "copyCode" | "copied" | "enterOpenChat";
@@ -36,7 +36,7 @@ const KakaoChatroom = () => {
           onClick={handleClick}
           className="flex items-center justify-center gap-0"
         >
-          <KakaoIcon className="!h-[30px] !w-[30px] h-[30px] w-[30px]" />
+          <KakaoIcon className="h-[30px] h-[30px]! w-[30px] w-[30px]!" />
           <span className="text-[16px]">
             {openChatStep === "copyCode"
               ? "비밀번호 복사하기"

@@ -1,8 +1,8 @@
+import { toast } from "react-toastify";
 import {
   defaultToastId,
   defaultToastOptions,
 } from "@/toast/defaultToastOption";
-import { toast } from "react-toastify";
 
 const TIMEOUT_MS = 5000;
 const TOAST_ID = defaultToastId;

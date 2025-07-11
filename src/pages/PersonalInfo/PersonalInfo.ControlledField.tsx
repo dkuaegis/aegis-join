@@ -1,10 +1,10 @@
-import { type Control, useController, useFormContext } from "react-hook-form";
 import type {
   FieldValues,
   Path,
   UseControllerProps,
   UseControllerReturn,
 } from "react-hook-form";
+import { type Control, useController, useFormContext } from "react-hook-form";
 
 interface UseControllerFieldProps<
   TFieldValues extends FieldValues = FieldValues,

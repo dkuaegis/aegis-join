@@ -1,6 +1,6 @@
+import { useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useFormContext } from "react-hook-form";
 import type { SurveyFormValues } from "./Survey.schema";
 
 export default function JoinReason() {

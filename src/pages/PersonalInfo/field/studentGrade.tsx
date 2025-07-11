@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -6,7 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { forwardRef } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 
 //학년 필드 배열

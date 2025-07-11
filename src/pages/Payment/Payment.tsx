@@ -1,9 +1,9 @@
+import { CircleAlert, CircleCheckBig, LoaderCircle } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import type { GetPaymentInfo } from "@/types/api/payment";
-import { CircleAlert, CircleCheckBig, LoaderCircle } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import { startPaymentPolling } from "./Payment.Api";
 import { ADMIN_INFO } from "./Payment.Config";
 // import HowtoDo from "./Payment.HowtoDo";
@@ -12,7 +12,10 @@ import Information from "./Payment.Information";
 function Payment({
   onNext,
   onPrev,
-}: { onNext: () => void; onPrev: () => void }) {
+}: {
+  onNext: () => void;
+  onPrev: () => void;
+}) {
   const [isValid, setIsValid] = useState(false);
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
@@ -48,7 +51,7 @@ function Payment({
       {payInfo && payInfo.status === "PENDING" ? (
         <Information payInfo={payInfo} remainingAmount={remainingAmount} />
       ) : (
-        <Alert className="border-green-200 bg-green-50 text-green-800 shadow-sm">
+        <Alert className="border-green-200 bg-green-50 text-green-800 shadow-xs">
           <CircleCheckBig size={24} color="#166534" />
           <AlertTitle className="font-semibold text-lg">
             입금이 완료되었습니다

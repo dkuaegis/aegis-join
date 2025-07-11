@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import Authentication from "./components/auth/authentication.tsx";
 
-// biome-ignore lint/style/noNonNullAssertion: <explanation>
+// biome-ignore lint/style/noNonNullAssertion: The 'root' element is guaranteed to exist in the HTML.
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Authentication>
