@@ -1,3 +1,5 @@
+import { Check, ChevronsUpDown } from "lucide-react";
+import { forwardRef, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -14,8 +16,6 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import type { Department } from "@/types/api/member";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { forwardRef, useState } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 
 interface StudentDepartmentProps {

@@ -1,5 +1,5 @@
-import { AcquisitionType } from "@/types/api/survey";
 import { z } from "zod/v4";
+import { AcquisitionType } from "@/types/api/survey";
 
 export const surveySchema = z.object({
   joinReason: z

@@ -18,7 +18,8 @@ function useFunnel({ steps }: useFunnelProps) {
     }
   }, [currentIndex, navigate, steps]);
 
-  const progress = currentIndex > -1 ? ((currentIndex + 1) / steps.length) * 100 : 0;
+  const progress =
+    currentIndex > -1 ? ((currentIndex + 1) / steps.length) * 100 : 0;
 
   const next = () => {
     const nextStepIndex = currentIndex + 1;

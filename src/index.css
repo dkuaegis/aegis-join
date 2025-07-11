@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin 'tailwindcss-animate';
 
@@ -89,7 +89,7 @@
 @layer utilities {
   body {
     overflow-y: scroll;
-    font-family: 'SUIT', sans-serif;
+    font-family: "SUIT", sans-serif;
   }
 }
 

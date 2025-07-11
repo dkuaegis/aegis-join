@@ -1,7 +1,7 @@
+import { forwardRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatPhoneNumber } from "@/pages/PersonalInfo/PersonalInfo.helper";
-import { forwardRef, useCallback } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 
 interface StudentPhoneNumberProps

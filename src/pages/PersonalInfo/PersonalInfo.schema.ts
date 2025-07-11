@@ -1,5 +1,5 @@
-import { Department, Grade } from "@/types/api/member";
 import { z } from "zod/v4";
+import { Department, Grade } from "@/types/api/member";
 
 // 생년월일 유효성 검사 함수 (YYMMDD 형식, 월/일 범위만 체크)
 const isValidBirthDate = (birthDate: string): boolean => {

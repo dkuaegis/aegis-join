@@ -1,7 +1,7 @@
+import type React from "react";
 import useAuth, { AuthStatus } from "@/hooks/useAuth";
 import JoinComplete from "@/pages/JoinComplete/JoinComplete";
 import LoginPage from "@/pages/LoginPage";
-import type React from "react";
 
 interface AuthenticationProps {
   children: React.ReactNode;

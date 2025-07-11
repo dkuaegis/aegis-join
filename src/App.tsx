@@ -1,14 +1,14 @@
+import { Navigate, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { Progress } from "@/components/ui/progress";
 import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { JOIN_STEP_KOREAN_MAP, JOIN_STEPS } from "./constants/joinSteps";
 import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
-import { JOIN_STEPS, JOIN_STEP_KOREAN_MAP  } from "./constants/joinSteps";
 
 function App() {
   const { currentStep, progress, next, prev } = useFunnel({
@@ -22,8 +22,10 @@ function App() {
         draggable={true}
         pauseOnFocusLoss={false}
       />
-      <h1 className="font-bold text-2xl">{JOIN_STEP_KOREAN_MAP[currentStep]}</h1>
-      <Progress value={progress} className="mt-4 mb-8 w-full h-0.5" />
+      <h1 className="font-bold text-2xl">
+        {JOIN_STEP_KOREAN_MAP[currentStep]}
+      </h1>
+      <Progress value={progress} className="mt-4 mb-8 h-0.5 w-full" />
       <Routes>
         <Route
           path="/personal-info"

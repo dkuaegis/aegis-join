@@ -1,6 +1,6 @@
+import { create } from "zustand";
 import type { SurveyFormValues } from "@/pages/Survey/Survey.schema";
 import { AcquisitionType, type InterestField } from "@/types/api/survey";
-import { create } from "zustand";
 
 interface SurveyState {
   interests: InterestField[];

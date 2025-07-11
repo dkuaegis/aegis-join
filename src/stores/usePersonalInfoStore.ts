@@ -1,5 +1,5 @@
-import type { PersonalInfoFormValues } from "@/pages/PersonalInfo/PersonalInfo.schema";
 import { create } from "zustand";
+import type { PersonalInfoFormValues } from "@/pages/PersonalInfo/PersonalInfo.schema";
 
 interface PersonalInfoState {
   personalInfoData: PersonalInfoFormValues | null;

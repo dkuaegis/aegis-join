@@ -1,9 +1,8 @@
-import NavigationButtons from "@/components/ui/custom/navigationButton";
-
-import { useSurveyStore } from "@/stores/useSurveyStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
+import { useSurveyStore } from "@/stores/useSurveyStore";
 import { AcquisitionType } from "./Survey.AcquisitionType";
 import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
 import JoinReason from "./Survey.JoinReason";

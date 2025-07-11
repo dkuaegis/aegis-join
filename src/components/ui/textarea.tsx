@@ -1,6 +1,4 @@
 import type * as React from "react";
-
-import { cn } from "@/lib/utils";
 import {
   forwardRef,
   useCallback,
@@ -8,6 +6,7 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
+import { cn } from "@/lib/utils";
 
 interface TextareaProps extends React.ComponentProps<"textarea"> {
   onValueChange?: (value: string) => void;
@@ -17,16 +16,15 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, onValueChange, ...props }, forwardedRef) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
 
-    useImperativeHandle<HTMLTextAreaElement, HTMLTextAreaElement>(
-      forwardedRef,
-      () => {
-        if (!internalRef.current) {
-          throw new Error("Text area Ref error");
-        }
-        return internalRef.current;
-      },
-      []
-    );
+    useImperativeHandle<
+      HTMLTextAreaElement,
+      HTMLTextAreaElement
+    >(forwardedRef, () => {
+      if (!internalRef.current) {
+        throw new Error("Text area Ref error");
+      }
+      return internalRef.current;
+    }, []);
 
     const adjustHeight = useCallback((e: HTMLTextAreaElement) => {
       requestAnimationFrame(() => {

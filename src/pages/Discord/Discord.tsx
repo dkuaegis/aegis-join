@@ -1,7 +1,3 @@
-import { Button } from "@/components/ui/button";
-import AlertBox from "@/components/ui/custom/alertbox";
-import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
-import NavigationButtons from "@/components/ui/custom/navigationButton";
 import {
   CheckCircleIcon,
   CircleHelp,
@@ -11,6 +7,10 @@ import {
   RefreshCcw,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import AlertBox from "@/components/ui/custom/alertbox";
+import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
 import HowtoDo from "./Discord.HowtoDo";
 
