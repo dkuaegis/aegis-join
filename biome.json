@@ -2,14 +2,16 @@
   "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "files": {
-    "includes": ["**", "!**/.next", "!**/node_modules"]
+    "includes": ["src/**/*", "!**/.next", "!**/node_modules"]
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "correctness": {
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "useHookAtTopLevel": "error",
+        "useExhaustiveDependencies": "error"
       },
       "nursery": {
         "useSortedClasses": {
@@ -17,6 +19,12 @@
           "fix": "safe",
           "options": {}
         }
+      },
+      "suspicious": {
+        "noArrayIndexKey": "warn"
+      },
+      "complexity": {
+        "useArrowFunction":"error"
       }
     }
   },
