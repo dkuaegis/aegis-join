@@ -3,7 +3,7 @@ import CenterLogo from "./JoinComplete.Centerlogo";
 import DiscordNotice from "./JoinComplete.DiscordNotice";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 
-export default function JoinComplete() {
+const JoinComplete = () => {
   return (
     <AlignCenter>
       <Wrapper>
@@ -20,7 +20,7 @@ export default function JoinComplete() {
       </Wrapper>
     </AlignCenter>
   );
-}
+};
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   return <div className="space-y-4">{children}</div>;
@@ -33,3 +33,5 @@ const AlignCenter = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
+
+export default JoinComplete;

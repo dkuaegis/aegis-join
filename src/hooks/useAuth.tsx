@@ -7,7 +7,7 @@ export enum AuthStatus {
   LOADING = "LOADING",
 }
 
-export default function useAuth() {
+const useAuth = () => {
   const [isAuthenticated, setAuthenticated] = useState<AuthStatus>(
     AuthStatus.LOADING
   );
@@ -45,4 +45,6 @@ export default function useAuth() {
   }, []);
 
   return { isAuthenticated };
-}
+};
+
+export default useAuth;

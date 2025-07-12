@@ -19,7 +19,7 @@ interface DiscordProps {
   onPrev: () => void;
 }
 
-function Discord({ onNext, onPrev }: DiscordProps) {
+const Discord = ({ onNext, onPrev }: DiscordProps) => {
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
   const { copyToClipboard } = useCopyToClipboard();
@@ -127,6 +127,6 @@ function Discord({ onNext, onPrev }: DiscordProps) {
       <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />
     </div>
   );
-}
+};
 
 export default Discord;

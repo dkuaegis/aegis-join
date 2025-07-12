@@ -27,7 +27,7 @@ interface InputCouponCodeProps {
   setCoupons: React.Dispatch<React.SetStateAction<Coupon[]>>;
 }
 
-export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
+const InputCouponCode = ({ setCoupons }: InputCouponCodeProps) => {
   const [isMobile, setIsMobile] = useState(false);
   const [open, setOpen] = useState(false);
   const [couponCode, setCouponCode] = useState("");
@@ -118,4 +118,6 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
       </Dialog>
     </div>
   );
-}
+};
+
+export default InputCouponCode;

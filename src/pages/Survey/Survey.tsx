@@ -8,13 +8,13 @@ import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
 
-function Survey({
+const Survey = ({
   onNext,
   onPrev,
 }: {
   onNext: () => void;
   onPrev: () => void;
-}) {
+}) => {
   const {
     joinReason,
     acquisitionType,
@@ -92,7 +92,7 @@ function Survey({
       </form>
     </FormProvider>
   );
-}
+};
 
 const Container = ({ children }: { children: React.ReactNode }) => {
   return <div className="space-y-2">{children}</div>;

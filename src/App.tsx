@@ -10,7 +10,7 @@ import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
 
-function App() {
+const App = () => {
   const { currentStep, progress, next, prev } = useFunnel({
     steps: JOIN_STEPS,
   });
@@ -53,6 +53,6 @@ function App() {
       </Routes>
     </div>
   );
-}
+};
 
 export default App;
