@@ -22,7 +22,7 @@ interface PersonalInfoProps {
   onPrev: () => void;
 }
 
-function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
+const PersonalInfo = ({ onNext, onPrev }: PersonalInfoProps) => {
   const { personalInfoData, setPersonalInfoData, isInitial, setNotInitial } =
     usePersonalInfoStore();
 
@@ -89,6 +89,6 @@ function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
       </form>
     </FormProvider>
   );
-}
+};
 
 export default PersonalInfo;

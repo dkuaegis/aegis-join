@@ -8,13 +8,13 @@ import InputCouponCode from "./Coupon.InputCouponCode";
 import { TotalAmount } from "./Coupon.TotalAmount";
 import type { Coupon as CouponType } from "./Coupon.Types";
 
-export default function Coupon({
+const Coupon = ({
   onNext,
   onPrev,
 }: {
   onNext: () => void;
   onPrev: () => void;
-}) {
+}) => {
   const [coupons, setCoupons] = useState<CouponType[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
 
@@ -63,4 +63,6 @@ export default function Coupon({
       <NavigationButtons prev={onPrev} next={onSubmit} isValid={true} />
     </div>
   );
-}
+};
+
+export default Coupon;

@@ -13,7 +13,7 @@ const showErrorToast = (message: string) => {
   }
 };
 
-async function errorHandlingWithToast(response: Response): Promise<never> {
+const errorHandlingWithToast = async (response: Response): Promise<never> => {
   let errorMessage = `${response.status} 에러! 알 수 없는 에러가 발생하였습니다. 다시 시도해 주세요`;
 
   try {
@@ -26,13 +26,13 @@ async function errorHandlingWithToast(response: Response): Promise<never> {
   }
 
   throw new Error(errorMessage);
-}
+};
 
 // promise 를 반환하는 함수. 미들웨어 패턴을 위한 함수라고 생각하면 된다.
-async function fetchingWithToast(
+const fetchingWithToast = async (
   url: string,
   options: RequestInit = {}
-): Promise<Response> {
+): Promise<Response> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
@@ -69,6 +69,6 @@ async function fetchingWithToast(
   } finally {
     clearTimeout(timeoutId);
   }
-}
+};
 
 export default fetchingWithToast;

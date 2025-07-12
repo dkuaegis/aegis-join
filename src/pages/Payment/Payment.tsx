@@ -9,13 +9,13 @@ import { ADMIN_INFO } from "./Payment.Config";
 // import HowtoDo from "./Payment.HowtoDo";
 import Information from "./Payment.Information";
 
-function Payment({
+const Payment = ({
   onNext,
   onPrev,
 }: {
   onNext: () => void;
   onPrev: () => void;
-}) {
+}) => {
   const [isValid, setIsValid] = useState(false);
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
@@ -97,6 +97,6 @@ function Payment({
       />
     </div>
   );
-}
+};
 
 export default Payment;
