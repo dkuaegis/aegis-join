@@ -5,7 +5,7 @@ export interface useFunnelProps {
   steps: readonly string[];
 }
 
-function useFunnel({ steps }: useFunnelProps) {
+const useFunnel = ({ steps }: useFunnelProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,6 +50,6 @@ function useFunnel({ steps }: useFunnelProps) {
     prev,
     goto,
   };
-}
+};
 
 export default useFunnel;

@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { SurveyFormValues } from "./Survey.schema";
 
-export default function JoinReason() {
+const JoinReason = () => {
   const {
     register,
     formState: { errors },
@@ -31,4 +31,6 @@ export default function JoinReason() {
       />
     </div>
   );
-}
+};
+
+export default JoinReason;
