@@ -47,12 +47,12 @@ export const StudentDepartment = forwardRef<
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <div className="relative">
-            <Button 
-              variant="outline-form"
-              size="lg"
+            <Button
+              type="button"
               aria-invalid={!isValid}
               className={cn(
-                "w-full"
+                "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                open && "ring-2 ring-ring ring-offset-2"
               )}
             >
               {defaultDepartmentLabel}

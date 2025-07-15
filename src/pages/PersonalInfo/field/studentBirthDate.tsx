@@ -31,7 +31,7 @@ export const StudentBirthDate = forwardRef<
         placeholder="020101"
         maxLength={6}
         ref={ref}
-        className={error && !isValid ? "border-red-500" : ""}
+        aria-invalid={!isValid}
         value={field.value || ""}
         onChange={handleInputChange} // handleInputChange 함수 연결
         {...props}

@@ -34,7 +34,7 @@ export const StudentId = forwardRef<HTMLInputElement, StudentIdProps>(
           placeholder="32000000"
           maxLength={8}
           ref={ref}
-          className={error && !isValid ? "border-red-500" : ""}
+          aria-invalid={!isValid}
           value={field.value || ""}
           onChange={handleInputChange}
           {...props}
