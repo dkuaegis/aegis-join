@@ -140,6 +140,10 @@
     word-break: keep-all;
     overflow-wrap: break-word;
   }
+
+  .text-input-base {
+    @apply text-lg;
+  }
   
   @keyframes fadeIn {
     from { opacity: 0; }
