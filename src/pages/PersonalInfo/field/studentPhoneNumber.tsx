@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatPhoneNumber } from "@/pages/PersonalInfo/PersonalInfo.helper";
 import { useControllerField } from "../PersonalInfo.ControlledField";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
 
 interface StudentPhoneNumberProps
   extends React.ComponentPropsWithoutRef<"input"> {
@@ -39,9 +40,10 @@ export const StudentPhoneNumber = forwardRef<
         maxLength={13} // 010-1234-5678
         {...props}
       />
-      {error && !isValid && (
-        <p className="text-red-500 text-xs">전화번호를 입력해주세요</p>
-      )}
+      <ErrorMessage
+        isShown={!!error && !isValid}
+        message="전화번호를 입력해주세요"
+      />
     </div>
   );
 });

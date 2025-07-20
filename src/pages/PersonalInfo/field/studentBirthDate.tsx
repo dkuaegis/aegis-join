@@ -2,6 +2,7 @@ import { forwardRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useControllerField } from "../PersonalInfo.ControlledField";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
 
 interface StudentBirthDateProps {
   name: string; // name prop 추가
@@ -36,9 +37,10 @@ export const StudentBirthDate = forwardRef<
         onChange={handleInputChange} // handleInputChange 함수 연결
         {...props}
       />
-      {error && !isValid && (
-        <p className="text-red-500 text-xs">생년월일을 6자리로 입력해주세요</p>
-      )}
+      <ErrorMessage
+        isShown={!!error && !isValid}
+        message="생년월일을 6자리로 입력해주세요"
+      />
     </div>
   );
 });

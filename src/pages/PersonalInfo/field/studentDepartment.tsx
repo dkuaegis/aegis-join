@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import type { Department } from "@/types/api/member";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 import { Button } from "@/components/ui/button";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
 
 interface StudentDepartmentProps {
   name: string; // name prop 추가
@@ -49,11 +50,10 @@ export const StudentDepartment = forwardRef<
         <PopoverTrigger asChild>
           <div className="relative">
             <Button
-              type="button"
+              variant="outline-form"
               aria-invalid={!isValid}
               className={cn(
-                "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                open && "ring-2 ring-ring ring-offset-2"
+                "w-full"
               )}
             >
               {defaultDepartmentLabel}
@@ -91,9 +91,10 @@ export const StudentDepartment = forwardRef<
         </PopoverContent>
       </Popover>
 
-      {error && !isValid && (
-        <p className="text-red-500 text-xs">학과를 선택해주세요</p>
-      )}
+      <ErrorMessage
+        isShown={!!error && !isValid}
+        message="학과를 선택해주세요"
+      />
     </div>
   );
 });
