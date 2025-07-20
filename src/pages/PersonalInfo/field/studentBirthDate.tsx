@@ -1,4 +1,5 @@
 import { forwardRef, useCallback } from "react";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useControllerField } from "../PersonalInfo.ControlledField";
@@ -31,14 +32,15 @@ export const StudentBirthDate = forwardRef<
         placeholder="020101"
         maxLength={6}
         ref={ref}
-        className={error && !isValid ? "border-red-500" : ""}
+        aria-invalid={!isValid}
         value={field.value || ""}
         onChange={handleInputChange} // handleInputChange 함수 연결
         {...props}
       />
-      {error && !isValid && (
-        <p className="text-red-500 text-xs">생년월일을 6자리로 입력해주세요</p>
-      )}
+      <ErrorMessage
+        isShown={!!error && !isValid}
+        message="생년월일을 6자리로 입력해주세요"
+      />
     </div>
   );
 });

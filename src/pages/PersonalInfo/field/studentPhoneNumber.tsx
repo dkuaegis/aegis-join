@@ -1,4 +1,5 @@
 import { forwardRef, useCallback } from "react";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatPhoneNumber } from "@/pages/PersonalInfo/PersonalInfo.helper";
@@ -33,15 +34,16 @@ export const StudentPhoneNumber = forwardRef<
         id="phoneNumber"
         placeholder="010-1234-5678"
         ref={ref}
-        className={error && !isValid ? "border-red-500" : ""}
+        aria-invalid={!isValid}
         value={field.value || ""}
         onChange={handleInputChange}
         maxLength={13} // 010-1234-5678
         {...props}
       />
-      {error && !isValid && (
-        <p className="text-red-500 text-xs">전화번호를 입력해주세요</p>
-      )}
+      <ErrorMessage
+        isShown={!!error && !isValid}
+        message="전화번호를 입력해주세요"
+      />
     </div>
   );
 });
