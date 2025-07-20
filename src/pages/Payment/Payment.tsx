@@ -47,7 +47,6 @@ const Payment = ({
 
   return (
     <div className="line-breaks space-y-4">
-      <h3 className="font-semibold text-lg">회비 납부</h3>
       {payInfo && payInfo.status === "PENDING" ? (
         <Information payInfo={payInfo} remainingAmount={remainingAmount} />
       ) : (
