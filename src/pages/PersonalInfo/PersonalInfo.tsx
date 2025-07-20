@@ -71,7 +71,6 @@ const PersonalInfo = ({ onNext, onPrev }: PersonalInfoProps) => {
         className="line-breaks space-y-4"
         onSubmit={methods.handleSubmit(onSubmit)}
       >
-        <h3 className="font-semibold text-lg">기본 인적사항</h3>
         <StudentBirthDate name="birthDate" />
         <StudentPhoneNumber name="phoneNumber" />
         <StudentId name="studentId" />

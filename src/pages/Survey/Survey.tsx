@@ -74,8 +74,6 @@ const Survey = ({
         className="line-breaks space-y-4"
         onSubmit={methods.handleSubmit(onSubmit)}
       >
-        <h3 className="font-semibold text-lg">설문조사</h3>
-
         <Container>
           <AcquisitionType />
         </Container>
