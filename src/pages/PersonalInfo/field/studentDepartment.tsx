@@ -52,7 +52,7 @@ export const StudentDepartment = forwardRef<
             <Button
               variant="outline-form"
               aria-invalid={!isValid}
-              className={cn("w-full")}
+              className="w-full"
             >
               {defaultDepartmentLabel}
               <ChevronsUpDown className="size-4 opacity-50" />
