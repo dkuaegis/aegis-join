@@ -56,7 +56,7 @@ export const StudentDepartment = forwardRef<
               )}
             >
               {defaultDepartmentLabel}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              <ChevronsUpDown className="size-4 opacity-50" />
             </Button>
           </div>
         </PopoverTrigger>
