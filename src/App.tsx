@@ -9,6 +9,7 @@ import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
+import Title from "./components/ui/custom/title";
 
 const App = () => {
   const { currentStep, progress, next, prev } = useFunnel({
@@ -22,9 +23,9 @@ const App = () => {
         draggable={true}
         pauseOnFocusLoss={false}
       />
-      <h1 className="font-bold text-2xl">
-        {JOIN_STEP_KOREAN_MAP[currentStep]}
-      </h1>
+      
+      <Title currentStep={currentStep} />
+
       <Progress value={progress} className="mt-4 mb-8 h-0.5 w-full" />
       <Routes>
         <Route
