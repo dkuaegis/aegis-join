@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useControllerField } from "../PersonalInfo.ControlledField";
+import { cn } from "@/lib/utils";
 
 //학년 필드 배열
 const grades = [
@@ -30,7 +31,7 @@ export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
       <div className="space-y-2" {...props} ref={ref}>
         <Label htmlFor="grade">모집 학기 기준 학년</Label>
         <Select value={field.value ?? ""} onValueChange={field.onChange}>
-          <SelectTrigger className={error && !isValid ? "border-red-500" : ""}>
+          <SelectTrigger className={cn("w-full h-12", error && !isValid ? "border-red-500" : "")}>
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
           <SelectContent>

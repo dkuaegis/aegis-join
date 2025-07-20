@@ -17,6 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { Department } from "@/types/api/member";
 import { useControllerField } from "../PersonalInfo.ControlledField";
+import { Button } from "@/components/ui/button";
 
 interface StudentDepartmentProps {
   name: string; // name prop 추가
@@ -46,17 +47,17 @@ export const StudentDepartment = forwardRef<
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <div className="relative">
-            <button
-              type="button"
+            <Button 
+              variant="outline-form"
+              size="lg"
+              aria-invalid={!isValid}
               className={cn(
-                "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                error && !isValid ? "border-red-500" : "",
-                open && "ring-2 ring-ring ring-offset-2"
+                "w-full"
               )}
             >
               {defaultDepartmentLabel}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </button>
+              <ChevronsUpDown className="size-4 opacity-50" />
+            </Button>
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-[400px] p-0">
