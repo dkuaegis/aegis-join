@@ -10,7 +10,7 @@ interface TitleProps {
 const Title = ({ currentStep }: TitleProps) => {
   return (
     <Stack>
-      <Button variant="icon" size="icon">
+      <Button variant="icon" size="icon" aria-label="Go back">
         <ArrowLeftIcon size={16} />
       </Button>
       <h1 className="font-bold text-2xl">
