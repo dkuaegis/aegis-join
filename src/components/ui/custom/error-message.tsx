@@ -1,9 +1,9 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import type * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface ErrorMessageProps extends React.HTMLAttributes<HTMLParagraphElement> {
-  isShown?: boolean
-  message?: string
+  isShown?: boolean;
+  message?: string;
 }
 
 export function ErrorMessage({
@@ -15,15 +15,14 @@ export function ErrorMessage({
   return (
     <p
       className={cn(
-        "text-xs font-medium",
-        isShown ? "text-red-500" : "invisible", 
+        "font-medium text-xs",
+        isShown ? "text-red-500" : "invisible",
         className
       )}
       aria-live="polite"
       {...props}
     >
-
       {message}
     </p>
-  )
+  );
 }

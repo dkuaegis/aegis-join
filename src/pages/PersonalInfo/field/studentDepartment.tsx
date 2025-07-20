@@ -1,5 +1,6 @@
 import { Check, ChevronsUpDown } from "lucide-react";
 import { forwardRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -8,6 +9,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
@@ -18,8 +20,6 @@ import { departments } from "@/constants/departments";
 import { cn } from "@/lib/utils";
 import type { Department } from "@/types/api/member";
 import { useControllerField } from "../PersonalInfo.ControlledField";
-import { Button } from "@/components/ui/button";
-import { ErrorMessage } from "@/components/ui/custom/error-message";
 
 interface StudentDepartmentProps {
   name: string; // name prop 추가
@@ -52,9 +52,7 @@ export const StudentDepartment = forwardRef<
             <Button
               variant="outline-form"
               aria-invalid={!isValid}
-              className={cn(
-                "w-full"
-              )}
+              className={cn("w-full")}
             >
               {defaultDepartmentLabel}
               <ChevronsUpDown className="size-4 opacity-50" />
@@ -100,5 +98,3 @@ export const StudentDepartment = forwardRef<
 });
 
 StudentDepartment.displayName = "StudentDepartment";
-
-

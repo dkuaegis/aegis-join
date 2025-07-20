@@ -4,12 +4,12 @@ import { Progress } from "@/components/ui/progress";
 import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
-import { JOIN_STEP_KOREAN_MAP, JOIN_STEPS } from "./constants/joinSteps";
+import Title from "./components/ui/custom/title";
+import { JOIN_STEPS } from "./constants/joinSteps";
 import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
-import Title from "./components/ui/custom/title";
 
 const App = () => {
   const { currentStep, progress, next, prev } = useFunnel({
@@ -23,7 +23,7 @@ const App = () => {
         draggable={true}
         pauseOnFocusLoss={false}
       />
-      
+
       <Title currentStep={currentStep} />
 
       <Progress value={progress} className="mt-4 mb-8 h-0.5 w-full" />

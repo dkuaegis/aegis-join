@@ -1,7 +1,7 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const stackVariants = cva("flex w-full items-center", {
   variants: {
@@ -22,7 +22,7 @@ const stackVariants = cva("flex w-full items-center", {
     justify: "start",
     gap: "md",
   },
-})
+});
 
 export interface StackProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -36,9 +36,9 @@ const Stack = React.forwardRef<HTMLDivElement, StackProps>(
         ref={ref}
         {...props}
       />
-    )
+    );
   }
-)
-Stack.displayName = "Stack"
+);
+Stack.displayName = "Stack";
 
-export { Stack, stackVariants }
+export { Stack, stackVariants };
