@@ -35,5 +35,6 @@ export enum AcquisitionType {
   EVERYTIME = "EVERYTIME",
   FRIEND = "FRIEND",
   CLUB_FAIR = "CLUB_FAIR",
+  OFFLINE_EVENT = "OFFLINE_EVENT",
   ETC = "ETC",
 }
