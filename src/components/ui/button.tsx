@@ -14,7 +14,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 active:scale-95",
         "outline-form":
           "justify-between border border-input bg-background shadow-xs text-muted-foreground text-input-base hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary:
@@ -23,6 +23,8 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         icon: "bg-white text-secondary-foreground hover:bg-primary/10 hover:text-accent-foreground active:bg-primary/10 active:scale-95",
+        discord:
+          "bg-[#5865F2] text-white transition-transform duration-100 hover:bg-[#4752C4] active:scale-95",
       },
       size: {
         default: "h-12 px-4 py-2 has-[>svg]:px-4",
