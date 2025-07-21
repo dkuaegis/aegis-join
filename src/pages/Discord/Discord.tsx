@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import AuthCode from "@/pages/Discord/Discord.Code";
+import DiscordCode from "@/pages/Discord/Discord.Code";
 import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
+import { DiscordWhy } from "./Discord.Why";
+import DiscordComplete from "./Discord.Complete";
 interface DiscordProps {
   onNext: () => void;
   onPrev: () => void;
@@ -41,17 +43,18 @@ const Discord = ({ onNext, onPrev }: DiscordProps) => {
   return (
     <div className="space-y-4 py-9 gap-12">
       {isValid ? (
-        <div className="text-2xl font-extrabold text-primary">
-          연동 완료
-        </div>
+        <DiscordComplete />
       ) : (
-        <AuthCode code={code || "99494"} onRefresh={handleRefresh} />
-      )}
-      <DiscordLinkButton
-        text="Aegis discord"
-        url={import.meta.env.VITE_DISCORD_INVITE_URL}
-      />
+        <div className="space-y-4">
+          <DiscordCode code={code || "12345"} isValid={isValid} onRefresh={handleRefresh} />
 
+          <DiscordLinkButton
+            text="Aegis discord"
+            url={import.meta.env.VITE_DISCORD_INVITE_URL}
+          />
+          <DiscordWhy />
+        </div>
+      )}
       <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />
     </div>
   );
