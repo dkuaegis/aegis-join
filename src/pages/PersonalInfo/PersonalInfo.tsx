@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
-import { StudentBirthDate } from "./field/studentBirthDate";
 import { StudentDepartment } from "./field/studentDepartment";
 import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
@@ -72,7 +71,6 @@ const PersonalInfo = ({ onNext, onPrev }: PersonalInfoProps) => {
         className="line-breaks space-y-4"
         onSubmit={methods.handleSubmit(onSubmit)}
       >
-        <StudentBirthDate name="birthDate" />
         <StudentPhoneNumber name="phoneNumber" />
         <StudentId name="studentId" />
         <StudentDepartment name="department" />
