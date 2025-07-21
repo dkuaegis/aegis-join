@@ -16,6 +16,7 @@ import {
   type PersonalInfoFormValues,
   personalInfoSchema,
 } from "./PersonalInfo.schema";
+import StudentResidentNumber from "./field/studentResidentNumber";
 
 interface PersonalInfoProps {
   onNext: (data: PersonalInfoFormValues) => void;
@@ -76,6 +77,7 @@ const PersonalInfo = ({ onNext, onPrev }: PersonalInfoProps) => {
         <StudentId name="studentId" />
         <StudentDepartment name="department" />
         <StudentGrade name="grade" />
+        <StudentResidentNumber />
         <NavigationButtons
           prev={() => {
             setPersonalInfoData(methods.getValues());
