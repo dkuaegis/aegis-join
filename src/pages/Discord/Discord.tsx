@@ -13,6 +13,7 @@ import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
 import HowtoDo from "./Discord.HowtoDo";
+import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 
 interface DiscordProps {
   onNext: () => void;
@@ -56,12 +57,9 @@ const Discord = ({ onNext, onPrev }: DiscordProps) => {
 
   return (
     <div className="line-breaks space-y-4">
-      <AlertBox
-        icon={<CircleHelp className="h-4 w-4" />}
-        title="디스코드 연동이 왜 필요한가요?"
-        description={[
-          "디스코드는 주제별 채널로 대화를 체계화하고, 알림 관리와 음성 채팅 기능을 통해 더 효율적인 소통을 제공해요! 또한, 카카오톡과는 달리 연락처를 제공하고 초대하는 과정을 생략할 수 있어요!",
-        ]}
+      <DiscordLinkButton
+        text="Aegis discord"
+        url={import.meta.env.VITE_DISCORD_INVITE_URL} 
       />
       <div className="space-y-2">
         <div className="flex flex-col items-center justify-center rounded-lg bg-secondary p-6">
@@ -106,22 +104,6 @@ const Discord = ({ onNext, onPrev }: DiscordProps) => {
         </div>
       </div>
 
-      <div className="flex items-center justify-center py-4">
-        {isValid ? (
-          <>
-            <CheckCircleIcon className="h-8 w-8 text-green-600" />
-            <p className="pl-4 text-green-600">가입 확인이 완료되었습니다!</p>
-          </>
-        ) : (
-          <>
-            <LoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
-            <p className="pl-4">디스코드 가입 확인 중입니다 . . .</p>
-          </>
-        )}
-      </div>
-
-      <h4 className="font-semibold text-lg">연동 방법</h4>
-      <HowtoDo />
 
       <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />
     </div>
