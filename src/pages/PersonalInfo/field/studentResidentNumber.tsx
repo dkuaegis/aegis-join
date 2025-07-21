@@ -5,7 +5,7 @@ const StudentResidentNumber = () => {
     return (
         <div className="space-y-2">
             <Label htmlFor="registrationNumber">주민등록번호</Label>
-            <div className="flex items-left space-x-2">
+            <div className="flex items-center space-x-2">
                 <Input
                     type="text"
                     inputMode="numeric"
