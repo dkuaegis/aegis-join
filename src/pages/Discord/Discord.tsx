@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import DiscordCode from "@/pages/Discord/Discord.Code";
 import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import DiscordCode from "@/pages/Discord/Discord.Code";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
-import { DiscordWhy } from "./Discord.Why";
 import DiscordComplete from "./Discord.Complete";
+import { DiscordWhy } from "./Discord.Why";
+
 interface DiscordProps {
   onNext: () => void;
   onPrev: () => void;
@@ -41,12 +42,16 @@ const Discord = ({ onNext, onPrev }: DiscordProps) => {
   }, [isValid, onNext]);
 
   return (
-    <div className="space-y-4 py-9 gap-12">
+    <div className="gap-12 space-y-4 py-9">
       {isValid ? (
         <DiscordComplete />
       ) : (
         <div className="space-y-4">
-          <DiscordCode code={code || "12345"} isValid={isValid} onRefresh={handleRefresh} />
+          <DiscordCode
+            code={code || "12345"}
+            isValid={isValid}
+            onRefresh={handleRefresh}
+          />
 
           <DiscordLinkButton
             text="Aegis discord"

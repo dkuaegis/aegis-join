@@ -9,7 +9,7 @@ const DiscordComplete = () => {
         loop={false} // 한 번만 재생
         style={{ width: 300, height: 300 }} // 원하는 크기로 조절
       />
-      <h2 className="text-2xl font-semibold tracking-tight">
+      <h2 className="font-semibold text-2xl tracking-tight">
         연동을 완료했어요
       </h2>
     </div>

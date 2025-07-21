@@ -1,6 +1,5 @@
-import { RefreshCcw } from 'lucide-react';
-import React from 'react';
-
+import { RefreshCcw } from "lucide-react";
+import type React from "react";
 
 interface RefreshButtonProps {
   onClick: () => void;
@@ -8,7 +7,11 @@ interface RefreshButtonProps {
 
 const RefreshButton: React.FC<RefreshButtonProps> = ({ onClick }) => {
   return (
-    <button onClick={onClick} className="flex items-center gap-1 text-neutral-500 underline">
+    <button
+      onClick={onClick}
+      type="button"
+      className="flex items-center gap-1 text-neutral-500 underline"
+    >
       <RefreshCcw size="12" />
       <span>새로고침</span>
     </button>
