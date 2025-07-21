@@ -10,6 +10,7 @@ import useFunnel from "./hooks/useFunnel";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
+import Agreement from "./pages/Agreement/Agreement";
 
 const App = () => {
   const { currentStep, progress, next, prev } = useFunnel({
@@ -24,10 +25,14 @@ const App = () => {
         pauseOnFocusLoss={false}
       />
 
-      <Title currentStep={currentStep} />
-
+      <Title currentStep={currentStep} onPrev={prev} />
       <Progress value={progress} className="mt-4 mb-8 h-0.5 w-full" />
+
       <Routes>
+        <Route
+          path="/agreement"
+          element={<Agreement />}
+        />
         <Route
           path="/personal-info"
           element={<PersonalInfo onNext={next} onPrev={prev} />}
