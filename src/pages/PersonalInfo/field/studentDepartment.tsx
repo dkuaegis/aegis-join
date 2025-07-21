@@ -50,6 +50,7 @@ export const StudentDepartment = forwardRef<
           <div className="relative">
             <Button
               variant="outline-form"
+              type="button"
               aria-invalid={!isValid}
               className="w-full"
             >
