@@ -7,6 +7,7 @@ import { StudentDepartment } from "./field/studentDepartment";
 import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
 import { StudentPhoneNumber } from "./field/studentPhoneNumber";
+import StudentResidentNumber from "./field/studentResidentNumber";
 import {
   fetchPersonalInfoData,
   submitPersonalInfoData,
@@ -15,7 +16,6 @@ import {
   type PersonalInfoFormValues,
   personalInfoSchema,
 } from "./PersonalInfo.schema";
-import StudentResidentNumber from "./field/studentResidentNumber";
 
 interface PersonalInfoProps {
   onNext: (data: PersonalInfoFormValues) => void;
