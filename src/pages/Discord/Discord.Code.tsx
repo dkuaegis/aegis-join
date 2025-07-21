@@ -5,17 +5,18 @@ import CopyToClipboardButton from '../../components/ui/custom/copy-to-clipboard-
 
 interface AuthCodeProps {
   code: string;
+  isValid: boolean;
   onRefresh: () => void;
 }
 
-const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
+const DiscordCode: React.FC<AuthCodeProps> = ({ code, isValid, onRefresh }) => {
   return (
-    <div className="flex flex-col items-center gap-4">
-      <p className="text-5xl font-medium">{code}</p>
-      <div className="flex gap-4">
-        <RefreshButton onClick={onRefresh} />
-        <CopyToClipboardButton textToCopy={code} />
-      </div>
+    <div className="flex flex-col items-center gap-4 h-36">
+        <p className="text-5xl font-medium">{code}</p>
+        <div className="flex gap-4">
+          <RefreshButton onClick={onRefresh} />
+          <CopyToClipboardButton textToCopy={code} />
+        </div>
     </div>
   );
 };
