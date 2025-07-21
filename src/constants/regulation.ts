@@ -1,20 +1,18 @@
-
-
 interface ConsentState {
-  regulations: boolean
-  privacy: boolean
+  regulations: boolean;
+  privacy: boolean;
 }
 
 interface Chapter {
-  id: string
-  title: string
-  articles: Article[]
+  id: string;
+  title: string;
+  articles: Article[];
 }
 
 interface Article {
-  number: number
-  title: string
-  content: string | string[]
+  number: number;
+  title: string;
+  content: string | string[];
 }
 
 const chapters: Chapter[] = [
@@ -30,7 +28,8 @@ const chapters: Chapter[] = [
       {
         number: 2,
         title: "목적",
-        content: "본회는 학술동아리로서 모든 구성원의 보안과 개발 분야의 역량 증진을 목표로 한다.",
+        content:
+          "본회는 학술동아리로서 모든 구성원의 보안과 개발 분야의 역량 증진을 목표로 한다.",
       },
     ],
   },
@@ -41,7 +40,8 @@ const chapters: Chapter[] = [
       {
         number: 3,
         title: "회원의 정의",
-        content: "회비를 납부하고 본회에 가입 의사를 전달한 자는 본회의 회원이 된다.",
+        content:
+          "회비를 납부하고 본회에 가입 의사를 전달한 자는 본회의 회원이 된다.",
       },
       {
         number: 4,
@@ -65,7 +65,8 @@ const chapters: Chapter[] = [
       {
         number: 6,
         title: "탈퇴와 회비의 반환",
-        content: "회비를 납부하고 본회의 그 어떠한 활동에 참여하지 않고 7일 이내에 본회의 운영진에게 탈퇴 의사를 전달한 경우 회비를 반환한다.",
+        content:
+          "회비를 납부하고 본회의 그 어떠한 활동에 참여하지 않고 7일 이내에 본회의 운영진에게 탈퇴 의사를 전달한 경우 회비를 반환한다.",
       },
     ],
   },
@@ -123,12 +124,14 @@ const chapters: Chapter[] = [
       {
         number: 12,
         title: "징계의 대상",
-        content: "본회의 회칙을 위반한 경우 운영진의 판단 하에 회원에게 징계를 부과한다.",
+        content:
+          "본회의 회칙을 위반한 경우 운영진의 판단 하에 회원에게 징계를 부과한다.",
       },
       {
         number: 13,
         title: "징계의 종류",
-        content: "징계의 종류에는 경고, 제적, 영구제적이 있으며, 경고를 받은 회원은 운영진의 판단 하에 활동이 제한될 수 있다.",
+        content:
+          "징계의 종류에는 경고, 제적, 영구제적이 있으며, 경고를 받은 회원은 운영진의 판단 하에 활동이 제한될 수 있다.",
       },
     ],
   },
@@ -144,7 +147,8 @@ const chapters: Chapter[] = [
       {
         number: 15,
         title: "회비",
-        content: "본회의 회비는 15,000원으로 하되 활동 내역에 따라 할인 또는 면제될 수 있다.",
+        content:
+          "본회의 회비는 15,000원으로 하되 활동 내역에 따라 할인 또는 면제될 수 있다.",
       },
     ],
   },
@@ -155,11 +159,12 @@ const chapters: Chapter[] = [
       {
         number: 16,
         title: "개인정보의 활용",
-        content: "본 회의 가입 과정에서 제출된 개인정보는 동아리 운영을 위하여 사용될 수 있으며, 운영진은 개인정보 보호를 위하여 노력하여야 한다.",
+        content:
+          "본 회의 가입 과정에서 제출된 개인정보는 동아리 운영을 위하여 사용될 수 있으며, 운영진은 개인정보 보호를 위하여 노력하여야 한다.",
       },
     ],
   },
 ];
 
-export { chapters }
-export type { ConsentState, Chapter, Article }
+export { chapters };
+export type { ConsentState, Chapter, Article };
