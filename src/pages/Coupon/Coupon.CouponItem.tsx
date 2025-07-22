@@ -1,6 +1,6 @@
-import type { CouponItemProps } from "./Coupon.Types";
-import ToggleCardWrapper from "@/components/ui/custom/toggle-card-wrapper";
 import CouponIcon from "@/assets/coupon.svg?react";
+import ToggleCardWrapper from "@/components/ui/custom/toggle-card-wrapper";
+import type { CouponItemProps } from "./Coupon.Types";
 
 const CouponItem = ({
   coupon,
@@ -20,13 +20,12 @@ const CouponItem = ({
         <CouponIcon className="h-8 w-12" />
 
         <div className="flex flex-col items-start space-y-1">
-          <span className="text-2xl font-bold text-gray-800">
+          <span className="font-bold text-2xl text-gray-800">
             {coupon.discountAmount.toLocaleString()}원 할인
           </span>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-sm">
             {coupon.couponName}
           </span>
-
         </div>
       </div>
     </ToggleCardWrapper>

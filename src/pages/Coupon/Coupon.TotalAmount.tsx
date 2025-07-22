@@ -17,7 +17,7 @@ export const TotalAmount = ({ coupons, selectedCoupons }: TotalAmountProps) => {
       <span className="font-bold text-5xl">
         {Math.min(total, CLUB_DUES).toLocaleString()}
       </span>
-      <span className="text-lg">{" "}원</span>
+      <span className="text-lg"> 원</span>
     </div>
   );
 };
