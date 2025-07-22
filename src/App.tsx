@@ -16,7 +16,7 @@ const App = () => {
   const { currentStep, progress } = useFunnel();
 
   return (
-    <div className="mx-auto mb-8 w-full max-w-md px-4 py-8 pb-28">
+    <div className="mx-auto mb-8 w-full max-w-md px-4 py-8 pb-28 ">
       <ToastContainer
         position="top-center"
         draggable={true}
