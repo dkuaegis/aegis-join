@@ -26,7 +26,7 @@ const Title = ({ currentStep, onPrev }: TitleProps) => {
   return (
     <Stack>
       <Button  variant="icon" aria-label="Go back" onClick={onPrev}>
-        <ArrowLeftIcon size={32}/>
+        <ArrowLeftIcon size={28}/>
       </Button>
       <h1 className="font-bold text-2xl">
         {JOIN_STEP_KOREAN_MAP[currentStep]}
