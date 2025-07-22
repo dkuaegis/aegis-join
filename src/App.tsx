@@ -5,7 +5,7 @@ import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
 import Title from "./components/ui/custom/title";
-import { JOIN_STEPS } from "./constants/joinSteps";
+
 import useFunnel from "./hooks/useFunnel";
 import Agreement from "./pages/Agreement/Agreement";
 import Coupon from "./pages/Coupon/Coupon";
@@ -13,9 +13,7 @@ import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
 
 const App = () => {
-  const { currentStep, progress, next, prev } = useFunnel({
-    steps: JOIN_STEPS,
-  });
+  const { currentStep, progress, next, prev } = useFunnel();
 
   return (
     <div className="mx-auto mb-8 w-full max-w-md px-4 py-8 pb-28">
