@@ -65,7 +65,7 @@ const InputCouponCode = ({ setCoupons }: InputCouponCodeProps) => {
       <div className="flex justify-center">
         <Drawer open={open} onOpenChange={setOpen} modal={false}>
           <DrawerTrigger asChild>
-            <Button size="lg" className=" w-full items-center">
+            <Button size="lg" className=" w-full items-center" variant="default">
               쿠폰 등록하기
             </Button>
           </DrawerTrigger>
@@ -98,8 +98,8 @@ const InputCouponCode = ({ setCoupons }: InputCouponCodeProps) => {
     <div className="flex justify-center">
       <Dialog open={open} onOpenChange={setOpen} modal={false}>
         <DialogTrigger asChild>
-          <Button size="lg" className=" w-10/12 items-center" variant="outline">
-            쿠폰 등록하기
+          <Button size="lg" className=" w-full items-center" variant="default">
+            코드로 쿠폰 등록하기
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
