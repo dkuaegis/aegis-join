@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { JOIN_STEPS } from "@/constants/joinSteps";
 
-export interface useFunnelProps {
-  steps: readonly string[];
-}
+const steps = JOIN_STEPS;
 
-const useFunnel = ({ steps }: useFunnelProps) => {
+const useFunnel = () => {
+  
   const navigate = useNavigate();
   const location = useLocation();
 
