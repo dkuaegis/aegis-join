@@ -8,7 +8,11 @@ interface NavigationButtonsProps {
   text?: string;
 }
 
-export default function NavigationButtons({ isValid, onFetch, text }: NavigationButtonsProps) {
+export default function NavigationButtons({
+  isValid,
+  onFetch,
+  text,
+}: NavigationButtonsProps) {
   const { next } = useFunnel();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -19,11 +23,11 @@ export default function NavigationButtons({ isValid, onFetch, text }: Navigation
   useLayoutEffect(() => {
     setButtonVariant(isValid ? "default" : "secondary");
   }, [isValid]);
-  
+
   const handleNext = useCallback(async () => {
     if (isLoading || !isValid) return;
 
-    if(!onFetch) {
+    if (!onFetch) {
       next();
       return;
     }
@@ -31,13 +35,13 @@ export default function NavigationButtons({ isValid, onFetch, text }: Navigation
     setIsLoading(true);
     try {
       const isSuccess = await onFetch();
-      if(isSuccess) {
+      if (isSuccess) {
         next();
       } else {
         console.error("Error on fetch");
       }
     } catch (error) {
-      console.error("Error on fetch");
+      console.error(`Error on fetch ${error}`);
     } finally {
       setIsLoading(false);
     }

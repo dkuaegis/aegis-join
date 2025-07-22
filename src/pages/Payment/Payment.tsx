@@ -1,9 +1,8 @@
 import { CircleAlert, CircleCheckBig, LoaderCircle } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
-import useFunnel from "@/hooks/useFunnel";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import { startPaymentPolling } from "./Payment.Api";
 import { ADMIN_INFO } from "./Payment.Config";
@@ -11,7 +10,6 @@ import { ADMIN_INFO } from "./Payment.Config";
 import Information from "./Payment.Information";
 
 const Payment = () => {
-  const { next } = useFunnel();
   const [isValid, setIsValid] = useState(false);
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
@@ -35,11 +33,6 @@ const Payment = () => {
       );
     }
   }, [payInfo]);
-
-  const _handleNext = useCallback(() => {
-    if (!isValid || payInfo?.status === "PENDING") return;
-    next();
-  }, [next, isValid, payInfo?.status]);
 
   return (
     <div className="line-breaks space-y-4">
@@ -83,8 +76,7 @@ const Payment = () => {
         </div>
       )}
 
-      {/* <HowtoDo /> */}
-      <NavigationButtons isValid={isValid} showPrev={isValid} />
+      <NavigationButtons isValid={isValid} />
     </div>
   );
 };
