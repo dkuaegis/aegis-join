@@ -1,6 +1,6 @@
 import ToggleCardWrapper from "@/components/ui/custom/toggle-card-wrapper";
 
-interface AcquisitionCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface AcquisitionCardProps extends React.HTMLAttributes<HTMLButtonElement> {
   label: string;
   icon: string;
   isSelected: boolean;
