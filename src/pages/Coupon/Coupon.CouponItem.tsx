@@ -1,6 +1,6 @@
-import { TicketPercent } from "lucide-react"; // 아이콘 라이브러리에서 아이콘 가져오기
 import type { CouponItemProps } from "./Coupon.Types";
 import ToggleCardWrapper from "@/components/ui/custom/toggle-card-wrapper";
+import CouponIcon from "@/assets/coupon.svg?react";
 
 const CouponItem = ({
   coupon,
@@ -17,9 +17,7 @@ const CouponItem = ({
       {...props}
     >
       <div className="flex w-full items-center justify-start space-x-4">
-        <div className="flex-shrink-0 text-red-500">
-          <TicketPercent className="h-10 w-10" />
-        </div>
+        <CouponIcon className="h-8 w-12" />
 
         <div className="flex flex-col items-start space-y-1">
           <span className="text-2xl font-bold text-gray-800">
