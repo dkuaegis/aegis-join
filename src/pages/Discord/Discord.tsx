@@ -1,17 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import useFunnel from "@/hooks/useFunnel";
 import DiscordCode from "@/pages/Discord/Discord.Code";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
 import DiscordComplete from "./Discord.Complete";
 import { DiscordWhy } from "./Discord.Why";
 
-interface DiscordProps {
-  onNext: () => void;
-  onPrev: () => void;
-}
-
-const Discord = ({ onNext, onPrev }: DiscordProps) => {
+const Discord = () => {
+  const { next } = useFunnel();
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
 
@@ -38,8 +35,8 @@ const Discord = ({ onNext, onPrev }: DiscordProps) => {
   }, [getDiscordCode]);
 
   const handleNext = useCallback(() => {
-    if (isValid) onNext();
-  }, [isValid, onNext]);
+    if (isValid) next();
+  }, [isValid, next]);
 
   return (
     <div className="gap-12 space-y-4 py-9">
@@ -60,7 +57,7 @@ const Discord = ({ onNext, onPrev }: DiscordProps) => {
           <DiscordWhy />
         </div>
       )}
-      <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />
+      <NavigationButtons isValid={isValid} />
     </div>
   );
 };

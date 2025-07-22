@@ -2,19 +2,15 @@ import { CircleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import useFunnel from "@/hooks/useFunnel";
 import { fetchCoupon, submitCoupon } from "./Coupon.Api";
 import { CouponList } from "./Coupon.CouponList";
 import InputCouponCode from "./Coupon.InputCouponCode";
 import { TotalAmount } from "./Coupon.TotalAmount";
 import type { Coupon as CouponType } from "./Coupon.Types";
 
-const Coupon = ({
-  onNext,
-  onPrev,
-}: {
-  onNext: () => void;
-  onPrev: () => void;
-}) => {
+const Coupon = () => {
+  const { next } = useFunnel();
   const [coupons, setCoupons] = useState<CouponType[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
 
@@ -34,7 +30,7 @@ const Coupon = ({
   const onSubmit = async () => {
     try {
       await submitCoupon(selectedCoupons);
-      onNext();
+      next();
     } catch (error: unknown) {
       console.error("제출 중 오류 발생:", error);
     }
@@ -59,7 +55,7 @@ const Coupon = ({
       </div>
       <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
       <InputCouponCode setCoupons={setCoupons} />
-      <NavigationButtons prev={onPrev} next={onSubmit} isValid={true} />
+      <NavigationButtons isValid={true} />
     </div>
   );
 };

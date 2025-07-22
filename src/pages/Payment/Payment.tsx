@@ -3,19 +3,15 @@ import { useCallback, useEffect, useState } from "react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import useFunnel from "@/hooks/useFunnel";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import { startPaymentPolling } from "./Payment.Api";
 import { ADMIN_INFO } from "./Payment.Config";
 // import HowtoDo from "./Payment.HowtoDo";
 import Information from "./Payment.Information";
 
-const Payment = ({
-  onNext,
-  onPrev,
-}: {
-  onNext: () => void;
-  onPrev: () => void;
-}) => {
+const Payment = () => {
+  const { next } = useFunnel();
   const [isValid, setIsValid] = useState(false);
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
@@ -42,8 +38,8 @@ const Payment = ({
 
   const handleNext = useCallback(() => {
     if (!isValid || payInfo?.status === "PENDING") return;
-    onNext();
-  }, [onNext, isValid, payInfo?.status]);
+    next();
+  }, [next, isValid, payInfo?.status]);
 
   return (
     <div className="line-breaks space-y-4">
@@ -88,12 +84,7 @@ const Payment = ({
       )}
 
       {/* <HowtoDo /> */}
-      <NavigationButtons
-        prev={onPrev}
-        next={handleNext}
-        isValid={isValid}
-        showPrev={isValid}
-      />
+      <NavigationButtons isValid={isValid} showPrev={isValid} />
     </div>
   );
 };

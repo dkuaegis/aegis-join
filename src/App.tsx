@@ -23,30 +23,30 @@ const App = () => {
         pauseOnFocusLoss={false}
       />
 
-      <Title currentStep={currentStep} onPrev={prev} />
+      <Title currentStep={currentStep} />
       <Progress value={progress} className="mt-4 mb-8 h-0.5 w-full" />
 
       <Routes>
         <Route path="/agreement" element={<Agreement />} />
         <Route
           path="/personal-info"
-          element={<PersonalInfo onNext={next} onPrev={prev} />}
+          element={<PersonalInfo />}
         />
         <Route
           path="/survey"
-          element={<Survey onNext={next} onPrev={prev} />}
+          element={<Survey />}
         />
         <Route
           path="/discord"
-          element={<Discord onNext={next} onPrev={prev} />}
+          element={<Discord />}
         />
         <Route
           path="/coupon"
-          element={<Coupon onNext={next} onPrev={prev} />}
+          element={<Coupon />}
         />
         <Route
           path="/payment"
-          element={<Payment onNext={next} onPrev={prev} />}
+          element={<Payment />}
         />
         <Route path="/complete" element={<JoinComplete />} />
 

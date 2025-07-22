@@ -2,19 +2,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import useFunnel from "@/hooks/useFunnel";
 import { useSurveyStore } from "@/stores/useSurveyStore";
 import { AcquisitionType } from "./Survey.AcquisitionType";
 import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
 
-const Survey = ({
-  onNext,
-  onPrev,
-}: {
-  onNext: () => void;
-  onPrev: () => void;
-}) => {
+const Survey = () => {
+  const { next } = useFunnel();
   const {
     joinReason,
     acquisitionType,
@@ -61,7 +57,7 @@ const Survey = ({
     submitSurveyData(data)
       .then(() => {
         setFormValues(data);
-        onNext();
+        next();
       })
       .catch((error) => {
         console.error("제출 중 오류가 발생했습니다:", error);
@@ -83,8 +79,6 @@ const Survey = ({
         </Container>
 
         <NavigationButtons
-          prev={onPrev}
-          next={methods.handleSubmit(onSubmit)}
           isValid={methods.formState.isValid}
         />
       </form>
