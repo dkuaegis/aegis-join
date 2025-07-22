@@ -10,7 +10,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { type ConsentState, chapters } from "@/constants/regulation";
 
-export default function AegisConsentPage() {
+const Agreement = () => {
   const [openChapters, setOpenChapters] = useState<string[]>([]);
   const [consent, setConsent] = useState<ConsentState>({
     regulations: false,
@@ -53,14 +53,6 @@ export default function AegisConsentPage() {
   return (
     <div className="min-h-screen">
       <div className="mx-auto min-h-screen max-w-md bg-white">
-        <div className="border-b p-6">
-          <div className="text-center">
-            <h1 className="mb-1 font-bold text-3xl text-gray-900">
-              Aegis 회칙
-            </h1>
-          </div>
-        </div>
-
         <div className="flex h-[calc(100vh-180px)] flex-col">
           <ScrollArea className="flex-1 p-4">
             <div className="space-y-3">
@@ -160,4 +152,6 @@ export default function AegisConsentPage() {
       </div>
     </div>
   );
-}
+};
+
+export default Agreement;
