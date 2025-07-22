@@ -8,13 +8,7 @@ import InputCouponCode from "./Coupon.InputCouponCode";
 import { TotalAmount } from "./Coupon.TotalAmount";
 import type { Coupon as CouponType } from "./Coupon.Types";
 
-const Coupon = ({
-  onNext,
-  onPrev,
-}: {
-  onNext: () => void;
-  onPrev: () => void;
-}) => {
+const Coupon = () => {
   const [coupons, setCoupons] = useState<CouponType[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
 
@@ -31,12 +25,13 @@ const Coupon = ({
     fetchData();
   }, []);
 
-  const onSubmit = async () => {
+  const onSubmit = async (): Promise<boolean> => {
     try {
       await submitCoupon(selectedCoupons);
-      onNext();
+      return true;
     } catch (error: unknown) {
       console.error("제출 중 오류 발생:", error);
+      return false;
     }
   };
 
@@ -59,7 +54,7 @@ const Coupon = ({
       </div>
       <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
       <InputCouponCode setCoupons={setCoupons} />
-      <NavigationButtons prev={onPrev} next={onSubmit} isValid={true} />
+      <NavigationButtons isValid={true} onFetch={onSubmit} />
     </div>
   );
 };

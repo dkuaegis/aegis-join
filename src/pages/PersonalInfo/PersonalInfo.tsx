@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import useFunnel from "@/hooks/useFunnel";
 import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
 import { StudentDepartment } from "./field/studentDepartment";
 import { StudentGrade } from "./field/studentGrade";
@@ -17,12 +18,8 @@ import {
   personalInfoSchema,
 } from "./PersonalInfo.schema";
 
-interface PersonalInfoProps {
-  onNext: (data: PersonalInfoFormValues) => void;
-  onPrev: () => void;
-}
-
-const PersonalInfo = ({ onNext, onPrev }: PersonalInfoProps) => {
+const PersonalInfo = () => {
+  const { next } = useFunnel();
   const { personalInfoData, setPersonalInfoData, isInitial, setNotInitial } =
     usePersonalInfoStore();
 
@@ -58,7 +55,7 @@ const PersonalInfo = ({ onNext, onPrev }: PersonalInfoProps) => {
     submitPersonalInfoData(data)
       .then(() => {
         setPersonalInfoData(data);
-        onNext(data);
+        next();
       })
       .catch((error) => {
         console.error("제출 중 오류가 발생했습니다:", error);
@@ -76,15 +73,7 @@ const PersonalInfo = ({ onNext, onPrev }: PersonalInfoProps) => {
         <StudentDepartment name="department" />
         <StudentGrade name="grade" />
         <StudentResidentNumber />
-        <NavigationButtons
-          prev={() => {
-            setPersonalInfoData(methods.getValues());
-            onPrev();
-          }}
-          next={methods.handleSubmit(onSubmit)}
-          isValid={methods.formState.isValid}
-          showPrev={true}
-        />
+        <NavigationButtons isValid={methods.formState.isValid} />
       </form>
     </FormProvider>
   );

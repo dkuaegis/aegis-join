@@ -1,25 +1,21 @@
-import { useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import useFunnel from "@/hooks/useFunnel";
 
 interface NavigationButtonsProps {
-  prev: () => void;
-  next: () => void;
   isValid?: boolean;
-  showPrev?: boolean;
-  showNext?: boolean;
-}
-
-function navigationButtonStyle(visible: boolean) {
-  return `w-[42.5%] ${visible ? "invisible" : ""}`;
+  onFetch?: () => Promise<boolean>;
+  text?: string;
 }
 
 export default function NavigationButtons({
-  prev,
-  next,
   isValid,
-  showPrev = false,
-  showNext = false,
+  onFetch,
+  text,
 }: NavigationButtonsProps) {
+  const { next } = useFunnel();
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [buttonVariant, setButtonVariant] = useState<"default" | "secondary">(
     "default"
   );
@@ -28,25 +24,40 @@ export default function NavigationButtons({
     setButtonVariant(isValid ? "default" : "secondary");
   }, [isValid]);
 
+  const handleNext = useCallback(async () => {
+    if (isLoading || !isValid) return;
+
+    if (!onFetch) {
+      next();
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const isSuccess = await onFetch();
+      if (isSuccess) {
+        next();
+      } else {
+        console.error("Error on fetch");
+      }
+    } catch (error) {
+      console.error(`Error on fetch ${error}`);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, isValid, onFetch, next]);
+
   return (
     <div className="fixed right-0 bottom-0 left-0 flex justify-center bg-background/80 p-4 backdrop-blur-xs">
       <div className="mx-auto flex w-full max-w-md justify-between py-2">
         <Button
-          type="button"
-          variant="outline"
-          onClick={prev}
-          size="lg"
-          className={navigationButtonStyle(showPrev)}
-        >
-          이전
-        </Button>
-        <Button
-          onClick={next}
+          onClick={handleNext}
           variant={buttonVariant}
           size="lg"
-          className={navigationButtonStyle(showNext)}
+          className="min-w-full"
+          disabled={isLoading || !isValid}
         >
-          다음
+          {text ? text : "다음"}
         </Button>
       </div>
     </div>

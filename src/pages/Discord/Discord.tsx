@@ -6,12 +6,7 @@ import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
 import DiscordComplete from "./Discord.Complete";
 import { DiscordWhy } from "./Discord.Why";
 
-interface DiscordProps {
-  onNext: () => void;
-  onPrev: () => void;
-}
-
-const Discord = ({ onNext, onPrev }: DiscordProps) => {
+const Discord = () => {
   const [code, setCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
 
@@ -37,10 +32,6 @@ const Discord = ({ onNext, onPrev }: DiscordProps) => {
     };
   }, [getDiscordCode]);
 
-  const handleNext = useCallback(() => {
-    if (isValid) onNext();
-  }, [isValid, onNext]);
-
   return (
     <div className="gap-12 space-y-4 py-9">
       {isValid ? (
@@ -60,7 +51,7 @@ const Discord = ({ onNext, onPrev }: DiscordProps) => {
           <DiscordWhy />
         </div>
       )}
-      <NavigationButtons prev={onPrev} next={handleNext} isValid={isValid} />
+      <NavigationButtons isValid={isValid} />
     </div>
   );
 };

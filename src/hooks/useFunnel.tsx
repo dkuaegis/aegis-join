@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { JOIN_STEPS } from "@/constants/joinSteps";
 
-export interface useFunnelProps {
-  steps: readonly string[];
-}
+const steps = JOIN_STEPS;
 
-const useFunnel = ({ steps }: useFunnelProps) => {
+const useFunnel = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,10 +15,10 @@ const useFunnel = ({ steps }: useFunnelProps) => {
     if (currentIndex === -1) {
       navigate(`/${steps[0]}`, { replace: true });
     }
-  }, [currentIndex, navigate, steps]);
+  }, [currentIndex, navigate]);
 
   const progress =
-    currentIndex > -1 ? ((currentIndex + 1) / steps.length) * 100 : 0;
+    currentIndex > -1 ? (currentIndex / (steps.length - 1)) * 100 : 0;
 
   const next = () => {
     const nextStepIndex = currentIndex + 1;

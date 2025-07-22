@@ -133,17 +133,9 @@
 }
 
 @layer utilities {
-  body {
-    overflow-y: scroll;
-  }
-
   .table-row {
     height: 40px;
     display: table-row;
-  }
-
-  html {
-    overflow-y: scroll;
   }
 
   .line-breaks {
