@@ -152,6 +152,6 @@ const Agreement = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Agreement;

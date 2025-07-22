@@ -7,10 +7,10 @@ import Survey from "@/pages/Survey/Survey";
 import Title from "./components/ui/custom/title";
 import { JOIN_STEPS } from "./constants/joinSteps";
 import useFunnel from "./hooks/useFunnel";
+import Agreement from "./pages/Agreement/Agreement";
 import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
-import Agreement from "./pages/Agreement/Agreement";
 
 const App = () => {
   const { currentStep, progress, next, prev } = useFunnel({
@@ -29,10 +29,7 @@ const App = () => {
       <Progress value={progress} className="mt-4 mb-8 h-0.5 w-full" />
 
       <Routes>
-        <Route
-          path="/agreement"
-          element={<Agreement />}
-        />
+        <Route path="/agreement" element={<Agreement />} />
         <Route
           path="/personal-info"
           element={<PersonalInfo onNext={next} onPrev={prev} />}

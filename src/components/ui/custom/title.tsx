@@ -9,7 +9,6 @@ interface TitleProps {
 }
 
 const Title = ({ currentStep, onPrev }: TitleProps) => {
-
   const stepKeys = Object.keys(JOIN_STEP_KOREAN_MAP);
   const isFirstStep = currentStep === stepKeys[0];
   const isLastStep = currentStep === stepKeys[stepKeys.length - 1];
@@ -17,22 +16,22 @@ const Title = ({ currentStep, onPrev }: TitleProps) => {
   if (isFirstStep || isLastStep) {
     return (
       <div className="flex h-full items-center justify-center">
-        <h1 className="text-2xl font-bold">
+        <h1 className="font-bold text-2xl">
           {JOIN_STEP_KOREAN_MAP[currentStep]}
         </h1>
-      </div>   
-    )
+      </div>
+    );
   } else {
-  return (
-    <Stack>
-      <Button  variant="icon" aria-label="Go back" onClick={onPrev}>
-        <ArrowLeftIcon size={28}/>
-      </Button>
-      <h1 className="font-bold text-2xl">
-        {JOIN_STEP_KOREAN_MAP[currentStep]}
-      </h1>
-    </Stack>
-  );
+    return (
+      <Stack>
+        <Button variant="icon" aria-label="Go back" onClick={onPrev}>
+          <ArrowLeftIcon size={28} />
+        </Button>
+        <h1 className="font-bold text-2xl">
+          {JOIN_STEP_KOREAN_MAP[currentStep]}
+        </h1>
+      </Stack>
+    );
   }
 };
 

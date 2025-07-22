@@ -32,7 +32,7 @@ const buttonVariants = cva(
         lg: "h-12 rounded-md px-6 has-[>svg]:px-4",
       },
     },
-compoundVariants: [
+    compoundVariants: [
       {
         variant: "icon",
         size: "default",
