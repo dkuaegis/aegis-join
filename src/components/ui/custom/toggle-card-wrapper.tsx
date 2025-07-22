@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-interface ToggleCardWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ToggleCardWrapperProps extends React.HTMLAttributes<HTMLButtonElement> {
   isSelected: boolean;
   children: React.ReactNode;
 }
@@ -13,7 +13,8 @@ const ToggleCardWrapper = ({
   ...props
 }: ToggleCardWrapperProps) => {
   return (
-    <div
+    <button
+      type="button"
       className={cn(
         "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 bg-white p-4 shadow-md transition-all duration-300 ease-in-out border-slate-200",
         !isSelected && "hover:-translate-y-1 hover:shadow-lg",
@@ -23,7 +24,7 @@ const ToggleCardWrapper = ({
       {...props}
     >
       {children}
-    </div>
+    </button>
   );
 };
 
