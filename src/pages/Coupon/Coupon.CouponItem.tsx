@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils";
+import CouponIcon from "@/assets/coupon.svg?react";
+import ToggleCardWrapper from "@/components/ui/custom/toggle-card-wrapper";
 import type { CouponItemProps } from "./Coupon.Types";
 
 const CouponItem = ({
@@ -9,24 +10,25 @@ const CouponItem = ({
   ...props
 }: CouponItemProps) => {
   return (
-    <button
-      tabIndex={0}
+    <ToggleCardWrapper
+      isSelected={isSelected}
       onClick={() => setSelect(coupon.issuedCouponId)}
-      className={cn(
-        "block w-full appearance-none rounded-2xl bg-gray-50 p-4 pl-6 text-left transition-all duration-200 ease-linear",
-        "outline-hidden hover:bg-gray-100",
-        isSelected && "bg-gray-200 ring-2 ring-primary",
-        className
-      )}
+      className="w-full"
       {...props}
     >
-      <div className="space-y-1">
-        <p className="font-bold text-2xl">
-          {coupon.discountAmount.toLocaleString()}원
-        </p>
-        <p className="text-muted-foreground text-sm">{coupon.couponName}</p>
+      <div className="flex w-full items-center justify-start space-x-4">
+        <CouponIcon className="h-8 w-12" />
+
+        <div className="flex flex-col items-start space-y-1">
+          <span className="font-bold text-2xl text-gray-800">
+            {coupon.discountAmount.toLocaleString()}원 할인
+          </span>
+          <span className="text-muted-foreground text-sm">
+            {coupon.couponName}
+          </span>
+        </div>
       </div>
-    </button>
+    </ToggleCardWrapper>
   );
 };
 

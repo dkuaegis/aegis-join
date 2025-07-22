@@ -2,6 +2,7 @@ import { CircleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import { Label } from "@/components/ui/label";
 import { fetchCoupon, submitCoupon } from "./Coupon.Api";
 import { CouponList } from "./Coupon.CouponList";
 import InputCouponCode from "./Coupon.InputCouponCode";
@@ -38,11 +39,16 @@ const Coupon = () => {
   return (
     <div className="space-y-4">
       <div>
+        <Label className="text-xl">할인 금액</Label>
+        <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
+      </div>
+      <InputCouponCode setCoupons={setCoupons} />
+      <div className="border-t py-4">
         {coupons.length === 0 ? (
           <AlertBox
             icon={<CircleAlert className="h-4 w-4" />}
             title="쿠폰이 없습니다."
-            description={["등록할 쿠폰이 없으면 '다음' 버튼을 눌러주세요."]}
+            description={["'다음' 버튼을 눌러주세요."]}
           />
         ) : (
           <CouponList
@@ -52,9 +58,12 @@ const Coupon = () => {
           />
         )}
       </div>
-      <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
-      <InputCouponCode setCoupons={setCoupons} />
-      <NavigationButtons isValid={true} onFetch={onSubmit} />
+
+      <NavigationButtons
+        isValid={true}
+        text="쿠폰 적용하기"
+        onFetch={onSubmit}
+      />
     </div>
   );
 };
