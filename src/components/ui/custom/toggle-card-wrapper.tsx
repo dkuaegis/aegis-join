@@ -1,0 +1,30 @@
+import React from "react";
+import { cn } from "@/lib/utils";
+
+interface ToggleCardWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+  isSelected: boolean;
+  children: React.ReactNode;
+}
+
+const ToggleCardWrapper = ({
+  isSelected,
+  className,
+  children,
+  ...props
+}: ToggleCardWrapperProps) => {
+  return (
+    <div
+      className={cn(
+        "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 bg-white p-4 shadow-md transition-all duration-300 ease-in-out border-slate-200",
+        !isSelected && "hover:-translate-y-1 hover:shadow-lg",
+        isSelected && "scale-105 border-primary bg-primary/10 shadow-lg",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+export default ToggleCardWrapper;
