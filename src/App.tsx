@@ -13,7 +13,7 @@ import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
 
 const App = () => {
-  const { currentStep, progress, next, prev } = useFunnel();
+  const { currentStep, progress } = useFunnel();
 
   return (
     <div className="mx-auto mb-8 w-full max-w-md px-4 py-8 pb-28">
