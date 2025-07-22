@@ -5,7 +5,6 @@ import { JOIN_STEPS } from "@/constants/joinSteps";
 const steps = JOIN_STEPS;
 
 const useFunnel = () => {
-  
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,10 +15,10 @@ const useFunnel = () => {
     if (currentIndex === -1) {
       navigate(`/${steps[0]}`, { replace: true });
     }
-  }, [currentIndex, navigate, steps]);
+  }, [currentIndex, navigate]);
 
   const progress =
-    currentIndex > -1 ? ((currentIndex) / (steps.length-1)) * 100 : 0;
+    currentIndex > -1 ? (currentIndex / (steps.length - 1)) * 100 : 0;
 
   const next = () => {
     const nextStepIndex = currentIndex + 1;

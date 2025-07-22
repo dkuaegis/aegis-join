@@ -34,7 +34,7 @@ const Discord = () => {
     };
   }, [getDiscordCode]);
 
-  const handleNext = useCallback(() => {
+  const _handleNext = useCallback(() => {
     if (isValid) next();
   }, [isValid, next]);
 

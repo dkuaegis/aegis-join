@@ -27,7 +27,7 @@ const Coupon = () => {
     fetchData();
   }, []);
 
-  const onSubmit = async () => {
+  const _onSubmit = async () => {
     try {
       await submitCoupon(selectedCoupons);
       next();

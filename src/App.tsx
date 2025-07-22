@@ -28,26 +28,11 @@ const App = () => {
 
       <Routes>
         <Route path="/agreement" element={<Agreement />} />
-        <Route
-          path="/personal-info"
-          element={<PersonalInfo />}
-        />
-        <Route
-          path="/survey"
-          element={<Survey />}
-        />
-        <Route
-          path="/discord"
-          element={<Discord />}
-        />
-        <Route
-          path="/coupon"
-          element={<Coupon />}
-        />
-        <Route
-          path="/payment"
-          element={<Payment />}
-        />
+        <Route path="/personal-info" element={<PersonalInfo />} />
+        <Route path="/survey" element={<Survey />} />
+        <Route path="/discord" element={<Discord />} />
+        <Route path="/coupon" element={<Coupon />} />
+        <Route path="/payment" element={<Payment />} />
         <Route path="/complete" element={<JoinComplete />} />
 
         <Route path="*" element={<Navigate to={`/${currentStep}`} replace />} />

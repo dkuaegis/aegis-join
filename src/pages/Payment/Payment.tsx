@@ -36,7 +36,7 @@ const Payment = () => {
     }
   }, [payInfo]);
 
-  const handleNext = useCallback(() => {
+  const _handleNext = useCallback(() => {
     if (!isValid || payInfo?.status === "PENDING") return;
     next();
   }, [next, isValid, payInfo?.status]);

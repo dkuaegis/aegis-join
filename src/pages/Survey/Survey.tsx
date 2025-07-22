@@ -78,9 +78,7 @@ const Survey = () => {
           <JoinReason />
         </Container>
 
-        <NavigationButtons
-          isValid={methods.formState.isValid}
-        />
+        <NavigationButtons isValid={methods.formState.isValid} />
       </form>
     </FormProvider>
   );

@@ -73,9 +73,7 @@ const PersonalInfo = () => {
         <StudentDepartment name="department" />
         <StudentGrade name="grade" />
         <StudentResidentNumber />
-        <NavigationButtons
-          isValid={methods.formState.isValid}
-        />
+        <NavigationButtons isValid={methods.formState.isValid} />
       </form>
     </FormProvider>
   );
