@@ -29,7 +29,7 @@ const AdminInfoDrawer = () => {
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
-          <DrawerClose>
+          <DrawerClose asChild>
             <Button variant="outline" className="w-full">
               닫기
             </Button>
