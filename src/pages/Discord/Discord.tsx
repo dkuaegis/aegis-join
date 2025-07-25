@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+import Complete from "@/components/ui/custom/complete";
 import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import DiscordCode from "@/pages/Discord/Discord.Code";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
-import DiscordComplete from "./Discord.Complete";
 import { DiscordWhy } from "./Discord.Why";
 
 const Discord = () => {
@@ -35,7 +35,7 @@ const Discord = () => {
   return (
     <div className="gap-12 space-y-4 py-9">
       {isValid ? (
-        <DiscordComplete />
+        <Complete message="연동을 완료했어요" />
       ) : (
         <div className="space-y-4">
           <DiscordCode
