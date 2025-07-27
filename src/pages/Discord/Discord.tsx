@@ -1,12 +1,11 @@
-import { Suspense, useCallback, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import DiscordCode from "@/pages/Discord/Discord.Code";
 import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
 import { DiscordWhy } from "./Discord.Why";
-import React from "react";
 
-const Complete = React.lazy(() => import('@/components/ui/custom/complete'));
+const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
 const Discord = () => {
   const [code, setCode] = useState<string>("");
@@ -40,7 +39,6 @@ const Discord = () => {
         <Suspense>
           <Complete message="연동을 완료했어요" />
         </Suspense>
-        
       ) : (
         <div className="space-y-4">
           <DiscordCode

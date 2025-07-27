@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import type { GetPaymentInfo } from "@/types/api/payment";
@@ -6,9 +6,8 @@ import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
 import { startPaymentPolling } from "./Payment.Api";
 import Information from "./Payment.Information";
-import React from "react";
 
-const Complete = React.lazy(() => import('@/components/ui/custom/complete'));
+const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
 const Payment = () => {
   const [isValid, setIsValid] = useState(false);
@@ -46,7 +45,6 @@ const Payment = () => {
         <Suspense>
           <Complete message="납부가 완료됐어요" />
         </Suspense>
-        
       )}
       <Button size="lg" className=" w-full items-center" variant="default">
         쿠폰 적용하기
