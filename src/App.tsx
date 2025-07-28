@@ -5,10 +5,8 @@ import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
 import Title from "./components/ui/custom/title";
-
 import useFunnel from "./hooks/useFunnel";
 import Agreement from "./pages/Agreement/Agreement";
-import Coupon from "./pages/Coupon/Coupon";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
 

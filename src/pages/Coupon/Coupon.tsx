@@ -1,5 +1,6 @@
-import { ArrowLeftIcon, CircleAlert } from "lucide-react";
-import { MouseEventHandler, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { CircleAlert } from "lucide-react";
+import { useEffect, useState } from "react";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { Label } from "@/components/ui/label";
@@ -7,17 +8,12 @@ import { fetchCoupon, submitCoupon } from "./Coupon.Api";
 import { CouponList } from "./Coupon.CouponList";
 import InputCouponCode from "./Coupon.InputCouponCode";
 import { TotalAmount } from "./Coupon.TotalAmount";
-import type { Coupon, Coupon as CouponType } from "./Coupon.Types";
-import { Stack } from "@/components/layout/Stack";
-import { Button } from "@/components/ui/button";
-import { JOIN_STEP_KOREAN_MAP } from "@/constants/joinSteps";
-import { motion, AnimatePresence} from 'framer-motion';
+import type { Coupon as CouponType } from "./Coupon.Types";
 
 interface CouponProps {
   onClose: () => void;
 }
 
-// ★ 1. NavigationButtons만을 위한 variants를 정의합니다.
 const buttonWrapperVariants = {
   // 초기 상태: 화면 아래에 숨겨져 있음
   initial: {
@@ -30,7 +26,7 @@ const buttonWrapperVariants = {
       duration: 0.2,
       ease: "easeInOut",
       // 부모 애니메이션이 끝날 즈음 시작되도록 약간의 딜레이를 줍니다.
-      delay: 0.3
+      delay: 0.3,
     },
   },
   // 사라지는 상태: 다시 화면 아래로 내려감
@@ -43,7 +39,7 @@ const buttonWrapperVariants = {
   },
 } as const;
 
-const Coupon = ({ onClose } : CouponProps) => {
+const Coupon = ({ onClose }: CouponProps) => {
   const [coupons, setCoupons] = useState<CouponType[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
   const [isExiting, setIsExiting] = useState<boolean>(false);
@@ -77,7 +73,6 @@ const Coupon = ({ onClose } : CouponProps) => {
 
   return (
     <div className="space-y-8">
-      
       <div>
         <Label className="text-xl">할인 금액</Label>
         <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
@@ -99,7 +94,6 @@ const Coupon = ({ onClose } : CouponProps) => {
         )}
       </div>
       <AnimatePresence onExitComplete={onClose}>
-        {/* isExiting 상태가 false일 때만 버튼을 렌더링 */}
         {!isExiting && (
           <motion.div
             variants={buttonWrapperVariants}
@@ -111,16 +105,13 @@ const Coupon = ({ onClose } : CouponProps) => {
               isValid={true}
               text="쿠폰 적용하기"
               onFetch={onSubmit}
-              // ★ 5. 버튼을 누르면 내부 퇴장 애니메이션을 트리거합니다.
               onNext={triggerExitAnimation}
             />
           </motion.div>
         )}
       </AnimatePresence>
-
     </div>
   );
 };
-
 
 export default Coupon;
