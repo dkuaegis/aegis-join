@@ -1,9 +1,13 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { type ConsentState, chapters } from "@/constants/regulation";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { type ConsentState, chapters } from "@/constants/regulation";
 import AgreementConsent from "./Agreement.Consent";
 
 const Agreement = () => {
@@ -32,6 +36,7 @@ const Agreement = () => {
       return (
         <ul className="ml-4 space-y-2">
           {content.map((item, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 이 목록은 정적이며 순서가 바뀌지 않으므로 인덱스를 key로 사용합니다.
             <li key={index} className="flex items-start space-x-2">
               <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gray-400"></span>
               <span className="text-gray-700 text-sm leading-relaxed">
@@ -90,12 +95,12 @@ const Agreement = () => {
         </div>
       </ScrollArea>
 
-      <AgreementConsent consent={consent} onConsentChange={handleConsentChange} />
-
-      <NavigationButtons
-        text="동의하고 계속하기"
-        isValid={allConsentsGiven}
+      <AgreementConsent
+        consent={consent}
+        onConsentChange={handleConsentChange}
       />
+
+      <NavigationButtons text="동의하고 계속하기" isValid={allConsentsGiven} />
     </div>
   );
 };

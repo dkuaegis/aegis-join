@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { type ConsentState } from "@/constants/regulation";
+import type { ConsentState } from "@/constants/regulation";
 
 interface AgreementConsentProps {
   consent: ConsentState;
@@ -44,8 +44,8 @@ const AgreementConsent = ({
             htmlFor="privacy"
             className="cursor-pointer text-gray-700 text-sm"
           >
-            <span className="text-red-500">[필수]</span> 개인정보 수집 및
-            이용에 동의합니다
+            <span className="text-red-500">[필수]</span> 개인정보 수집 및 이용에
+            동의합니다
           </label>
         </div>
       </div>
