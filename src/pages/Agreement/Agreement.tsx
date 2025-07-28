@@ -116,7 +116,7 @@ const Agreement = () => {
             </label>
           </div>
 
-          <div className="flex items-start space-x-3 p-3">
+          <div className="flex items-start space-x-3 p-3 pt-0">
             <Checkbox
               id="privacy"
               checked={consent.privacy}
