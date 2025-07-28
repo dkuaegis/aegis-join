@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import KakaoIcon from "./KakaoIcon"; // 직접 만든 SVG 컴포넌트
+import KakaoIcon from "@/assets/kakaoIcon.svg"
 
 type OpenChatStep = "copyCode" | "copied" | "enterOpenChat";
 
@@ -20,9 +20,9 @@ const KakaoChatroom = () => {
   };
 
   return (
-    <div className="break-words pt-8">
+    <div className="break-words pt-4">
       <p className="line-breaks mb-1 text-center text-gray-600 text-sm">
-        오픈채팅방에서도 공지를 확인할 수 있습니다.
+        오픈채팅방에서도 공지를 확인할 수 있습니다
       </p>
       <Button
         size="lg"
@@ -36,10 +36,10 @@ const KakaoChatroom = () => {
           onClick={handleClick}
           className="flex items-center justify-center gap-0"
         >
-          <KakaoIcon className="h-[30px] h-[30px]! w-[30px] w-[30px]!" />
+          <img src={KakaoIcon} />
           <span className="text-[16px]">
             {openChatStep === "copyCode"
-              ? "비밀번호 복사하기"
+              ? "비밀번호 복사 및 채팅방 참여하기"
               : openChatStep === "copied"
                 ? "복사되었습니다!"
                 : "오픈채팅방 참여하기!!"}
