@@ -2,19 +2,20 @@
 import CenterLogo from "./JoinComplete.Centerlogo";
 import DiscordNotice from "./JoinComplete.DiscordNotice";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
-
+import Lottie from "lottie-react";
+import Rocket from "@/assets/lottie/Rocket.json";
 const JoinComplete = () => {
   return (
     <AlignCenter>
       <Wrapper>
-        {/* <Confetti recycle={false} numberOfPieces={500} /> */}
-        <h2 className="font-bold text-3xl tracking-tight">
-          가입을 축하합니다! 🎉
-        </h2>
+        <Lottie
+        animationData={Rocket}
+        loop={true}
+        style={{ width: 300, height: 300 }}
+        />
         <p className="text-muted-foreground text-xl">
           성공적으로 가입이 완료되었습니다.
         </p>
-        <CenterLogo />
         <DiscordNotice />
         <KakaoChatroom />
       </Wrapper>
