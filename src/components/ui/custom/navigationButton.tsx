@@ -4,18 +4,22 @@ import useFunnel from "@/hooks/useFunnel";
 
 interface NavigationButtonsProps {
   isValid?: boolean;
+  onNext?: () => void;
   onFetch?: () => Promise<boolean>;
   text?: string;
 }
 
 export default function NavigationButtons({
   isValid,
+  onNext,
   onFetch,
   text,
 }: NavigationButtonsProps) {
   const { next } = useFunnel();
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const goNext = onNext || next;
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [buttonVariant, setButtonVariant] = useState<"default" | "secondary">(
     "default"
   );
@@ -28,7 +32,7 @@ export default function NavigationButtons({
     if (isLoading || !isValid) return;
 
     if (!onFetch) {
-      next();
+      goNext();
       return;
     }
 
@@ -36,7 +40,7 @@ export default function NavigationButtons({
     try {
       const isSuccess = await onFetch();
       if (isSuccess) {
-        next();
+        goNext();
       } else {
         console.error("Error on fetch");
       }
@@ -45,7 +49,7 @@ export default function NavigationButtons({
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, isValid, onFetch, next]);
+  }, [isLoading, isValid, onFetch, goNext]);
 
   return (
     <div className="fixed right-0 bottom-0 left-0 flex justify-center bg-background/80 p-4 backdrop-blur-xs">
@@ -55,7 +59,6 @@ export default function NavigationButtons({
           variant={buttonVariant}
           size="lg"
           className="min-w-full"
-          disabled={isLoading || !isValid}
         >
           {text ? text : "다음"}
         </Button>
