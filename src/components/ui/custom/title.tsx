@@ -16,7 +16,7 @@ const Title = ({ currentStep }: TitleProps) => {
 
   if (isFirstStep || isLastStep) {
     return (
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-9 items-center justify-center">
         <h1 className="font-bold text-2xl">
           {JOIN_STEP_KOREAN_MAP[currentStep]}
         </h1>
