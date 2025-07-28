@@ -1,5 +1,5 @@
-import { CircleAlert } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowLeftIcon, CircleAlert } from "lucide-react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { Label } from "@/components/ui/label";
@@ -7,9 +7,16 @@ import { fetchCoupon, submitCoupon } from "./Coupon.Api";
 import { CouponList } from "./Coupon.CouponList";
 import InputCouponCode from "./Coupon.InputCouponCode";
 import { TotalAmount } from "./Coupon.TotalAmount";
-import type { Coupon as CouponType } from "./Coupon.Types";
+import type { Coupon, Coupon as CouponType } from "./Coupon.Types";
+import { Stack } from "@/components/layout/Stack";
+import { Button } from "@/components/ui/button";
+import { JOIN_STEP_KOREAN_MAP } from "@/constants/joinSteps";
 
-const Coupon = () => {
+interface CouponProps {
+  onClose: () => void;
+}
+
+const Coupon = ({ onClose } : CouponProps) => {
   const [coupons, setCoupons] = useState<CouponType[]>([]);
   const [selectedCoupons, setSelectedCoupons] = useState<number[]>([]);
 
@@ -37,7 +44,18 @@ const Coupon = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="">
+      <header className="absolute top-8 bg-white">
+        <Stack>
+          <Button variant="icon" aria-label="Go back" onClick={onClose}>
+            <ArrowLeftIcon size={28} />
+          </Button>
+          <h1 className="font-bold text-2xl">
+            쿠폰 적용
+          </h1>
+        </Stack>
+      </header>
+      
       <div>
         <Label className="text-xl">할인 금액</Label>
         <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />

@@ -6,13 +6,17 @@ import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
 import { startPaymentPolling } from "./Payment.Api";
 import Information from "./Payment.Information";
+import { cn } from "@/lib/utils";
+import Coupon from "../Coupon/Coupon";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
+
 
 const Payment = () => {
   const [isValid, setIsValid] = useState(false);
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
+  const [currentView, setCurrentView] = useState<'coupon' | 'payment'>('payment');
 
   useEffect(() => {
     const cleanupPolling = startPaymentPolling(
@@ -35,24 +39,29 @@ const Payment = () => {
   }, [payInfo]);
 
   return (
-    <div className="line-breaks space-y-8">
-      {!isValid ? (
-        <>
-          <PaymentAmount amount={remainingAmount} />
-          <Information />
-        </>
-      ) : (
-        <Suspense>
-          <Complete message="납부가 완료됐어요" />
-        </Suspense>
-      )}
-      <Button size="lg" className=" w-full items-center" variant="default">
-        쿠폰 적용하기
-      </Button>
-      <AdminInfoDrawer />
+    <>
+      <div className={cn("line-breaks space-y-8", currentView === 'payment' ? '' : 'hidden')} >
+        {!isValid ? (
+          <>
+            <PaymentAmount amount={remainingAmount} />
+            <Information />
+          </>
+        ) : (
+          <Suspense>
+            <Complete message="납부가 완료됐어요" />
+          </Suspense>
+        )}
+        <Button size="lg" className=" w-full items-center" variant="default" onClick={() => setCurrentView('coupon')}>
+          쿠폰 적용하기
+        </Button>
+        <AdminInfoDrawer />
 
-      <NavigationButtons isValid={isValid} />
-    </div>
+        <NavigationButtons isValid={isValid} />
+      </div>
+      <div className={cn("line-breaks space-y-8", currentView === 'coupon' ? '' : 'hidden')} >
+        <Coupon onClose={() => setCurrentView('payment')}/>
+      </div>
+    </>
   );
 };
 
