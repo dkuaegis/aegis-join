@@ -1,14 +1,10 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import NavigationButtons from "@/components/ui/custom/navigationButton";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { type ConsentState, chapters } from "@/constants/regulation";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
+import AgreementConsent from "./Agreement.Consent";
 
 const Agreement = () => {
   const [openChapters, setOpenChapters] = useState<string[]>([]);
@@ -36,7 +32,6 @@ const Agreement = () => {
       return (
         <ul className="ml-4 space-y-2">
           {content.map((item, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: 이 목록은 정적이며 순서가 바뀌지 않으므로 인덱스를 key로 사용합니다.
             <li key={index} className="flex items-start space-x-2">
               <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gray-400"></span>
               <span className="text-gray-700 text-sm leading-relaxed">
@@ -95,51 +90,12 @@ const Agreement = () => {
         </div>
       </ScrollArea>
 
-      {/* Consent Section */}
-      <div className="my-6 space-y-4 border-t p-4 pb-20">
-        <div className="space-y-3">
-          <div className="flex items-start space-x-3 p-3">
-            <Checkbox
-              id="regulations"
-              checked={consent.regulations}
-              onCheckedChange={(checked) =>
-                handleConsentChange("regulations", checked as boolean)
-              }
-              className="mt-0.5"
-            />
-            <label
-              htmlFor="regulations"
-              className="cursor-pointer text-gray-700 text-sm"
-            >
-              <span className="text-red-500">[필수]</span> Aegis 동아리 회칙에
-              동의합니다
-            </label>
-          </div>
+      <AgreementConsent consent={consent} onConsentChange={handleConsentChange} />
 
-          <div className="flex items-start space-x-3 p-3 pt-0">
-            <Checkbox
-              id="privacy"
-              checked={consent.privacy}
-              onCheckedChange={(checked) =>
-                handleConsentChange("privacy", checked as boolean)
-              }
-              className="mt-0.5"
-            />
-            <label
-              htmlFor="privacy"
-              className="cursor-pointer text-gray-700 text-sm"
-            >
-              <span className="text-red-500">[필수]</span> 개인정보 수집 및
-              이용에 동의합니다
-            </label>
-          </div>
-        </div>
-
-        <NavigationButtons
-          text="동의하고 계속하기"
-          isValid={allConsentsGiven}
-        />
-      </div>
+      <NavigationButtons
+        text="동의하고 계속하기"
+        isValid={allConsentsGiven}
+      />
     </div>
   );
 };
