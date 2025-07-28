@@ -1,5 +1,5 @@
 import { useState } from "react";
-import KakaoIcon from "@/assets/kakaoIcon.svg";
+import KakaoIcon from "@/assets/kakao-logo.svg";
 import { Button } from "@/components/ui/button";
 
 type OpenChatStep = "copyCode" | "copied" | "enterOpenChat";

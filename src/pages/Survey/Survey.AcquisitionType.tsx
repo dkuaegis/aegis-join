@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import ClubFairIcon from "@/assets/clubFairIcon.svg";
-import EtcIcon from "@/assets/etcIcon.svg";
-import EverytimeIcon from "@/assets/everytimeIcon.svg";
-import FriendIcon from "@/assets/friendIcon.svg";
+import ClubFairIcon from "@/assets/everytime.svg";
+import EtcIcon from "@/assets/everytime.svg";
+import EverytimeIcon from "@/assets/everytime.svg";
+import FriendIcon from "@/assets/everytime.svg";
+import OfflineEventIcon from "@/assets/everytime.svg";
 import InstagramIcon from "@/assets/instagramIcon.svg";
-import OfflineEventIcon from "@/assets/offlineEventIcon.svg";
 import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Label } from "@/components/ui/label";
 import { AcquisitionType as AcquisitionTypeEnum } from "@/types/api/survey";

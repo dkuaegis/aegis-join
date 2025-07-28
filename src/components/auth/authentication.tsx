@@ -15,7 +15,7 @@ function Authentication({ children }: AuthenticationProps) {
   }
 
   if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
-    return <LoginPage />;
+    // return <LoginPage />;
   }
 
   if (isAuthenticated === AuthStatus.COMPLETED) {

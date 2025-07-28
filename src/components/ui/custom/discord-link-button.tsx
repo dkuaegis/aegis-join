@@ -1,4 +1,4 @@
-import DiscordIcon from "@/assets/discordIcon.svg";
+import DiscordIcon from "@/assets/discord-logo.svg";
 import { Button } from "@/components/ui/button";
 
 interface DiscordLinkButtonProps {
