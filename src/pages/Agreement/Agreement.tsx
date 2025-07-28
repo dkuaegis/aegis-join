@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { type ConsentState, chapters } from "@/constants/regulation";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 
 const Agreement = () => {
   const [openChapters, setOpenChapters] = useState<string[]>([]);
@@ -51,10 +52,8 @@ const Agreement = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto min-h-screen max-w-md bg-white">
-        <div className="flex h-[calc(100vh-180px)] flex-col">
-          <ScrollArea className="flex-1 p-4">
+    <div className="space-y-4">
+          <ScrollArea className="flex-1">
             <div className="space-y-3">
               {chapters.map((chapter) => (
                 <div key={chapter.id} className="rounded-lg border bg-white">
@@ -65,7 +64,7 @@ const Agreement = () => {
                     <CollapsibleTrigger asChild>
                       <div className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50">
                         <div className="flex items-center space-x-3">
-                          <span className="font-medium text-gray-900 text-sm">
+                          <span className="font-medium text-gray-900 text-base">
                             {chapter.title}
                           </span>
                         </div>
@@ -137,19 +136,11 @@ const Agreement = () => {
               </div>
             </div>
 
-            <Button
-              className={`h-12 w-full font-medium text-base ${
-                allConsentsGiven
-                  ? "bg-slate-800 hover:bg-slate-700"
-                  : "cursor-not-allowed bg-gray-300"
-              }`}
-              disabled={!allConsentsGiven}
-            >
-              동의하고 계속하기
-            </Button>
+            <NavigationButtons
+              text="동의하고 계속하기"
+              isValid={allConsentsGiven}
+            />
           </div>
-        </div>
-      </div>
     </div>
   );
 };
