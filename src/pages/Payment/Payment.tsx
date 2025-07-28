@@ -8,6 +8,7 @@ import { startPaymentPolling } from "./Payment.Api";
 import Information from "./Payment.Information";
 import { cn } from "@/lib/utils";
 import Coupon from "../Coupon/Coupon";
+import { Label } from "@radix-ui/react-label";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -43,6 +44,7 @@ const Payment = () => {
       <div className={cn("line-breaks space-y-8", currentView === 'payment' ? '' : 'hidden')} >
         {!isValid ? (
           <>
+             <Label className="text-xl">납부 금액</Label>
             <PaymentAmount amount={remainingAmount} />
             <Information />
           </>

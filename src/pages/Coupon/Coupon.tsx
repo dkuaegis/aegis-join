@@ -44,7 +44,7 @@ const Coupon = ({ onClose } : CouponProps) => {
   };
 
   return (
-    <div className="">
+    <div className="space-y-8">
       <header className="absolute top-8 bg-white">
         <Stack>
           <Button variant="icon" aria-label="Go back" onClick={onClose}>
@@ -65,8 +65,8 @@ const Coupon = ({ onClose } : CouponProps) => {
         {coupons.length === 0 ? (
           <AlertBox
             icon={<CircleAlert className="h-4 w-4" />}
-            title="쿠폰이 없습니다."
-            description={["'다음' 버튼을 눌러주세요."]}
+            title="쿠폰이 없습니다"
+            description={["쿠폰을 등록하거나, 결제 페이지로 이동해주세요"]}
           />
         ) : (
           <CouponList
