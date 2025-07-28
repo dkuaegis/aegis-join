@@ -10,6 +10,8 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { type ConsentState, chapters } from "@/constants/regulation";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import React from "react";
+import { Separator } from "@radix-ui/react-select";
 
 const Agreement = () => {
   const [openChapters, setOpenChapters] = useState<string[]>([]);
@@ -52,8 +54,8 @@ const Agreement = () => {
   };
 
   return (
-    <div className="space-y-4">
-          <ScrollArea className="flex-1">
+    <div className="flex h-[50vh] max-h-120 flex-col">
+          <ScrollArea className="h-[50vh] max-h-120 flex-1">
             <div className="space-y-3">
               {chapters.map((chapter) => (
                 <div key={chapter.id} className="rounded-lg border bg-white">
@@ -97,7 +99,7 @@ const Agreement = () => {
           </ScrollArea>
 
           {/* Consent Section */}
-          <div className="space-y-4 border-t bg-white p-4">
+          <div className="space-y-4 border-t my-6 p-4 pb-20">
             <div className="space-y-3">
               <div className="flex items-start space-x-3 p-3">
                 <Checkbox
