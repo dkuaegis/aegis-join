@@ -1,17 +1,14 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { type ConsentState, chapters } from "@/constants/regulation";
-import NavigationButtons from "@/components/ui/custom/navigationButton";
-import React from "react";
-import { Separator } from "@radix-ui/react-select";
 
 const Agreement = () => {
   const [openChapters, setOpenChapters] = useState<string[]>([]);
@@ -55,94 +52,94 @@ const Agreement = () => {
 
   return (
     <div className="flex h-[50vh] max-h-120 flex-col">
-          <ScrollArea className="h-[50vh] max-h-120 flex-1">
-            <div className="space-y-3">
-              {chapters.map((chapter) => (
-                <div key={chapter.id} className="rounded-lg border bg-white">
-                  <Collapsible
-                    open={openChapters.includes(chapter.id)}
-                    onOpenChange={() => toggleChapter(chapter.id)}
-                  >
-                    <CollapsibleTrigger asChild>
-                      <div className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50">
-                        <div className="flex items-center space-x-3">
-                          <span className="font-medium text-gray-900 text-base">
-                            {chapter.title}
-                          </span>
+      <ScrollArea className="h-[50vh] max-h-120 flex-1">
+        <div className="space-y-3">
+          {chapters.map((chapter) => (
+            <div key={chapter.id} className="rounded-lg border bg-white">
+              <Collapsible
+                open={openChapters.includes(chapter.id)}
+                onOpenChange={() => toggleChapter(chapter.id)}
+              >
+                <CollapsibleTrigger asChild>
+                  <div className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50">
+                    <div className="flex items-center space-x-3">
+                      <span className="font-medium text-base text-gray-900">
+                        {chapter.title}
+                      </span>
+                    </div>
+                    {openChapters.includes(chapter.id) ? (
+                      <ChevronDown className="h-4 w-4 text-gray-500" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 text-gray-500" />
+                    )}
+                  </div>
+                </CollapsibleTrigger>
+
+                <CollapsibleContent>
+                  <div className="border-gray-100 border-t px-4 pb-4">
+                    <div className="mt-4 space-y-4">
+                      {chapter.articles.map((article) => (
+                        <div key={article.number} className="space-y-2">
+                          <h4 className="font-medium text-gray-900 text-sm">
+                            제{article.number}조 {article.title}
+                          </h4>
+                          {renderArticleContent(article.content)}
                         </div>
-                        {openChapters.includes(chapter.id) ? (
-                          <ChevronDown className="h-4 w-4 text-gray-500" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4 text-gray-500" />
-                        )}
-                      </div>
-                    </CollapsibleTrigger>
-
-                    <CollapsibleContent>
-                      <div className="border-gray-100 border-t px-4 pb-4">
-                        <div className="mt-4 space-y-4">
-                          {chapter.articles.map((article) => (
-                            <div key={article.number} className="space-y-2">
-                              <h4 className="font-medium text-gray-900 text-sm">
-                                제{article.number}조 {article.title}
-                              </h4>
-                              {renderArticleContent(article.content)}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </div>
-              ))}
+                      ))}
+                    </div>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
             </div>
-          </ScrollArea>
+          ))}
+        </div>
+      </ScrollArea>
 
-          {/* Consent Section */}
-          <div className="space-y-4 border-t my-6 p-4 pb-20">
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3 p-3">
-                <Checkbox
-                  id="regulations"
-                  checked={consent.regulations}
-                  onCheckedChange={(checked) =>
-                    handleConsentChange("regulations", checked as boolean)
-                  }
-                  className="mt-0.5"
-                />
-                <label
-                  htmlFor="regulations"
-                  className="cursor-pointer text-gray-700 text-sm"
-                >
-                  <span className="text-red-500">[필수]</span> Aegis 동아리
-                  회칙에 동의합니다
-                </label>
-              </div>
-
-              <div className="flex items-start space-x-3 p-3">
-                <Checkbox
-                  id="privacy"
-                  checked={consent.privacy}
-                  onCheckedChange={(checked) =>
-                    handleConsentChange("privacy", checked as boolean)
-                  }
-                  className="mt-0.5"
-                />
-                <label
-                  htmlFor="privacy"
-                  className="cursor-pointer text-gray-700 text-sm"
-                >
-                  <span className="text-red-500">[필수]</span> 개인정보 수집 및
-                  이용에 동의합니다
-                </label>
-              </div>
-            </div>
-
-            <NavigationButtons
-              text="동의하고 계속하기"
-              isValid={allConsentsGiven}
+      {/* Consent Section */}
+      <div className="my-6 space-y-4 border-t p-4 pb-20">
+        <div className="space-y-3">
+          <div className="flex items-start space-x-3 p-3">
+            <Checkbox
+              id="regulations"
+              checked={consent.regulations}
+              onCheckedChange={(checked) =>
+                handleConsentChange("regulations", checked as boolean)
+              }
+              className="mt-0.5"
             />
+            <label
+              htmlFor="regulations"
+              className="cursor-pointer text-gray-700 text-sm"
+            >
+              <span className="text-red-500">[필수]</span> Aegis 동아리 회칙에
+              동의합니다
+            </label>
           </div>
+
+          <div className="flex items-start space-x-3 p-3">
+            <Checkbox
+              id="privacy"
+              checked={consent.privacy}
+              onCheckedChange={(checked) =>
+                handleConsentChange("privacy", checked as boolean)
+              }
+              className="mt-0.5"
+            />
+            <label
+              htmlFor="privacy"
+              className="cursor-pointer text-gray-700 text-sm"
+            >
+              <span className="text-red-500">[필수]</span> 개인정보 수집 및
+              이용에 동의합니다
+            </label>
+          </div>
+        </div>
+
+        <NavigationButtons
+          text="동의하고 계속하기"
+          isValid={allConsentsGiven}
+        />
+      </div>
     </div>
   );
 };
