@@ -1,6 +1,5 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Collapsible,
   CollapsibleContent,
@@ -9,6 +8,7 @@ import {
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { type ConsentState, chapters } from "@/constants/regulation";
+import AgreementConsent from "./Agreement.Consent";
 
 const Agreement = () => {
   const [openChapters, setOpenChapters] = useState<string[]>([]);
@@ -95,51 +95,12 @@ const Agreement = () => {
         </div>
       </ScrollArea>
 
-      {/* Consent Section */}
-      <div className="my-6 space-y-4 border-t p-4 pb-20">
-        <div className="space-y-3">
-          <div className="flex items-start space-x-3 p-3">
-            <Checkbox
-              id="regulations"
-              checked={consent.regulations}
-              onCheckedChange={(checked) =>
-                handleConsentChange("regulations", checked as boolean)
-              }
-              className="mt-0.5"
-            />
-            <label
-              htmlFor="regulations"
-              className="cursor-pointer text-gray-700 text-sm"
-            >
-              <span className="text-red-500">[필수]</span> Aegis 동아리 회칙에
-              동의합니다
-            </label>
-          </div>
+      <AgreementConsent
+        consent={consent}
+        onConsentChange={handleConsentChange}
+      />
 
-          <div className="flex items-start space-x-3 p-3">
-            <Checkbox
-              id="privacy"
-              checked={consent.privacy}
-              onCheckedChange={(checked) =>
-                handleConsentChange("privacy", checked as boolean)
-              }
-              className="mt-0.5"
-            />
-            <label
-              htmlFor="privacy"
-              className="cursor-pointer text-gray-700 text-sm"
-            >
-              <span className="text-red-500">[필수]</span> 개인정보 수집 및
-              이용에 동의합니다
-            </label>
-          </div>
-        </div>
-
-        <NavigationButtons
-          text="동의하고 계속하기"
-          isValid={allConsentsGiven}
-        />
-      </div>
+      <NavigationButtons text="동의하고 계속하기" isValid={allConsentsGiven} />
     </div>
   );
 };
