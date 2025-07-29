@@ -4,12 +4,6 @@ import { forwardRef } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 import { ErrorMessage } from "@/components/ui/custom/error-message";
 
-
-interface StudentResidentNumberProps
-  extends React.ComponentPropsWithoutRef<"input"> {
-  name: string; // name prop 추가
-}
-
 const StudentResidentNumber = forwardRef<HTMLDivElement>((props, ref) => {
   
   const {
