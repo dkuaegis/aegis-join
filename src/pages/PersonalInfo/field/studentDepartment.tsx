@@ -19,6 +19,7 @@ import {
 import { departments } from "@/constants/departments";
 import type { Department } from "@/types/api/member";
 import { useControllerField } from "../PersonalInfo.ControlledField";
+import { cn } from "@/lib/utils";
 
 interface StudentDepartmentProps {
   name: string; // name prop 추가
@@ -52,7 +53,10 @@ export const StudentDepartment = forwardRef<
               variant="outline-form"
               type="button"
               aria-invalid={!isValid}
-              className="w-full"
+              className={cn(
+                "w-full text-lg", // 기본 스타일
+                !field.value && "text-muted-foreground" // 선택된 값이 없을 때만 적용될 스타일
+              )}
             >
               {defaultDepartmentLabel}
               <ChevronsUpDown className="size-4 opacity-50" />
