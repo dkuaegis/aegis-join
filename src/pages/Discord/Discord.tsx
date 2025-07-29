@@ -42,7 +42,7 @@ const Discord = () => {
       ) : (
         <div className="space-y-4">
           <DiscordCode
-            code={code || "12345"}
+            code={code || "- - - - -"}
             isValid={isValid}
             onRefresh={handleRefresh}
           />
