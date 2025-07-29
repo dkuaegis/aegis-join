@@ -40,9 +40,7 @@ const Information = () => {
           value={import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER}
           onCopy={() => handleCopy}
         />
-        <InfoRow label="예금주명" value={
-          "윤성민"
-        } />
+        <InfoRow label="예금주명" value={"윤성민"} />
       </AlertDescription>
     </Alert>
   );

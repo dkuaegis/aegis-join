@@ -11,16 +11,13 @@ export const fetchCoupon = async (): Promise<Coupon[]> => {
 export const submitCoupon = async (selectedCoupons: number[]) => {
   const payload = { issuedCouponIds: selectedCoupons };
 
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/payments`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    }
-  );
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/payments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
 
   return response.headers.get("content-length") !== "0"
     ? await response.json()
