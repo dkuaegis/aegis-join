@@ -36,9 +36,12 @@ const Discord = () => {
   return (
     <div className="gap-12 space-y-4 py-9">
       {isValid ? (
-        <Suspense>
-          <Complete message="연동을 완료했어요" />
-        </Suspense>
+        <>
+          <Suspense>
+            <Complete message="연동을 완료했어요" />
+          </Suspense>
+          <NavigationButtons isValid={isValid} />
+        </>
       ) : (
         <div className="space-y-4">
           <DiscordCode
@@ -54,7 +57,7 @@ const Discord = () => {
           <DiscordWhy />
         </div>
       )}
-      <NavigationButtons isValid={isValid} />
+      
     </div>
   );
 };
