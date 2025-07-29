@@ -1,9 +1,8 @@
-import fetchingWithToast from "@/lib/customFetch";
 import type { PersonalInfoFormValues } from "./PersonalInfo.schema";
 
 export const fetchPersonalInfoData =
   async (): Promise<PersonalInfoFormValues> => {
-    const response = await fetchingWithToast(
+    const response = await fetch(
       `${import.meta.env.VITE_API_URL}/members`
     );
 
@@ -14,7 +13,7 @@ export const fetchPersonalInfoData =
   };
 
 export const submitPersonalInfoData = async (data: PersonalInfoFormValues) => {
-  const response = await fetchingWithToast(
+  const response = await fetch(
     `${import.meta.env.VITE_API_URL}/members`,
     {
       method: "POST",
