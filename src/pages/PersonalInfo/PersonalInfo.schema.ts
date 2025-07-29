@@ -29,6 +29,12 @@ export const personalInfoSchema = z.object({
       isValidBirthDate,
       "유효하지 않은 생년월일입니다 (월/일 범위: 1~12, 1~31)"
     ),
+  gender: z
+    .coerce
+    .number({ error: "성별은 숫자로 입력해야 합니다."})
+    .int()
+    .gte(1, { error: "1에서 8사이의 숫자여야 합니다."})
+    .lte(8, { error: "1에서 8사이의 숫자여야 합니다."}),
   studentId: z
     .string()
     .length(8, { error: "학번은 8자리여야 합니다" })
@@ -43,11 +49,10 @@ export const personalInfoSchema = z.object({
       const phoneRegex = /^(01[016789])-?[0-9]{3,4}-?[0-9]{4}$/;
       return phoneRegex.test(val);
     }, "전화번호 형식이 올바르지 않습니다"),
-  department: z.nativeEnum(Department, {
+  department: z.enum(Department, {
     error: "학과를 선택해주세요",
   }),
-
-  grade: z.nativeEnum(Grade, {
+  grade: z.enum(Grade, {
     error: "학년을 선택해주세요",
   }),
 });
