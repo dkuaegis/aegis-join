@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import { Progress } from "@/components/ui/progress";
 import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
@@ -15,12 +14,6 @@ const App = () => {
 
   return (
     <div className="mx-auto mb-8 w-full max-w-md px-4 py-8 pb-28 ">
-      <ToastContainer
-        position="top-center"
-        draggable={true}
-        pauseOnFocusLoss={false}
-      />
-
       <Title currentStep={currentStep} />
       <Progress value={progress} className="mt-4 mb-8 h-0.5 w-full" />
 
