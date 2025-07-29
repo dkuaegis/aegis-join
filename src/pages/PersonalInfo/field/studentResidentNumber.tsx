@@ -38,7 +38,6 @@ const StudentResidentNumber = forwardRef<HTMLDivElement>((props, ref) => {
         <Input
           type="text"
           inputMode="numeric"
-          placeholder="성별"
           className="h-12 w-16 text-center text-base"
           maxLength={1}
           aria-invalid={!isGenderValid}
