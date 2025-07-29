@@ -5,7 +5,7 @@ import NavigationButtons from "@/components/ui/custom/navigationButton";
 import useFunnel from "@/hooks/useFunnel";
 import { useSurveyStore } from "@/stores/useSurveyStore";
 import { AcquisitionType } from "./Survey.AcquisitionType";
-import { fetchSurveyData, submitSurveyData } from "./Survey.Api";
+import { submitSurveyData } from "./Survey.Api";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
 
@@ -14,9 +14,7 @@ const Survey = () => {
   const {
     joinReason,
     acquisitionType,
-    isInitial,
     setFormValues,
-    setNotInitial,
   } = useSurveyStore();
 
   const methods = useForm<SurveyFormValues>({
@@ -29,28 +27,13 @@ const Survey = () => {
   });
 
   useEffect(() => {
-    if (isInitial) {
-      fetchSurveyData()
-        .then((data) => {
-          // Form 에 받은 데이터를 넣어주고, useForm 의 상태를 초기화 해주고, 받아왔으니 처음이 아닌 상태로.
-          setFormValues(data);
-          methods.reset(data);
-          setNotInitial();
-        })
-        .catch((error) => {
-          console.log("설문조사 정보 가져오는데 오류발생.", error);
-        });
-    }
     return () => {
       // 언마운트 시에 FormValue 를 업데이트 해줌.
       setFormValues(methods.getValues());
     };
   }, [
-    isInitial,
     methods.getValues,
-    methods.reset,
     setFormValues,
-    setNotInitial,
   ]);
 
   const onSubmit = (data: SurveyFormValues) => {
