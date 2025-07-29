@@ -57,7 +57,6 @@ const Discord = () => {
           <DiscordWhy />
         </div>
       )}
-      
     </div>
   );
 };

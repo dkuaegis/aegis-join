@@ -87,8 +87,6 @@ const Payment = () => {
               쿠폰 적용하기
             </Button>
             <AdminInfoDrawer />
-
-            
           </>
         ) : (
           <Suspense>
@@ -96,7 +94,6 @@ const Payment = () => {
             <NavigationButtons isValid={isValid} />
           </Suspense>
         )}
-
       </div>
       <AnimatePresence>
         {currentView === "coupon" && (
