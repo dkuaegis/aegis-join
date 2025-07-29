@@ -46,22 +46,13 @@ const Survey = () => {
         className="line-breaks space-y-4"
         onSubmit={methods.handleSubmit(onSubmit)}
       >
-        <Container>
-          <AcquisitionType />
-        </Container>
-
-        <Container>
-          <JoinReason />
-        </Container>
+        <AcquisitionType />
+        <JoinReason />
 
         <NavigationButtons isValid={methods.formState.isValid} />
       </form>
     </FormProvider>
   );
-};
-
-const Container = ({ children }: { children: React.ReactNode }) => {
-  return <div className="space-y-2">{children}</div>;
 };
 
 export default Survey;
