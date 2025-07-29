@@ -17,9 +17,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { departments } from "@/constants/departments";
+import { cn } from "@/lib/utils";
 import type { Department } from "@/types/api/member";
 import { useControllerField } from "../PersonalInfo.ControlledField";
-import { cn } from "@/lib/utils";
 
 interface StudentDepartmentProps {
   name: string; // name prop 추가
