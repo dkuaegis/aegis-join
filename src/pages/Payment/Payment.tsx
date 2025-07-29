@@ -78,23 +78,25 @@ const Payment = () => {
             <Label className="text-xl">납부 금액</Label>
             <PaymentAmount amount={remainingAmount} />
             <Information />
+            <Button
+              size="lg"
+              className=" w-full items-center"
+              variant="default"
+              onClick={() => setCurrentView("coupon")}
+            >
+              쿠폰 적용하기
+            </Button>
+            <AdminInfoDrawer />
+
+            
           </>
         ) : (
           <Suspense>
             <Complete message="납부가 완료됐어요" />
+            <NavigationButtons isValid={isValid} />
           </Suspense>
         )}
-        <Button
-          size="lg"
-          className=" w-full items-center"
-          variant="default"
-          onClick={() => setCurrentView("coupon")}
-        >
-          쿠폰 적용하기
-        </Button>
-        <AdminInfoDrawer />
 
-        <NavigationButtons isValid={isValid} />
       </div>
       <AnimatePresence>
         {currentView === "coupon" && (
