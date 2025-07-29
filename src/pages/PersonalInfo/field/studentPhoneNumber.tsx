@@ -42,7 +42,7 @@ export const StudentPhoneNumber = forwardRef<
       />
       <ErrorMessage
         isShown={!!error && !isValid}
-        message="전화번호를 입력해주세요"
+        message="유효하지 않은 전화번호입니다"
       />
     </div>
   );

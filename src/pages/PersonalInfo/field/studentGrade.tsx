@@ -29,9 +29,9 @@ export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
 
     return (
       <div className="space-y-2" {...props} ref={ref}>
-        <Label htmlFor="grade">모집 학기 기준 학년</Label>
+        <Label htmlFor="grade">학년</Label>
         <Select value={field.value ?? ""} onValueChange={field.onChange}>
-          <SelectTrigger aria-invalid={!isValid} className="h-12 w-full">
+          <SelectTrigger aria-invalid={!isValid} className="h-12 w-full font-medium">
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
           <SelectContent>
