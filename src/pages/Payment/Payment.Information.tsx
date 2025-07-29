@@ -29,7 +29,7 @@ const InfoRow = ({
 
 const Information = () => {
   const handleCopy = () => {
-    navigator.clipboard.writeText(import.meta.env.VITE_ADMIN_PHONE);
+    navigator.clipboard.writeText(import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER);
   };
 
   return (
