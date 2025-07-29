@@ -11,11 +11,7 @@ import { type SurveyFormValues, surveySchema } from "./Survey.schema";
 
 const Survey = () => {
   const { next } = useFunnel();
-  const {
-    joinReason,
-    acquisitionType,
-    setFormValues,
-  } = useSurveyStore();
+  const { joinReason, acquisitionType, setFormValues } = useSurveyStore();
 
   const methods = useForm<SurveyFormValues>({
     resolver: zodResolver(surveySchema),
@@ -31,10 +27,7 @@ const Survey = () => {
       // 언마운트 시에 FormValue 를 업데이트 해줌.
       setFormValues(methods.getValues());
     };
-  }, [
-    methods.getValues,
-    setFormValues,
-  ]);
+  }, [methods.getValues, setFormValues]);
 
   const onSubmit = (data: SurveyFormValues) => {
     submitSurveyData(data)
