@@ -30,7 +30,7 @@ const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
           <span>새로고침</span>
         </button>
         <button
-          onClick={handleCopy}
+          onClick={() => handleCopy()}
           type="button"
           className="flex cursor-pointer items-center gap-1 rounded-2xl p-1 text-slate-500 underline transition-colors hover:bg-neutral-200"
         >

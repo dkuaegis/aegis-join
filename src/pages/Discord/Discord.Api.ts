@@ -1,8 +1,6 @@
-import fetchingWithToast from "@/lib/customFetch";
-
 export const fetchDiscordCode = async (): Promise<string> => {
   try {
-    const response = await fetchingWithToast(
+    const response = await fetch(
       `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,
       {
         credentials: "include",

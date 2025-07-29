@@ -1,8 +1,7 @@
-import fetchingWithToast from "@/lib/customFetch";
 import type { Coupon } from "./Coupon.Types";
 
 export const fetchCoupon = async (): Promise<Coupon[]> => {
-  const response = await fetchingWithToast(
+  const response = await fetch(
     `${import.meta.env.VITE_API_URL}/coupons/issued/me`
   );
 
@@ -12,16 +11,13 @@ export const fetchCoupon = async (): Promise<Coupon[]> => {
 export const submitCoupon = async (selectedCoupons: number[]) => {
   const payload = { issuedCouponIds: selectedCoupons };
 
-  const response = await fetchingWithToast(
-    `${import.meta.env.VITE_API_URL}/payments`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    }
-  );
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/payments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
 
   return response.headers.get("content-length") !== "0"
     ? await response.json()
@@ -31,7 +27,7 @@ export const submitCoupon = async (selectedCoupons: number[]) => {
 export const submitAndFetchCouponCode = async (couponCode: string) => {
   const payload = { code: couponCode };
 
-  const postResponse = await fetchingWithToast(
+  const postResponse = await fetch(
     `${import.meta.env.VITE_API_URL}/coupons/code`,
     {
       method: "POST",

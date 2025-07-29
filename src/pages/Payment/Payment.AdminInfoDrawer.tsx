@@ -9,7 +9,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ADMIN_INFO } from "./Payment.Config";
 
 const AdminInfoDrawer = () => {
   return (
@@ -24,8 +23,8 @@ const AdminInfoDrawer = () => {
         <DrawerHeader>
           <DrawerTitle>연락처</DrawerTitle>
           <DrawerDescription>
-            전화번호: {ADMIN_INFO.phoneNumber} <br />
-            카카오톡: {ADMIN_INFO.kakaoId}
+            전화번호: {import.meta.env.VITE_ADMIN_PHONE} <br />
+            카카오톡: {import.meta.env.VITE_ADMIN_KAKAO}
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>

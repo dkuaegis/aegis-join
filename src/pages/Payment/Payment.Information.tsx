@@ -1,8 +1,6 @@
 import { Copy } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import useCopyToClipboard from "@/components/ui/custom/copyToClipboard";
-import { ADMIN_INFO } from "./Payment.Config";
 
 const InfoRow = ({
   label,
@@ -30,17 +28,19 @@ const InfoRow = ({
 );
 
 const Information = () => {
-  const { copyToClipboard } = useCopyToClipboard();
+  const handleCopy = () => {
+    navigator.clipboard.writeText(import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER);
+  };
 
   return (
     <Alert>
       <AlertDescription className="h-24 space-y-2 text-base sm:text-base">
         <InfoRow
           label="계좌번호"
-          value={ADMIN_INFO.accountNumber}
-          onCopy={() => copyToClipboard(ADMIN_INFO.accountNumber)}
+          value={import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER}
+          onCopy={() => handleCopy}
         />
-        <InfoRow label="예금주명" value={ADMIN_INFO.name} />
+        <InfoRow label="예금주명" value={"윤성민"} />
       </AlertDescription>
     </Alert>
   );
