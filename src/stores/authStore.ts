@@ -42,9 +42,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   completeRegistration: () => {
-    console.log("변경 전 상태:", get().isAuthenticated);
     set({ isAuthenticated: AuthStatus.COMPLETED });
-    console.log("변경 후 상태:", get().isAuthenticated);
   },
 
   logout: () => {
