@@ -30,7 +30,7 @@ httpClient.interceptors.response.use(
   (response) => response,
   (error: ServerError) => {
     const message = getErrorMessage(error);
-    alert(message); // 사용자에게 메시지 표시
+    console.log(message); // 사용자에게 메시지 표시
 
     return Promise.reject(error);
   }

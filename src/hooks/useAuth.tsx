@@ -30,7 +30,6 @@ const useAuth = () => {
 
   const completeRegistration = useCallback(() => {
     setAuthenticated(AuthStatus.COMPLETED);
-    console.log('hi' + isAuthenticated)
   }, []);  
 
   return { isAuthenticated, completeRegistration };
