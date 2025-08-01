@@ -5,7 +5,6 @@ export const JOIN_STEPS: readonly string[] = [
   "survey",
   "discord",
   "payment",
-  "complete",
 ] as const;
 
 // 각 단계의 타입을 추론
@@ -18,5 +17,4 @@ export const JOIN_STEP_KOREAN_MAP: { [key in JoinStep]: string } = {
   survey: "가입 설문",
   discord: "디스코드 인증",
   payment: "회비 납부",
-  complete: "가입 완료",
 };

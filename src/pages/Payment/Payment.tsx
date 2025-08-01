@@ -4,6 +4,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/authStore";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import Coupon from "../Coupon/Coupon";
 import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
@@ -49,6 +50,9 @@ const Payment = () => {
   const [currentView, setCurrentView] = useState<"coupon" | "payment">(
     "payment"
   );
+  const completeRegistration = useAuthStore(
+    (state) => state.completeRegistration
+  );
 
   useEffect(() => {
     const cleanupPolling = startPaymentPolling(
@@ -91,7 +95,10 @@ const Payment = () => {
         ) : (
           <Suspense>
             <Complete message="납부가 완료됐어요" />
-            <NavigationButtons isValid={isValid} />
+            <NavigationButtons
+              isValid={isValid}
+              onNext={completeRegistration}
+            />
           </Suspense>
         )}
       </div>

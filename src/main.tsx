@@ -9,10 +9,10 @@ import Authentication from "./components/auth/authentication.tsx";
 // biome-ignore lint/style/noNonNullAssertion: The 'root' element is guaranteed to exist in the HTML.
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Authentication>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Authentication>
         <App />
-      </BrowserRouter>
-    </Authentication>
+      </Authentication>
+    </BrowserRouter>
   </StrictMode>
 );
