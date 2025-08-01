@@ -1,6 +1,6 @@
 import type React from "react";
-import { AuthStatus } from "@/hooks/useAuth";
 import { Navigate, useLocation } from "react-router-dom";
+import { AuthStatus } from "@/hooks/useAuth";
 import useFunnel from "@/hooks/useFunnel";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -9,7 +9,7 @@ interface AuthenticationProps {
 }
 
 function Authentication({ children }: AuthenticationProps) {
- const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const { currentStep } = useFunnel();
   const location = useLocation();
 
@@ -18,22 +18,29 @@ function Authentication({ children }: AuthenticationProps) {
   }
 
   if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
-    return location.pathname === '/login' 
-      ? children 
-      : <Navigate to="/login" state={{ from: location }} replace />;
+    return location.pathname === "/login" ? (
+      children
+    ) : (
+      <Navigate to="/login" state={{ from: location }} replace />
+    );
   }
 
   if (isAuthenticated === AuthStatus.COMPLETED) {
-    return location.pathname === '/complete' 
-      ? children 
-      : <Navigate to="/complete" replace />;
+    return location.pathname === "/complete" ? (
+      children
+    ) : (
+      <Navigate to="/complete" replace />
+    );
   }
 
   if (isAuthenticated === AuthStatus.NOT_COMPLETED) {
-    const isFunnelPage = location.pathname !== '/login' && location.pathname !== '/complete';
-    return isFunnelPage 
-      ? children 
-      : <Navigate to={`/${currentStep}`} replace />;
+    const isFunnelPage =
+      location.pathname !== "/login" && location.pathname !== "/complete";
+    return isFunnelPage ? (
+      children
+    ) : (
+      <Navigate to={`/${currentStep}`} replace />
+    );
   }
 
   return null;

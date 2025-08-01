@@ -2,10 +2,10 @@ import type { ServerError } from "./types";
 
 // URL + 상태코드 별 에러 메세지 정의
 const messagesByUrl: Record<string, Record<number, string>> = {
-  '/api/users/': {
+  "/api/users/": {
     404: "사용자 정보를 찾을 수 없습니다.",
   },
-  '/api/orders': {
+  "/api/orders": {
     400: "주문 정보가 올바르지 않습니다. 입력 내용을 다시 확인해주세요.",
   },
 };

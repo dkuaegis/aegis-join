@@ -1,13 +1,14 @@
 import {
-  ServerError,
   type HttpRequestConfig,
   type HttpResponse,
   type RequestInterceptor,
   type ResponseInterceptor,
+  ServerError,
 } from "./types";
 
 interface Interceptors {
   request: RequestInterceptor[];
+  // biome-ignore lint/suspicious/noExplicitAny: <This is intentionally an array of mixed-type interceptors>
   response: ResponseInterceptor<any>[];
 }
 
@@ -36,7 +37,9 @@ export class HttpClient {
       },
       response: {
         use: <SuccessType = unknown>(
-          onFulfilled: (response: HttpResponse<SuccessType>) => HttpResponse<SuccessType> | Promise<HttpResponse<SuccessType>>,
+          onFulfilled: (
+            response: HttpResponse<SuccessType>
+          ) => HttpResponse<SuccessType> | Promise<HttpResponse<SuccessType>>,
           onRejected?: (error: ServerError) => Promise<never>
         ) => {
           this._interceptors.response.push({ onFulfilled, onRejected });
@@ -61,11 +64,14 @@ export class HttpClient {
 
     try {
       const finalConfig = {
-        credentials: 'include' as const,
+        credentials: "include" as const,
         ...currentConfig,
       };
 
-      const response = await fetch(this._baseURL + finalConfig.url, finalConfig);
+      const response = await fetch(
+        this._baseURL + finalConfig.url,
+        finalConfig
+      );
 
       if (!response.ok) {
         throw new ServerError({
@@ -99,7 +105,6 @@ export class HttpClient {
       }
 
       return processedResponse.data;
-
     } catch (error) {
       if (error instanceof ServerError) {
         let processedError = error;
@@ -118,25 +123,24 @@ export class HttpClient {
     }
   }
 
-private async _requestWithBody<T>(
-  method: 'POST' | 'PUT' | 'PATCH', // PATCH 등 다른 메서드도 확장 가능
-  url: string,
-  data?: unknown,
-  config?: Omit<HttpRequestConfig, "url" | "method" | "body">
-): Promise<T> {
-  const headers = {
-    "Content-Type": "application/json",
-    ...config?.headers,
-  };
-  return this.request<T>({
-    ...config,
-    method, // 인자로 받은 메서드 사용
-    url,
-    body: JSON.stringify(data),
-    headers,
-  });
-}
-
+  private async _requestWithBody<T>(
+    method: "POST" | "PUT" | "PATCH", // PATCH 등 다른 메서드도 확장 가능
+    url: string,
+    data?: unknown,
+    config?: Omit<HttpRequestConfig, "url" | "method" | "body">
+  ): Promise<T> {
+    const headers = {
+      "Content-Type": "application/json",
+      ...config?.headers,
+    };
+    return this.request<T>({
+      ...config,
+      method, // 인자로 받은 메서드 사용
+      url,
+      body: JSON.stringify(data),
+      headers,
+    });
+  }
 
   public async get<T>(
     url: string,
@@ -147,18 +151,18 @@ private async _requestWithBody<T>(
 
   public async post<T>(
     url: string,
-    data?: unknown, 
+    data?: unknown,
     config?: Omit<HttpRequestConfig, "url" | "method" | "body">
   ): Promise<T> {
-    return this._requestWithBody('POST', url, data, config);
+    return this._requestWithBody("POST", url, data, config);
   }
 
   public async put<T>(
     url: string,
-    data?: unknown, 
+    data?: unknown,
     config?: Omit<HttpRequestConfig, "url" | "method" | "body">
   ): Promise<T> {
-    return this._requestWithBody('PUT', url, data, config);
+    return this._requestWithBody("PUT", url, data, config);
   }
 
   public async delete<T>(

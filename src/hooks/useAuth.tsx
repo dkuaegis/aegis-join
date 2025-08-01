@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { httpClient } from "@/api/api";
+import { ServerError } from "@/api/types";
 
 export enum AuthStatus {
   UNAUTHORIZED = "UNAUTHORIZED", // 인증 안됨 (401)
@@ -18,10 +19,12 @@ const useAuth = () => {
       try {
         await httpClient.get("/auth/check");
         setAuthenticated(AuthStatus.NOT_COMPLETED);
-
-
       } catch (error: unknown) {
-        setAuthenticated(AuthStatus.UNAUTHORIZED);
+        if (error instanceof ServerError) {
+          if (error.status === 401) {
+            setAuthenticated(AuthStatus.UNAUTHORIZED);
+          }
+        }
       }
     };
 
@@ -30,7 +33,7 @@ const useAuth = () => {
 
   const completeRegistration = useCallback(() => {
     setAuthenticated(AuthStatus.COMPLETED);
-  }, []);  
+  }, []);
 
   return { isAuthenticated, completeRegistration };
 };

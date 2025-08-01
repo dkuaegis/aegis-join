@@ -4,13 +4,13 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/authStore";
 import type { GetPaymentInfo } from "@/types/api/payment";
 import Coupon from "../Coupon/Coupon";
 import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
 import { startPaymentPolling } from "./Payment.Api";
 import Information from "./Payment.Information";
-import { useAuthStore } from "@/stores/authStore";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -50,7 +50,9 @@ const Payment = () => {
   const [currentView, setCurrentView] = useState<"coupon" | "payment">(
     "payment"
   );
-  const completeRegistration = useAuthStore((state) => state.completeRegistration);
+  const completeRegistration = useAuthStore(
+    (state) => state.completeRegistration
+  );
 
   useEffect(() => {
     const cleanupPolling = startPaymentPolling(
@@ -93,7 +95,10 @@ const Payment = () => {
         ) : (
           <Suspense>
             <Complete message="납부가 완료됐어요" />
-            <NavigationButtons isValid={isValid} onNext={completeRegistration}/>
+            <NavigationButtons
+              isValid={isValid}
+              onNext={completeRegistration}
+            />
           </Suspense>
         )}
       </div>
