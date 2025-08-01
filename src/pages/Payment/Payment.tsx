@@ -10,6 +10,7 @@ import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
 import { startPaymentPolling } from "./Payment.Api";
 import Information from "./Payment.Information";
+import { useAuthStore } from "@/stores/authStore";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -49,6 +50,7 @@ const Payment = () => {
   const [currentView, setCurrentView] = useState<"coupon" | "payment">(
     "payment"
   );
+  const completeRegistration = useAuthStore((state) => state.completeRegistration);
 
   useEffect(() => {
     const cleanupPolling = startPaymentPolling(
@@ -91,7 +93,7 @@ const Payment = () => {
         ) : (
           <Suspense>
             <Complete message="납부가 완료됐어요" />
-            <NavigationButtons isValid={isValid} />
+            <NavigationButtons isValid={isValid} onNext={completeRegistration}/>
           </Suspense>
         )}
       </div>
