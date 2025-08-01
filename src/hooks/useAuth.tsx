@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { httpClient } from "@/api/api";
 
 export enum AuthStatus {
   UNAUTHORIZED = "UNAUTHORIZED", // 인증 안됨 (401)
@@ -15,28 +16,11 @@ const useAuth = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/check`,
-          {
-            credentials: "include",
-          }
-        );
+        await httpClient.get("/auth/check");
+        setAuthenticated(AuthStatus.NOT_COMPLETED);
 
-        if (response.status === 401) {
-          setAuthenticated(AuthStatus.UNAUTHORIZED);
-          return;
-        }
-        if (!response.ok) {
-          throw new Error("알 수 없는 에러 발생.");
-        }
-        const data = await response.json();
-        if (data.status === "COMPLETED" || data.status === "OVERPAID") {
-          setAuthenticated(AuthStatus.COMPLETED);
-        } else {
-          setAuthenticated(AuthStatus.NOT_COMPLETED);
-        }
-      } catch (error) {
-        console.log("로그인 인증 에러:", error);
+
+      } catch (error: unknown) {
         setAuthenticated(AuthStatus.UNAUTHORIZED);
       }
     };
@@ -44,7 +28,12 @@ const useAuth = () => {
     checkAuth();
   }, []);
 
-  return { isAuthenticated };
+  const completeRegistration = useCallback(() => {
+    setAuthenticated(AuthStatus.COMPLETED);
+    console.log('hi' + isAuthenticated)
+  }, []);  
+
+  return { isAuthenticated, completeRegistration };
 };
 
 export default useAuth;
