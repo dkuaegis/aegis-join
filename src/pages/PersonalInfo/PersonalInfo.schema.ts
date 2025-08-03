@@ -1,25 +1,9 @@
 import { z } from "zod";
 import { Department, Grade } from "@/types/api/member";
+import { isValidBirthDate } from "./PersonalInfo.helper";
 
 // 생년월일 유효성 검사 함수 (YYMMDD 형식, 월/일 범위만 체크)
-const isValidBirthDate = (birthDate: string): boolean => {
-  if (!/^\d{6}$/.test(birthDate)) {
-    return false; // 형식이 YYMMDD가 아니면 false
-  }
-  const year = Number.parseInt(birthDate.substring(0, 2), 10);
-  const month = Number.parseInt(birthDate.substring(2, 4), 10);
-  const day = Number.parseInt(birthDate.substring(4, 6), 10);
 
-  const fullYear = year >= 50 ? 1900 + year : 2000 + year;
-
-  const date = new Date(fullYear, month - 1, day);
-
-  return (
-    date.getFullYear() === fullYear &&
-    date.getMonth() + 1 === month &&
-    date.getDate() === day
-  );
-};
 
 export const personalInfoSchema = z.object({
   birthDate: z
@@ -29,7 +13,7 @@ export const personalInfoSchema = z.object({
       isValidBirthDate,
       "유효하지 않은 생년월일입니다 (월/일 범위: 1~12, 1~31)"
     ),
-  gender: z
+  residentNumber_back: z
     .string()
     .regex(/^[1-8]$/, { error: "성별은 1에서 8 사이의 숫자여야 합니다." }),
   studentId: z
@@ -54,4 +38,11 @@ export const personalInfoSchema = z.object({
   }),
 });
 
+export const personalInfoApiSchema = personalInfoSchema
+    .omit({ residentNumber_back: true})
+    .extend({
+      gender: z.enum(["MALE", "FEMALE"]),
+    });
+    
+export type PersonalInfoApiValues = z.infer<typeof personalInfoApiSchema>;
 export type PersonalInfoFormValues = z.infer<typeof personalInfoSchema>;
