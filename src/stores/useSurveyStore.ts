@@ -8,9 +8,7 @@ interface SurveyState {
   joinReason: string;
   feedback: string;
   acquisitionType: AcquisitionType | undefined;
-  isInitial: boolean;
 
-  setNotInitial: () => void;
   setFormValues: (values: Partial<SurveyFormValues>) => void;
 }
 
@@ -30,8 +28,5 @@ export const useSurveyStore = create<SurveyState>((set) => ({
       )
         ? (values.acquisitionType as AcquisitionType)
         : undefined,
-    })),
-
-  isInitial: true,
-  setNotInitial: () => set({ isInitial: false }),
+    }))
 }));
