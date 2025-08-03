@@ -2,14 +2,18 @@ import React, { Suspense, useCallback, useEffect, useState } from "react";
 import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import DiscordCode from "@/pages/Discord/Discord.Code";
-import { fetchDiscordCode, startDiscordPolling } from "./Discord.Api";
+import { fetchDiscordCode } from "./Discord.Api";
 import { DiscordWhy } from "./Discord.Why";
+import useFunnel from "@/hooks/useFunnel";
+import { useDiscordPolling } from "./useDiscordPolling";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
 const Discord = () => {
   const [code, setCode] = useState<string>("");
-  const [isValid, setIsValid] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(true);
+  const { next } = useFunnel();
+  useDiscordPolling(setIsValid);
 
   const getDiscordCode = useCallback(async () => {
     try {
@@ -26,11 +30,6 @@ const Discord = () => {
 
   useEffect(() => {
     getDiscordCode();
-
-    const cleanupPolling = startDiscordPolling(setIsValid);
-    return () => {
-      cleanupPolling();
-    };
   }, [getDiscordCode]);
 
   return (
@@ -40,7 +39,7 @@ const Discord = () => {
           <Suspense>
             <Complete message="연동을 완료했어요" />
           </Suspense>
-          <NavigationButtons isValid={isValid} />
+          <NavigationButtons disabled={!isValid} onClick={next} />
         </>
       ) : (
         <div className="space-y-4">
