@@ -8,7 +8,6 @@ import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
 import { httpClient } from "@/api/api";
 import { useNextStep } from "@/hooks/useNextStep";
-import { AcquisitionType as AC } from "@/types/api/survey";
 import { AcquisitionType } from "./Survey.AcquisitionType";
 
 const submitSurveyData =  async (data: SurveyFormValues) => {
@@ -38,10 +37,6 @@ const Survey = () => {
     };
   }, [methods, setFormValues]);
 
-  const isDisabled = methods.formState.isDirty
-    ? !methods.formState.isValid
-    : !isInitiallyValid;  
-
   return (
     <FormProvider {...methods}>
       <form
@@ -52,7 +47,7 @@ const Survey = () => {
         <JoinReason />
 
         <NavigationButtons 
-          disabled={isDisabled} 
+          disabled={!methods.formState.isValid} 
           isLoading={isLoading}
         />
       </form>
