@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/stores/authStore";
 import getErrorMessage from "./errorMessage";
 import { HttpClient } from "./HttpClient";
 import type { ServerError } from "./types";
@@ -17,7 +18,8 @@ httpClient.interceptors.response.use(
   (response) => response,
   (error: ServerError) => {
     if (error.status === 401) {
-      console.error("401 Unauthorized");
+      console.log("...^>^");
+      useAuthStore.getState().logout();
     }
     return Promise.reject(error);
   }
@@ -33,3 +35,5 @@ httpClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+
