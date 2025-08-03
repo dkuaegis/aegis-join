@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import useFunnel from "@/hooks/useFunnel";
-import { useSurveyStore } from "@/stores/useSurveyStore";
+import { useSurveyStore } from "@/stores/surveyStore";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
 import { httpClient } from "@/api/api";

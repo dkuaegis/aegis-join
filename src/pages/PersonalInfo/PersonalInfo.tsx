@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import useFunnel from "@/hooks/useFunnel";
-import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
+import { usePersonalInfoStore } from "@/stores/personalInfoStore";
 import { StudentDepartment } from "./field/studentDepartment";
 import { StudentGrade } from "./field/studentGrade";
 import { StudentId } from "./field/studentId";
