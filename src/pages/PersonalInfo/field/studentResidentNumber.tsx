@@ -12,10 +12,10 @@ const StudentResidentNumber = forwardRef<HTMLDivElement>((props, ref) => {
   } = useControllerField({ name: "birthDate" });
 
   const {
-    field: genderField,
-    error: genderError,
-    isValid: isGenderValid,
-  } = useControllerField({ name: "gender" });
+    field: residentNumberBackField, // 2. 변수 이름도 명확하게 바꿔줍니다.
+    error: residentNumberBackError,
+    isValid: isResidentNumberBackValid,
+  } = useControllerField({ name: "residentNumber_back" });
 
   return (
     <div className="space-y-2" ref={ref} {...props}>
@@ -39,21 +39,18 @@ const StudentResidentNumber = forwardRef<HTMLDivElement>((props, ref) => {
           inputMode="numeric"
           className="h-12 w-16 text-center text-base"
           maxLength={1}
-          aria-invalid={!isGenderValid}
-          value={genderField.value || ""}
-          onChange={genderField.onChange}
-          onBlur={genderField.onBlur}
-          ref={genderField.ref}
+          aria-invalid={!isResidentNumberBackValid}
+          // 4. 변경된 변수를 Input의 props에 연결합니다.
+          {...residentNumberBackField}
         />
         <div className="flex space-x-1">
           {[...Array(6)].map((_, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: 이 목록은 정적이며 순서가 바뀌지 않으므로 인덱스를 key로 사용합니다.
             <div key={i} className="h-3 w-3 rounded-full bg-gray-300"></div>
           ))}
         </div>
       </div>
       <ErrorMessage
-        isShown={!!birthDateError || !!genderError}
+        isShown={!!birthDateError || !!residentNumberBackError}
         message="유효하지 않은 주민등록번호입니다"
       />
     </div>
