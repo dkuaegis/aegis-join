@@ -107,17 +107,19 @@ export class HttpClient {
       return processedResponse.data;
     } catch (error) {
       if (error instanceof ServerError) {
-        let processedError = error;
-        for (const interceptor of this._interceptors.response) {
-          if (interceptor.onRejected) {
-            try {
-              await interceptor.onRejected(processedError);
-            } catch (newError) {
-              processedError = newError as ServerError;
+        const errorInterceptorChain = this._interceptors.response.reduce(
+          (promise, interceptor) => {
+            // onRejected 핸들러가 있는 경우에만 체인에 추가합니다.
+            if (interceptor.onRejected) {
+              // 이전 Promise가 거부되었을 때 현재 인터셉터의 onRejected를 실행하도록 연결합니다.
+              return promise.catch(interceptor.onRejected);
             }
-          }
-        }
-        return Promise.reject(processedError);
+            return promise;
+          },
+          Promise.reject(error) // 체인의 시작은 최초 발생한 에러를 거부하는 Promise입니다.
+        );
+
+        return errorInterceptorChain;
       }
       return Promise.reject(error);
     }
