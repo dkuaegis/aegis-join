@@ -11,12 +11,6 @@ const useFunnel = () => {
   const currentStep = location.pathname.substring(1);
   const currentIndex = steps.indexOf(currentStep);
 
-  useEffect(() => {
-    if (currentIndex === -1) {
-      navigate(`/${steps[0]}`, { replace: true });
-    }
-  }, [currentIndex, navigate]);
-
   const progress =
     currentIndex > -1 ? (currentIndex / (steps.length - 1)) * 100 : 0;
 
