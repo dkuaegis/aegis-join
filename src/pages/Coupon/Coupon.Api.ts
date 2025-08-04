@@ -1,47 +1,22 @@
+import { httpClient } from "@/api/api";
 import type { Coupon } from "./Coupon.Types";
 
 export const fetchCoupon = async (): Promise<Coupon[]> => {
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/coupons/issued/me`
-  );
-
-  return await response.json();
+  return httpClient.get<Coupon[]>("/coupons/issued/me");
 };
 
 export const submitCoupon = async (selectedCoupons: number[]) => {
   const payload = { issuedCouponIds: selectedCoupons };
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/payments`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  return response.headers.get("content-length") !== "0"
-    ? await response.json()
-    : null;
+  return httpClient.put("/payments", payload);
 };
 
-export const submitAndFetchCouponCode = async (couponCode: string) => {
+export const submitAndFetchCouponCode = async (
+  couponCode: string
+): Promise<Coupon[]> => {
   const payload = { code: couponCode };
 
-  const postResponse = await fetch(
-    `${import.meta.env.VITE_API_URL}/coupons/code`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    }
-  );
+  await httpClient.post("/coupons/code", payload);
 
-  if (!postResponse.ok) {
-    throw new Error("쿠폰 코드 제출에 실패했습니다.");
-  }
-  const getResponse = fetchCoupon();
-
-  return getResponse;
+  return fetchCoupon();
 };

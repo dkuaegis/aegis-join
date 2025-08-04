@@ -16,7 +16,7 @@ const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
       <button
         className="cursor-pointer rounded-4xl p-4 font-medium text-5xl transition-colors hover:bg-neutral-200"
         type="button"
-        onClick={onRefresh}
+        onClick={() => handleCopy()}
       >
         {code}
       </button>

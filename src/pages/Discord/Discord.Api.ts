@@ -1,22 +1,4 @@
-export const fetchDiscordCode = async (): Promise<string> => {
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/discord/issue-verification-code`,
-      {
-        credentials: "include",
-        method: "POST",
-      }
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP ERROR! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data.code;
-  } catch (err: unknown) {
-    console.error("디스코드 인증코드 에러:", err);
-    throw err;
-  }
-};
+import { httpClient } from "@/api/api";
 
 interface DiscordResponse {
   discordId: string | null;
@@ -27,21 +9,23 @@ interface DiscordPollingResult {
   discordInfo?: DiscordResponse;
 }
 
+export const fetchDiscordCode = async (): Promise<string> => {
+  try {
+    const response = await httpClient.post<{ code: string }>(
+      "/discord/issue-verification-code"
+    );
+    return response.code;
+  } catch (err) {
+    console.error("디스코드 인증코드 요청 에러:", err);
+    throw err;
+  }
+};
+
 export const pollDiscordStatus = async (): Promise<DiscordPollingResult> => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/discord/myid`,
-      {
-        credentials: "include",
-      }
-    );
+    const data = await httpClient.get<DiscordResponse>("/discord/myid");
 
-    if (!response.ok) {
-      throw new Error(`ERROR on polling: ${response.status}`);
-    }
-
-    const data: DiscordResponse = await response.json();
-
+    // 응답 데이터를 가공하는 비즈니스 로직은 그대로 유지합니다.
     return {
       isSuccess: data.discordId !== null,
       discordInfo: data,
@@ -50,35 +34,4 @@ export const pollDiscordStatus = async (): Promise<DiscordPollingResult> => {
     console.error("디스코드 폴링 중 오류 발생:", err);
     throw err;
   }
-};
-
-export const startDiscordPolling = (
-  setIsValid: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  let pollingActive = true;
-  const interval = 5000;
-
-  const pollDiscordStatusInterval = async () => {
-    try {
-      const result = await pollDiscordStatus();
-      if (!pollingActive) return;
-
-      setIsValid(result.isSuccess);
-
-      if (result.isSuccess) {
-        pollingActive = false;
-        clearInterval(pollingInterval);
-      }
-    } catch (error) {
-      console.error("디스코드 폴링 실패:", error);
-    }
-  };
-
-  const pollingInterval = setInterval(pollDiscordStatusInterval, interval);
-  pollDiscordStatusInterval();
-
-  return () => {
-    pollingActive = false;
-    clearInterval(pollingInterval);
-  };
 };
