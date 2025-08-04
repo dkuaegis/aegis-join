@@ -1,16 +1,16 @@
 import { Label } from "@radix-ui/react-label";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/authStore";
-import type { GetPaymentInfo } from "@/types/api/payment";
 import Coupon from "../Coupon/Coupon";
 import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
-import { startPaymentPolling } from "./Payment.Api";
+import { makePayment, startPaymentPolling } from "./Payment.Api";
 import Information from "./Payment.Information";
+import { ServerError } from "@/api/types";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -45,34 +45,54 @@ const modalVariants = {
 
 const Payment = () => {
   const [isValid, setIsValid] = useState(false);
-  const [remainingAmount, setRemainingAmount] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(0);
   const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
   const [currentView, setCurrentView] = useState<"coupon" | "payment">(
     "payment"
   );
+
   const completeRegistration = useAuthStore(
     (state) => state.completeRegistration
   );
+  const pollingCleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    const cleanupPolling = startPaymentPolling(
-      setIsValid,
-      setPayInfo,
-      setRemainingAmount
-    );
+    const startPollingSequence = () => {
+      const cleanupPolling = startPaymentPolling(
+        setIsValid,
+        setFinalPrice
+      );
+      pollingCleanupRef.current = cleanupPolling;
+      console.log("폴링을 시작합니다.");
+    };
+    const initPayment = async () => {
+      try {
+        await makePayment([]);
+
+        startPollingSequence();
+
+      } catch (error) {
+        if (error instanceof ServerError && error.status === 409) {
+          startPollingSequence();
+        } else {
+          console.error("결제 생성에 실패했습니다:", error);
+        }
+        
+      }
+    };
+
+    initPayment();
 
     return () => {
-      cleanupPolling();
+      // ref에 저장된 클린업 함수가 있다면 실행
+      if (pollingCleanupRef.current) {
+        pollingCleanupRef.current();
+        console.log("폴링을 중단합니다.");
+      }
     };
+
   }, []);
 
-  useEffect(() => {
-    if (payInfo) {
-      setRemainingAmount(
-        payInfo.expectedDepositAmount - payInfo.currentDepositAmount
-      );
-    }
-  }, [payInfo]);
 
   return (
     <div className="relative h-full w-full">
@@ -80,7 +100,7 @@ const Payment = () => {
         {!isValid ? (
           <>
             <Label className="text-xl">납부 금액</Label>
-            <PaymentAmount amount={remainingAmount} />
+            <PaymentAmount amount={finalPrice} />
             <Information />
             <Button
               size="lg"
@@ -96,8 +116,8 @@ const Payment = () => {
           <Suspense>
             <Complete message="납부가 완료됐어요" />
             <NavigationButtons
-              isValid={isValid}
-              onNext={completeRegistration}
+              disabled={!isValid}
+              onClick={completeRegistration}
             />
           </Suspense>
         )}

@@ -1,39 +1,23 @@
-import type { GetPaymentInfo } from "@/types/api/payment";
+import { httpClient } from "@/api/api";
+
+export const makePayment = async (selectedCoupons: number[]) => {
+  const payload = { issuedCouponIds: selectedCoupons };
+
+  return httpClient.post("/payments", payload);
+};
 
 interface PaymentPollingResult {
-  isSuccess: boolean;
-  paymentInfo?: GetPaymentInfo;
+  status: string;
+  finalPrice: number;
 }
 
 export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/payments/status`,
-      {
-        credentials: "include",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`ERROR on polling: ${response.status}`);
-    }
-
-    const data: GetPaymentInfo = await response.json();
-
-    return {
-      isSuccess: ["COMPLETED", "OVERPAID"].includes(data.status),
-      paymentInfo: data,
-    };
-  } catch (err) {
-    console.error("송금 폴링 중 오류 발생:", err);
-    throw err;
-  }
+  return httpClient.get<PaymentPollingResult>("/payments/status");
 };
 
 export const startPaymentPolling = (
   setIsValid: React.Dispatch<React.SetStateAction<boolean>>,
-  setPayInfo: React.Dispatch<React.SetStateAction<GetPaymentInfo | null>>,
-  setRemainingAmount: React.Dispatch<React.SetStateAction<number>>
+  setFinalPrice: React.Dispatch<React.SetStateAction<number>>
 ) => {
   let pollingActive = true;
   const interval = 5000;
@@ -43,19 +27,11 @@ export const startPaymentPolling = (
       const result = await pollPaymentStatus();
       if (!pollingActive) return;
 
-      setIsValid(result.isSuccess);
-      setPayInfo(result.paymentInfo ?? null);
-
-      if (result.paymentInfo) {
-        const remainingAmount =
-          result.paymentInfo.expectedDepositAmount -
-          result.paymentInfo.currentDepositAmount;
-        setRemainingAmount(remainingAmount);
-      }
+      setIsValid(result.status === "COMPLETED");
+      setFinalPrice(result.finalPrice);
 
       if (
-        result.paymentInfo &&
-        ["COMPLETED", "OVERPAID"].includes(result.paymentInfo.status)
+        result.status === "COMPLETED"
       ) {
         pollingActive = false;
         clearInterval(pollingInterval);
