@@ -57,18 +57,15 @@ const Coupon = ({ onClose }: CouponProps) => {
     fetchData();
   }, []);
 
-  const onSubmit = async (): Promise<boolean> => {
+  const handleSubmit = async () => {
+    setIsExiting(true);
     try {
       await submitCoupon(selectedCoupons);
-      return true;
     } catch (error: unknown) {
       console.error("제출 중 오류 발생:", error);
-      return false;
+    } finally {
+      onClose();
     }
-  };
-
-  const triggerExitAnimation = () => {
-    setIsExiting(true);
   };
 
   return (
@@ -102,10 +99,9 @@ const Coupon = ({ onClose }: CouponProps) => {
             exit="exit"
           >
             <NavigationButtons
-              isValid={true}
+              disabled={false}
               text="쿠폰 적용하기"
-              onFetch={onSubmit}
-              onNext={triggerExitAnimation}
+              onClick={handleSubmit}
             />
           </motion.div>
         )}
