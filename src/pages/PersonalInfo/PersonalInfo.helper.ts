@@ -1,4 +1,7 @@
-import { PersonalInfoApiValues, PersonalInfoFormValues } from "./PersonalInfo.schema";
+import type {
+  PersonalInfoApiValues,
+  PersonalInfoFormValues,
+} from "./PersonalInfo.schema";
 
 export const formatPhoneNumber = (rawValue: string): string => {
   const sanitizedValue = rawValue.replace(/[^0-9]/g, ""); // 숫자 외의 문자 제거
@@ -35,14 +38,15 @@ export const transformFetchedDataToFormValues = (
   fetchedData: PersonalInfoApiValues
 ): PersonalInfoFormValues => {
   const { gender, ...rest } = fetchedData;
-  
+
   const birthYear = parseInt(fetchedData.birthDate.substring(0, 2), 10);
   let residentNumber_back: string;
 
   if (gender === "MALE") {
     // 2000년 이전 출생(yy가 50 이상)이면 1, 이후면 3
     residentNumber_back = birthYear >= 50 ? "1" : "3";
-  } else { // FEMALE
+  } else {
+    // FEMALE
     // 2000년 이전 출생이면 2, 이후면 4
     residentNumber_back = birthYear >= 50 ? "2" : "4";
   }

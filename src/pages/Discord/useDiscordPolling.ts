@@ -1,7 +1,6 @@
 import React from "react";
 import { pollDiscordStatus } from "./Discord.Api";
 
-
 export const useDiscordPolling = (
   setIsValid: React.Dispatch<React.SetStateAction<boolean>>
 ) => {

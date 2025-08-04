@@ -4,7 +4,6 @@ import { isValidBirthDate } from "./PersonalInfo.helper";
 
 // 생년월일 유효성 검사 함수 (YYMMDD 형식, 월/일 범위만 체크)
 
-
 export const personalInfoSchema = z.object({
   birthDate: z
     .string()
@@ -39,10 +38,10 @@ export const personalInfoSchema = z.object({
 });
 
 export const personalInfoApiSchema = personalInfoSchema
-    .omit({ residentNumber_back: true})
-    .extend({
-      gender: z.enum(["MALE", "FEMALE"]),
-    });
-    
+  .omit({ residentNumber_back: true })
+  .extend({
+    gender: z.enum(["MALE", "FEMALE"]),
+  });
+
 export type PersonalInfoApiValues = z.infer<typeof personalInfoApiSchema>;
 export type PersonalInfoFormValues = z.infer<typeof personalInfoSchema>;

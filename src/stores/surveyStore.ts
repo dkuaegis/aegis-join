@@ -28,5 +28,5 @@ export const useSurveyStore = create<SurveyState>((set) => ({
       )
         ? (values.acquisitionType as AcquisitionType)
         : undefined,
-    }))
+    })),
 }));

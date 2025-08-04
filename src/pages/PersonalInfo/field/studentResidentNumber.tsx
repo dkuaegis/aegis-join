@@ -45,6 +45,7 @@ const StudentResidentNumber = forwardRef<HTMLDivElement>((props, ref) => {
         />
         <div className="flex space-x-1">
           {[...Array(6)].map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: The list is static and will not reorder.
             <div key={i} className="h-3 w-3 rounded-full bg-gray-300"></div>
           ))}
         </div>

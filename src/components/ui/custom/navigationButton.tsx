@@ -1,6 +1,4 @@
-import { useCallback, useLayoutEffect, useState } from "react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import useFunnel from "@/hooks/useFunnel";
+import { Button } from "@/components/ui/button";
 
 interface NavigationButtonsProps {
   onClick?: () => void;

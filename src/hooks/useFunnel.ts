@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { JOIN_STEPS } from "@/constants/joinSteps";
 

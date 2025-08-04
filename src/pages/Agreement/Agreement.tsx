@@ -8,9 +8,8 @@ import {
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { type ConsentState, chapters } from "@/constants/regulation";
-import AgreementConsent from "./Agreement.Consent";
 import useFunnel from "@/hooks/useFunnel";
-
+import AgreementConsent from "./Agreement.Consent";
 
 const Agreement = () => {
   const [openChapters, setOpenChapters] = useState<string[]>([]);
@@ -19,7 +18,6 @@ const Agreement = () => {
     privacy: false,
   });
   const { next } = useFunnel();
-  
 
   const toggleChapter = (chapterId: string) => {
     setOpenChapters((prev) =>
@@ -104,7 +102,11 @@ const Agreement = () => {
         onConsentChange={handleConsentChange}
       />
 
-      <NavigationButtons text="동의하고 계속하기" disabled={!allConsentsGiven} onClick={next} />
+      <NavigationButtons
+        text="동의하고 계속하기"
+        disabled={!allConsentsGiven}
+        onClick={next}
+      />
     </div>
   );
 };

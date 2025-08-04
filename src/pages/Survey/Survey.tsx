@@ -1,18 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { httpClient } from "@/api/api";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
-import useFunnel from "@/hooks/useFunnel";
+import { useNextStep } from "@/hooks/useNextStep";
 import { useSurveyStore } from "@/stores/surveyStore";
+import { AcquisitionType } from "./Survey.AcquisitionType";
 import JoinReason from "./Survey.JoinReason";
 import { type SurveyFormValues, surveySchema } from "./Survey.schema";
-import { httpClient } from "@/api/api";
-import { useNextStep } from "@/hooks/useNextStep";
-import { AcquisitionType } from "./Survey.AcquisitionType";
 
-const submitSurveyData =  async (data: SurveyFormValues) => {
-    return httpClient.post('/survey', data);
-}
+const submitSurveyData = async (data: SurveyFormValues) => {
+  return httpClient.post("/survey", data);
+};
 
 const Survey = () => {
   const { joinReason, acquisitionType, setFormValues } = useSurveyStore();
@@ -21,9 +20,7 @@ const Survey = () => {
   const defaultValues = {
     joinReason: joinReason || "",
     acquisitionType: acquisitionType || undefined,
-  };  
-
-  const isInitiallyValid = surveySchema.safeParse(defaultValues).success;
+  };
 
   const methods = useForm<SurveyFormValues>({
     resolver: zodResolver(surveySchema),
@@ -46,8 +43,8 @@ const Survey = () => {
         <AcquisitionType />
         <JoinReason />
 
-        <NavigationButtons 
-          disabled={!methods.formState.isValid} 
+        <NavigationButtons
+          disabled={!methods.formState.isValid}
           isLoading={isLoading}
         />
       </form>

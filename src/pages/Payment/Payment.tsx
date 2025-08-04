@@ -1,6 +1,7 @@
 import { Label } from "@radix-ui/react-label";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { Suspense, useEffect, useRef, useState } from "react";
+import { ServerError } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
@@ -10,7 +11,6 @@ import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
 import { makePayment, startPaymentPolling } from "./Payment.Api";
 import Information from "./Payment.Information";
-import { ServerError } from "@/api/types";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -46,7 +46,6 @@ const modalVariants = {
 const Payment = () => {
   const [isValid, setIsValid] = useState(false);
   const [finalPrice, setFinalPrice] = useState(0);
-  const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
   const [currentView, setCurrentView] = useState<"coupon" | "payment">(
     "payment"
   );
@@ -58,10 +57,7 @@ const Payment = () => {
 
   useEffect(() => {
     const startPollingSequence = () => {
-      const cleanupPolling = startPaymentPolling(
-        setIsValid,
-        setFinalPrice
-      );
+      const cleanupPolling = startPaymentPolling(setIsValid, setFinalPrice);
       pollingCleanupRef.current = cleanupPolling;
       console.log("폴링을 시작합니다.");
     };
@@ -70,14 +66,12 @@ const Payment = () => {
         await makePayment([]);
 
         startPollingSequence();
-
       } catch (error) {
         if (error instanceof ServerError && error.status === 409) {
           startPollingSequence();
         } else {
           console.error("결제 생성에 실패했습니다:", error);
         }
-        
       }
     };
 
@@ -90,9 +84,7 @@ const Payment = () => {
         console.log("폴링을 중단합니다.");
       }
     };
-
   }, []);
-
 
   return (
     <div className="relative h-full w-full">

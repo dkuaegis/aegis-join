@@ -30,9 +30,7 @@ export const startPaymentPolling = (
       setIsValid(result.status === "COMPLETED");
       setFinalPrice(result.finalPrice);
 
-      if (
-        result.status === "COMPLETED"
-      ) {
+      if (result.status === "COMPLETED") {
         pollingActive = false;
         clearInterval(pollingInterval);
       }

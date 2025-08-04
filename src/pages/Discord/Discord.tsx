@@ -1,10 +1,10 @@
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
+import useFunnel from "@/hooks/useFunnel";
 import DiscordCode from "@/pages/Discord/Discord.Code";
 import { fetchDiscordCode } from "./Discord.Api";
 import { DiscordWhy } from "./Discord.Why";
-import useFunnel from "@/hooks/useFunnel";
 import { useDiscordPolling } from "./useDiscordPolling";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));

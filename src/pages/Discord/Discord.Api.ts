@@ -1,5 +1,4 @@
-import { httpClient } from "@/api/api"; 
-
+import { httpClient } from "@/api/api";
 
 interface DiscordResponse {
   discordId: string | null;
@@ -21,7 +20,6 @@ export const fetchDiscordCode = async (): Promise<string> => {
     throw err;
   }
 };
-
 
 export const pollDiscordStatus = async (): Promise<DiscordPollingResult> => {
   try {

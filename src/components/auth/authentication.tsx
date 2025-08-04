@@ -1,9 +1,9 @@
 import type React from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { JOIN_STEPS } from "@/constants/joinSteps";
 import { AuthStatus } from "@/hooks/useAuth";
 import useFunnel from "@/hooks/useFunnel";
 import { useAuthStore } from "@/stores/authStore";
-import { JOIN_STEPS } from "@/constants/joinSteps";
 
 interface AuthenticationProps {
   children: React.ReactNode;
@@ -35,11 +35,12 @@ function Authentication({ children }: AuthenticationProps) {
   }
 
   if (isAuthenticated === AuthStatus.NOT_COMPLETED) {
-    const isFunnelPage = JOIN_STEPS.includes(location.pathname.replace("/", ""));
-    if(isFunnelPage) {
+    const isFunnelPage = JOIN_STEPS.includes(
+      location.pathname.replace("/", "")
+    );
+    if (isFunnelPage) {
       return children;
-    }
-    else {
+    } else {
       const isValidStep = JOIN_STEPS.includes(currentStep);
       const redirectTo = isValidStep ? `/${currentStep}` : JOIN_STEPS[0];
       return <Navigate to={redirectTo} replace />;

@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
-import useFunnel from "@/hooks/useFunnel";
+import { useNextStep } from "@/hooks/useNextStep";
 import { usePersonalInfoStore } from "@/stores/personalInfoStore";
 import { StudentDepartment } from "./field/studentDepartment";
 import { StudentGrade } from "./field/studentGrade";
@@ -13,31 +13,29 @@ import {
   fetchPersonalInfoData,
   submitPersonalInfoData,
 } from "./PersonalInfo.Api";
+import { transformFetchedDataToFormValues } from "./PersonalInfo.helper";
 import {
-  PersonalInfoApiValues,
+  type PersonalInfoApiValues,
   type PersonalInfoFormValues,
   personalInfoSchema,
 } from "./PersonalInfo.schema";
-import { useNextStep } from "@/hooks/useNextStep";
-import { transformFetchedDataToFormValues } from "./PersonalInfo.helper";
-
-
 
 const PersonalInfo = () => {
   const { personalInfoData, setPersonalInfoData } = usePersonalInfoStore();
   const isInitial = personalInfoData === null;
-  const [isFetching, setIsFetching] = useState(isInitial);
 
-  const handleSubmitWithTransform = async (formData: PersonalInfoFormValues) => {
-      // 주민등록번호로 성별 계산
-      const gender = Number(formData.residentNumber_back) % 2 ? "MALE" : "FEMALE";
-      
-      // API에 보낼 데이터 가공
-      const { residentNumber_back, ...rest } = formData;
-      const apiData: PersonalInfoApiValues = { ...rest, gender };
+  const handleSubmitWithTransform = async (
+    formData: PersonalInfoFormValues
+  ) => {
+    // 주민등록번호로 성별 계산
+    const gender = Number(formData.residentNumber_back) % 2 ? "MALE" : "FEMALE";
 
-      // 실제 API 호출 함수 실행
-      return submitPersonalInfoData(apiData);
+    // API에 보낼 데이터 가공
+    const { residentNumber_back: _, ...rest } = formData;
+    const apiData: PersonalInfoApiValues = { ...rest, gender };
+
+    // 실제 API 호출 함수 실행
+    return submitPersonalInfoData(apiData);
   };
 
   const { isLoading, handleSubmit } = useNextStep(handleSubmitWithTransform);
@@ -58,8 +56,7 @@ const PersonalInfo = () => {
           setPersonalInfoData(transformedData);
           methods.reset(transformedData);
         })
-        .catch(console.error)
-        .finally(() => setIsFetching(false));
+        .catch(console.error);
     }
 
     return () => {
@@ -71,6 +68,8 @@ const PersonalInfo = () => {
     methods.reset,
     methods.getValues,
     setPersonalInfoData,
+    methods.formState.isDirty,
+    isInitial,
   ]);
 
   return (
@@ -84,9 +83,9 @@ const PersonalInfo = () => {
         <StudentDepartment name="department" />
         <StudentGrade name="grade" />
         <StudentResidentNumber />
-        <NavigationButtons 
-          disabled={!methods.formState.isValid} 
-          isLoading={isLoading} 
+        <NavigationButtons
+          disabled={!methods.formState.isValid}
+          isLoading={isLoading}
         />
       </form>
     </FormProvider>
@@ -94,4 +93,3 @@ const PersonalInfo = () => {
 };
 
 export default PersonalInfo;
-
