@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { AcquisitionType } from "@/types/api/survey";
-import { SurveyFormValues, surveySchema } from "@/pages/Survey/Survey.schema";
+import type { SurveyFormValues } from "@/pages/Survey/Survey.schema";
 
 interface SurveyState {
   joinReason: string;
@@ -14,7 +13,7 @@ export const useSurveyStore = create<SurveyState>((set) => ({
   acquisitionType: undefined,
 
   setFormValues: (values) => {
-        set((state) => ({
+    set((state) => ({
       ...state,
       ...values,
     }));

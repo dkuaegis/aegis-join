@@ -1,4 +1,3 @@
-
 export enum AcquisitionType {
   INSTAGRAM = "INSTAGRAM",
   EVERYTIME = "EVERYTIME",
