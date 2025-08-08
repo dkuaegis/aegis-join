@@ -1,38 +1,45 @@
 import { useEffect, useRef, useState } from "react";
 import { pollDiscordStatus } from "./Discord.Api";
 
+type DiscordStatus = "polling" | "success" | "error";
+
 export const useDiscordPolling = () => {
-  const [isValid, setIsValid] = useState<boolean>(false);
+  const [status, setStatus] = useState<DiscordStatus>("polling");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   useEffect(() => {
     const poll = async () => {
       try {
         const result = await pollDiscordStatus();
 
         if (result.isSuccess) {
-          setIsValid(true);
-          // 성공
+          setStatus("success");
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
           }
         }
-        // false 인 경우
+
       } catch (error) {
         console.error("디스코드 폴링 실패:", error);
-
+        setStatus("error");
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
       }
     };
-    poll();
+
+    poll(); 
     intervalRef.current = setInterval(poll, 5000);
-    
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, []); 
+  }, []);
 
-  return { isValid };
+  // 기존 컴포넌트 호환성을 위해 isValid 값을 status로부터 계산해서 함께 반환합니다.
+  const isValid = status === "success";
+
+  return { isValid, status };
 };
