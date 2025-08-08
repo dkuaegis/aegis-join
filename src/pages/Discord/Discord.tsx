@@ -11,7 +11,7 @@ const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
 const Discord = () => {
   const [code, setCode] = useState<string>("\u00A0");
-  const [isValid, setIsValid] = useState<boolean>(true);
+  const [isValid, setIsValid] = useState<boolean>(false);
   const { next } = useFunnel();
   useDiscordPolling(setIsValid);
 
