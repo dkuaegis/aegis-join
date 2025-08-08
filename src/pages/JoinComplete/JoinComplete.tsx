@@ -15,9 +15,7 @@ const JoinComplete = () => {
           style={{ width: 300, height: 300 }}
         />
       </Suspense>
-      <p className="font-bold text-3xl mt-4 mb-16">
-        등록이 완료됐어요
-      </p>
+      <p className="mt-4 mb-16 font-bold text-3xl">등록이 완료됐어요</p>
       <DiscordNotice />
       <KakaoChatroom />
     </Wrapper>
@@ -25,8 +23,11 @@ const JoinComplete = () => {
 };
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
-  return <div className="mx-auto mb-8 w-full max-w-md px-4 py-8 pb-28 text-center space-y-4 mt-16">{children}</div>; 
+  return (
+    <div className="mx-auto mt-16 mb-8 w-full max-w-md space-y-4 px-4 py-8 pb-28 text-center">
+      {children}
+    </div>
+  );
 };
-
 
 export default JoinComplete;

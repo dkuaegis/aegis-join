@@ -1,16 +1,31 @@
+import { Check, Copy } from "lucide-react";
 import { forwardRef, useState } from "react";
 import KakaoIcon from "@/assets/kakao-logo.svg";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { Check, Copy, Info } from "lucide-react";
-import React from "react";
 
 const TriggerButton = forwardRef<HTMLDivElement>((props, ref) => (
   <div ref={ref} className="flex items-center justify-center gap-2" {...props}>
-    <img src={KakaoIcon} alt="Kakao Icon" className="w-8 h-8" />
-    <span className="text-base font-semibold">카카오톡에서도 공지 받기</span>
+    <img src={KakaoIcon} alt="Kakao Icon" className="h-8 w-8" />
+    <span className="font-semibold text-base">카카오톡에서도 공지 받기</span>
   </div>
 ));
 TriggerButton.displayName = "TriggerButton";
@@ -36,7 +51,10 @@ const Content = () => {
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="space-y-2">
-        <label htmlFor="password" className="text-sm font-medium text-slate-600">
+        <label
+          htmlFor="password"
+          className="font-medium text-slate-600 text-sm"
+        >
           채팅방 비밀번호
         </label>
         <div className="flex items-center gap-2">
@@ -45,7 +63,7 @@ const Content = () => {
             type="text"
             value={password}
             readOnly
-            className="flex-1 px-3 py-2 text-center bg-slate-100 border rounded-md text-lg font-mono"
+            className="flex-1 rounded-md border bg-slate-100 px-3 py-2 text-center font-mono text-lg"
           />
           <Button
             variant="icon"
@@ -53,9 +71,9 @@ const Content = () => {
             aria-label="비밀번호 복사"
           >
             {copied ? (
-              <Check className="w-5 h-5 text-green-500" />
+              <Check className="h-5 w-5 text-green-500" />
             ) : (
-              <Copy className="w-5 h-5" />
+              <Copy className="h-5 w-5" />
             )}
           </Button>
         </div>
@@ -64,7 +82,7 @@ const Content = () => {
       {/* 2. 참여하기 버튼 */}
       <Button
         size="lg"
-        className="w-full bg-[#FEE500] text-black font-bold transition-all hover:bg-[#F7D300] active:scale-95"
+        className="w-full bg-[#FEE500] font-bold text-black transition-all hover:bg-[#F7D300] active:scale-95"
         onClick={handleJoin}
       >
         입장하기
@@ -85,11 +103,15 @@ const KakaoChatroom = () => {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button size="lg" className="w-full bg-[#FEE500] text-black transition-all hover:bg-[#F7D300] active:scale-95" asChild>
+          <Button
+            size="lg"
+            className="w-full bg-[#FEE500] text-black transition-all hover:bg-[#F7D300] active:scale-95"
+            asChild
+          >
             <TriggerButton />
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-sm p-0">
+        <DialogContent className="p-0 sm:max-w-sm">
           <DialogHeader className="p-6 pb-4">
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>
@@ -103,7 +125,11 @@ const KakaoChatroom = () => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button size="lg" className="w-full bg-[#FEE500] text-black transition-all hover:bg-[#F7D300] active:scale-95" asChild>
+        <Button
+          size="lg"
+          className="w-full bg-[#FEE500] text-black transition-all hover:bg-[#F7D300] active:scale-95"
+          asChild
+        >
           <TriggerButton />
         </Button>
       </DrawerTrigger>
