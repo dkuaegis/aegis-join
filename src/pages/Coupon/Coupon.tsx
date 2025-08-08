@@ -14,40 +14,6 @@ interface CouponProps {
   onClose: () => void;
 }
 
-
-export const mockCoupons: CouponType[] = [
-  {
-    issuedCouponId: 1,
-    discountAmount: 1000,
-    couponName: '신규 가입 환영 쿠폰',
-  },
-  {
-    issuedCouponId: 2,
-    discountAmount: 5000,
-    couponName: '여름맞이 5천원 할인 쿠폰',
-  },
-  {
-    issuedCouponId: 3,
-    discountAmount: 3000,
-    couponName: '배송비 지원 쿠폰',
-  },
-  {
-    issuedCouponId: 4,
-    discountAmount: 10000,
-    couponName: '10만원 이상 구매 시 1만원 할인',
-  },
-  {
-    issuedCouponId: 5,
-    discountAmount: 2000,
-    couponName: '재구매 감사 쿠폰',
-  },
-  {
-    issuedCouponId: 6,
-    discountAmount: 7000,
-    couponName: 'VIP 고객 전용 특별 할인',
-  },
-];
-
 const buttonWrapperVariants = {
   // 초기 상태: 화면 아래에 숨겨져 있음
   initial: {
