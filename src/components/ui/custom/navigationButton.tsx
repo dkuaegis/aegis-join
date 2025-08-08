@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 } from "lucide-react"; // 로딩 아이콘
 import { Button } from "@/components/ui/button";
 
@@ -46,11 +46,7 @@ export default function NavigationButtons({
               className="w-full"
             >
               {/* isLoading 상태일 때 로딩 아이콘 표시 */}
-              {isLoading ? (
-                <Loader2 className="h-6 w-6 animate-spin" />
-              ) : (
-                text
-              )}
+              {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : text}
             </Button>
           </div>
         </motion.div>
