@@ -70,7 +70,7 @@ const Coupon = ({ onClose }: CouponProps) => {
 
   return (
     <div className="space-y-8 pb-20">
-      <div className="bg-slate-50 p-6 rounded-2xl space-y-5">
+      <div className="space-y-5 rounded-2xl bg-slate-50 p-6">
         <div>
           <Label className="text-xl">할인 금액</Label>
           <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
