@@ -1,7 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import { ServerError } from "@/api/types";
+import React, { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
@@ -9,10 +8,8 @@ import { useAuthStore } from "@/stores/authStore";
 import Coupon from "../Coupon/Coupon";
 import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
-import { makePayment } from "./Payment.Api";
 import Information from "./Payment.Information";
 import { usePaymentPolling } from "./usePaymentPolling";
-import { s } from "node_modules/framer-motion/dist/types.d-Cjd591yU";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -53,7 +50,7 @@ const Payment = () => {
   const completeRegistration = useAuthStore(
     (state) => state.completeRegistration
   );
-  
+
   if (status === "loading") {
     return <div className="text-center">로딩 중...</div>;
   }

@@ -24,7 +24,6 @@ export const useDiscordPolling = () => {
             clearInterval(intervalRef.current);
           }
         }
-
       } catch (error) {
         console.error("디스코드 폴링 실패:", error);
         setStatus("error");
@@ -36,7 +35,7 @@ export const useDiscordPolling = () => {
       }
     };
 
-    poll(); 
+    poll();
     intervalRef.current = setInterval(poll, 5000);
 
     return () => {
