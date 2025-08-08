@@ -1,7 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import { ServerError } from "@/api/types";
+import React, { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
@@ -9,8 +8,8 @@ import { useAuthStore } from "@/stores/authStore";
 import Coupon from "../Coupon/Coupon";
 import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
-import { makePayment, startPaymentPolling } from "./Payment.Api";
 import Information from "./Payment.Information";
+import { usePaymentPolling } from "./usePaymentPolling";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -44,47 +43,25 @@ const modalVariants = {
 } as const;
 
 const Payment = () => {
-  const [isValid, setIsValid] = useState(false);
-  const [finalPrice, setFinalPrice] = useState(0);
+  const { isValid, finalPrice, status } = usePaymentPolling();
   const [currentView, setCurrentView] = useState<"coupon" | "payment">(
     "payment"
   );
-
   const completeRegistration = useAuthStore(
     (state) => state.completeRegistration
   );
-  const pollingCleanupRef = useRef<(() => void) | null>(null);
 
-  useEffect(() => {
-    const startPollingSequence = () => {
-      const cleanupPolling = startPaymentPolling(setIsValid, setFinalPrice);
-      pollingCleanupRef.current = cleanupPolling;
-      console.log("폴링을 시작합니다.");
-    };
-    const initPayment = async () => {
-      try {
-        await makePayment([]);
+  if (status === "loading") {
+    return <div className="text-center">로딩 중...</div>;
+  }
 
-        startPollingSequence();
-      } catch (error) {
-        if (error instanceof ServerError && error.status === 409) {
-          startPollingSequence();
-        } else {
-          console.error("결제 생성에 실패했습니다:", error);
-        }
-      }
-    };
-
-    initPayment();
-
-    return () => {
-      // ref에 저장된 클린업 함수가 있다면 실행
-      if (pollingCleanupRef.current) {
-        pollingCleanupRef.current();
-        console.log("폴링을 중단합니다.");
-      }
-    };
-  }, []);
+  if (status === "error") {
+    return (
+      <div className="text-center text-red-500">
+        결제 상태를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.
+      </div>
+    );
+  }
 
   return (
     <div className="relative">
