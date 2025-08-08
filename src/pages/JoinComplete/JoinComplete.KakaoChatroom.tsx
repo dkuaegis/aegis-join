@@ -21,8 +21,8 @@ const KakaoChatroom = () => {
 
   return (
     <div className="break-words pt-4">
-      <p className="line-breaks mb-1 text-center text-gray-600 text-sm">
-        오픈채팅방에서도 공지를 확인할 수 있습니다
+      <p className="line-breaks mb-1 text-center text-muted-foreground">
+        오픈채팅방에서도 공지를 확인할 수 있어요
       </p>
       <Button
         size="lg"

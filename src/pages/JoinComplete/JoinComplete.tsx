@@ -7,35 +7,26 @@ const Lottie = lazy(() => import("lottie-react"));
 
 const JoinComplete = () => {
   return (
-    <AlignCenter>
-      <Wrapper>
-        <Suspense fallback={<div style={{ width: 300, height: 300 }} />}>
-          <Lottie
-            animationData={Rocket}
-            loop={true}
-            style={{ width: 300, height: 300 }}
-          />
-        </Suspense>
-        <p className="text-muted-foreground text-xl">
-          성공적으로 가입이 완료되었습니다.
-        </p>
-        <DiscordNotice />
-        <KakaoChatroom />
-      </Wrapper>
-    </AlignCenter>
+    <Wrapper>
+      <Suspense fallback={<div style={{ width: 300, height: 300 }} />}>
+        <Lottie
+          animationData={Rocket}
+          loop={true}
+          style={{ width: 300, height: 300 }}
+        />
+      </Suspense>
+      <p className="font-bold text-3xl mt-4 mb-16">
+        등록이 완료됐어요
+      </p>
+      <DiscordNotice />
+      <KakaoChatroom />
+    </Wrapper>
   );
 };
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
-  return <div className="space-y-4">{children}</div>;
+  return <div className="mx-auto mb-8 w-full max-w-md px-4 py-8 pb-28 text-center space-y-4 mt-16">{children}</div>; 
 };
 
-const AlignCenter = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="flex flex-1 items-center justify-center p-6 text-center">
-      {children}
-    </div>
-  );
-};
 
 export default JoinComplete;
