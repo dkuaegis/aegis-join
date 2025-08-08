@@ -11,9 +11,8 @@ const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
 const Discord = () => {
   const [code, setCode] = useState<string>("\u00A0");
-  const [isValid, setIsValid] = useState<boolean>(false);
   const { next } = useFunnel();
-  useDiscordPolling(setIsValid);
+  const { isValid } = useDiscordPolling();
 
   const getDiscordCode = useCallback(async () => {
     try {
@@ -44,7 +43,7 @@ const Discord = () => {
       ) : (
         <div className="space-y-4">
           <DiscordCode
-            code={code || "- - - - -"}
+            code={code}
             isValid={isValid}
             onRefresh={handleRefresh}
           />
