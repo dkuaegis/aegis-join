@@ -8,9 +8,15 @@ export const usePaymentPolling = () => {
   const [status, setStatus] = useState<PaymentStatus>("loading");
   const [finalPrice, setFinalPrice] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+   const inFlightRef = useRef(false);
 
   useEffect(() => {
     const poll = async () => {
+      if (inFlightRef.current) {
+        return;
+      }        
+
+      inFlightRef.current = true;
       try {
         const result = await pollPaymentStatus();
         setFinalPrice(result.finalPrice);
@@ -28,6 +34,8 @@ export const usePaymentPolling = () => {
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
         }
+      } finally {
+        inFlightRef.current = false;
       }
     };
 

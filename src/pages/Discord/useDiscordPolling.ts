@@ -6,9 +6,15 @@ type DiscordStatus = "polling" | "success" | "error";
 export const useDiscordPolling = () => {
   const [status, setStatus] = useState<DiscordStatus>("polling");
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const inFlightRef = useRef(false);
 
   useEffect(() => {
     const poll = async () => {
+      if (inFlightRef.current) {
+        return;
+      }
+
+      inFlightRef.current = true;
       try {
         const result = await pollDiscordStatus();
 
@@ -25,6 +31,8 @@ export const useDiscordPolling = () => {
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
         }
+      } finally {
+        inFlightRef.current = false;
       }
     };
 
