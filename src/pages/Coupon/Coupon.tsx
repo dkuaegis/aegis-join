@@ -69,12 +69,15 @@ const Coupon = ({ onClose }: CouponProps) => {
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <Label className="text-xl">할인 금액</Label>
-        <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
+    <div className="space-y-8 pb-20">
+      <div className="space-y-5 rounded-2xl bg-slate-50 p-6">
+        <div>
+          <Label className="text-xl">할인 금액</Label>
+          <TotalAmount coupons={coupons} selectedCoupons={selectedCoupons} />
+        </div>
+        <InputCouponCode setCoupons={setCoupons} />
       </div>
-      <InputCouponCode setCoupons={setCoupons} />
+
       <div className="border-t py-4">
         {coupons.length === 0 ? (
           <AlertBox

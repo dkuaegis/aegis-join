@@ -87,7 +87,7 @@ const Payment = () => {
   }, []);
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative">
       <div className={cn("line-breaks space-y-8")}>
         {!isValid ? (
           <>

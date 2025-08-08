@@ -63,7 +63,7 @@ const InputCouponCode = ({ setCoupons }: InputCouponCodeProps) => {
   if (isMobile) {
     return (
       <div className="flex justify-center">
-        <Drawer open={open} onOpenChange={setOpen} modal={false}>
+        <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
             <Button
               size="lg"
@@ -100,7 +100,7 @@ const InputCouponCode = ({ setCoupons }: InputCouponCodeProps) => {
 
   return (
     <div className="flex justify-center">
-      <Dialog open={open} onOpenChange={setOpen} modal={false}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size="lg" className=" w-full items-center" variant="default">
             코드로 쿠폰 등록하기
