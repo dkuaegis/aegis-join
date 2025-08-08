@@ -7,7 +7,7 @@ type PaymentStatus = "loading" | "polling" | "success" | "error";
 export const usePaymentPolling = () => {
   const [status, setStatus] = useState<PaymentStatus>("loading");
   const [finalPrice, setFinalPrice] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const poll = async () => {

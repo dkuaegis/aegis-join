@@ -5,7 +5,7 @@ type DiscordStatus = "polling" | "success" | "error";
 
 export const useDiscordPolling = () => {
   const [status, setStatus] = useState<DiscordStatus>("polling");
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const poll = async () => {
