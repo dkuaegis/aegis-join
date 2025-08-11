@@ -1,5 +1,6 @@
-import { Check, Copy } from "lucide-react";
+import { Copy } from "lucide-react";
 import { forwardRef, useState } from "react";
+import toast from "react-hot-toast";
 import KakaoIcon from "@/assets/kakao-logo.svg";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +42,7 @@ const Content = () => {
       toast.success("복사되었습니다.");
     } catch (error) {
       toast.error("복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
+      console.error("copy failed:", error);
     }
   };
 
@@ -70,7 +72,7 @@ const Content = () => {
             onClick={handleCopy}
             aria-label="비밀번호 복사"
           >
-              <Copy className="h-5 w-5" />
+            <Copy className="h-5 w-5" />
           </Button>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useAuthStore } from "@/stores/authStore";
 import getErrorMessage from "./errorMessage";
 import { HttpClient } from "./HttpClient";

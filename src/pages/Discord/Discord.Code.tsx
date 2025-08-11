@@ -15,8 +15,8 @@ const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
       toast.success("코드가 복사되었습니다.");
     } catch (error) {
       toast.error("코드 복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
+      console.error("copy failed:", error);
     }
-    
   };
   return (
     <div className="flex h-36 flex-col items-center gap-4">
