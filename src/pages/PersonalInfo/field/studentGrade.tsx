@@ -39,7 +39,7 @@ export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
           </SelectTrigger>
           <SelectContent>
             {grades.map((grade) => (
-              <SelectItem key={grade.value} value={grade.value}> 
+              <SelectItem key={grade.value} value={grade.value}>
                 {grade.label}
               </SelectItem>
             ))}

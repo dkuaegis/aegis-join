@@ -1,8 +1,8 @@
 import { Copy } from "lucide-react";
+import { useMemo } from "react";
 import toast from "react-hot-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { useMemo } from "react";
 
 interface InfoRowProps {
   label: string;
@@ -49,7 +49,7 @@ const Information: React.FC = () => {
       accountNumber,
       accountHolder: "윤성민",
     };
-  }, [accountString]);
+  }, []);
 
   const handleCopy = async () => {
     try {
@@ -66,10 +66,7 @@ const Information: React.FC = () => {
   return (
     <Alert>
       <AlertDescription className="space-y-2 text-sm sm:text-base">
-        <InfoRow
-          label="은행"
-          value={accountDetails.bankName}
-        />        
+        <InfoRow label="은행" value={accountDetails.bankName} />
         <InfoRow
           label="계좌번호"
           value={accountDetails.accountNumber}
