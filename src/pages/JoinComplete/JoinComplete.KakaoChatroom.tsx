@@ -21,6 +21,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import toast from "react-hot-toast";
 
 const TriggerButton = forwardRef<HTMLDivElement>((props, ref) => (
   <div ref={ref} className="flex items-center justify-center gap-2" {...props}>
@@ -31,17 +32,16 @@ const TriggerButton = forwardRef<HTMLDivElement>((props, ref) => (
 TriggerButton.displayName = "TriggerButton";
 
 const Content = () => {
-  const [copied, setCopied] = useState(false);
-
   const password = import.meta.env.VITE_KAKAO_CHATROOM_PASSWORD;
   const chatroomUrl = import.meta.env.VITE_KAKAO_CHATROOM_URL;
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(password).then(() => {
-      setCopied(true);
-
-      setTimeout(() => setCopied(false), 2000); // 2초 후 아이콘 원래대로
-    });
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(password);
+      toast.success("복사되었습니다.");
+    } catch (error) {
+      toast.error("복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
+    }
   };
 
   const handleJoin = () => {
@@ -70,11 +70,7 @@ const Content = () => {
             onClick={handleCopy}
             aria-label="비밀번호 복사"
           >
-            {copied ? (
-              <Check className="h-5 w-5 text-green-500" />
-            ) : (
               <Copy className="h-5 w-5" />
-            )}
           </Button>
         </div>
       </div>

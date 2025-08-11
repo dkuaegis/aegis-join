@@ -2,6 +2,7 @@ import { useAuthStore } from "@/stores/authStore";
 import getErrorMessage from "./errorMessage";
 import { HttpClient } from "./HttpClient";
 import type { ServerError } from "./types";
+import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -18,7 +19,6 @@ httpClient.interceptors.response.use(
   (response) => response,
   (error: ServerError) => {
     if (error.status === 401) {
-      console.log("...^>^");
       useAuthStore.getState().logout();
     }
     return Promise.reject(error);
@@ -30,7 +30,7 @@ httpClient.interceptors.response.use(
   (response) => response,
   (error: ServerError) => {
     const message = getErrorMessage(error);
-    console.log(message); // 사용자에게 메시지 표시
+    if (message) toast.error(message);
 
     return Promise.reject(error);
   }
