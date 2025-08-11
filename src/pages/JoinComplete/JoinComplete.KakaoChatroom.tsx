@@ -22,7 +22,6 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import toast from "react-hot-toast";
 
 const TriggerButton = forwardRef<HTMLDivElement>((props, ref) => (
   <div ref={ref} className="flex items-center justify-center gap-2" {...props}>
