@@ -29,8 +29,7 @@ export function DiscordWhy() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const title = "디스코드 연동 안내";
-  const description =
-    "동아리 활동을 하기 위해 디스코드 계정 연동이 필요해요";
+  const description = "동아리 활동을 하기 위해 디스코드 계정 연동이 필요해요";
 
   if (isDesktop) {
     return (
@@ -87,7 +86,8 @@ function DiscordInfoContent({ className }: { className?: string }) {
             <li className="flex items-start gap-2">
               <span className="mt-1">✓</span>
               <span>
-                <strong>초대의 자동화:</strong> 동아리 등록 시, 자동으로 초대가 가능하여 기다릴 필요 없이 활동에 참여할 수 있어요.
+                <strong>초대의 자동화:</strong> 동아리 등록 시, 자동으로 초대가
+                가능하여 기다릴 필요 없이 활동에 참여할 수 있어요.
               </span>
             </li>
             <li className="flex items-start gap-2">
@@ -107,15 +107,14 @@ function DiscordInfoContent({ className }: { className?: string }) {
           <h3 className="mb-2 font-semibold">🔗 연동 방법</h3>
           <ol className="list-inside list-decimal space-y-2 text-muted-foreground">
             <li>제공되는 인증 코드를 확인하고 '복사하기' 버튼 누르기</li>
+            <li>'Aegis discord' 버튼을 눌러 동아리 서버의 인증 채널로 이동</li>
             <li>
-              'Aegis discord' 버튼을 눌러 동아리 서버의 인증 채널로 이동
-            </li>
-            <li>
-              채팅창에 `/인증` 명령어를 입력하고, 복사한 코드를 붙여넣어
-              전송
+              채팅창에 `/인증` 명령어를 입력하고, 복사한 코드를 붙여넣어 전송
             </li>
             <li>자동으로 역할이 부여되며 연동 완료!</li>
-            <li>연동이 완료되면 이 페이지로 다시 돌아와 나머지 절차를 진행해주세요</li>
+            <li>
+              연동이 완료되면 이 페이지로 다시 돌아와 나머지 절차를 진행해주세요
+            </li>
           </ol>
         </div>
       </div>
