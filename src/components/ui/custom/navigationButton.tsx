@@ -37,7 +37,7 @@ export default function NavigationButtons({
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
           className="fixed right-0 bottom-0 left-0 flex justify-center bg-background/80 p-4 backdrop-blur-sm"
         >
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md px-4">
             <Button
               type="submit"
               onClick={onClick}
