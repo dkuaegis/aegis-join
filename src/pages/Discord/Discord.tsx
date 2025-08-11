@@ -41,7 +41,7 @@ const Discord = () => {
           <NavigationButtons disabled={!isValid} onClick={next} />
         </>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 break-words">
           <DiscordCode
             code={code}
             isValid={isValid}
