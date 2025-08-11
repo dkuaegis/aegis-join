@@ -6,7 +6,6 @@ import "./index.css";
 import { Toaster } from "react-hot-toast";
 import App from "./App.tsx";
 import Authentication from "./components/auth/authentication.tsx";
-import { Toaster } from "react-hot-toast";
 
 // biome-ignore lint/style/noNonNullAssertion: The 'root' element is guaranteed to exist in the HTML.
 createRoot(document.getElementById("root")!).render(
