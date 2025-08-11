@@ -1,7 +1,7 @@
 import { Copy } from "lucide-react";
+import toast from "react-hot-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
 
 const InfoRow = ({
   label,
@@ -31,12 +31,14 @@ const InfoRow = ({
 const Information = () => {
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER);
+      await navigator.clipboard.writeText(
+        import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER
+      );
       toast.success("복사되었습니다.");
     } catch (error) {
       toast.error("복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
+      console.error("copy failed:", error);
     }
-    
   };
 
   return (

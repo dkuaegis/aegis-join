@@ -1,8 +1,8 @@
+import toast from "react-hot-toast";
 import { useAuthStore } from "@/stores/authStore";
 import getErrorMessage from "./errorMessage";
 import { HttpClient } from "./HttpClient";
 import type { ServerError } from "./types";
-import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
