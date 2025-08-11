@@ -1,6 +1,7 @@
 import { Copy } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 const InfoRow = ({
   label,
@@ -28,8 +29,14 @@ const InfoRow = ({
 );
 
 const Information = () => {
-  const handleCopy = () => {
-    navigator.clipboard.writeText(import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER);
+      toast.success("복사되었습니다.");
+    } catch (error) {
+      toast.error("복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
+    }
+    
   };
 
   return (
@@ -38,7 +45,7 @@ const Information = () => {
         <InfoRow
           label="계좌번호"
           value={import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER}
-          onCopy={() => handleCopy}
+          onCopy={handleCopy}
         />
         <InfoRow label="예금주명" value={"윤성민"} />
       </AlertDescription>

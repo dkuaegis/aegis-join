@@ -1,5 +1,6 @@
 import { CopyIcon, RefreshCcw } from "lucide-react";
 import type React from "react";
+import toast from "react-hot-toast";
 
 interface AuthCodeProps {
   code: string;
@@ -8,8 +9,14 @@ interface AuthCodeProps {
 }
 
 const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      toast.success("코드가 복사되었습니다.");
+    } catch (error) {
+      toast.error("코드 복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
+    }
+    
   };
   return (
     <div className="flex h-36 flex-col items-center gap-4">
