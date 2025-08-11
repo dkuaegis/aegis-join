@@ -54,7 +54,7 @@ export const StudentDepartment = forwardRef<
               type="button"
               aria-invalid={!isValid}
               className={cn(
-                "w-full text-lg", // 기본 스타일
+                "w-full text-lg",
                 !field.value && "text-muted-foreground" // 선택된 값이 없을 때만 적용될 스타일
               )}
             >

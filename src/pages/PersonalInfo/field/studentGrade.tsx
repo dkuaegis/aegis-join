@@ -33,13 +33,13 @@ export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
         <Select value={field.value ?? ""} onValueChange={field.onChange}>
           <SelectTrigger
             aria-invalid={!isValid}
-            className="h-12 w-full font-medium"
+            className="h-12 w-full text-lg "
           >
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
           <SelectContent>
             {grades.map((grade) => (
-              <SelectItem key={grade.value} value={grade.value}>
+              <SelectItem key={grade.value} value={grade.value}> 
                 {grade.label}
               </SelectItem>
             ))}
