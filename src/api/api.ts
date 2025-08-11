@@ -30,7 +30,10 @@ httpClient.interceptors.response.use(
   (response) => response,
   (error: ServerError) => {
     const message = getErrorMessage(error);
-    if (message) toast.error(message);
+    if (message) {
+      toast.error(message);
+      console.error(message);
+    }
 
     return Promise.reject(error);
   }
