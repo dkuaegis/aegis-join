@@ -2,6 +2,7 @@ import { Copy } from "lucide-react";
 import toast from "react-hot-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 const InfoRow = ({
   label,
@@ -39,7 +40,6 @@ const Information = () => {
       toast.error("복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
       console.error("copy failed:", error);
     }
-  };
 
   return (
     <Alert>
