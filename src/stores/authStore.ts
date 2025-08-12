@@ -18,7 +18,7 @@ interface AuthState {
 }
 
 interface AuthResponse {
-  status: 'PENDING' | 'COMPLETED';
+  status: "PENDING" | "COMPLETED";
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -35,7 +35,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       if (data.status === "COMPLETED") {
         set({ isAuthenticated: AuthStatus.COMPLETED });
       }
-      
     } catch (error) {
       // 401 에러 또는 네트워크 에러 발생 시 인증 실패 상태로 변경
       const serverError = error as ServerError;
