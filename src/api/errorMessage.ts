@@ -1,11 +1,14 @@
 import type { ServerError } from "./types";
 
 const ignoredErrors = [
-    { url: "/auth/check", method: "GET", status: 401 },
-    { url: "/payments", method: "POST", status: 409 },
+  { url: "/auth/check", method: "GET", status: 401 },
+  { url: "/payments", method: "POST", status: 409 },
 ];
 
-const specificMessages: Record<string, Partial<Record<string, Record<number, string | null>>>> = {
+const specificMessages: Record<
+  string,
+  Partial<Record<string, Record<number, string | null>>>
+> = {
   // --- 회원 (Members) ---
   "/members": {
     GET: {
@@ -22,18 +25,21 @@ const specificMessages: Record<string, Partial<Record<string, Record<number, str
     GET: {
       404: "설문조사 답변을 찾을 수 없습니다.",
     },
-    POST: { // 작성/수정
+    POST: {
+      // 작성/수정
       400: "요청 데이터가 올바르지 않습니다. 답변을 확인해주세요.",
     },
   },
 
   // --- 결제 (Payments) ---
   "/payments": {
-    POST: { // 생성
+    POST: {
+      // 생성
       400: "쿠폰이 해당 사용자에게 발급되지 않았습니다.",
       404: "학생 정보를 찾을 수 없습니다.",
     },
-    PUT: { // 수정
+    PUT: {
+      // 수정
       400: "쿠폰이 해당 사용자에게 발급되지 않았습니다.",
       404: "처리 대기(PENDING) 상태의 결제 정보를 찾을 수 없습니다.",
       409: "이미 완료되었거나 처리할 수 없는 상태의 결제입니다.",
@@ -53,7 +59,7 @@ const specificMessages: Record<string, Partial<Record<string, Record<number, str
       409: "이미 사용되었거나, 다른 계정에서 사용 중인 쿠폰 코드입니다.",
     },
   },
-  
+
   // --- 디스코드 (Discord) ---
   "/discord/issue-verification-code": {
     POST: {
@@ -81,12 +87,13 @@ const messagesByStatus: Record<number, string> = {
 };
 
 const isIgnoredError = (error: ServerError): boolean => {
-    return ignoredErrors.some(ignored =>
-        error.url.startsWith(ignored.url) &&
-        error.method.toUpperCase() === ignored.method &&
-        error.status === ignored.status
-    );
-}
+  return ignoredErrors.some(
+    (ignored) =>
+      error.url.startsWith(ignored.url) &&
+      error.method.toUpperCase() === ignored.method &&
+      error.status === ignored.status
+  );
+};
 
 // 기본 에러 메시지
 const DEFAULT_ERROR_MESSAGE = "오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
@@ -95,17 +102,17 @@ export default function getErrorMessage(error: ServerError): string {
   const { status, url, method } = error;
 
   // 무시할 에러인지 확인
-    if (isIgnoredError(error)) {
-        return "";
-    }  
+  if (isIgnoredError(error)) {
+    return "";
+  }
 
   // 1. 특정 메시지가 있는지 먼저 확인
   for (const urlPattern in specificMessages) {
     if (url.startsWith(urlPattern)) {
       const messagesByMethod = specificMessages[urlPattern];
-      const messagesForStatus = messagesByMethod[method.toUpperCase()]; 
+      const messagesForStatus = messagesByMethod[method.toUpperCase()];
 
-      if (messagesForStatus && messagesForStatus[status]) {
+      if (messagesForStatus?.[status]) {
         return messagesForStatus[status];
       }
     }
