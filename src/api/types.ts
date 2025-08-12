@@ -13,13 +13,13 @@ export class ServerError extends Error {
   readonly status: number;
   readonly headers: Headers;
   readonly url: string;
-  readonly method?: string;
+  readonly method: string;
 
   constructor(response: {
     status: number;
     headers: Headers;
     url: string;
-    method?: string;
+    method: string;
   }) {
     super(
       `Server error! status: ${response.status} for ${response.method || "GET"} ${response.url}`

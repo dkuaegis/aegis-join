@@ -78,7 +78,7 @@ export class HttpClient {
           status: response.status,
           headers: response.headers,
           url: config.url,
-          method: config.method,
+          method: finalConfig.method ?? "GET",
         });
       }
 
