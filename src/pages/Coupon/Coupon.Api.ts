@@ -2,7 +2,7 @@ import { httpClient } from "@/api/api";
 import type { Coupon } from "./Coupon.Types";
 
 export const fetchCoupon = async (): Promise<Coupon[]> => {
-  return httpClient.get<Coupon[]>("/coupons/issued/me");
+  return httpClient.get<Coupon[]>("/coupons/me");
 };
 
 export const submitCoupon = async (selectedCoupons: number[]) => {
