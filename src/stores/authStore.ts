@@ -17,6 +17,10 @@ interface AuthState {
   logout: () => void;
 }
 
+interface AuthResponse {
+  status: "PENDING" | "COMPLETED";
+}
+
 export const useAuthStore = create<AuthState>((set) => ({
   // 초기 상태
   isAuthenticated: AuthStatus.LOADING,
@@ -24,9 +28,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   // 비동기 액션: 앱 시작 시 최초 인증 확인
   checkAuth: async () => {
     try {
-      // 200 OK 응답을 받으면, 가입 절차를 마저 진행해야 하는 상태로 간주
-      await httpClient.get("/auth/check");
-      set({ isAuthenticated: AuthStatus.NOT_COMPLETED });
+      const data = await httpClient.get<AuthResponse>("/auth/check");
+      if (data.status === "PENDING") {
+        set({ isAuthenticated: AuthStatus.NOT_COMPLETED });
+      }
+      if (data.status === "COMPLETED") {
+        set({ isAuthenticated: AuthStatus.COMPLETED });
+      }
     } catch (error) {
       // 401 에러 또는 네트워크 에러 발생 시 인증 실패 상태로 변경
       const serverError = error as ServerError;
