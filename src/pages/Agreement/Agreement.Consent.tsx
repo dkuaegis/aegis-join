@@ -11,7 +11,7 @@ const AgreementConsent = ({
   onConsentChange,
 }: AgreementConsentProps) => {
   return (
-    <div className="my-6 space-y-4 border-t p-4 pb-4">
+    <div className="my-6 space-y-4 border-t p-4 pb-18">
       <div className="space-y-3">
         <div className="flex items-start space-x-3 p-3">
           <Checkbox

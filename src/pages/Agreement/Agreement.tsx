@@ -53,8 +53,8 @@ const Agreement = () => {
   };
 
   return (
-    <div className="flex h-[50vh] max-h-120 flex-col">
-      <ScrollArea className="h-[50vh] max-h-120 flex-1">
+    <div className="flex h-100 flex-col">
+      <ScrollArea className="h-100 flex-1">
         <div className="space-y-3">
           {chapters.map((chapter) => (
             <div key={chapter.id} className="rounded-lg border bg-white">

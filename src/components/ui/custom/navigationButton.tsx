@@ -35,7 +35,7 @@ export default function NavigationButtons({
           animate="animate"
           exit="exit"
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
-          className="fixed right-0 bottom-0 left-0 flex justify-center bg-background/80 p-4 backdrop-blur-sm"
+          className="fixed right-0 bottom-0 left-0 flex justify-center bg-background/80 p-3 backdrop-blur-sm"
         >
           <div className="w-full max-w-md px-4">
             <Button
