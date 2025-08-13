@@ -15,7 +15,7 @@ function Authentication({ children }: AuthenticationProps) {
   const location = useLocation();
 
   if (isAuthenticated === AuthStatus.LOADING) {
-    return <p> loading </p>;
+    return null;
   }
 
   if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
