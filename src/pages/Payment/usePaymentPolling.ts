@@ -11,6 +11,8 @@ export const usePaymentPolling = () => {
   const inFlightRef = useRef(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     const poll = async () => {
       if (inFlightRef.current) {
         return;
@@ -39,21 +41,24 @@ export const usePaymentPolling = () => {
       }
     };
 
+    const startPolling = () => {
+      if (isMounted) {
+        setStatus("polling");
+        poll();
+        intervalRef.current = setInterval(poll, 5000);
+      }
+    };
+
     // 결제 생성 및 폴링 시작 로직
     const initializePayment = async () => {
       try {
         await makePayment([]);
-        console.log("폴링을 시작합니다.");
-        setStatus("polling");
-        poll();
-        intervalRef.current = setInterval(poll, 5000);
+
+        startPolling();
       } catch (error) {
         // 409 에러는 이미 결제가 생성된 경우이므로, 정상적으로 폴링을 시작합니다.
         if (error instanceof ServerError && error.status === 409) {
-          console.log("이미 진행 중인 결제가 있어 폴링을 재개합니다.");
-          setStatus("polling");
-          poll();
-          intervalRef.current = setInterval(poll, 5000);
+          startPolling();
         } else {
           console.error("결제 생성에 실패했습니다:", error);
           setStatus("error");
@@ -64,8 +69,8 @@ export const usePaymentPolling = () => {
     initializePayment();
 
     return () => {
+      isMounted = false;
       if (intervalRef.current) {
-        console.log("폴링을 중단합니다.");
         clearInterval(intervalRef.current);
       }
     };
