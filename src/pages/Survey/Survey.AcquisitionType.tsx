@@ -3,7 +3,7 @@ import ClubFairIcon from "@/assets/club-fair.svg";
 import EtcIcon from "@/assets/etc.svg";
 import EverytimeIcon from "@/assets/everytime.svg";
 import FriendIcon from "@/assets/friend.svg";
-import InstagramIcon from "@/assets/instagramIcon.svg";
+import InstagramIcon from "@/assets/instargram-logo.svg";
 import OfflineEventIcon from "@/assets/offline-event.svg";
 import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Label } from "@/components/ui/label";
