@@ -7,8 +7,11 @@ export const fetchCoupon = async (): Promise<Coupon[]> => {
 
 export const submitCoupon = async (selectedCoupons: number[]) => {
   const payload = { issuedCouponIds: selectedCoupons };
+  if (selectedCoupons.length === 0) {
+    return;
+  }
 
-  return httpClient.put("/payments", payload);
+  await httpClient.put("/payments", payload);
 };
 
 export const submitAndFetchCouponCode = async (
