@@ -8,14 +8,15 @@ const Lottie = lazy(() => import("lottie-react"));
 const JoinComplete = () => {
   return (
     <Wrapper>
-      <Suspense fallback={<div style={{ width: 300, height: 300 }} />}>
+      <Suspense fallback={<div className="mx-auto" style={{ width: 240, height: 240 }} />}>
+        {/* Lottie 애니메이션 크기를 줄여 세로 공간을 확보합니다. */}
         <Lottie
           animationData={Rocket}
           loop={true}
-          style={{ width: 300, height: 300 }}
+          style={{ width: 240, height: 240, margin: "0 auto" }}
         />
       </Suspense>
-      <p className="mt-4 mb-16 font-bold text-3xl">등록이 완료됐어요</p>
+      <p className="mt-4 font-bold text-3xl">등록이 완료됐어요</p>
       <DiscordNotice />
       <KakaoChatroom />
     </Wrapper>
