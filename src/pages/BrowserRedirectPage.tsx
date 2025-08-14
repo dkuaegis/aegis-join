@@ -1,9 +1,14 @@
 import { Label } from "@/components/ui/label";
 import { useExternalBrowser } from "@/hooks/useExternalBrowser";
+import { useEffect } from "react";
 
 const BrowserRedirectPage = () => {
   const { openInDefaultBrowser } = useExternalBrowser();
-  openInDefaultBrowser();
+  
+  useEffect(() => {
+    openInDefaultBrowser();
+  }, [openInDefaultBrowser]);
+
   return (
     <div className="wrap-break-word mx-10 flex h-screen flex-col items-center justify-center space-y-4">
       <Label className="text-3xl">카카오톡 브라우저에서 접속 중</Label>
