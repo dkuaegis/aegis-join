@@ -5,7 +5,7 @@ import BrowserRedirectPage from "./BrowserRedirectPage";
 const LoginPage = () => {
   const { isKakaoInApp } = useExternalBrowser();
 
-  if (!isKakaoInApp) {
+  if (isKakaoInApp) {
     return <BrowserRedirectPage />;
   }
 
