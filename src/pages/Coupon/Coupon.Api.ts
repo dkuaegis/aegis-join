@@ -11,7 +11,7 @@ export const submitCoupon = async (selectedCoupons: number[]) => {
     return;
   }
 
-  return httpClient.put("/payments", payload);
+  await httpClient.put("/payments", payload);
 };
 
 export const submitAndFetchCouponCode = async (
