@@ -46,7 +46,7 @@ export const AcquisitionType = () => {
       <Label htmlFor="acquisitionType" className="text-lg">
         유입 경로
       </Label>
-      <div className="grid grid-cols-3 gap-4 auto-rows-fr">
+      <div className="grid auto-rows-fr grid-cols-3 gap-4">
         {acquisitionTypes.map(({ value, label, icon }) => (
           <AcquisitionCard
             key={value}
