@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { useExternalBrowser } from "@/hooks/useExternalBrowser";
-import { useEffect } from "react";
 
 const BrowserRedirectPage = () => {
   const { openInDefaultBrowser } = useExternalBrowser();
-  
+
   useEffect(() => {
     openInDefaultBrowser();
   }, [openInDefaultBrowser]);
