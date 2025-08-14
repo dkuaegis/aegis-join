@@ -8,7 +8,11 @@ const Lottie = lazy(() => import("lottie-react"));
 const JoinComplete = () => {
   return (
     <Wrapper>
-      <Suspense fallback={<div className="mx-auto" style={{ width: 240, height: 240 }} />}>
+      <Suspense
+        fallback={
+          <div className="mx-auto" style={{ width: 240, height: 240 }} />
+        }
+      >
         {/* Lottie 애니메이션 크기를 줄여 세로 공간을 확보합니다. */}
         <Lottie
           animationData={Rocket}
