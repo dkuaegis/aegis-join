@@ -3,7 +3,7 @@ import ClubFairIcon from "@/assets/club-fair.svg";
 import EtcIcon from "@/assets/etc.svg";
 import EverytimeIcon from "@/assets/everytime.svg";
 import FriendIcon from "@/assets/friend.svg";
-import InstagramIcon from "@/assets/instagramIcon.svg";
+import InstagramIcon from "@/assets/instargram-logo.svg";
 import OfflineEventIcon from "@/assets/offline-event.svg";
 import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Label } from "@/components/ui/label";
@@ -46,7 +46,7 @@ export const AcquisitionType = () => {
       <Label htmlFor="acquisitionType" className="text-lg">
         유입 경로
       </Label>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid auto-rows-fr grid-cols-3 gap-4">
         {acquisitionTypes.map(({ value, label, icon }) => (
           <AcquisitionCard
             key={value}
