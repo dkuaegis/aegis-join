@@ -1,9 +1,9 @@
 import { useFormContext } from "react-hook-form";
-import ClubFairIcon from "@/assets/everytime.svg";
-import EtcIcon from "@/assets/everytime.svg";
+import ClubFairIcon from "@/assets/club-fair.svg";
+import EtcIcon from "@/assets/etc.svg";
 import EverytimeIcon from "@/assets/everytime.svg";
-import FriendIcon from "@/assets/everytime.svg";
-import OfflineEventIcon from "@/assets/everytime.svg";
+import FriendIcon from "@/assets/friend.svg";
+import OfflineEventIcon from "@/assets/offline-event.svg";
 import InstagramIcon from "@/assets/instagramIcon.svg";
 import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Label } from "@/components/ui/label";
