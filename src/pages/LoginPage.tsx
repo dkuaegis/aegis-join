@@ -4,11 +4,11 @@ import BrowserRedirectPage from "./BrowserRedirectPage";
 
 const LoginPage = () => {
   const { isKakaoInApp } = useExternalBrowser();
-  
+
   if (!isKakaoInApp) {
-    return <BrowserRedirectPage />
+    return <BrowserRedirectPage />;
   }
-  
+
   return (
     <div className="line-breaks flex min-h-screen flex-col items-center justify-center bg-background">
       <div className="w-full max-w-[400px] space-y-6 p-4">
