@@ -25,7 +25,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         icon: "text-secondary-foreground hover:bg-primary/10 active:bg-primary/10",
         discord:
-          "bg-[#5865F2] text-white transition-transform duration-100 hover:bg-[#4752C4",
+          "bg-[#5865F2] text-white transition-transform duration-100 hover:bg-[#4752C4]",
       },
       size: {
         default: "h-12 px-4 py-2 has-[>svg]:px-4",
