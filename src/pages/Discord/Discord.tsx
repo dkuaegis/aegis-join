@@ -12,7 +12,7 @@ const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 const Discord = () => {
   const [code, setCode] = useState<string>("\u00A0");
   const { next } = useFunnel();
-  const { isValid } = useDiscordPolling();
+  const { isValid, status } = useDiscordPolling();
 
   const getDiscordCode = useCallback(async () => {
     try {
@@ -30,6 +30,10 @@ const Discord = () => {
   useEffect(() => {
     getDiscordCode();
   }, [getDiscordCode]);
+
+  if (status === "loading") {
+    return null;
+  }
 
   return (
     <div className="gap-12 space-y-4 py-9">
