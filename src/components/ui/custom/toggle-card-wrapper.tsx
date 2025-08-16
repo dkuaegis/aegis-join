@@ -2,8 +2,10 @@ import type React from "react";
 import { cn } from "@/lib/utils";
 import { HTMLMotionProps, motion, Variants } from "framer-motion";
 
-interface ToggleCardWrapperProps
-  extends HTMLMotionProps<"button"> {
+interface ToggleCardWrapperProps extends
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof HTMLMotionProps<"button">>,
+  HTMLMotionProps<"button">
+{
   isSelected: boolean;
   children: React.ReactNode;
 }
@@ -46,7 +48,7 @@ const ToggleCardWrapper = ({
         "transition-colors duration-300",
         isSelected
           ? // 👇 v4에서 정의한 클래스를 사용하여 선택 상태 스타일링
-            "border-[oklch(var(--primary)/0.3)] bg-[length:300%_500%] bg-gradient-to-r from-white via-[aliceblue] to-white animate-aurora"
+            "border-[oklch(var(--primary)/0.5)] bg-[length:300%_500%] bg-gradient-to-r from-white via-[aliceblue] to-white animate-aurora"
           : "border-slate-200 bg-white",
         className
       )}
