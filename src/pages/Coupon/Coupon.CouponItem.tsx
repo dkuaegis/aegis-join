@@ -2,19 +2,12 @@ import CouponIcon from "@/assets/coupon.svg?react";
 import ToggleCardWrapper from "@/components/ui/custom/toggle-card-wrapper";
 import type { CouponItemProps } from "./Coupon.Types";
 
-const CouponItem = ({
-  coupon,
-  isSelected,
-  setSelect,
-  className,
-  ...props
-}: CouponItemProps) => {
+const CouponItem = ({ coupon, isSelected, setSelect }: CouponItemProps) => {
   return (
     <ToggleCardWrapper
       isSelected={isSelected}
       onClick={() => setSelect(coupon.issuedCouponId)}
       className="w-full"
-      {...props}
     >
       <div className="flex w-full items-center justify-start space-x-4">
         <CouponIcon className="h-8 w-12" />
