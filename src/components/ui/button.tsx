@@ -76,7 +76,7 @@ function Button({
           whileTap: { scale: 0.95 },
         }
       : {};
-    return (
+  return (
     <MotionComp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}

@@ -2,7 +2,8 @@ import ToggleCardWrapper from "@/components/ui/custom/toggle-card-wrapper";
 
 type ToggleCardWrapperProps = React.ComponentProps<typeof ToggleCardWrapper>;
 
-interface AcquisitionCardProps extends Omit<ToggleCardWrapperProps, "children"> {
+interface AcquisitionCardProps
+  extends Omit<ToggleCardWrapperProps, "children"> {
   label: string;
   icon: string;
 }
