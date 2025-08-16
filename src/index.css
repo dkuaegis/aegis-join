@@ -78,6 +78,7 @@
     --popover: 1 0 0;
     --popover-foreground: 0.129 0.042 264.695;
     --primary: 0.208 0.042 265.755;
+    --primary-border: 222.2 47.4% 11.2% / 0.5;
     --primary-foreground: 0.984 0.003 247.858;
     --secondary: 0.968 0.007 247.896;
     --secondary-foreground: 0.208 0.042 265.755;
@@ -170,4 +171,17 @@
   .fade-out {
     animation: fadeOut 0.3s ease-out forwards;
   }
+
+  @keyframes aurora {
+    from {
+      background-position: 0% 50%;
+    }
+    to {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-aurora {
+    animation: aurora 5s linear infinite alternate;
+  }  
 }
