@@ -18,9 +18,9 @@ const cardVariants: Variants = {
   selected: {
     scale: 1.05,
     y: -4,
-    // 그림자를 이용해 부드러운 외곽선(글로우) 효과를 줍니다.
     boxShadow:
-      "0 0 0 2px rgba(240, 248, 255, 0.5), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",  },
+      "0 0 0 2px rgba(240, 248, 255, 0.5), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+  },
   hover: {
     y: -4,
     boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)", // shadow-lg
