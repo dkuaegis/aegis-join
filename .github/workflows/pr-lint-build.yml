@@ -3,6 +3,7 @@ name: Run Lint and Build
 on:
   pull_request:
     branches:
+      - main
       - develop
 
 permissions:
