@@ -6,6 +6,7 @@ import DiscordCode from "@/pages/Discord/Discord.Code";
 import { fetchDiscordCode } from "./Discord.Api";
 import { DiscordWhy } from "./Discord.Why";
 import { useDiscordPolling } from "./useDiscordPolling";
+import { Analytics } from "@/service/analytics";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -16,6 +17,7 @@ const Discord = () => {
 
   const getDiscordCode = useCallback(async () => {
     try {
+  Analytics.trackEvent("Discord_Code_Refresh_Click", { category: "Discord" });
       const fetchedCode = await fetchDiscordCode();
       setCode(fetchedCode);
     } catch (err) {
@@ -42,7 +44,13 @@ const Discord = () => {
           <Suspense>
             <Complete message="연동을 완료했어요" />
           </Suspense>
-          <NavigationButtons disabled={!isValid} onClick={next} />
+          <NavigationButtons
+            disabled={!isValid}
+            onClick={() => {
+              Analytics.trackEvent("Discord_Next_Click", { category: "Discord" });
+              next();
+            }}
+          />
         </>
       ) : (
         <div className="space-y-4 break-words">
