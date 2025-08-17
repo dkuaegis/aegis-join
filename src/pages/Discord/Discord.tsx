@@ -3,6 +3,7 @@ import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import useFunnel from "@/hooks/useFunnel";
 import DiscordCode from "@/pages/Discord/Discord.Code";
+import { Analytics } from "@/service/analytics";
 import { fetchDiscordCode } from "./Discord.Api";
 import { DiscordWhy } from "./Discord.Why";
 import { useDiscordPolling } from "./useDiscordPolling";
@@ -42,7 +43,15 @@ const Discord = () => {
           <Suspense>
             <Complete message="연동을 완료했어요" />
           </Suspense>
-          <NavigationButtons disabled={!isValid} onClick={next} />
+          <NavigationButtons
+            disabled={!isValid}
+            onClick={() => {
+              Analytics.safeTrack("Discord_Next_Click", {
+                category: "Discord",
+              });
+              next();
+            }}
+          />
         </>
       ) : (
         <div className="space-y-4 break-words">

@@ -1,11 +1,50 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
+import { httpClient } from "@/api/api";
 import Rocket from "@/assets/lottie/Rocket.json";
+import { Analytics } from "@/service/analytics";
+import { usePersonalInfoStore } from "@/stores/personalInfoStore";
 import DiscordNotice from "./JoinComplete.DiscordNotice";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 
 const Lottie = lazy(() => import("lottie-react"));
 
+interface RequiredMemberInfo {
+  studentId: string;
+  name: string;
+}
+
 const JoinComplete = () => {
+  const studentId = usePersonalInfoStore((s) => s.personalInfoData?.studentId);
+  const identifiedRef = useRef(false);
+
+  useEffect(() => {
+    Analytics.safeTrack("Complete_View", { category: "Complete" });
+
+    if (identifiedRef.current) return;
+
+    const identify = async () => {
+      try {
+        if (studentId) {
+          Analytics.identifyStudent(studentId);
+          identifiedRef.current = true;
+          return;
+        }
+        // 스토어에 없으면 백엔드에서 가져와서 식별
+        const profile = await httpClient.get<RequiredMemberInfo>("/members");
+        if (profile.studentId) {
+          Analytics.identifyStudent(String(profile.studentId), profile.name);
+          identifiedRef.current = true;
+        }
+      } catch (e) {
+        if (import.meta.env.VITE_ENV === "development") {
+          console.warn("identifyStudent on Complete failed:", e);
+        }
+      }
+    };
+
+    void identify();
+  }, [studentId]);
+
   return (
     <Wrapper>
       <Suspense

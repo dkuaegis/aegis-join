@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Analytics } from "@/service/analytics";
 import { pollDiscordStatus } from "./Discord.Api";
 
 // 1. 'loading' 상태를 타입에 추가합니다.
@@ -10,6 +11,8 @@ export const useDiscordPolling = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const inFlightRef = useRef(false);
 
+  const pollingCountRef = useRef(0);
+
   useEffect(() => {
     // 주기적인 폴링을 위한 함수
     const poll = async () => {
@@ -18,6 +21,8 @@ export const useDiscordPolling = () => {
       }
 
       inFlightRef.current = true;
+      pollingCountRef.current += 1;
+
       try {
         const result = await pollDiscordStatus();
 
@@ -25,15 +30,29 @@ export const useDiscordPolling = () => {
           setStatus("success");
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
+            intervalRef.current = null;
           }
+
+          Analytics.safeTrack("Discord_Polling_Success", {
+            category: "Discord",
+            count: pollingCountRef.current,
+          });
         }
         // isSuccess가 false인 경우, 다음 interval에서 다시 시도하므로 상태 변경 없음
       } catch (error) {
         console.error("디스코드 폴링 실패:", error);
         setStatus("error");
+
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
+          intervalRef.current = null;
         }
+
+        Analytics.safeTrack("Discord_Polling_Error", {
+          category: "Discord",
+          count: pollingCountRef.current,
+          error_message: error instanceof Error ? error.message : String(error),
+        });
       } finally {
         inFlightRef.current = false;
       }
@@ -47,6 +66,10 @@ export const useDiscordPolling = () => {
 
         if (result.isSuccess) {
           setStatus("success");
+          Analytics.safeTrack("Discord_Polling_Success_At_First_Time", {
+            category: "Discord",
+            count: pollingCountRef.current,
+          });
         } else {
           // 4. 첫 시도가 성공이 아니면, 상태를 'polling'으로 바꾸고 인터벌을 시작합니다.
           setStatus("polling");
@@ -55,6 +78,11 @@ export const useDiscordPolling = () => {
       } catch (error) {
         console.error("디스코드 폴링 실패:", error);
         setStatus("error");
+        Analytics.safeTrack("Discord_Polling_Error_At_First", {
+          category: "Discord",
+          count: pollingCountRef.current,
+          error_message: error instanceof Error ? error.message : String(error),
+        });
       }
     };
 
@@ -64,6 +92,11 @@ export const useDiscordPolling = () => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        Analytics.safeTrack("Discord_Polling_Aborted", {
+          category: "Discord",
+          count: pollingCountRef.current,
+        });
       }
     };
   }, []); // 의존성 배열은 비워두어 한 번만 실행되도록 합니다.

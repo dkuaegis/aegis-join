@@ -1,9 +1,10 @@
 import { Label } from "@radix-ui/react-label";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@/service/analytics";
 import { useAuthStore } from "@/stores/authStore";
 import Coupon from "../Coupon/Coupon";
 import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
@@ -51,6 +52,12 @@ const Payment = () => {
     (state) => state.completeRegistration
   );
 
+  useEffect(() => {
+    if (status === "error") {
+      Analytics.safeTrack("Payment_View_Error", { category: "Payment" });
+    }
+  }, [status]);
+
   if (status === "loading") {
     return null;
   }
@@ -75,7 +82,12 @@ const Payment = () => {
               size="lg"
               className=" w-full items-center"
               variant="default"
-              onClick={() => setCurrentView("coupon")}
+              onClick={() => {
+                Analytics.safeTrack("Payment_Open_Coupon_Click", {
+                  category: "Payment",
+                });
+                setCurrentView("coupon");
+              }}
             >
               쿠폰 적용하기
             </Button>
@@ -86,13 +98,18 @@ const Payment = () => {
             <Complete message="납부가 완료됐어요" />
             <NavigationButtons
               disabled={!isValid}
-              onClick={completeRegistration}
+              onClick={() => {
+                Analytics.safeTrack("Payment_Complete_Next_Click", {
+                  category: "Payment",
+                });
+                completeRegistration();
+              }}
             />
           </Suspense>
         )}
       </div>
       <AnimatePresence>
-        {currentView === "coupon" && (
+        {!isValid && currentView === "coupon" && (
           <motion.div
             className="absolute top-0 left-0 z-10 h-full w-full bg-white"
             variants={modalVariants} // variants 속성 사용
@@ -100,7 +117,14 @@ const Payment = () => {
             animate="visible" // "visible"이라는 이름의 variant를 애니메이션 상태로
             exit="exit" // "exit"라는 이름의 variant를 종료 상태로
           >
-            <Coupon onClose={() => setCurrentView("payment")} />
+            <Coupon
+              onClose={() => {
+                Analytics.safeTrack("Payment_Close_Coupon_Click", {
+                  category: "Payment",
+                });
+                setCurrentView("payment");
+              }}
+            />
           </motion.div>
         )}
       </AnimatePresence>

@@ -22,6 +22,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { Analytics } from "@/service/analytics";
 
 const TriggerButton = forwardRef<HTMLDivElement>((props, ref) => (
   <div ref={ref} className="flex items-center justify-center gap-2" {...props}>
@@ -39,13 +40,22 @@ const Content = () => {
     try {
       await navigator.clipboard.writeText(password);
       toast.success("복사되었습니다.");
+      Analytics.safeTrack("Complete_Kakao_Copy_Password_Success", {
+        category: "Complete",
+      });
     } catch (error) {
       toast.error("복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
       console.error("copy failed:", error);
+      Analytics.safeTrack("Complete_Kakao_Copy_Password_Failed", {
+        category: "Complete",
+        error_message:
+          error instanceof Error ? error.message : String(error ?? ""),
+      });
     }
   };
 
   const handleJoin = () => {
+    Analytics.safeTrack("Complete_Kakao_Join_Click", { category: "Complete" });
     window.open(chatroomUrl, "_blank", "noopener,noreferrer");
   };
 
@@ -92,13 +102,25 @@ const KakaoChatroom = () => {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
+  const handleOpenChange = (next: boolean) => {
+    if (next !== open) {
+      Analytics.safeTrack(
+        next ? "Complete_Kakao_Open" : "Complete_Kakao_Close",
+        {
+          category: "Complete",
+        }
+      );
+    }
+    setOpen(next);
+  };
+
   const title = "카카오톡 공지방 참여 안내";
   const description =
     "아래에서 비밀번호를 복사한 후, '입장하기' 버튼을 눌러 참여해주세요.";
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogTrigger asChild>
           <Button
             size="lg"
@@ -120,7 +142,7 @@ const KakaoChatroom = () => {
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer open={open} onOpenChange={handleOpenChange}>
       <DrawerTrigger asChild>
         <Button
           size="lg"

@@ -1,5 +1,6 @@
 import DiscordIcon from "@/assets/discord-logo.svg";
 import { Button } from "@/components/ui/button";
+import { Analytics } from "@/service/analytics";
 
 interface DiscordLinkButtonProps {
   text: string;
@@ -9,7 +10,16 @@ interface DiscordLinkButtonProps {
 const DiscordLinkButton = ({ text, url }: DiscordLinkButtonProps) => {
   return (
     <Button variant="discord" size="lg" className="w-full" asChild>
-      <a href={url} target="_blank" rel="noopener noreferrer">
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() =>
+          Analytics.safeTrack("Discord_External_Open", {
+            category: "Discord",
+          })
+        }
+      >
         <img src={DiscordIcon} alt="Discord Icon" className="h-6 w-6" />
         <span className="text-base">{text}</span>
       </a>
