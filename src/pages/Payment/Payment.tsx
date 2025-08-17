@@ -10,6 +10,7 @@ import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
 import Information from "./Payment.Information";
 import { usePaymentPolling } from "./usePaymentPolling";
+import { Analytics } from "@/service/analytics";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -56,6 +57,7 @@ const Payment = () => {
   }
 
   if (status === "error") {
+    Analytics.trackEvent("Payment_View_Error", { category: "Payment" });
     return (
       <div className="text-center text-red-500">
         결제 상태를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.
@@ -75,7 +77,12 @@ const Payment = () => {
               size="lg"
               className=" w-full items-center"
               variant="default"
-              onClick={() => setCurrentView("coupon")}
+              onClick={() => {
+                Analytics.trackEvent("Payment_Open_Coupon_Click", {
+                  category: "Payment",
+                });
+                setCurrentView("coupon");
+              }}
             >
               쿠폰 적용하기
             </Button>
@@ -86,7 +93,12 @@ const Payment = () => {
             <Complete message="납부가 완료됐어요" />
             <NavigationButtons
               disabled={!isValid}
-              onClick={completeRegistration}
+              onClick={() => {
+                Analytics.trackEvent("Payment_Complete_Next_Click", {
+                  category: "Payment",
+                });
+                completeRegistration();
+              }}
             />
           </Suspense>
         )}
@@ -99,8 +111,15 @@ const Payment = () => {
             initial="hidden" // "hidden"이라는 이름의 variant를 초기 상태로
             animate="visible" // "visible"이라는 이름의 variant를 애니메이션 상태로
             exit="exit" // "exit"라는 이름의 variant를 종료 상태로
-          >
-            <Coupon onClose={() => setCurrentView("payment")} />
+            >
+            <Coupon
+              onClose={() => {
+                Analytics.trackEvent("Payment_Close_Coupon_Click", {
+                  category: "Payment",
+                });
+                setCurrentView("payment");
+              }}
+            />
           </motion.div>
         )}
       </AnimatePresence>

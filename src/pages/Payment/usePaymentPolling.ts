@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ServerError } from "@/api/types";
 import { makePayment, pollPaymentStatus } from "@/pages/Payment/Payment.Api";
+import { Analytics } from "@/service/analytics";
 
 type PaymentStatus = "loading" | "polling" | "success" | "error";
 
@@ -13,7 +14,7 @@ export const usePaymentPolling = () => {
   useEffect(() => {
     let isMounted = true;
 
-    const poll = async () => {
+  const poll = async () => {
       if (inFlightRef.current) {
         return;
       }
@@ -25,6 +26,10 @@ export const usePaymentPolling = () => {
 
         if (result.status === "COMPLETED") {
           setStatus("success");
+          Analytics.trackEvent("Payment_Poll_Success", {
+            category: "Payment",
+            final_price: result.finalPrice,
+          });
 
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
@@ -33,6 +38,10 @@ export const usePaymentPolling = () => {
       } catch (err) {
         console.error("재시도 필요. Payment polling failed:", err);
         setStatus("error");
+        Analytics.trackEvent("Payment_Poll_Error", {
+          category: "Payment",
+          error_message: err instanceof Error ? err.message : String(err ?? ""),
+        });
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
         }
@@ -41,9 +50,10 @@ export const usePaymentPolling = () => {
       }
     };
 
-    const startPolling = () => {
+  const startPolling = () => {
       if (isMounted) {
         setStatus("polling");
+    Analytics.trackEvent("Payment_Poll_Start", { category: "Payment" });
         poll();
         intervalRef.current = setInterval(poll, 5000);
       }
@@ -58,10 +68,16 @@ export const usePaymentPolling = () => {
       } catch (error) {
         // 409 에러는 이미 결제가 생성된 경우이므로, 정상적으로 폴링을 시작합니다.
         if (error instanceof ServerError && error.status === 409) {
+          Analytics.trackEvent("Payment_Already_Exists", { category: "Payment" });
           startPolling();
         } else {
           console.error("결제 생성에 실패했습니다:", error);
           setStatus("error");
+          Analytics.trackEvent("Payment_Init_Error", {
+            category: "Payment",
+            error_message:
+              error instanceof Error ? error.message : String(error ?? ""),
+          });
         }
       }
     };
