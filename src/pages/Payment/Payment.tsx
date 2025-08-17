@@ -109,7 +109,7 @@ const Payment = () => {
         )}
       </div>
       <AnimatePresence>
-        {currentView === "coupon" && (
+        {!isValid && currentView === "coupon" && (
           <motion.div
             className="absolute top-0 left-0 z-10 h-full w-full bg-white"
             variants={modalVariants} // variants 속성 사용
