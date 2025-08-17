@@ -18,9 +18,11 @@ const isValidEnvVar = (value: string | undefined): value is string => {
   return !!value && !['false', 'null', 'undefined'].includes(value);
 };
 
+const isDev = import.meta.env.MODE === 'development';
+
 const init = (): void => {
   if (isInitialized) {
-    if (import.meta.env.VITE_ENV === 'development') {
+    if (isDev) {
       console.warn("Analytics has already been initialized.");
     }
     return;
@@ -32,18 +34,18 @@ const init = (): void => {
   try {
     if (isValidEnvVar(gaMeasurementId)) {
       ReactGA.initialize(gaMeasurementId);
-      if (import.meta.env.VITE_ENV === 'development') console.log("GA initialized.");
+      if (isDev) console.log("GA initialized.");
     }
 
     if (isValidEnvVar(mixpanelToken)) {
       mixpanel.init(mixpanelToken, {
-        debug: import.meta.env.VITE_ENV === 'development',
+        debug: isDev,
       });
-      if (import.meta.env.VITE_ENV === 'development') console.log("Mixpanel initialized.");
+      if (isDev) console.log("Mixpanel initialized.");
     }
     isInitialized = true;
   } catch (error) {
-    if (import.meta.env.VITE_ENV === 'development') {
+    if (isDev) {
       console.error("Failed to initialize analytics:", error);
     }
   }
@@ -59,7 +61,7 @@ const identifyUser = (userId: string, userData: MixpanelUserProfile): void => {
       ReactGA.set({ userId });
     }
   } catch (error) {
-    if (import.meta.env.VITE_ENV === 'development') {
+    if (isDev) {
       console.error("Failed to identify user:", error);
     }
   }
@@ -83,7 +85,7 @@ const trackEvent = (eventName: string, properties: EventProperties = {}): void =
       ReactGA.event(eventName, properties);
     }
   } catch (error) {
-    if (import.meta.env.VITE_ENV === 'development') {
+    if (isDev) {
       console.error(`Failed to track event [${eventName}]:`, error);
     }
   }
@@ -98,7 +100,7 @@ const trackPageView = (path: string): void => {
       mixpanel.track("Page View", { page_path: path });
     }
   } catch (error) {
-    if (import.meta.env.VITE_ENV === 'development') {
+    if (isDev) {
       console.error(`Failed to track page view [${path}]:`, error);
     }
   }
@@ -116,7 +118,7 @@ const checkAndTrackRefresh = (): void => {
       }
     }
   } catch (error) {
-    if (import.meta.env.VITE_ENV === 'development') {
+    if (isDev) {
       console.error("Failed to check and track refresh:", error);
     }
   }
