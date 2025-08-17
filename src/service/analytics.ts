@@ -1,96 +1,120 @@
 import ReactGA from "react-ga4";
 import mixpanel from "mixpanel-browser";
 
-const gaMeasurementId: string | undefined = import.meta.env.VITE_GA_MEASUREMENT_ID;
-const mixpanelToken: string | undefined = import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN;
-
 interface MixpanelUserProfile {
   $name?: string;
   $email?: string;
-  [key: string]: any; 
+  [key: string]: string | number | boolean | undefined | null;
 }
 
 interface EventProperties {
   category?: string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | undefined | null;
 }
 
-if (gaMeasurementId) {
-  ReactGA.initialize(gaMeasurementId);
-}
+let isInitialized = false;
 
-if (mixpanelToken) {
-  mixpanel.init(mixpanelToken, {
-    debug: process.env.NODE_ENV === "development",
-    // track_pageview: true,
-  });
-}
+const isValidEnvVar = (value: string | undefined): value is string => {
+  return !!value && !['false', 'null', 'undefined'].includes(value);
+};
 
-/**
- * 사용자 식별 (로그인, 회원가입 시)
- * @param {string} userId - 우리 서비스의 유저 ID
- * @param {object} userData - 유저 프로필 정보 { $name, $email, ... }
- */
-const identifyUser = (userId: string, userData: MixpanelUserProfile): void => {
-  if (mixpanelToken) {
-    mixpanel.identify(userId);
-    mixpanel.people.set(userData);
+const init = (): void => {
+  if (isInitialized) {
+    if (import.meta.env.VITE_ENV === 'development') {
+      console.warn("Analytics has already been initialized.");
+    }
+    return;
   }
-  if (gaMeasurementId) {
-    ReactGA.set({ userId });
+
+  const gaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+  const mixpanelToken = import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN;
+
+  try {
+    if (isValidEnvVar(gaMeasurementId)) {
+      ReactGA.initialize(gaMeasurementId);
+      if (import.meta.env.VITE_ENV === 'development') console.log("GA initialized.");
+    }
+
+    if (isValidEnvVar(mixpanelToken)) {
+      mixpanel.init(mixpanelToken, {
+        debug: import.meta.env.VITE_ENV === 'development',
+      });
+      if (import.meta.env.VITE_ENV === 'development') console.log("Mixpanel initialized.");
+    }
+    isInitialized = true;
+  } catch (error) {
+    if (import.meta.env.VITE_ENV === 'development') {
+      console.error("Failed to initialize analytics:", error);
+    }
   }
 };
 
-/**
- * 이벤트 추적
- * @param {string} eventName - 이벤트 이름
- * @param {object} properties - 이벤트 상세 정보
- */
-const trackEvent = (eventName: string, properties: EventProperties = {}): void => {
-  if (mixpanelToken) {
-    mixpanel.track(eventName, properties);
+const identifyUser = (userId: string, userData: MixpanelUserProfile): void => {
+  try {
+    if (isValidEnvVar(import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN)) {
+      mixpanel.identify(userId);
+      mixpanel.people.set(userData);
+    }
+    if (isValidEnvVar(import.meta.env.VITE_GA_MEASUREMENT_ID)) {
+      ReactGA.set({ userId });
+    }
+  } catch (error) {
+    if (import.meta.env.VITE_ENV === 'development') {
+      console.error("Failed to identify user:", error);
+    }
   }
-  if (gaMeasurementId) {
-    ReactGA.event({
-      category: properties?.category || 'General',
-      action: eventName,
-    });
+};
+
+const trackEvent = (eventName: string, properties: EventProperties = {}): void => {
+  try {
+    if (isValidEnvVar(import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN)) {
+      mixpanel.track(eventName, properties);
+    }
+    if (isValidEnvVar(import.meta.env.VITE_GA_MEASUREMENT_ID)) {
+      ReactGA.event(eventName, properties);
+    }
+  } catch (error) {
+    if (import.meta.env.VITE_ENV === 'development') {
+      console.error(`Failed to track event [${eventName}]:`, error);
+    }
   }
 };
 
 const trackPageView = (path: string): void => {
-  if (gaMeasurementId) {
-    ReactGA.send({ hitType: "pageview", page: path });
-  }
-  if (mixpanelToken) {
-    mixpanel.track("Page View", { page_path: path });
+  try {
+    if (isValidEnvVar(import.meta.env.VITE_GA_MEASUREMENT_ID)) {
+      ReactGA.send({ hitType: "pageview", page: path });
+    }
+    if (isValidEnvVar(import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN)) {
+      mixpanel.track("Page View", { page_path: path });
+    }
+  } catch (error) {
+    if (import.meta.env.VITE_ENV === 'development') {
+      console.error(`Failed to track page view [${path}]:`, error);
+    }
   }
 };
 
-/**
- * 페이지 로드 시 새로고침 여부를 확인하고 이벤트를 전송합니다.
- */
 const checkAndTrackRefresh = (): void => {
   try {
-    // Performance API가 지원되는지 확인
     if (window.performance) {
       const navigationEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
-      
       if (navigationEntries.length > 0 && navigationEntries[0].type === 'reload') {
-        console.log('Page was reloaded!');
-        
-        trackEvent('Page_Refreshed', {
+        trackEvent('Page Refreshed', {
           category: 'Navigation',
           page_path: window.location.pathname + window.location.search,
         });
       }
     }
   } catch (error) {
-    console.error(error);
+    if (import.meta.env.VITE_ENV === 'development') {
+      console.error("Failed to check and track refresh:", error);
+    }
   }
 };
 
 export const Analytics = {
+  init,
   identifyUser,
   trackEvent,
   trackPageView,
