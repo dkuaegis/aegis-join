@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useFunnel from "./useFunnel";
+import { Analytics } from "@/service/analytics";
 
 export const useNextStep = <T>(submitFunc: (data: T) => Promise<unknown>) => {
   const { next } = useFunnel();
@@ -9,9 +10,19 @@ export const useNextStep = <T>(submitFunc: (data: T) => Promise<unknown>) => {
     setIsLoading(true);
     try {
       await submitFunc(data);
+      // 트래킹: 현재 단계 제출 성공
+      Analytics.trackEvent("Funnel_Submit_Success", {
+        category: "Funnel",
+      });
       next();
     } catch (error) {
       console.error("제출 실패", error);
+      // 트래킹: 제출 실패
+      Analytics.trackEvent("Funnel_Submit_Failed", {
+        category: "Funnel",
+        error_message:
+          error instanceof Error ? error.message : String(error ?? "unknown"),
+      });
     } finally {
       setIsLoading(false);
     }
