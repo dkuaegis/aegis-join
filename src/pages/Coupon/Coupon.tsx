@@ -48,16 +48,16 @@ const Coupon = ({ onClose }: CouponProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        Analytics.trackEvent("Coupon_Fetch_Start", { category: "Payment" });
+        Analytics.safeTrack("Coupon_Fetch_Start", { category: "Payment" });
         const data = await fetchCoupon();
         setCoupons(data);
-        Analytics.trackEvent("Coupon_Fetch_Success", {
+        Analytics.safeTrack("Coupon_Fetch_Success", {
           category: "Payment",
           coupon_count: data.length,
         });
       } catch (error) {
         console.error("쿠폰 불러오는데 오류 발생:", error);
-        Analytics.trackEvent("Coupon_Fetch_Failed", {
+        Analytics.safeTrack("Coupon_Fetch_Failed", {
           category: "Payment",
           error_message:
             error instanceof Error ? error.message : String(error ?? ""),
@@ -71,18 +71,18 @@ const Coupon = ({ onClose }: CouponProps) => {
   const handleSubmit = async () => {
     setIsExiting(true);
     try {
-      Analytics.trackEvent("Coupon_Apply_Start", {
+      Analytics.safeTrack("Coupon_Apply_Start", {
         category: "Payment",
         selected_count: selectedCoupons.length,
       });
       await submitCoupon(selectedCoupons);
-      Analytics.trackEvent("Coupon_Apply_Success", {
+      Analytics.safeTrack("Coupon_Apply_Success", {
         category: "Payment",
         selected_count: selectedCoupons.length,
       });
     } catch (error: unknown) {
       console.error("제출 중 오류 발생:", error);
-      Analytics.trackEvent("Coupon_Apply_Failed", {
+      Analytics.safeTrack("Coupon_Apply_Failed", {
         category: "Payment",
         selected_count: selectedCoupons.length,
         error_message:

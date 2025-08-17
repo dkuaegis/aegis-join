@@ -54,7 +54,7 @@ const Payment = () => {
 
   useEffect(() => {
     if (status === "error") {
-      Analytics.trackEvent("Payment_View_Error", { category: "Payment" });
+      Analytics.safeTrack("Payment_View_Error", { category: "Payment" });
     }
   }, [status]);
 
@@ -83,7 +83,7 @@ const Payment = () => {
               className=" w-full items-center"
               variant="default"
               onClick={() => {
-                Analytics.trackEvent("Payment_Open_Coupon_Click", {
+                Analytics.safeTrack("Payment_Open_Coupon_Click", {
                   category: "Payment",
                 });
                 setCurrentView("coupon");
@@ -99,7 +99,7 @@ const Payment = () => {
             <NavigationButtons
               disabled={!isValid}
               onClick={() => {
-                Analytics.trackEvent("Payment_Complete_Next_Click", {
+                Analytics.safeTrack("Payment_Complete_Next_Click", {
                   category: "Payment",
                 });
                 completeRegistration();
@@ -119,7 +119,7 @@ const Payment = () => {
           >
             <Coupon
               onClose={() => {
-                Analytics.trackEvent("Payment_Close_Coupon_Click", {
+                Analytics.safeTrack("Payment_Close_Coupon_Click", {
                   category: "Payment",
                 });
                 setCurrentView("payment");

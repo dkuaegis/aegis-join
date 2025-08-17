@@ -14,11 +14,11 @@ const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
     try {
       await navigator.clipboard.writeText(code);
       toast.success("코드가 복사되었습니다.");
-      Analytics.trackEvent("Discord_Code_Copied", { category: "Discord" });
+      Analytics.safeTrack("Discord_Code_Copied", { category: "Discord" });
     } catch (error) {
       toast.error("코드 복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
       console.error("copy failed:", error);
-      Analytics.trackEvent("Discord_Code_Copy_Failed", {
+      Analytics.safeTrack("Discord_Code_Copy_Failed", {
         category: "Discord",
         error_message:
           error instanceof Error ? error.message : String(error ?? ""),
@@ -37,7 +37,7 @@ const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
       <div className="flex gap-4">
         <button
           onClick={() => {
-            Analytics.trackEvent("Discord_Code_Refresh_Click", {
+            Analytics.safeTrack("Discord_Code_Refresh_Click", {
               category: "Discord",
             });
             onRefresh();

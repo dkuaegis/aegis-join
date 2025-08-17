@@ -24,7 +24,7 @@ function Authentication({ children }: AuthenticationProps) {
       return children;
     } else {
       // 로그인 페이지로 강제 이동될 때 이벤트 기록
-      Analytics.trackEvent("Redirect_To_Login", {
+      Analytics.safeTrack("Redirect_To_Login", {
         category: "Auth",
         from_path: location.pathname, // 어느 페이지에 접근하려 했는지 기록
       });
@@ -37,7 +37,7 @@ function Authentication({ children }: AuthenticationProps) {
       return children;
     } else {
       // 가입 완료자가 다른 페이지 접근 시 완료 페이지로 강제 이동될 때 이벤트 기록
-      Analytics.trackEvent("Redirect_To_Complete", {
+      Analytics.safeTrack("Redirect_To_Complete", {
         category: "Auth",
         from_path: location.pathname,
       });
@@ -56,7 +56,7 @@ function Authentication({ children }: AuthenticationProps) {
       const redirectTo = isValidStep ? `/${currentStep}` : `/${JOIN_STEPS[0]}`;
 
       // 가입 미완료자가 퍼널 이탈 시 다시 퍼널로 강제 이동될 때 이벤트 기록
-      Analytics.trackEvent("Redirect_To_Funnel", {
+      Analytics.safeTrack("Redirect_To_Funnel", {
         category: "Auth",
         from_path: location.pathname, // 어디로 가려고 했는지
         to_funnel_step: redirectTo, // 어디로 보내졌는지

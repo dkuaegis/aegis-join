@@ -46,7 +46,7 @@ const Discord = () => {
           <NavigationButtons
             disabled={!isValid}
             onClick={() => {
-              Analytics.trackEvent("Discord_Next_Click", {
+              Analytics.safeTrack("Discord_Next_Click", {
                 category: "Discord",
               });
               next();

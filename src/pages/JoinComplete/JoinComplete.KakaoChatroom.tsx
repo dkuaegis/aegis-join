@@ -40,13 +40,13 @@ const Content = () => {
     try {
       await navigator.clipboard.writeText(password);
       toast.success("복사되었습니다.");
-      Analytics.trackEvent("Complete_Kakao_Copy_Password_Success", {
+      Analytics.safeTrack("Complete_Kakao_Copy_Password_Success", {
         category: "Complete",
       });
     } catch (error) {
       toast.error("복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
       console.error("copy failed:", error);
-      Analytics.trackEvent("Complete_Kakao_Copy_Password_Failed", {
+      Analytics.safeTrack("Complete_Kakao_Copy_Password_Failed", {
         category: "Complete",
         error_message:
           error instanceof Error ? error.message : String(error ?? ""),
@@ -55,7 +55,7 @@ const Content = () => {
   };
 
   const handleJoin = () => {
-    Analytics.trackEvent("Complete_Kakao_Join_Click", { category: "Complete" });
+    Analytics.safeTrack("Complete_Kakao_Join_Click", { category: "Complete" });
     window.open(chatroomUrl, "_blank", "noopener,noreferrer");
   };
 
@@ -104,7 +104,7 @@ const KakaoChatroom = () => {
 
   const handleOpenChange = (next: boolean) => {
     if (next !== open) {
-      Analytics.trackEvent(
+      Analytics.safeTrack(
         next ? "Complete_Kakao_Open" : "Complete_Kakao_Close",
         {
           category: "Complete",

@@ -19,7 +19,7 @@ const useFunnel = () => {
     if (nextStepIndex < steps.length) {
       // 트래킹: 다음 단계로 이동
       const toStep = steps[nextStepIndex];
-      Analytics.trackEvent("Funnel_Step_Advance", {
+      Analytics.safeTrack("Funnel_Step_Advance", {
         category: "Funnel",
         from_step: currentStep,
         to_step: toStep,
@@ -36,7 +36,7 @@ const useFunnel = () => {
     if (prevStepIndex >= 0) {
       // 트래킹: 이전 단계로 이동
       const toStep = steps[prevStepIndex];
-      Analytics.trackEvent("Funnel_Step_Back", {
+      Analytics.safeTrack("Funnel_Step_Back", {
         category: "Funnel",
         from_step: currentStep,
         to_step: toStep,

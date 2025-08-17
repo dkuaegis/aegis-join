@@ -15,7 +15,7 @@ const DiscordLinkButton = ({ text, url }: DiscordLinkButtonProps) => {
         target="_blank"
         rel="noopener noreferrer"
         onClick={() =>
-          Analytics.trackEvent("Discord_External_Open", {
+          Analytics.safeTrack("Discord_External_Open", {
             category: "Discord",
           })
         }

@@ -18,7 +18,7 @@ const JoinComplete = () => {
   const identifiedRef = useRef(false);
 
   useEffect(() => {
-    Analytics.trackEvent("Complete_View", { category: "Complete" });
+    Analytics.safeTrack("Complete_View", { category: "Complete" });
 
     if (identifiedRef.current) return;
 

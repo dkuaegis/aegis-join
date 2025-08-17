@@ -32,20 +32,21 @@ export const usePaymentPolling = () => {
         if (result.status === "COMPLETED") {
           setStatus("success");
 
-          Analytics.trackEvent("payment_polling_success", {
+          Analytics.safeTrack("payment_polling_success", {
             category: "Payment",
             count: pollingCountRef.current,
           });
 
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
+            intervalRef.current = null;
           }
         }
       } catch (err) {
         console.error("재시도 필요. Payment polling failed:", err);
         setStatus("error");
 
-        Analytics.trackEvent("payment_polling_error", {
+        Analytics.safeTrack("payment_polling_error", {
           category: "Payment",
           count: pollingCountRef.current,
           error_message: err instanceof Error ? err.message : String(err),
@@ -53,6 +54,7 @@ export const usePaymentPolling = () => {
 
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
+          intervalRef.current = null;
         }
       } finally {
         inFlightRef.current = false;
@@ -90,9 +92,10 @@ export const usePaymentPolling = () => {
       isMounted = false;
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
 
         // 4. 컴포넌트 이탈로 폴링이 중단될 때 트래킹 이벤트를 전송합니다.
-        Analytics.trackEvent("payment_polling_aborted", {
+        Analytics.safeTrack("payment_polling_aborted", {
           category: "Payment",
           count: pollingCountRef.current,
         });

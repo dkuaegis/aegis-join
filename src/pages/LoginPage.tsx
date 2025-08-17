@@ -28,7 +28,7 @@ const LoginPage = () => {
         </div>
         <Button
           onClick={() => {
-            Analytics.trackEvent("Google_Login_Click", {
+            Analytics.safeTrack("Google_Login_Click", {
               category: "Auth",
               method: "Google",
             });
@@ -44,7 +44,7 @@ const LoginPage = () => {
         </Button>
         <Button
           onClick={() => {
-            Analytics.trackEvent("Email_Guide_Click", {
+            Analytics.safeTrack("Email_Guide_Click", {
               category: "Auth",
               method: "Email",
             });

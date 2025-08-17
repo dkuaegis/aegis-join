@@ -119,7 +119,7 @@ const checkAndTrackRefresh = (): void => {
         navigationEntries.length > 0 &&
         navigationEntries[0].type === "reload"
       ) {
-        trackEvent("Page Refreshed", {
+        safeTrack("Page Refreshed", {
           category: "Navigation",
           page_path: window.location.pathname + window.location.search,
         });
@@ -132,11 +132,44 @@ const checkAndTrackRefresh = (): void => {
   }
 };
 
+/**
+ * 어떤 종류의 에러든 일관된 문자열로 변환하고 길이를 제한합니다.
+ * PII/민감정보 유출 방지 및 분석 플랫폼의 길이 제한을 준수하는 데 도움이 됩니다.
+ * @param err - 알 수 없는 타입의 에러 객체
+ * @returns 정규화된 에러 메시지 문자열
+ */
+const toErrorMessage = (err: unknown): string => {
+  const msg = err instanceof Error ? err.message : String(err ?? "");
+  return msg.slice(0, 200); // 메시지 길이를 200자로 제한
+};
+
+
+/**
+ * safeTrack를 안전하게 호출하는 래퍼 함수.
+ * 이 함수는 절대 에러를 발생시키지 않으므로, 결제와 같은 중요 로직의 흐름을 방해하지 않습니다.
+ * @param eventName - 이벤트 이름
+ * @param properties - 이벤트 속성
+ */
+const safeTrack = (eventName: string, properties?: EventProperties): void => {
+  try {
+    // safeTrack 함수를 호출합니다.
+    trackEvent(eventName, properties);
+  } catch (err) {
+    // 개발 환경에서만 내부 에러를 조용히 로깅하여 디버깅을 돕습니다.
+    if (isDev) {
+      console.error(`safeTrack failed internally for event [${eventName}]:`, err);
+    }
+    // 의도적으로 에러를 무시합니다 (no-op).
+  }
+};
+
 export const Analytics = {
   init,
   identifyUser,
   identifyStudent,
+  toErrorMessage,
   trackEvent,
   trackPageView,
   checkAndTrackRefresh,
+  safeTrack,
 };

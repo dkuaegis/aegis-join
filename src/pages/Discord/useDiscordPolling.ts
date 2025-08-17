@@ -30,9 +30,10 @@ export const useDiscordPolling = () => {
           setStatus("success");
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
+            intervalRef.current = null;
           }
 
-          Analytics.trackEvent("discord_polling_success", {
+          Analytics.safeTrack("Discord_Polling_Success", {
             category: "Discord",
             count: pollingCountRef.current,
           });
@@ -44,9 +45,10 @@ export const useDiscordPolling = () => {
 
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
+          intervalRef.current = null;
         }
 
-        Analytics.trackEvent("discord_polling_error", {
+        Analytics.safeTrack("Discord_Polling_Error", {
           category: "Discord",
           count: pollingCountRef.current,
           error_message: error instanceof Error ? error.message : String(error),
@@ -64,7 +66,7 @@ export const useDiscordPolling = () => {
 
         if (result.isSuccess) {
           setStatus("success");
-          Analytics.trackEvent("discord_polling_success_at_first_time", {
+          Analytics.safeTrack("Discord_Polling_Success_At_First_Time", {
             category: "Discord",
             count: pollingCountRef.current,
           });
@@ -76,7 +78,7 @@ export const useDiscordPolling = () => {
       } catch (error) {
         console.error("디스코드 폴링 실패:", error);
         setStatus("error");
-        Analytics.trackEvent("discord_polling_error_at_first", {
+        Analytics.safeTrack("Discord_Polling_Error_At_First", {
           category: "Discord",
           count: pollingCountRef.current,
           error_message: error instanceof Error ? error.message : String(error),
@@ -90,7 +92,8 @@ export const useDiscordPolling = () => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-        Analytics.trackEvent("discord_polling_aborted", {
+        intervalRef.current = null;
+        Analytics.safeTrack("Discord_Polling_Aborted", {
           category: "Discord",
           count: pollingCountRef.current,
         });
