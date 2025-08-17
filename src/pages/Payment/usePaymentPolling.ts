@@ -1,113 +1,82 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { httpClient } from "@/api/api";
-import { Analytics } from "@/service/analytics";
+import { useEffect, useRef, useState } from "react";
+import { ServerError } from "@/api/types";
+import { makePayment, pollPaymentStatus } from "@/pages/Payment/Payment.Api";
 
 type PaymentStatus = "loading" | "polling" | "success" | "error";
 
-interface PaymentResponse {
-  status: string;
-  finalPrice: number;
-}
-
 export const usePaymentPolling = () => {
   const [status, setStatus] = useState<PaymentStatus>("loading");
-  const [finalPrice, setFinalPrice] = useState<number>(0);
-
-  const timeoutRef = useRef<number | null>(null);
+  const [finalPrice, setFinalPrice] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const inFlightRef = useRef(false);
-  const isMountedRef = useRef(true);
-
-  const POLL_INTERVAL = 5000;
-
-  const safeSetStatus = useCallback((newStatus: PaymentStatus) => {
-    if (isMountedRef.current) {
-      setStatus(newStatus);
-    }
-  }, []);
-
-  const safeSetFinalPrice = useCallback((price: number) => {
-    if (isMountedRef.current) {
-      setFinalPrice(price);
-    }
-  }, []);
 
   useEffect(() => {
-    isMountedRef.current = true;
+    let isMounted = true;
 
-    const poll = async (): Promise<boolean> => {
-      if (inFlightRef.current) return false;
+    const poll = async () => {
+      if (inFlightRef.current) {
+        return;
+      }
+
       inFlightRef.current = true;
-
       try {
-        const payload =
-          await httpClient.get<PaymentResponse>("/payment/status");
+        const result = await pollPaymentStatus();
+        setFinalPrice(result.finalPrice);
 
-        // finalPrice가 전달되면 업데이트
-        if (typeof payload.finalPrice === "number") {
-          safeSetFinalPrice(payload.finalPrice);
-        }
+        if (result.status === "COMPLETED") {
+          setStatus("success");
 
-        const success = payload.status === "COMPLETED";
-        if (success) {
-          safeSetStatus("success");
-          if (timeoutRef.current !== null) {
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = null;
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
           }
-          Analytics.trackEvent("Payment_Poll_Success", {
-            category: "Payment",
-            is_success: true,
-          });
-          return true;
         }
-
-        return false;
       } catch (err) {
-        console.error("결제 폴링 에러:", err);
-        Analytics.trackEvent("Payment_Poll_Failed", {
-          category: "Payment",
-          error_message: err instanceof Error ? err.message : String(err ?? ""),
-        });
-        safeSetStatus("error");
-
-        return false;
+        console.error("재시도 필요. Payment polling failed:", err);
+        setStatus("error");
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
       } finally {
         inFlightRef.current = false;
       }
     };
 
-    const scheduleNext = () => {
-      if (!isMountedRef.current) return;
+    const startPolling = () => {
+      if (isMounted) {
+        setStatus("polling");
+        poll();
+        intervalRef.current = setInterval(poll, 5000);
+      }
+    };
 
-      timeoutRef.current = window.setTimeout(async () => {
-        const isSuccess = await poll();
-        if (!isSuccess && isMountedRef.current) {
-          // 로딩 후에는 항상 'polling' 상태로 변경
-          safeSetStatus("polling");
-          scheduleNext();
+    // 결제 생성 및 폴링 시작 로직
+    const initializePayment = async () => {
+      try {
+        await makePayment([]);
+
+        startPolling();
+      } catch (error) {
+        // 409 에러는 이미 결제가 생성된 경우이므로, 정상적으로 폴링을 시작합니다.
+        if (error instanceof ServerError && error.status === 409) {
+          startPolling();
+        } else {
+          console.error("결제 생성에 실패했습니다:", error);
+          setStatus("error");
         }
-      }, POLL_INTERVAL);
+      }
     };
 
-    // 첫 호출
-    (async () => {
-      const isSuccess = await poll();
-      if (!isSuccess) {
-        safeSetStatus("polling");
-        scheduleNext();
-      }
-    })();
+    initializePayment();
 
-    // 클린업 함수
     return () => {
-      isMountedRef.current = false;
-      if (timeoutRef.current !== null) {
-        clearTimeout(timeoutRef.current);
+      isMounted = false;
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
       }
     };
-    // 5. useCallback으로 만든 함수들을 의존성 배열에 추가
-  }, [safeSetStatus, safeSetFinalPrice]);
+  }, []);
 
   const isValid = status === "success";
+
   return { isValid, finalPrice, status };
 };
