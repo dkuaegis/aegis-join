@@ -22,7 +22,7 @@ const useFunnel = () => {
       Analytics.trackEvent("Funnel_Step_Advance", {
         category: "Funnel",
         from_step: currentStep,
-        to_step: toStep,  
+        to_step: toStep,
         from_index: currentIndex,
         to_index: nextStepIndex,
         total_steps: steps.length,

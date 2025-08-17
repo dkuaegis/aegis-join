@@ -4,13 +4,13 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@/service/analytics";
 import { useAuthStore } from "@/stores/authStore";
 import Coupon from "../Coupon/Coupon";
 import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
 import PaymentAmount from "./Payment.Amount";
 import Information from "./Payment.Information";
 import { usePaymentPolling } from "./usePaymentPolling";
-import { Analytics } from "@/service/analytics";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -52,17 +52,16 @@ const Payment = () => {
     (state) => state.completeRegistration
   );
 
-
   useEffect(() => {
     if (status === "error") {
       Analytics.trackEvent("Payment_View_Error", { category: "Payment" });
     }
-  }, [status]);  
+  }, [status]);
 
   if (status === "loading") {
     return null;
   }
-  
+
   if (status === "error") {
     return (
       <div className="text-center text-red-500">
@@ -117,7 +116,7 @@ const Payment = () => {
             initial="hidden" // "hidden"이라는 이름의 variant를 초기 상태로
             animate="visible" // "visible"이라는 이름의 variant를 애니메이션 상태로
             exit="exit" // "exit"라는 이름의 variant를 종료 상태로
-            >
+          >
             <Coupon
               onClose={() => {
                 Analytics.trackEvent("Payment_Close_Coupon_Click", {

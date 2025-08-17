@@ -1,5 +1,5 @@
-import ReactGA from "react-ga4";
 import mixpanel from "mixpanel-browser";
+import ReactGA from "react-ga4";
 
 interface MixpanelUserProfile {
   $name?: string;
@@ -15,10 +15,10 @@ interface EventProperties {
 let isInitialized = false;
 
 const isValidEnvVar = (value: string | undefined): value is string => {
-  return !!value && !['false', 'null', 'undefined'].includes(value);
+  return !!value && !["false", "null", "undefined"].includes(value);
 };
 
-const isDev = import.meta.env.MODE === 'development';
+const isDev = import.meta.env.MODE === "development";
 
 const init = (): void => {
   if (isInitialized) {
@@ -76,7 +76,10 @@ const identifyStudent = (studentId: string, name?: string): void => {
   identifyUser(studentId, profile);
 };
 
-const trackEvent = (eventName: string, properties: EventProperties = {}): void => {
+const trackEvent = (
+  eventName: string,
+  properties: EventProperties = {}
+): void => {
   try {
     if (isValidEnvVar(import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN)) {
       mixpanel.track(eventName, properties);
@@ -109,10 +112,15 @@ const trackPageView = (path: string): void => {
 const checkAndTrackRefresh = (): void => {
   try {
     if (window.performance) {
-      const navigationEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
-      if (navigationEntries.length > 0 && navigationEntries[0].type === 'reload') {
-        trackEvent('Page Refreshed', {
-          category: 'Navigation',
+      const navigationEntries = performance.getEntriesByType(
+        "navigation"
+      ) as PerformanceNavigationTiming[];
+      if (
+        navigationEntries.length > 0 &&
+        navigationEntries[0].type === "reload"
+      ) {
+        trackEvent("Page Refreshed", {
+          category: "Navigation",
           page_path: window.location.pathname + window.location.search,
         });
       }

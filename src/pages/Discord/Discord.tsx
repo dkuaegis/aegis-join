@@ -3,10 +3,10 @@ import DiscordLinkButton from "@/components/ui/custom/discord-link-button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import useFunnel from "@/hooks/useFunnel";
 import DiscordCode from "@/pages/Discord/Discord.Code";
+import { Analytics } from "@/service/analytics";
 import { fetchDiscordCode } from "./Discord.Api";
 import { DiscordWhy } from "./Discord.Why";
 import { useDiscordPolling } from "./useDiscordPolling";
-import { Analytics } from "@/service/analytics";
 
 const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
 
@@ -17,7 +17,9 @@ const Discord = () => {
 
   const getDiscordCode = useCallback(async () => {
     try {
-  Analytics.trackEvent("Discord_Code_Refresh_Click", { category: "Discord" });
+      Analytics.trackEvent("Discord_Code_Refresh_Click", {
+        category: "Discord",
+      });
       const fetchedCode = await fetchDiscordCode();
       setCode(fetchedCode);
     } catch (err) {
@@ -47,7 +49,9 @@ const Discord = () => {
           <NavigationButtons
             disabled={!isValid}
             onClick={() => {
-              Analytics.trackEvent("Discord_Next_Click", { category: "Discord" });
+              Analytics.trackEvent("Discord_Next_Click", {
+                category: "Discord",
+              });
               next();
             }}
           />

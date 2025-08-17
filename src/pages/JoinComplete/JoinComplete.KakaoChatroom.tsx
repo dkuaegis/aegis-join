@@ -104,9 +104,12 @@ const KakaoChatroom = () => {
 
   const handleOpenChange = (next: boolean) => {
     if (next !== open) {
-      Analytics.trackEvent(next ? "Complete_Kakao_Open" : "Complete_Kakao_Close", {
-        category: "Complete",
-      });
+      Analytics.trackEvent(
+        next ? "Complete_Kakao_Open" : "Complete_Kakao_Close",
+        {
+          category: "Complete",
+        }
+      );
     }
     setOpen(next);
   };

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useExternalBrowser } from "@/hooks/useExternalBrowser";
-import BrowserRedirectPage from "./BrowserRedirectPage";
 import { Analytics } from "@/service/analytics";
+import BrowserRedirectPage from "./BrowserRedirectPage";
 
 const LoginPage = () => {
   const { isKakaoInApp } = useExternalBrowser();
@@ -26,14 +26,32 @@ const LoginPage = () => {
             단국대학교 구글 계정으로 로그인해주세요
           </p>
         </div>
-        <Button onClick={() => {Analytics.trackEvent('Google_Login_Click', { category: 'Auth', method: 'Google' });}} className="w-full" asChild>
+        <Button
+          onClick={() => {
+            Analytics.trackEvent("Google_Login_Click", {
+              category: "Auth",
+              method: "Google",
+            });
+          }}
+          className="w-full"
+          asChild
+        >
           <a
             href={`${import.meta.env.VITE_API_URL}/oauth2/authorization/google`}
           >
             Google로 로그인
           </a>
         </Button>
-        <Button onClick={() => {Analytics.trackEvent('Email_Guide_Click', { category: 'Auth', method: 'Email' });}} className="w-full" asChild>
+        <Button
+          onClick={() => {
+            Analytics.trackEvent("Email_Guide_Click", {
+              category: "Auth",
+              method: "Email",
+            });
+          }}
+          className="w-full"
+          asChild
+        >
           <a href="https://sites.google.com/dankook.ac.kr/help">
             단국대 Gmail 생성 가이드
           </a>

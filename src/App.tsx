@@ -1,8 +1,11 @@
+import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import { Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
+import Authentication from "./components/auth/authentication";
 import Title from "./components/ui/custom/title";
 import useFunnel from "./hooks/useFunnel";
 import Agreement from "./pages/Agreement/Agreement";
@@ -10,9 +13,6 @@ import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
 import LoginPage from "./pages/LoginPage";
 import { Analytics } from "./service/analytics";
-import { useEffect } from "react";
-import Authentication from "./components/auth/authentication";
-import { Toaster } from "react-hot-toast";
 
 const useAnalyticsSetup = () => {
   const location = useLocation();
@@ -27,13 +27,13 @@ const useAnalyticsSetup = () => {
     const currentPath = location.pathname + location.search;
     Analytics.trackPageView(currentPath);
   }, [location]); // location 객체가 바뀔 때마다 실행됩니다.
-}
+};
 
 // BrowserRouter 안에서 훅을 실행하기 위한 컴포넌트
 const AnalyticsTracker = () => {
   useAnalyticsSetup();
   return null;
-}
+};
 
 const FunnelLayout = () => {
   const { currentStep, progress } = useFunnel();
@@ -54,7 +54,7 @@ const App = () => {
       <AnalyticsTracker />
       <Authentication>
         <Toaster position="bottom-center" />
-        
+
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/complete" element={<JoinComplete />} />

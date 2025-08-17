@@ -20,7 +20,8 @@ const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
       console.error("copy failed:", error);
       Analytics.trackEvent("Discord_Code_Copy_Failed", {
         category: "Discord",
-        error_message: error instanceof Error ? error.message : String(error ?? ""),
+        error_message:
+          error instanceof Error ? error.message : String(error ?? ""),
       });
     }
   };
@@ -36,7 +37,9 @@ const DiscordCode: React.FC<AuthCodeProps> = ({ code, onRefresh }) => {
       <div className="flex gap-4">
         <button
           onClick={() => {
-            Analytics.trackEvent("Discord_Code_Refresh_Click", { category: "Discord" });
+            Analytics.trackEvent("Discord_Code_Refresh_Click", {
+              category: "Discord",
+            });
             onRefresh();
           }}
           type="button"

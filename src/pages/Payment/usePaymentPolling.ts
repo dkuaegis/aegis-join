@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { httpClient } from "@/api/api";
 import { Analytics } from "@/service/analytics";
 
 type PaymentStatus = "loading" | "polling" | "success" | "error";
 
 interface PaymentResponse {
-  isPaid: boolean;
-  finalPrice?: number;
-  // 서버가 반환하는 실제 필드에 맞게 확장하세요.
+  status: string;
+  finalPrice: number;
 }
 
 export const usePaymentPolling = () => {
@@ -20,34 +19,45 @@ export const usePaymentPolling = () => {
 
   const POLL_INTERVAL = 5000;
 
+  const safeSetStatus = useCallback((newStatus: PaymentStatus) => {
+    if (isMountedRef.current) {
+      setStatus(newStatus);
+    }
+  }, []);
+
+  const safeSetFinalPrice = useCallback((price: number) => {
+    if (isMountedRef.current) {
+      setFinalPrice(price);
+    }
+  }, []);
+
   useEffect(() => {
     isMountedRef.current = true;
-
-    const safePayload = (resp: any): PaymentResponse => (resp && resp.data) || resp || {};
 
     const poll = async (): Promise<boolean> => {
       if (inFlightRef.current) return false;
       inFlightRef.current = true;
 
       try {
-        // API 경로는 실제 엔드포인트로 조정하세요.
-        const resp = await httpClient.get<PaymentResponse>("/payment/status");
-        const payload = safePayload(resp);
+        const payload =
+          await httpClient.get<PaymentResponse>("/payment/status");
 
         // finalPrice가 전달되면 업데이트
-        if (typeof payload.finalPrice === "number" && isMountedRef.current) {
-          setFinalPrice(payload.finalPrice);
+        if (typeof payload.finalPrice === "number") {
+          safeSetFinalPrice(payload.finalPrice);
         }
 
-        const success = Boolean(payload.isPaid);
+        const success = payload.status === "COMPLETED";
         if (success) {
-          if (isMountedRef.current) setStatus("success");
-          // 성공 시 재시도 타이머 정리
+          safeSetStatus("success");
           if (timeoutRef.current !== null) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
           }
-          Analytics.trackEvent("Payment_Poll_Success", { category: "Payment", is_success: true });
+          Analytics.trackEvent("Payment_Poll_Success", {
+            category: "Payment",
+            is_success: true,
+          });
           return true;
         }
 
@@ -58,43 +68,45 @@ export const usePaymentPolling = () => {
           category: "Payment",
           error_message: err instanceof Error ? err.message : String(err ?? ""),
         });
-        if (isMountedRef.current) setStatus("error");
-        // 실패시 재시도는 멈추게 할지 계속할지 정책에 따르세요. 여기선 멈추도록 함.
+        safeSetStatus("error");
+
         return false;
       } finally {
         inFlightRef.current = false;
       }
     };
 
-    // 재귀적 setTimeout으로 중복 호출 방지 및 네트워크 지연 안전화
-    const scheduleNext = (delay = POLL_INTERVAL) => {
+    const scheduleNext = () => {
       if (!isMountedRef.current) return;
+
       timeoutRef.current = window.setTimeout(async () => {
-        const ok = await poll();
-        if (!ok && isMountedRef.current) {
-          setStatus((s) => (s === "loading" ? "polling" : s));
+        const isSuccess = await poll();
+        if (!isSuccess && isMountedRef.current) {
+          // 로딩 후에는 항상 'polling' 상태로 변경
+          safeSetStatus("polling");
           scheduleNext();
         }
-      }, delay);
+      }, POLL_INTERVAL);
     };
 
     // 첫 호출
     (async () => {
-      const firstOk = await poll();
-      if (!firstOk) {
-        if (isMountedRef.current) setStatus("polling");
+      const isSuccess = await poll();
+      if (!isSuccess) {
+        safeSetStatus("polling");
         scheduleNext();
       }
     })();
 
+    // 클린업 함수
     return () => {
       isMountedRef.current = false;
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
       }
     };
-  }, []);
+    // 5. useCallback으로 만든 함수들을 의존성 배열에 추가
+  }, [safeSetStatus, safeSetFinalPrice]);
 
   const isValid = status === "success";
   return { isValid, finalPrice, status };

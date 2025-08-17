@@ -1,18 +1,16 @@
 import { lazy, Suspense, useEffect, useRef } from "react";
+import { httpClient } from "@/api/api";
 import Rocket from "@/assets/lottie/Rocket.json";
-import DiscordNotice from "./JoinComplete.DiscordNotice";
-import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 import { Analytics } from "@/service/analytics";
 import { usePersonalInfoStore } from "@/stores/personalInfoStore";
-import { httpClient } from "@/api/api";
 import type { GetMemberResponse } from "@/types/api/member";
+import DiscordNotice from "./JoinComplete.DiscordNotice";
+import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 
 const Lottie = lazy(() => import("lottie-react"));
 
 const JoinComplete = () => {
-  const studentId = usePersonalInfoStore(
-    (s) => s.personalInfoData?.studentId
-  );
+  const studentId = usePersonalInfoStore((s) => s.personalInfoData?.studentId);
   const identifiedRef = useRef(false);
 
   useEffect(() => {

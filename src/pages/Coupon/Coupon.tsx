@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import AlertBox from "@/components/ui/custom/alertbox";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { Label } from "@/components/ui/label";
+import { Analytics } from "@/service/analytics";
 import { fetchCoupon, submitCoupon } from "./Coupon.Api";
 import { CouponList } from "./Coupon.CouponList";
 import InputCouponCode from "./Coupon.InputCouponCode";
 import { TotalAmount } from "./Coupon.TotalAmount";
 import type { Coupon as CouponType } from "./Coupon.Types";
-import { Analytics } from "@/service/analytics";
 
 interface CouponProps {
   onClose: () => void;

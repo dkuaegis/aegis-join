@@ -10,8 +10,8 @@ Analytics.init();
 // biome-ignore lint/style/noNonNullAssertion: The 'root' element is guaranteed to exist in the HTML.
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>  
-        <App />
+    <BrowserRouter>
+      <App />
     </BrowserRouter>
   </StrictMode>
 );

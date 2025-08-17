@@ -1,6 +1,6 @@
 import { useState } from "react";
-import useFunnel from "./useFunnel";
 import { Analytics } from "@/service/analytics";
+import useFunnel from "./useFunnel";
 
 export const useNextStep = <T>(submitFunc: (data: T) => Promise<unknown>) => {
   const { next } = useFunnel();
