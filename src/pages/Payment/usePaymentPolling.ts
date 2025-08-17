@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ServerError } from "@/api/types";
 import { makePayment, pollPaymentStatus } from "@/pages/Payment/Payment.Api";
 import { Analytics } from "@/service/analytics";
@@ -10,8 +10,24 @@ export const usePaymentPolling = () => {
   const [finalPrice, setFinalPrice] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const inFlightRef = useRef(false);
-
   const pollingCountRef = useRef(0);
+
+  const refreshFinalPrice = useCallback(async () => {
+    if (inFlightRef.current) {
+      console.log("결제 상태 조회 요청이 이미 진행 중입니다.");
+      return;
+    }
+    inFlightRef.current = true;
+
+    try {
+      const result = await pollPaymentStatus();
+      setFinalPrice(result.finalPrice);
+    } catch (err) {
+      console.error("가격 정보 업데이트에 실패했습니다:", err);
+    } finally {
+      inFlightRef.current = false;
+    }
+  }, []); 
 
   useEffect(() => {
     let isMounted = true;
@@ -105,5 +121,5 @@ export const usePaymentPolling = () => {
 
   const isValid = status === "success";
 
-  return { isValid, finalPrice, status };
+  return { isValid, finalPrice, status, refreshFinalPrice };
 };

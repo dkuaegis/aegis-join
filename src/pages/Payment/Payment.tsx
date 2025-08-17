@@ -44,7 +44,7 @@ const modalVariants = {
 } as const;
 
 const Payment = () => {
-  const { isValid, finalPrice, status } = usePaymentPolling();
+  const { isValid, finalPrice, status, refreshFinalPrice } = usePaymentPolling();
   const [currentView, setCurrentView] = useState<"coupon" | "payment">(
     "payment"
   );
@@ -119,9 +119,10 @@ const Payment = () => {
           >
             <Coupon
               onClose={() => {
-                Analytics.safeTrack("Payment_Close_Coupon_Click", {
-                  category: "Payment",
+                Analytics.safeTrack("Coupon_Apply_And_Fetch_And_Close", {
+                  category: "Coupon",
                 });
+                refreshFinalPrice();
                 setCurrentView("payment");
               }}
             />
