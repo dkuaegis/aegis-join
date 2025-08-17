@@ -143,7 +143,6 @@ const toErrorMessage = (err: unknown): string => {
   return msg.slice(0, 200); // 메시지 길이를 200자로 제한
 };
 
-
 /**
  * safeTrack를 안전하게 호출하는 래퍼 함수.
  * 이 함수는 절대 에러를 발생시키지 않으므로, 결제와 같은 중요 로직의 흐름을 방해하지 않습니다.
@@ -157,7 +156,10 @@ const safeTrack = (eventName: string, properties?: EventProperties): void => {
   } catch (err) {
     // 개발 환경에서만 내부 에러를 조용히 로깅하여 디버깅을 돕습니다.
     if (isDev) {
-      console.error(`safeTrack failed internally for event [${eventName}]:`, err);
+      console.error(
+        `safeTrack failed internally for event [${eventName}]:`,
+        err
+      );
     }
     // 의도적으로 에러를 무시합니다 (no-op).
   }
