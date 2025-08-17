@@ -1,98 +1,101 @@
 import { useEffect, useRef, useState } from "react";
-import { ServerError } from "@/api/types";
-import { makePayment, pollPaymentStatus } from "@/pages/Payment/Payment.Api";
+import { httpClient } from "@/api/api";
 import { Analytics } from "@/service/analytics";
 
 type PaymentStatus = "loading" | "polling" | "success" | "error";
 
+interface PaymentResponse {
+  isPaid: boolean;
+  finalPrice?: number;
+  // 서버가 반환하는 실제 필드에 맞게 확장하세요.
+}
+
 export const usePaymentPolling = () => {
   const [status, setStatus] = useState<PaymentStatus>("loading");
-  const [finalPrice, setFinalPrice] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [finalPrice, setFinalPrice] = useState<number>(0);
+
+  const timeoutRef = useRef<number | null>(null);
   const inFlightRef = useRef(false);
+  const isMountedRef = useRef(true);
+
+  const POLL_INTERVAL = 5000;
 
   useEffect(() => {
-    let isMounted = true;
+    isMountedRef.current = true;
 
-  const poll = async () => {
-      if (inFlightRef.current) {
-        return;
-      }
+    const safePayload = (resp: any): PaymentResponse => (resp && resp.data) || resp || {};
 
+    const poll = async (): Promise<boolean> => {
+      if (inFlightRef.current) return false;
       inFlightRef.current = true;
+
       try {
-        const result = await pollPaymentStatus();
-        setFinalPrice(result.finalPrice);
+        // API 경로는 실제 엔드포인트로 조정하세요.
+        const resp = await httpClient.get<PaymentResponse>("/payment/status");
+        const payload = safePayload(resp);
 
-        if (result.status === "COMPLETED") {
-          setStatus("success");
-          Analytics.trackEvent("Payment_Poll_Success", {
-            category: "Payment",
-            final_price: result.finalPrice,
-          });
-
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-          }
+        // finalPrice가 전달되면 업데이트
+        if (typeof payload.finalPrice === "number" && isMountedRef.current) {
+          setFinalPrice(payload.finalPrice);
         }
+
+        const success = Boolean(payload.isPaid);
+        if (success) {
+          if (isMountedRef.current) setStatus("success");
+          // 성공 시 재시도 타이머 정리
+          if (timeoutRef.current !== null) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+          }
+          Analytics.trackEvent("Payment_Poll_Success", { category: "Payment", is_success: true });
+          return true;
+        }
+
+        return false;
       } catch (err) {
-        console.error("재시도 필요. Payment polling failed:", err);
-        setStatus("error");
-        Analytics.trackEvent("Payment_Poll_Error", {
+        console.error("결제 폴링 에러:", err);
+        Analytics.trackEvent("Payment_Poll_Failed", {
           category: "Payment",
           error_message: err instanceof Error ? err.message : String(err ?? ""),
         });
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-        }
+        if (isMountedRef.current) setStatus("error");
+        // 실패시 재시도는 멈추게 할지 계속할지 정책에 따르세요. 여기선 멈추도록 함.
+        return false;
       } finally {
         inFlightRef.current = false;
       }
     };
 
-  const startPolling = () => {
-      if (isMounted) {
-        setStatus("polling");
-    Analytics.trackEvent("Payment_Poll_Start", { category: "Payment" });
-        poll();
-        intervalRef.current = setInterval(poll, 5000);
-      }
-    };
-
-    // 결제 생성 및 폴링 시작 로직
-    const initializePayment = async () => {
-      try {
-        await makePayment([]);
-
-        startPolling();
-      } catch (error) {
-        // 409 에러는 이미 결제가 생성된 경우이므로, 정상적으로 폴링을 시작합니다.
-        if (error instanceof ServerError && error.status === 409) {
-          Analytics.trackEvent("Payment_Already_Exists", { category: "Payment" });
-          startPolling();
-        } else {
-          console.error("결제 생성에 실패했습니다:", error);
-          setStatus("error");
-          Analytics.trackEvent("Payment_Init_Error", {
-            category: "Payment",
-            error_message:
-              error instanceof Error ? error.message : String(error ?? ""),
-          });
+    // 재귀적 setTimeout으로 중복 호출 방지 및 네트워크 지연 안전화
+    const scheduleNext = (delay = POLL_INTERVAL) => {
+      if (!isMountedRef.current) return;
+      timeoutRef.current = window.setTimeout(async () => {
+        const ok = await poll();
+        if (!ok && isMountedRef.current) {
+          setStatus((s) => (s === "loading" ? "polling" : s));
+          scheduleNext();
         }
-      }
+      }, delay);
     };
 
-    initializePayment();
+    // 첫 호출
+    (async () => {
+      const firstOk = await poll();
+      if (!firstOk) {
+        if (isMountedRef.current) setStatus("polling");
+        scheduleNext();
+      }
+    })();
 
     return () => {
-      isMounted = false;
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+      isMountedRef.current = false;
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
     };
   }, []);
 
   const isValid = status === "success";
-
   return { isValid, finalPrice, status };
 };
