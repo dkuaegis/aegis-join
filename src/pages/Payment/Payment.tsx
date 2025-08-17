@@ -1,6 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
 import { cn } from "@/lib/utils";
@@ -52,12 +52,18 @@ const Payment = () => {
     (state) => state.completeRegistration
   );
 
+
+  useEffect(() => {
+    if (status === "error") {
+      Analytics.trackEvent("Payment_View_Error", { category: "Payment" });
+    }
+  }, [status]);  
+
   if (status === "loading") {
     return null;
   }
-
+  
   if (status === "error") {
-    Analytics.trackEvent("Payment_View_Error", { category: "Payment" });
     return (
       <div className="text-center text-red-500">
         결제 상태를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.
