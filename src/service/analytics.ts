@@ -65,6 +65,15 @@ const identifyUser = (userId: string, userData: MixpanelUserProfile): void => {
   }
 };
 
+// 학번/이름 기반 식별 헬퍼
+const identifyStudent = (studentId: string, name?: string): void => {
+  const profile: MixpanelUserProfile = {
+    $name: name,
+    student_id: studentId,
+  };
+  identifyUser(studentId, profile);
+};
+
 const trackEvent = (eventName: string, properties: EventProperties = {}): void => {
   try {
     if (isValidEnvVar(import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN)) {
@@ -116,6 +125,7 @@ const checkAndTrackRefresh = (): void => {
 export const Analytics = {
   init,
   identifyUser,
+  identifyStudent,
   trackEvent,
   trackPageView,
   checkAndTrackRefresh,
