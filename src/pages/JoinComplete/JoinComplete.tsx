@@ -3,11 +3,15 @@ import { httpClient } from "@/api/api";
 import Rocket from "@/assets/lottie/Rocket.json";
 import { Analytics } from "@/service/analytics";
 import { usePersonalInfoStore } from "@/stores/personalInfoStore";
-import type { GetMemberResponse } from "@/types/api/member";
 import DiscordNotice from "./JoinComplete.DiscordNotice";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 
 const Lottie = lazy(() => import("lottie-react"));
+
+interface RequiredMemberInfo {
+  studentId: string;
+  name: string;
+}
 
 const JoinComplete = () => {
   const studentId = usePersonalInfoStore((s) => s.personalInfoData?.studentId);
@@ -26,13 +30,12 @@ const JoinComplete = () => {
           return;
         }
         // 스토어에 없으면 백엔드에서 가져와서 식별
-        const profile = await httpClient.get<GetMemberResponse>("/member");
-        if (profile.student_id) {
-          Analytics.identifyStudent(String(profile.student_id), profile.name);
+        const profile = await httpClient.get<RequiredMemberInfo>("/members");
+        if (profile.studentId) {
+          Analytics.identifyStudent(String(profile.studentId), profile.name);
           identifiedRef.current = true;
         }
       } catch (e) {
-        // 실패해도 무시
         if (import.meta.env.VITE_ENV === "development") {
           console.warn("identifyStudent on Complete failed:", e);
         }
