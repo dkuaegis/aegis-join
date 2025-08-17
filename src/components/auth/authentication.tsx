@@ -53,7 +53,7 @@ function Authentication({ children }: AuthenticationProps) {
       return children;
     } else {
       const isValidStep = JOIN_STEPS.includes(currentStep);
-      const redirectTo = isValidStep ? `/${currentStep}` : JOIN_STEPS[0];
+      const redirectTo = isValidStep ? `/${currentStep}` : `/${JOIN_STEPS[0]}`;
 
       // 가입 미완료자가 퍼널 이탈 시 다시 퍼널로 강제 이동될 때 이벤트 기록
       Analytics.trackEvent("Redirect_To_Funnel", {

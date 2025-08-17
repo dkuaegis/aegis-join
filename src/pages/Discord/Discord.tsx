@@ -17,9 +17,6 @@ const Discord = () => {
 
   const getDiscordCode = useCallback(async () => {
     try {
-      Analytics.trackEvent("Discord_Code_Refresh_Click", {
-        category: "Discord",
-      });
       const fetchedCode = await fetchDiscordCode();
       setCode(fetchedCode);
     } catch (err) {
