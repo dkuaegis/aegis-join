@@ -4,13 +4,16 @@ import getErrorMessage from "./errorMessage";
 import { HttpClient } from "./HttpClient";
 import type { ServerError } from "./types";
 
+const isDev = import.meta.env.MODE === "development";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const httpClient = new HttpClient(BASE_URL);
 
 // reqeust 로깅
 httpClient.interceptors.request.use((config) => {
-  console.log(`➡️ ${config.method?.toUpperCase()} ${config.url}`);
+  if (isDev) {
+    console.log(`➡️ ${config.method?.toUpperCase()} ${config.url}`);
+  }
   return config;
 });
 

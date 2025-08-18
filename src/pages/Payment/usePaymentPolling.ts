@@ -14,7 +14,7 @@ export const usePaymentPolling = () => {
 
   const refreshFinalPrice = useCallback(async () => {
     if (inFlightRef.current) {
-      console.log("결제 상태 조회 요청이 이미 진행 중입니다.");
+      console.error("결제 상태 조회 요청이 이미 진행 중입니다.");
       return;
     }
     inFlightRef.current = true;
@@ -27,7 +27,7 @@ export const usePaymentPolling = () => {
     } finally {
       inFlightRef.current = false;
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
