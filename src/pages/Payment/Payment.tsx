@@ -66,7 +66,8 @@ const Payment = () => {
   if (status === "error") {
     return (
       <div className="text-center text-red-500">
-        결제 상태를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.
+        <p className="my-7">결제 상태를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.</p>
+        <AdminInfoDrawer />
       </div>
     );
   }
