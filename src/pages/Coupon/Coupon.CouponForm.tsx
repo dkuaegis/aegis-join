@@ -19,7 +19,6 @@ const CouponForm: React.FC<CouponFormProps> = React.memo(
           placeholder="쿠폰 코드를 입력하세요"
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}
-          required
         />
       </div>
       <Button type="submit" className="w-full">

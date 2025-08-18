@@ -22,6 +22,7 @@ import {
 import { submitAndFetchCouponCode } from "./Coupon.Api";
 import CouponForm from "./Coupon.CouponForm";
 import type { Coupon } from "./Coupon.Types";
+import toast from "react-hot-toast";
 
 interface InputCouponCodeProps {
   setCoupons: React.Dispatch<React.SetStateAction<Coupon[]>>;
@@ -48,7 +49,7 @@ const InputCouponCode = ({ setCoupons }: InputCouponCodeProps) => {
     try {
       const trimmedCouponCode = couponCode.trim();
       if (!trimmedCouponCode) {
-        console.log("쿠폰 코드를 입력해주세요");
+        toast.error("쿠폰 코드를 입력해주세요");
         return;
       }
       const data = await submitAndFetchCouponCode(trimmedCouponCode);
@@ -56,7 +57,7 @@ const InputCouponCode = ({ setCoupons }: InputCouponCodeProps) => {
       setOpen(false);
       setCouponCode("");
     } catch (error: unknown) {
-      console.log("쿠폰 코드 적용하는데 에러", error);
+      console.error("쿠폰 코드 적용하는데 에러", error);
     }
   };
 
