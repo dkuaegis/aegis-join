@@ -27,7 +27,7 @@ export const usePaymentPolling = () => {
     } finally {
       inFlightRef.current = false;
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
     let isMounted = true;

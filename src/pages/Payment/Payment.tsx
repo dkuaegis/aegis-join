@@ -44,7 +44,8 @@ const modalVariants = {
 } as const;
 
 const Payment = () => {
-  const { isValid, finalPrice, status, refreshFinalPrice } = usePaymentPolling();
+  const { isValid, finalPrice, status, refreshFinalPrice } =
+    usePaymentPolling();
   const [currentView, setCurrentView] = useState<"coupon" | "payment">(
     "payment"
   );

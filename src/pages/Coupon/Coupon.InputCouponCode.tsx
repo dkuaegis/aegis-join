@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,7 +23,6 @@ import {
 import { submitAndFetchCouponCode } from "./Coupon.Api";
 import CouponForm from "./Coupon.CouponForm";
 import type { Coupon } from "./Coupon.Types";
-import toast from "react-hot-toast";
 
 interface InputCouponCodeProps {
   setCoupons: React.Dispatch<React.SetStateAction<Coupon[]>>;
