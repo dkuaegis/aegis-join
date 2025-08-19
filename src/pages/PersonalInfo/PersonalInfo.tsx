@@ -19,6 +19,7 @@ import {
   type PersonalInfoFormValues,
   personalInfoSchema,
 } from "./PersonalInfo.schema";
+import { isValid } from "zod/v3";
 
 const PersonalInfo = () => {
   const { personalInfoData, setPersonalInfoData } = usePersonalInfoStore();
@@ -87,7 +88,7 @@ const PersonalInfo = () => {
         <StudentGrade name="grade" />
 
         <NavigationButtons
-          disabled={!methods.formState.isValid}
+          isVisuallyDisabled={!methods.formState.isValid}
           isLoading={isLoading}
         />
       </form>

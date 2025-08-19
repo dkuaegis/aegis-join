@@ -44,7 +44,7 @@ const Survey = () => {
         <JoinReason />
 
         <NavigationButtons
-          disabled={!methods.formState.isValid}
+          isVisuallyDisabled={!methods.formState.isValid}
           isLoading={isLoading}
         />
       </form>
