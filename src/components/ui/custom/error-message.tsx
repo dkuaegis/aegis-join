@@ -15,7 +15,7 @@ export function ErrorMessage({
   return (
     <p
       className={cn(
-        "font-medium text-xs",
+        "font-medium text-sm",
         isShown ? "text-red-500" : "invisible",
         className
       )}
