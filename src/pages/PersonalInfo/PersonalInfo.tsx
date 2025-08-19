@@ -54,7 +54,9 @@ const PersonalInfo = () => {
         .then((data) => {
           const transformedData = transformFetchedDataToFormValues(data);
           setPersonalInfoData(transformedData);
-          methods.reset(transformedData);
+          // 학년(grade)은 초기화에서 제외하고, 나머지 필드만 초기화
+          const { grade: _omitGrade, ...rest } = transformedData;
+          methods.reset(rest as Partial<PersonalInfoFormValues>);
         })
         .catch(console.error);
     }
@@ -80,11 +82,12 @@ const PersonalInfo = () => {
       >
         <StudentPhoneNumber name="phoneNumber" />
         <StudentId name="studentId" />
+        <StudentResidentNumber />
         <StudentDepartment name="department" />
         <StudentGrade name="grade" />
-        <StudentResidentNumber />
+
         <NavigationButtons
-          disabled={!methods.formState.isValid}
+          isVisuallyDisabled={!methods.formState.isValid}
           isLoading={isLoading}
         />
       </form>
