@@ -82,9 +82,10 @@ const PersonalInfo = () => {
       >
         <StudentPhoneNumber name="phoneNumber" />
         <StudentId name="studentId" />
+        <StudentResidentNumber />
         <StudentDepartment name="department" />
         <StudentGrade name="grade" />
-        <StudentResidentNumber />
+
         <NavigationButtons
           disabled={!methods.formState.isValid}
           isLoading={isLoading}
