@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 } from "lucide-react"; // 로딩 아이콘
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 // 기능 개선을 위해 Props 인터페이스 확장
 interface NavigationButtonsProps {
@@ -9,6 +10,7 @@ interface NavigationButtonsProps {
   disabled?: boolean;
   isLoading?: boolean;
   isVisible?: boolean; // 애니메이션 제어를 위한 prop
+  isVisuallyDisabled?: boolean;
 }
 
 // 애니메이션 효과 정의
@@ -24,6 +26,7 @@ export default function NavigationButtons({
   disabled = false,
   isLoading = false,
   isVisible = true,
+  isVisuallyDisabled = false,
 }: NavigationButtonsProps) {
   // AnimatePresence: isVisible 값이 바뀔 때 exit 애니메이션을 실행
   return (
@@ -42,8 +45,11 @@ export default function NavigationButtons({
               type="submit"
               onClick={onClick}
               disabled={isLoading || disabled}
+              className={cn(
+                "w-full",
+                isVisuallyDisabled && "opacity-50"
+              )}
               size="lg"
-              className="w-full"
             >
               {/* isLoading 상태일 때 로딩 아이콘 표시 */}
               {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : text}
