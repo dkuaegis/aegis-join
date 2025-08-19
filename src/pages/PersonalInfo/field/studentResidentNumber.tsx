@@ -40,8 +40,11 @@ const StudentResidentNumber = forwardRef<HTMLDivElement>((props, ref) => {
           className="h-12 w-16 text-center text-base"
           maxLength={1}
           aria-invalid={!isResidentNumberBackValid}
-          // 4. 변경된 변수를 Input의 props에 연결합니다.
-          {...residentNumberBackField}
+          // 항상 제어 컴포넌트가 되도록 value를 문자열로 강제
+          value={residentNumberBackField.value ?? ""}
+          onChange={residentNumberBackField.onChange}
+          onBlur={residentNumberBackField.onBlur}
+          ref={residentNumberBackField.ref}
         />
         <div className="flex space-x-1">
           {[...Array(6)].map((_, i) => (
