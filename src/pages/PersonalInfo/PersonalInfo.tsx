@@ -19,7 +19,6 @@ import {
   type PersonalInfoFormValues,
   personalInfoSchema,
 } from "./PersonalInfo.schema";
-import { isValid } from "zod/v3";
 
 const PersonalInfo = () => {
   const { personalInfoData, setPersonalInfoData } = usePersonalInfoStore();

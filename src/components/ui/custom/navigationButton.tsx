@@ -45,10 +45,7 @@ export default function NavigationButtons({
               type="submit"
               onClick={onClick}
               disabled={isLoading || disabled}
-              className={cn(
-                "w-full",
-                isVisuallyDisabled && "opacity-50"
-              )}
+              className={cn("w-full", isVisuallyDisabled && "opacity-50")}
               size="lg"
             >
               {/* isLoading 상태일 때 로딩 아이콘 표시 */}
