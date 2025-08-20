@@ -1,35 +1,77 @@
-// import Confetti from "react-confetti";
-import CenterLogo from "./JoinComplete.Centerlogo";
+import { lazy, Suspense, useEffect, useRef } from "react";
+import { httpClient } from "@/api/api";
+import Rocket from "@/assets/lottie/Rocket.json";
+import { Analytics } from "@/service/analytics";
+import { usePersonalInfoStore } from "@/stores/personalInfoStore";
 import DiscordNotice from "./JoinComplete.DiscordNotice";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 
-export default function JoinComplete() {
-  return (
-    <AlignCenter>
-      <Wrapper>
-        {/* <Confetti recycle={false} numberOfPieces={500} /> */}
-        <h2 className="font-bold text-3xl tracking-tight">
-          가입을 축하합니다! 🎉
-        </h2>
-        <p className="text-muted-foreground text-xl">
-          성공적으로 가입이 완료되었습니다.
-        </p>
-        <CenterLogo />
-        <DiscordNotice />
-        <KakaoChatroom />
-      </Wrapper>
-    </AlignCenter>
-  );
+const Lottie = lazy(() => import("lottie-react"));
+
+interface RequiredMemberInfo {
+  studentId: string;
+  name: string;
 }
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => {
-  return <div className="space-y-4">{children}</div>;
+const JoinComplete = () => {
+  const studentId = usePersonalInfoStore((s) => s.personalInfoData?.studentId);
+  const identifiedRef = useRef(false);
+
+  useEffect(() => {
+    Analytics.safeTrack("Complete_View", { category: "Complete" });
+
+    if (identifiedRef.current) return;
+
+    const identify = async () => {
+      try {
+        if (studentId) {
+          Analytics.identifyStudent(studentId);
+          identifiedRef.current = true;
+          return;
+        }
+        // 스토어에 없으면 백엔드에서 가져와서 식별
+        const profile = await httpClient.get<RequiredMemberInfo>("/members");
+        if (profile.studentId) {
+          Analytics.identifyStudent(String(profile.studentId), profile.name);
+          identifiedRef.current = true;
+        }
+      } catch (e) {
+        if (import.meta.env.VITE_ENV === "development") {
+          console.warn("identifyStudent on Complete failed:", e);
+        }
+      }
+    };
+
+    void identify();
+  }, [studentId]);
+
+  return (
+    <Wrapper>
+      <Suspense
+        fallback={
+          <div className="mx-auto" style={{ width: 240, height: 240 }} />
+        }
+      >
+        {/* Lottie 애니메이션 크기를 줄여 세로 공간을 확보합니다. */}
+        <Lottie
+          animationData={Rocket}
+          loop={true}
+          style={{ width: 240, height: 240, margin: "0 auto" }}
+        />
+      </Suspense>
+      <p className="mt-4 font-bold text-3xl">등록이 완료됐어요</p>
+      <DiscordNotice />
+      <KakaoChatroom />
+    </Wrapper>
+  );
 };
 
-const AlignCenter = ({ children }: { children: React.ReactNode }) => {
+const Wrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-1 items-center justify-center p-6 text-center">
+    <div className="mx-auto mt-16 mb-8 w-full max-w-md space-y-4 px-4 py-8 pb-28 text-center">
       {children}
     </div>
   );
 };
+
+export default JoinComplete;

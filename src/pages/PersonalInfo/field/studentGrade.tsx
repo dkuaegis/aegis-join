@@ -1,3 +1,5 @@
+import { forwardRef } from "react";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -6,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { forwardRef } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 
 //학년 필드 배열
@@ -28,9 +29,12 @@ export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
 
     return (
       <div className="space-y-2" {...props} ref={ref}>
-        <Label htmlFor="grade">모집 학기 기준 학년</Label>
+        <Label htmlFor="grade">학년</Label>
         <Select value={field.value ?? ""} onValueChange={field.onChange}>
-          <SelectTrigger className={error && !isValid ? "border-red-500" : ""}>
+          <SelectTrigger
+            aria-invalid={!isValid}
+            className="h-12 w-full text-lg "
+          >
             <SelectValue placeholder="학년 선택" />
           </SelectTrigger>
           <SelectContent>
@@ -41,9 +45,10 @@ export const StudentGrade = forwardRef<HTMLDivElement, StudentGradeProps>(
             ))}
           </SelectContent>
         </Select>
-        {error && !isValid && (
-          <p className="text-red-500 text-xs">학년을 선택해주세요</p>
-        )}
+        <ErrorMessage
+          isShown={!!error && !isValid}
+          message="학년을 선택해주세요"
+        />
       </div>
     );
   }

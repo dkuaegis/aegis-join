@@ -1,5 +1,6 @@
 import type React from "react";
-
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,7 +20,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { useEffect, useState } from "react";
 import { submitAndFetchCouponCode } from "./Coupon.Api";
 import CouponForm from "./Coupon.CouponForm";
 import type { Coupon } from "./Coupon.Types";
@@ -28,7 +28,7 @@ interface InputCouponCodeProps {
   setCoupons: React.Dispatch<React.SetStateAction<Coupon[]>>;
 }
 
-export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
+const InputCouponCode = ({ setCoupons }: InputCouponCodeProps) => {
   const [isMobile, setIsMobile] = useState(false);
   const [open, setOpen] = useState(false);
   const [couponCode, setCouponCode] = useState("");
@@ -49,7 +49,7 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
     try {
       const trimmedCouponCode = couponCode.trim();
       if (!trimmedCouponCode) {
-        console.log("쿠폰 코드를 입력해주세요");
+        toast.error("쿠폰 코드를 입력해주세요");
         return;
       }
       const data = await submitAndFetchCouponCode(trimmedCouponCode);
@@ -57,16 +57,20 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
       setOpen(false);
       setCouponCode("");
     } catch (error: unknown) {
-      console.log("쿠폰 코드 적용하는데 에러", error);
+      console.error("쿠폰 코드 적용하는데 에러", error);
     }
   };
 
   if (isMobile) {
     return (
       <div className="flex justify-center">
-        <Drawer open={open} onOpenChange={setOpen} modal={false}>
+        <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
-            <Button size="lg" className=" w-full items-center">
+            <Button
+              size="lg"
+              className=" w-full items-center"
+              variant="default"
+            >
               쿠폰 등록하기
             </Button>
           </DrawerTrigger>
@@ -97,10 +101,10 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
 
   return (
     <div className="flex justify-center">
-      <Dialog open={open} onOpenChange={setOpen} modal={false}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button size="lg" className=" w-10/12 items-center" variant="outline">
-            쿠폰 등록하기
+          <Button size="lg" className=" w-full items-center" variant="default">
+            코드로 쿠폰 등록하기
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -119,4 +123,6 @@ export default function InputCouponCode({ setCoupons }: InputCouponCodeProps) {
       </Dialog>
     </div>
   );
-}
+};
+
+export default InputCouponCode;

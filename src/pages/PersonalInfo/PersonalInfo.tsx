@@ -1,104 +1,98 @@
-import NavigationButtons from "@/components/ui/custom/navigationButton";
-import { usePersonalInfoStore } from "@/stores/usePersonalInfoStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import NavigationButtons from "@/components/ui/custom/navigationButton";
+import { useNextStep } from "@/hooks/useNextStep";
+import { usePersonalInfoStore } from "@/stores/personalInfoStore";
+import { StudentDepartment } from "./field/studentDepartment";
+import { StudentGrade } from "./field/studentGrade";
+import { StudentId } from "./field/studentId";
+import { StudentPhoneNumber } from "./field/studentPhoneNumber";
+import StudentResidentNumber from "./field/studentResidentNumber";
 import {
   fetchPersonalInfoData,
   submitPersonalInfoData,
 } from "./PersonalInfo.Api";
+import { transformFetchedDataToFormValues } from "./PersonalInfo.helper";
 import {
+  type PersonalInfoApiValues,
   type PersonalInfoFormValues,
   personalInfoSchema,
 } from "./PersonalInfo.schema";
-import { StudentAcademicStatus } from "./field/studentAcademicStatus";
-import { StudentBirthDate } from "./field/studentBirthDate";
-import { StudentDepartment } from "./field/studentDepartment";
-import { StudentFresh } from "./field/studentFresh";
-import { StudentGender } from "./field/studentGender";
-import { StudentGrade } from "./field/studentGrade";
-import { StudentId } from "./field/studentId";
-import { StudentName } from "./field/studentName";
-import { StudentPhoneNumber } from "./field/studentPhoneNumber";
-import { StudentSemester } from "./field/studentSemester";
 
-interface PersonalInfoProps {
-  onNext: (data: PersonalInfoFormValues) => void;
-  onPrev: () => void;
-}
+const PersonalInfo = () => {
+  const { personalInfoData, setPersonalInfoData } = usePersonalInfoStore();
+  const isInitial = personalInfoData === null;
 
-function PersonalInfo({ onNext, onPrev }: PersonalInfoProps) {
-  const { personalInfoData, setPersonalInfoData, isInitial, setNotInitial } =
-    usePersonalInfoStore();
+  const handleSubmitWithTransform = async (
+    formData: PersonalInfoFormValues
+  ) => {
+    // 주민등록번호로 성별 계산
+    const gender = Number(formData.residentNumber_back) % 2 ? "MALE" : "FEMALE";
+
+    // API에 보낼 데이터 가공
+    const { residentNumber_back: _, ...rest } = formData;
+    const apiData: PersonalInfoApiValues = { ...rest, gender };
+
+    // 실제 API 호출 함수 실행
+    return submitPersonalInfoData(apiData);
+  };
+
+  const { isLoading, handleSubmit } = useNextStep(handleSubmitWithTransform);
+
+  const defaultValues = personalInfoData || {};
 
   const methods = useForm<PersonalInfoFormValues>({
     resolver: zodResolver(personalInfoSchema),
     mode: "onChange",
-    defaultValues: personalInfoData || {},
+    defaultValues,
   });
 
   useEffect(() => {
     if (isInitial) {
       fetchPersonalInfoData()
-        .then((data: PersonalInfoFormValues) => {
-          setPersonalInfoData(data);
-          methods.reset(data);
-          setNotInitial();
+        .then((data) => {
+          const transformedData = transformFetchedDataToFormValues(data);
+          setPersonalInfoData(transformedData);
+          // 학년(grade)은 초기화에서 제외하고, 나머지 필드만 초기화
+          const { grade: _omitGrade, ...rest } = transformedData;
+          methods.reset(rest as Partial<PersonalInfoFormValues>);
         })
         .catch(console.error);
     }
 
     return () => {
-      setPersonalInfoData(methods.getValues());
+      if (methods.formState.isDirty) {
+        setPersonalInfoData(methods.getValues());
+      }
     };
   }, [
-    isInitial,
     methods.reset,
     methods.getValues,
-    setNotInitial,
     setPersonalInfoData,
+    methods.formState.isDirty,
+    isInitial,
   ]);
-
-  const onSubmit = (data: PersonalInfoFormValues) => {
-    submitPersonalInfoData(data)
-      .then(() => {
-        setPersonalInfoData(data);
-        onNext(data);
-      })
-      .catch((error) => {
-        console.error("제출 중 오류가 발생했습니다:", error);
-      });
-  };
 
   return (
     <FormProvider {...methods}>
       <form
         className="line-breaks space-y-4"
-        onSubmit={methods.handleSubmit(onSubmit)}
+        onSubmit={methods.handleSubmit(handleSubmit)}
       >
-        <h3 className="font-semibold text-lg">기본 인적사항</h3>
-        <StudentName name="name" />
-        <StudentBirthDate name="birthDate" />
-        <StudentGender name="gender" />
         <StudentPhoneNumber name="phoneNumber" />
         <StudentId name="studentId" />
+        <StudentResidentNumber />
         <StudentDepartment name="department" />
-        <StudentAcademicStatus name="academicStatus" />
         <StudentGrade name="grade" />
-        <StudentSemester name="semester" />
-        <StudentFresh name="fresh" />
+
         <NavigationButtons
-          prev={() => {
-            setPersonalInfoData(methods.getValues());
-            onPrev();
-          }}
-          next={methods.handleSubmit(onSubmit)}
-          isValid={methods.formState.isValid}
-          showPrev={true}
+          isVisuallyDisabled={!methods.formState.isValid}
+          isLoading={isLoading}
         />
       </form>
     </FormProvider>
   );
-}
+};
 
 export default PersonalInfo;

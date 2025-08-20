@@ -1,6 +1,4 @@
 import type * as React from "react";
-
-import { cn } from "@/lib/utils";
 import {
   forwardRef,
   useCallback,
@@ -8,6 +6,7 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
+import { cn } from "@/lib/utils";
 
 interface TextareaProps extends React.ComponentProps<"textarea"> {
   onValueChange?: (value: string) => void;
@@ -17,16 +16,15 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, onValueChange, ...props }, forwardedRef) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
 
-    useImperativeHandle<HTMLTextAreaElement, HTMLTextAreaElement>(
-      forwardedRef,
-      () => {
-        if (!internalRef.current) {
-          throw new Error("Text area Ref error");
-        }
-        return internalRef.current;
-      },
-      []
-    );
+    useImperativeHandle<
+      HTMLTextAreaElement,
+      HTMLTextAreaElement
+    >(forwardedRef, () => {
+      if (!internalRef.current) {
+        throw new Error("Text area Ref error");
+      }
+      return internalRef.current;
+    }, []);
 
     const adjustHeight = useCallback((e: HTMLTextAreaElement) => {
       requestAnimationFrame(() => {
@@ -53,7 +51,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <textarea
         className={cn(
-          "flex min-h-[60px] w-full resize-none overflow-hidden rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          "flex min-h-[60px] w-full resize-none overflow-hidden rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
           className
         )}
         onInput={handleChange}

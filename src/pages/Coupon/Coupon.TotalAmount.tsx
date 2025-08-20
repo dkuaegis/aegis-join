@@ -1,6 +1,5 @@
+import { CLUB_DUES } from "@/constants/constants";
 import type { Coupon, TotalAmountProps } from "./Coupon.Types";
-
-const CLUB_DUES = 15000;
 
 const totalAmount = (coupons: Coupon[], selectedCoupons: number[]) =>
   coupons.reduce((sum, coupon) => {
@@ -12,13 +11,13 @@ const totalAmount = (coupons: Coupon[], selectedCoupons: number[]) =>
 
 export const TotalAmount = ({ coupons, selectedCoupons }: TotalAmountProps) => {
   const total = totalAmount(coupons, selectedCoupons);
-  const finalDues = CLUB_DUES - total;
 
   return (
     <div className="mt-2 p-2 text-center">
-      <p className="font-bold text-2xl">
-        회비: {Math.max(finalDues, 0).toLocaleString()}원
-      </p>
+      <span className="font-bold text-5xl">
+        {Math.min(total, CLUB_DUES).toLocaleString()}
+      </span>
+      <span className="text-lg"> 원</span>
     </div>
   );
 };

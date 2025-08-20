@@ -1,59 +1,68 @@
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { AcquisitionType as AcquisitionTypeEnum } from "@/types/api/survey"; // AcquisitionType enum import, enum 이름 충돌 방지를 위해 AcquisitionTypeEnum 으로 alias
 import { useFormContext } from "react-hook-form";
+import ClubFairIcon from "@/assets/club-fair.svg";
+import EtcIcon from "@/assets/etc.svg";
+import EverytimeIcon from "@/assets/everytime.svg";
+import FriendIcon from "@/assets/friend.svg";
+import InstagramIcon from "@/assets/instargram-logo.svg";
+import OfflineEventIcon from "@/assets/offline-event.svg";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
+import { Label } from "@/components/ui/label";
+import { AcquisitionType as AcquisitionTypeEnum } from "@/types/api/survey";
+import { AcquisitionCard } from "./AcquisitionCard";
 import type { SurveyFormValues } from "./Survey.schema";
+
+const acquisitionTypes = [
+  {
+    value: AcquisitionTypeEnum.INSTAGRAM,
+    label: "인스타그램",
+    icon: InstagramIcon,
+  },
+  {
+    value: AcquisitionTypeEnum.EVERYTIME,
+    label: "에브리타임",
+    icon: EverytimeIcon,
+  },
+  { value: AcquisitionTypeEnum.FRIEND, label: "지인 추천", icon: FriendIcon },
+  { value: AcquisitionTypeEnum.CLUB_FAIR, label: "알림제", icon: ClubFairIcon },
+  {
+    value: AcquisitionTypeEnum.OFFLINE_EVENT,
+    label: "오프라인 행사",
+    icon: OfflineEventIcon,
+  },
+  { value: AcquisitionTypeEnum.ETC, label: "기타", icon: EtcIcon },
+];
 
 export const AcquisitionType = () => {
   const {
-    register,
+    watch,
+    setValue,
     formState: { errors },
   } = useFormContext<SurveyFormValues>();
 
+  const selectedValue = watch("acquisitionType");
+
   return (
     <div className="space-y-2">
-      <Label htmlFor="acquisitionType" className="flex items-end text-xl">
-        알게된 경로{" "}
-        <span
-          className={`pb-1 pl-2 text-red-500 text-xs ${
-            errors.acquisitionType
-              ? "visibility-visible opacity-100"
-              : "visibility-hidden opacity-0"
-          }`}
-        >
-          *필수 항목입니다
-        </span>
+      <Label htmlFor="acquisitionType" className="text-lg">
+        유입 경로
       </Label>
-      <Select
-        onValueChange={(value) => {
-          register("acquisitionType").onChange({
-            target: { name: "acquisitionType", value },
-          });
-        }}
-      >
-        <SelectTrigger
-          className={errors.acquisitionType ? "border-red-500" : ""}
-        >
-          <SelectValue placeholder="알게된 경로 선택" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value={AcquisitionTypeEnum.INSTAGRAM}>
-            인스타그램
-          </SelectItem>
-          <SelectItem value={AcquisitionTypeEnum.EVERYTIME}>
-            에브리타임
-          </SelectItem>
-          <SelectItem value={AcquisitionTypeEnum.FRIEND}>지인 추천</SelectItem>
-          <SelectItem value={AcquisitionTypeEnum.CLUB_FAIR}>알림제</SelectItem>
-          <SelectItem value={AcquisitionTypeEnum.ETC}>기타</SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="grid auto-rows-fr grid-cols-3 gap-4">
+        {acquisitionTypes.map(({ value, label, icon }) => (
+          <AcquisitionCard
+            key={value}
+            label={label}
+            icon={icon}
+            isSelected={selectedValue === value}
+            onClick={() =>
+              setValue("acquisitionType", value, { shouldValidate: true })
+            }
+          />
+        ))}
+      </div>
+      <ErrorMessage
+        isShown={!!errors.acquisitionType}
+        message={errors.acquisitionType?.message}
+      />
     </div>
   );
 };

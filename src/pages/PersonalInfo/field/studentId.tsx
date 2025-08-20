@@ -1,6 +1,7 @@
+import { forwardRef, useCallback } from "react";
+import { ErrorMessage } from "@/components/ui/custom/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { forwardRef, useCallback } from "react";
 import { useControllerField } from "../PersonalInfo.ControlledField";
 
 interface StudentIdProps {
@@ -34,16 +35,15 @@ export const StudentId = forwardRef<HTMLInputElement, StudentIdProps>(
           placeholder="32000000"
           maxLength={8}
           ref={ref}
-          className={error && !isValid ? "border-red-500" : ""}
+          aria-invalid={!isValid}
           value={field.value || ""}
           onChange={handleInputChange}
           {...props}
         />
-        {error && !isValid && (
-          <p className="text-red-500 text-xs">
-            학번은 32로 시작하는 8자리 숫자여야 합니다
-          </p>
-        )}
+        <ErrorMessage
+          isShown={!!error && !isValid}
+          message="학번은 32로 시작하는 8자리 숫자여야 합니다"
+        />
       </div>
     );
   }

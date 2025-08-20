@@ -1,111 +1,75 @@
+import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import Payment from "@/pages/Payment/Payment";
 import PersonalInfo from "@/pages/PersonalInfo/PersonalInfo";
 import Survey from "@/pages/Survey/Survey";
-import { useEffect } from "react";
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import useAuth, { AuthStatus } from "./hooks/useAuth";
+import Authentication from "./components/auth/authentication";
+import Title from "./components/ui/custom/title";
 import useFunnel from "./hooks/useFunnel";
-import Coupon from "./pages/Coupon/Coupon";
+import Agreement from "./pages/Agreement/Agreement";
 import Discord from "./pages/Discord/Discord";
 import JoinComplete from "./pages/JoinComplete/JoinComplete";
 import LoginPage from "./pages/LoginPage";
+import { Analytics } from "./service/analytics";
 
-function App() {
-  const { isAuthenticated } = useAuth();
-  const { currentStep, progress, next, prev, goto } = useFunnel({
-    steps: [
-      "PersonalInfo",
-      "Survey",
-      // "Everytime",
-      "Discord",
-      "Coupon",
-      "Payment",
-      "JoinComplete",
-    ],
-    initialStep: "PersonalInfo",
-  });
-
+const useAnalyticsSetup = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
+  // 1. 앱이 맨 처음 로드될 때 새로고침 여부를 체크합니다.
   useEffect(() => {
-    window.history.pushState(null, "", location.pathname);
+    Analytics.checkAndTrackRefresh();
+  }, []); // 의존성 배열이 비어있으므로 최초 1회만 실행됩니다.
 
-    const handlePopState = () => {
-      navigate(location.pathname, { replace: true });
-    };
+  // 2. URL(location)이 변경될 때마다 페이지 뷰를 추적합니다.
+  useEffect(() => {
+    const currentPath = location.pathname + location.search;
+    Analytics.trackPageView(currentPath);
+  }, [location]); // location 객체가 바뀔 때마다 실행됩니다.
+};
 
-    window.addEventListener("popstate", handlePopState);
+// BrowserRouter 안에서 훅을 실행하기 위한 컴포넌트
+const AnalyticsTracker = () => {
+  useAnalyticsSetup();
+  return null;
+};
 
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, [location, navigate]);
-
-  if (isAuthenticated === AuthStatus.LOADING) {
-    return null;
-  }
-
-  if (isAuthenticated === AuthStatus.UNAUTHORIZED) {
-    return <LoginPage />;
-  }
-
-  if (isAuthenticated === AuthStatus.COMPLETED) {
-    goto("JoinComplete");
-  }
+const FunnelLayout = () => {
+  const { currentStep, progress } = useFunnel();
 
   return (
-    <div className="mx-auto mb-4 w-full max-w-md px-4 py-8 pb-28">
-      <ToastContainer
-        position="top-center"
-        draggable={true}
-        pauseOnFocusLoss={false}
-      />
-      <h1 className="font-bold text-2xl">동아리 회원 가입</h1>
-      <Progress value={progress} className="mt-3 mb-3 w-full" />
-      <Routes>
-        <Route
-          path="/PersonalInfo"
-          element={<PersonalInfo onNext={next} onPrev={prev} />}
-        />
-        <Route
-          path="/Survey"
-          element={<Survey onNext={next} onPrev={prev} />}
-        />
-        {/* <Route
-          path="/Everytime"
-          element={
-            <Everytime
-              onNext={next}
-              onPrev={prev}
-              onDataSubmit={() => {}} // 핸들러 전달
-            />
-          }
-        /> */}
-        <Route
-          path="/Discord"
-          element={<Discord onNext={next} onPrev={prev} />}
-        />
-        <Route
-          path="/Coupon"
-          element={<Coupon onNext={next} onPrev={prev} />}
-        />
-        <Route
-          path="/Payment"
-          element={<Payment onNext={next} onPrev={prev} />}
-        />
-        <Route path="/JoinComplete" element={<JoinComplete />} />
+    <div className="mx-auto mb-8 w-full max-w-md px-4 py-8 pb-28">
+      <Title currentStep={currentStep} />
+      <Progress value={progress} className="mt-4 mb-8 h-0.5 w-full" />
 
-        <Route path="*" element={<Navigate to={`/${currentStep}`} replace />} />
-      </Routes>
+      <Outlet />
     </div>
   );
-}
+};
+
+const App = () => {
+  return (
+    <>
+      <AnalyticsTracker />
+      <Authentication>
+        <Toaster position="bottom-center" />
+
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/complete" element={<JoinComplete />} />
+
+          <Route element={<FunnelLayout />}>
+            <Route path="/agreement" element={<Agreement />} />
+            <Route path="/personal-info" element={<PersonalInfo />} />
+            <Route path="/survey" element={<Survey />} />
+            <Route path="/discord" element={<Discord />} />
+            <Route path="/payment" element={<Payment />} />
+          </Route>
+        </Routes>
+      </Authentication>
+    </>
+  );
+};
 
 export default App;

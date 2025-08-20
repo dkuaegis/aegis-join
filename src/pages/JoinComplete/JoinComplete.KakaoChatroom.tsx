@@ -1,52 +1,170 @@
+import { Copy } from "lucide-react";
+import { forwardRef, useState } from "react";
+import toast from "react-hot-toast";
+import KakaoIcon from "@/assets/kakao-logo.svg";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import KakaoIcon from "./KakaoIcon"; // 직접 만든 SVG 컴포넌트
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { Analytics } from "@/service/analytics";
 
-type OpenChatStep = "copyCode" | "copied" | "enterOpenChat";
+const TriggerButton = forwardRef<HTMLDivElement>((props, ref) => (
+  <div ref={ref} className="flex items-center justify-center gap-2" {...props}>
+    <img src={KakaoIcon} alt="Kakao Icon" className="h-8 w-8" />
+    <span className="font-semibold text-base">카카오톡에서도 공지 받기</span>
+  </div>
+));
+TriggerButton.displayName = "TriggerButton";
 
-const KakaoChatroom = () => {
-  const [openChatStep, setOpenChatStep] = useState<OpenChatStep>("copyCode");
-  const password = import.meta.env.VITE_KAKAO_CHATROOM_PASSWORD; // 예시 비밀번호
+const Content = () => {
+  const password = import.meta.env.VITE_KAKAO_CHATROOM_PASSWORD;
   const chatroomUrl = import.meta.env.VITE_KAKAO_CHATROOM_URL;
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (openChatStep === "copyCode") {
-      e.preventDefault();
-      navigator.clipboard.writeText(password);
-      setOpenChatStep("copied");
-      setTimeout(() => setOpenChatStep("enterOpenChat"), 1000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(password);
+      toast.success("복사되었습니다.");
+      Analytics.safeTrack("Complete_Kakao_Copy_Password_Success", {
+        category: "Complete",
+      });
+    } catch (error) {
+      toast.error("복사에 실패했습니다. 브라우저 권한을 확인해주세요.");
+      console.error("copy failed:", error);
+      Analytics.safeTrack("Complete_Kakao_Copy_Password_Failed", {
+        category: "Complete",
+        error_message:
+          error instanceof Error ? error.message : String(error ?? ""),
+      });
     }
-    // "enterOpenChat" 상태에서는 링크의 기본 동작이 진행됩니다.
+  };
+
+  const handleJoin = () => {
+    Analytics.safeTrack("Complete_Kakao_Join_Click", { category: "Complete" });
+    window.open(chatroomUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <div className="break-words pt-8">
-      <p className="line-breaks mb-1 text-center text-gray-600 text-sm">
-        오픈채팅방에서도 공지를 확인할 수 있습니다.
-      </p>
+    <div className="flex flex-col gap-4 p-4">
+      <div className="space-y-2">
+        <label
+          htmlFor="password"
+          className="font-medium text-slate-600 text-sm"
+        >
+          채팅방 비밀번호
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            id="password"
+            type="text"
+            value={password}
+            readOnly
+            className="flex-1 rounded-md border bg-slate-100 px-3 py-2 text-center font-mono text-lg"
+          />
+          <Button
+            variant="icon"
+            onClick={handleCopy}
+            aria-label="비밀번호 복사"
+          >
+            <Copy className="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+
+      {/* 2. 참여하기 버튼 */}
       <Button
         size="lg"
-        className="w-full bg-[#FEE500] text-black transition-transform duration-100 hover:bg-[#FEE500] hover:text-black active:scale-95"
-        asChild
+        className="w-full bg-[#FEE500] font-bold text-black transition-all hover:bg-[#F7D300] active:scale-95"
+        onClick={handleJoin}
       >
-        <a
-          href={chatroomUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleClick}
-          className="flex items-center justify-center gap-0"
-        >
-          <KakaoIcon className="!h-[30px] !w-[30px] h-[30px] w-[30px]" />
-          <span className="text-[16px]">
-            {openChatStep === "copyCode"
-              ? "비밀번호 복사하기"
-              : openChatStep === "copied"
-                ? "복사되었습니다!"
-                : "오픈채팅방 참여하기!!"}
-          </span>
-        </a>
+        입장하기
       </Button>
     </div>
+  );
+};
+
+const KakaoChatroom = () => {
+  const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const handleOpenChange = (next: boolean) => {
+    if (next !== open) {
+      Analytics.safeTrack(
+        next ? "Complete_Kakao_Open" : "Complete_Kakao_Close",
+        {
+          category: "Complete",
+        }
+      );
+    }
+    setOpen(next);
+  };
+
+  const title = "카카오톡 공지방 참여 안내";
+  const description =
+    "아래에서 비밀번호를 복사한 후, '입장하기' 버튼을 눌러 참여해주세요.";
+
+  if (isDesktop) {
+    return (
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogTrigger asChild>
+          <Button
+            size="lg"
+            className="w-full bg-[#FEE500] text-black transition-all hover:bg-[#F7D300] active:scale-95"
+            asChild
+          >
+            <TriggerButton />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="p-0 sm:max-w-sm">
+          <DialogHeader className="p-6 pb-4">
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
+          <Content />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
+    <Drawer open={open} onOpenChange={handleOpenChange}>
+      <DrawerTrigger asChild>
+        <Button
+          size="lg"
+          className="w-full bg-[#FEE500] text-black transition-all hover:bg-[#F7D300] active:scale-95"
+          asChild
+        >
+          <TriggerButton />
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>{title}</DrawerTitle>
+          <DrawerDescription>{description}</DrawerDescription>
+        </DrawerHeader>
+        <Content />
+        <DrawerFooter className="pt-2">
+          <DrawerClose asChild>
+            <Button variant="outline">닫기</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

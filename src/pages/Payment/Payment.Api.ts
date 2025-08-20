@@ -1,75 +1,44 @@
-import type { GetPaymentInfo } from "@/types/api/payment";
+import { httpClient } from "@/api/api";
+import { Analytics } from "@/service/analytics";
 
-interface PaymentPollingResult {
-  isSuccess: boolean;
-  paymentInfo?: GetPaymentInfo;
-}
-
-export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
+export const makePayment = async (selectedCoupons: number[]) => {
+  const payload = { issuedCouponIds: selectedCoupons };
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/payments/status`,
-      {
-        credentials: "include",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`ERROR on polling: ${response.status}`);
-    }
-
-    const data: GetPaymentInfo = await response.json();
-
-    return {
-      isSuccess: ["COMPLETED", "OVERPAID"].includes(data.status),
-      paymentInfo: data,
-    };
+    Analytics.safeTrack("Payment_Create_Start", {
+      category: "Payment",
+      coupon_count: selectedCoupons.length,
+    });
+    const res = await httpClient.post("/payments", payload);
+    Analytics.safeTrack("Payment_Create_Success", { category: "Payment" });
+    return res;
   } catch (err) {
-    console.error("송금 폴링 중 오류 발생:", err);
+    Analytics.safeTrack("Payment_Create_Failed", {
+      category: "Payment",
+      error_message: err instanceof Error ? err.message : String(err ?? ""),
+    });
     throw err;
   }
 };
 
-export const startPaymentPolling = (
-  setIsValid: React.Dispatch<React.SetStateAction<boolean>>,
-  setPayInfo: React.Dispatch<React.SetStateAction<GetPaymentInfo | null>>,
-  setRemainingAmount: React.Dispatch<React.SetStateAction<number>>
-) => {
-  let pollingActive = true;
-  const interval = 5000;
+interface PaymentPollingResult {
+  status: string;
+  finalPrice: number;
+}
 
-  const pollPaymentStatusInterval = async () => {
-    try {
-      const result = await pollPaymentStatus();
-      if (!pollingActive) return;
-
-      setIsValid(result.isSuccess);
-      setPayInfo(result.paymentInfo ?? null);
-
-      if (result.paymentInfo) {
-        const remainingAmount =
-          result.paymentInfo.expectedDepositAmount -
-          result.paymentInfo.currentDepositAmount;
-        setRemainingAmount(remainingAmount);
-      }
-
-      if (
-        result.paymentInfo &&
-        ["COMPLETED", "OVERPAID"].includes(result.paymentInfo.status)
-      ) {
-        pollingActive = false;
-        clearInterval(pollingInterval);
-      }
-    } catch (error) {
-      console.error("Payment polling failed:", error);
-    }
-  };
-
-  const pollingInterval = setInterval(pollPaymentStatusInterval, interval);
-  pollPaymentStatusInterval();
-
-  return () => {
-    pollingActive = false;
-    clearInterval(pollingInterval);
-  };
+export const pollPaymentStatus = async (): Promise<PaymentPollingResult> => {
+  try {
+    const res = await httpClient.get<PaymentPollingResult>("/payments/status");
+    Analytics.safeTrack("Payment_Poll_Tick", {
+      category: "Payment",
+      status: res.status,
+      final_price: res.finalPrice,
+    });
+    return res;
+  } catch (err) {
+    Analytics.safeTrack("Payment_Poll_Failed", {
+      category: "Payment",
+      error_message: err instanceof Error ? err.message : String(err ?? ""),
+    });
+    throw err;
+  }
 };

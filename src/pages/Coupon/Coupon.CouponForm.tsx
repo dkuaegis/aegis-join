@@ -1,7 +1,7 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
 
 interface CouponFormProps {
   couponCode: string;
@@ -19,7 +19,6 @@ const CouponForm: React.FC<CouponFormProps> = React.memo(
           placeholder="쿠폰 코드를 입력하세요"
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}
-          required
         />
       </div>
       <Button type="submit" className="w-full">

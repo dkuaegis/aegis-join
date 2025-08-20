@@ -1,99 +1,140 @@
-import { Alert, AlertTitle } from "@/components/ui/alert";
-import AlertBox from "@/components/ui/custom/alertbox";
+import { Label } from "@radix-ui/react-label";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { Suspense, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import NavigationButtons from "@/components/ui/custom/navigationButton";
-import type { GetPaymentInfo } from "@/types/api/payment";
-import { CircleAlert, CircleCheckBig, LoaderCircle } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { startPaymentPolling } from "./Payment.Api";
-import { ADMIN_INFO } from "./Payment.Config";
-// import HowtoDo from "./Payment.HowtoDo";
+import { cn } from "@/lib/utils";
+import { Analytics } from "@/service/analytics";
+import { useAuthStore } from "@/stores/authStore";
+import Coupon from "../Coupon/Coupon";
+import AdminInfoDrawer from "./Payment.AdminInfoDrawer";
+import PaymentAmount from "./Payment.Amount";
 import Information from "./Payment.Information";
+import { usePaymentPolling } from "./usePaymentPolling";
 
-function Payment({
-  onNext,
-  onPrev,
-}: { onNext: () => void; onPrev: () => void }) {
-  const [isValid, setIsValid] = useState(false);
-  const [remainingAmount, setRemainingAmount] = useState(0);
-  const [payInfo, setPayInfo] = useState<GetPaymentInfo | null>(null);
+const Complete = React.lazy(() => import("@/components/ui/custom/complete"));
+
+const modalVariants = {
+  // 초기 상태 (화면 아래, 숨김)
+  hidden: {
+    y: "60%",
+    opacity: 0,
+  },
+  // 보이는 상태
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut",
+      // 자식 요소들의 애니메이션을 부모보다 0.2초 늦게 시작
+      staggerChildren: 0,
+      when: "beforeChildren", // 이 속성은 자식보다 부모 애니메이션을 먼저 시작하도록 보장
+    },
+  },
+  // 사라지는 상태
+  exit: {
+    y: "60%",
+    opacity: 0,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut",
+    },
+  },
+} as const;
+
+const Payment = () => {
+  const { isValid, finalPrice, status, refreshFinalPrice } =
+    usePaymentPolling();
+  const [currentView, setCurrentView] = useState<"coupon" | "payment">(
+    "payment"
+  );
+  const completeRegistration = useAuthStore(
+    (state) => state.completeRegistration
+  );
 
   useEffect(() => {
-    const cleanupPolling = startPaymentPolling(
-      setIsValid,
-      setPayInfo,
-      setRemainingAmount
-    );
-
-    return () => {
-      cleanupPolling();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (payInfo) {
-      setRemainingAmount(
-        payInfo.expectedDepositAmount - payInfo.currentDepositAmount
-      );
+    if (status === "error") {
+      Analytics.safeTrack("Payment_View_Error", { category: "Payment" });
     }
-  }, [payInfo]);
+  }, [status]);
 
-  const handleNext = useCallback(() => {
-    if (!isValid || payInfo?.status === "PENDING") return;
-    onNext();
-  }, [onNext, isValid, payInfo?.status]);
+  if (status === "loading") {
+    return null;
+  }
+
+  if (status === "error") {
+    return (
+      <div className="text-center text-red-500">
+        <p className="my-7">
+          결제 상태를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.
+        </p>
+        <AdminInfoDrawer />
+      </div>
+    );
+  }
 
   return (
-    <div className="line-breaks space-y-4">
-      <h3 className="font-semibold text-lg">회비 납부</h3>
-      {payInfo && payInfo.status === "PENDING" ? (
-        <Information payInfo={payInfo} remainingAmount={remainingAmount} />
-      ) : (
-        <Alert className="border-green-200 bg-green-50 text-green-800 shadow-sm">
-          <CircleCheckBig size={24} color="#166534" />
-          <AlertTitle className="font-semibold text-lg">
-            입금이 완료되었습니다
-          </AlertTitle>
-        </Alert>
-      )}
-
-      {isValid === false && payInfo && payInfo.currentDepositAmount > 0 && (
-        <AlertBox
-          icon={<CircleAlert className="h-4 w-4" />}
-          title="회비 추가 납부 안내"
-          description={[
-            "아직 회비가 완납되지 않았습니다.",
-            `남은 금액 ${remainingAmount.toLocaleString()}원을 납부해주세요.`,
-          ]}
-        />
-      )}
-
-      {payInfo && payInfo.status === "OVERPAID" && (
-        <AlertBox
-          icon={<CircleAlert className="h-4 w-4" />}
-          title="회비 초과 납부 안내"
-          description={[
-            "초과 납부가 발생한 경우에도 회원가입은 정상적으로 처리됩니다. 환불이 필요하시면 운영진에게 문의해 주세요.",
-            `연락처: ${ADMIN_INFO.phoneNumber}`,
-            `카카오톡 ID: ${ADMIN_INFO.kakaoId}`,
-          ]}
-        />
-      )}
-      {!isValid && (
-        <div className="flex items-center justify-center py-4">
-          <LoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
-          <p className="pl-4">회비를 납부해주세요.</p>
-        </div>
-      )}
-
-      {/* <HowtoDo /> */}
-      <NavigationButtons
-        prev={onPrev}
-        next={handleNext}
-        isValid={isValid}
-        showPrev={isValid}
-      />
+    <div className="relative">
+      <div className={cn("line-breaks space-y-8")}>
+        {!isValid ? (
+          <>
+            <Label className="text-xl">납부 금액</Label>
+            <PaymentAmount amount={finalPrice} />
+            <Information />
+            <Button
+              size="lg"
+              className=" w-full items-center"
+              variant="default"
+              onClick={() => {
+                Analytics.safeTrack("Payment_Open_Coupon_Click", {
+                  category: "Payment",
+                });
+                setCurrentView("coupon");
+              }}
+            >
+              쿠폰 적용하기
+            </Button>
+            <AdminInfoDrawer />
+          </>
+        ) : (
+          <Suspense>
+            <Complete message="납부가 완료됐어요" />
+            <NavigationButtons
+              disabled={!isValid}
+              onClick={() => {
+                Analytics.safeTrack("Payment_Complete_Next_Click", {
+                  category: "Payment",
+                });
+                completeRegistration();
+              }}
+            />
+          </Suspense>
+        )}
+      </div>
+      <AnimatePresence>
+        {!isValid && currentView === "coupon" && (
+          <motion.div
+            className="absolute top-0 left-0 z-10 h-full w-full bg-white"
+            variants={modalVariants} // variants 속성 사용
+            initial="hidden" // "hidden"이라는 이름의 variant를 초기 상태로
+            animate="visible" // "visible"이라는 이름의 variant를 애니메이션 상태로
+            exit="exit" // "exit"라는 이름의 variant를 종료 상태로
+          >
+            <Coupon
+              onClose={() => {
+                Analytics.safeTrack("Coupon_Apply_And_Fetch_And_Close", {
+                  category: "Coupon",
+                });
+                refreshFinalPrice();
+                setCurrentView("payment");
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
-}
+};
 
 export default Payment;
