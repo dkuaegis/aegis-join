@@ -81,7 +81,7 @@ export const usePaymentPolling = () => {
       if (isMounted) {
         setStatus("polling");
         poll();
-        intervalRef.current = setInterval(poll, 5000);
+        intervalRef.current = setInterval(poll, 1000);
       }
     };
 
