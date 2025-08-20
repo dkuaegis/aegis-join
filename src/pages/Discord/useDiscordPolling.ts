@@ -73,7 +73,7 @@ export const useDiscordPolling = () => {
         } else {
           // 4. 첫 시도가 성공이 아니면, 상태를 'polling'으로 바꾸고 인터벌을 시작합니다.
           setStatus("polling");
-          intervalRef.current = setInterval(poll, 5000);
+          intervalRef.current = setInterval(poll, 1000);
         }
       } catch (error) {
         console.error("디스코드 폴링 실패:", error);
