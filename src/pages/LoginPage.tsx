@@ -1,9 +1,8 @@
+import { ExternalLinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useExternalBrowser } from "@/hooks/useExternalBrowser";
 import { Analytics } from "@/service/analytics";
 import BrowserRedirectPage from "./BrowserRedirectPage";
-import { Label } from "@/components/ui/label";
-import { ExternalLinkIcon } from "lucide-react";
 
 const LoginPage = () => {
   const { isKakaoInApp } = useExternalBrowser();
@@ -54,28 +53,32 @@ const LoginPage = () => {
           className="w-full"
           asChild
         >
-          <a href="https://dkuaegis.org/" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://dkuaegis.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Aegis 홈페이지
           </a>
         </Button>
       </div>
-    <div className="flex flex-col text-center">
-      <a
-        href="https://sites.google.com/dankook.ac.kr/help"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-muted-foreground text-sm font-extrabold underline inline-flex items-center justify-center gap-1"
-        onClick={() => {
-          Analytics.safeTrack("Gmail_Guide_Click", {
-            category: "Link",
-            method: "Guide",
-          });
-        }}      
-      >
-        단국대 Gmail 생성 가이드
-        <ExternalLinkIcon className="h-4 w-4" /> 
-      </a>
-    </div>
+      <div className="flex flex-col text-center">
+        <a
+          href="https://sites.google.com/dankook.ac.kr/help"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-1 font-extrabold text-muted-foreground text-sm underline"
+          onClick={() => {
+            Analytics.safeTrack("Gmail_Guide_Click", {
+              category: "Link",
+              method: "Guide",
+            });
+          }}
+        >
+          단국대 Gmail 생성 가이드
+          <ExternalLinkIcon className="h-4 w-4" />
+        </a>
+      </div>
     </div>
   );
 };
