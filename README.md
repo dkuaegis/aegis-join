@@ -14,7 +14,8 @@
 <img src="https://github.com/user-attachments/assets/d9ec93f3-c630-42b6-be8a-68e04702d27a" width="100%"/>
 <!-- 디스코드 연동 -->
 <img src="https://github.com/user-attachments/assets/eb3cfd81-bf7f-4efc-9db7-602bf21535aa" width="100%"/>
-<img src="https://github.com/user-attachments/assets/247247b2-684c-430d-8007-421bfedc232f" width="100%">
+<!-- 회비납부 -->
+<img src="https://github.com/user-attachments/assets/79735922-7dd3-4d25-bac0-a22a0778a891" width="100%"/>
 <img src="https://github.com/user-attachments/assets/142a0e4c-f1b3-4e8a-bdc9-e44386f78f6c" width="100%">
 
 <h3>기술 스택</h3>
