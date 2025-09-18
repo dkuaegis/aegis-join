@@ -16,7 +16,11 @@
 <img src="https://github.com/user-attachments/assets/eb3cfd81-bf7f-4efc-9db7-602bf21535aa" width="100%"/>
 <!-- 회비납부 -->
 <img src="https://github.com/user-attachments/assets/79735922-7dd3-4d25-bac0-a22a0778a891" width="100%"/>
-<img src="https://github.com/user-attachments/assets/142a0e4c-f1b3-4e8a-bdc9-e44386f78f6c" width="100%">
+<!-- 회비납부 쿠폰 등록 -->
+<img src="https://github.com/user-attachments/assets/06b9f692-c14a-4d38-b9f5-b5642c69751d" width="100%"/>
+<!-- 가입 완료 -->
+<img src="https://github.com/user-attachments/assets/aff2c7bb-a921-4654-a9fa-0dad61e1c0f4" width="100%"/>
+
 
 <h3>기술 스택</h3>
 
