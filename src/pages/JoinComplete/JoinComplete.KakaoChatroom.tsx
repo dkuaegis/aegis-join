@@ -27,7 +27,7 @@ import { Analytics } from "@/service/analytics";
 const TriggerButton = forwardRef<HTMLDivElement>((props, ref) => (
   <div ref={ref} className="flex items-center justify-center gap-2" {...props}>
     <img src={KakaoIcon} alt="Kakao Icon" className="h-8 w-8" />
-    <span className="font-semibold text-base">카카오톡에서도 공지 받기</span>
+    <span className="font-semibold text-base">카카오톡에서 공지 받기</span>
   </div>
 ));
 TriggerButton.displayName = "TriggerButton";

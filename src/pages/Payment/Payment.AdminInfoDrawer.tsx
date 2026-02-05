@@ -14,7 +14,7 @@ const AdminInfoDrawer = () => {
   return (
     <Drawer>
       <DrawerTrigger>
-        <p className=" text-start text-slate-500 underline">
+        <p className="text-start text-slate-500 underline">
           입금과정에서 초과납부 등의 문제 발생 시
           <span className="font-extrabold"> 회장/총무에게 문의해주세요.</span>
         </p>
