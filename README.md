@@ -4,12 +4,23 @@
 <img src="https://github.com/user-attachments/assets/a954b8b1-5599-4b52-ba75-fd8607b6d67a" width="40%">
 <br/>
 <br/>
-<img src="https://github.com/user-attachments/assets/2c49e405-416e-44f6-98bd-147908fddc29" width="100%">
-<img src="https://github.com/user-attachments/assets/fdd810ad-7a68-4157-b9ad-f64b22a69538" width="100%">
-<img src="https://github.com/user-attachments/assets/7cae310f-2934-4f7d-9543-b9ea1ab3f9f1" width="100%">
-<img src="https://github.com/user-attachments/assets/dbfa7487-86ee-4a25-9e07-d520f46bdc1a" width="100%">
-<img src="https://github.com/user-attachments/assets/247247b2-684c-430d-8007-421bfedc232f" width="100%">
-<img src="https://github.com/user-attachments/assets/142a0e4c-f1b3-4e8a-bdc9-e44386f78f6c" width="100%">
+<!-- 로그인 -->
+<img src="https://github.com/user-attachments/assets/4b3f5eb5-a7f2-40d7-9c28-138cb1ff70c6" width="100%">
+<!-- 회칙 동의 -->
+<img src="https://github.com/user-attachments/assets/b200f5e6-13fe-4ef8-a9b7-7d8a3c69a7bd" width="100%"/>
+<!-- 인적 사항 -->
+<img src="https://github.com/user-attachments/assets/3929d483-dec0-4cc6-b600-c1fc63558d71" width="100%"/>
+<!-- 가입 설문 -->
+<img src="https://github.com/user-attachments/assets/d9ec93f3-c630-42b6-be8a-68e04702d27a" width="100%"/>
+<!-- 디스코드 연동 -->
+<img src="https://github.com/user-attachments/assets/eb3cfd81-bf7f-4efc-9db7-602bf21535aa" width="100%"/>
+<!-- 회비납부 -->
+<img src="https://github.com/user-attachments/assets/79735922-7dd3-4d25-bac0-a22a0778a891" width="100%"/>
+<!-- 회비납부 쿠폰 등록 -->
+<img src="https://github.com/user-attachments/assets/06b9f692-c14a-4d38-b9f5-b5642c69751d" width="100%"/>
+<!-- 가입 완료 -->
+<img src="https://github.com/user-attachments/assets/aff2c7bb-a921-4654-a9fa-0dad61e1c0f4" width="100%"/>
+
 
 <h3>기술 스택</h3>
 
