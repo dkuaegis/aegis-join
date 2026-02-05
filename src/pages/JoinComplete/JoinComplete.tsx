@@ -3,8 +3,8 @@ import { httpClient } from "@/api/api";
 import Rocket from "@/assets/lottie/Rocket.json";
 import { Analytics } from "@/service/analytics";
 import { usePersonalInfoStore } from "@/stores/personalInfoStore";
-import DiscordNotice from "./JoinComplete.DiscordNotice";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
+import CompleteNotice from "./JoinComplete.Notice";
 
 const Lottie = lazy(() => import("lottie-react"));
 
@@ -60,7 +60,7 @@ const JoinComplete = () => {
         />
       </Suspense>
       <p className="mt-4 font-bold text-3xl">등록이 완료됐어요</p>
-      <DiscordNotice />
+      <CompleteNotice />
       <KakaoChatroom />
     </Wrapper>
   );
