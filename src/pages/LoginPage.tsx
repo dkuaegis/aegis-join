@@ -4,6 +4,10 @@ import { useExternalBrowser } from "@/hooks/useExternalBrowser";
 import { Analytics } from "@/service/analytics";
 import BrowserRedirectPage from "./BrowserRedirectPage";
 
+const GOOGLE_LOGIN_URL = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
+const AEGIS_HOMEPAGE_URL = "https://homepage.dkuaegis.org/";
+const GMAIL_GUIDE_URL = "https://sites.google.com/dankook.ac.kr/help";
+
 const LoginPage = () => {
   const { isKakaoInApp } = useExternalBrowser();
 
@@ -37,11 +41,7 @@ const LoginPage = () => {
           className="w-full"
           asChild
         >
-          <a
-            href={`${import.meta.env.VITE_API_URL}/oauth2/authorization/google`}
-          >
-            Google로 로그인
-          </a>
+          <a href={GOOGLE_LOGIN_URL}>Google로 로그인</a>
         </Button>
         <Button
           onClick={() => {
@@ -54,7 +54,7 @@ const LoginPage = () => {
           asChild
         >
           <a
-            href="https://dkuaegis.org/"
+            href={AEGIS_HOMEPAGE_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -64,7 +64,7 @@ const LoginPage = () => {
       </div>
       <div className="flex flex-col text-center">
         <a
-          href="https://sites.google.com/dankook.ac.kr/help"
+          href={GMAIL_GUIDE_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-1 font-extrabold text-muted-foreground text-sm underline"
