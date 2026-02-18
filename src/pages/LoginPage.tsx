@@ -5,7 +5,7 @@ import { Analytics } from "@/service/analytics";
 import BrowserRedirectPage from "./BrowserRedirectPage";
 
 const GOOGLE_LOGIN_URL = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
-const AEGIS_HOMEPAGE_URL = "https://homepage.dkuaegis.org/";
+const AEGIS_HOMEPAGE_URL = "https://dkuaegis.org/";
 const GMAIL_GUIDE_URL = "https://sites.google.com/dankook.ac.kr/help";
 
 const LoginPage = () => {
