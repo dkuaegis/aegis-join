@@ -38,7 +38,7 @@ const Information: React.FC = () => {
 
   const accountDetails = useMemo<AccountDetails>(() => {
     if (!accountString) {
-      return { bankName: "", accountNumber: "", accountHolder: "윤성민" };
+      return { bankName: "", accountNumber: "", accountHolder: "권대근" };
     }
     const lastSpaceIndex = accountString.lastIndexOf(" ");
     const bankName = accountString.slice(0, lastSpaceIndex);
@@ -47,14 +47,14 @@ const Information: React.FC = () => {
     return {
       bankName,
       accountNumber,
-      accountHolder: "윤성민",
+      accountHolder: "권대근",
     };
   }, []);
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(
-        import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER
+        import.meta.env.VITE_ADMIN_ACCOUNT_NUMBER,
       );
       toast.success("복사되었습니다.");
     } catch (error) {
