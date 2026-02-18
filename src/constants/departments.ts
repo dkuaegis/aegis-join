@@ -13,6 +13,10 @@ export const departments = [
     label: "SW융합대학 사이버보안학과",
   },
   {
+    value: "SW융합대학_인공지능학과",
+    label: "SW융합대학 인공지능학과",
+  },
+  {
     value: "SW융합대학_통계데이터사이언스학과",
     label: "SW융합대학 통계데이터사이언스학과",
   },
@@ -21,12 +25,12 @@ export const departments = [
     label: "SW융합대학 SW융합학부",
   },
   {
-    value: "퇴계혁신칼리지_SW융합계열광역",
-    label: "퇴계혁신칼리지 SW융합계열광역",
-  },
-  {
     value: "프리무스국제대학_모바일시스템공학과",
     label: "프리무스국제대학 모바일시스템공학과",
+  },
+  {
+    value: "퇴계혁신칼리지_SW융합계열광역",
+    label: "퇴계혁신칼리지 SW융합계열광역",
   },
   {
     value: "퇴계혁신칼리지_광역",
