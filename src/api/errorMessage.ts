@@ -45,12 +45,6 @@ const specificMessages: Record<
       409: "이미 완료되었거나 처리할 수 없는 상태의 결제입니다.",
     },
   },
-  "/payments/status": {
-    GET: {
-      404: "사용자 정보를 찾을 수 없습니다.",
-    },
-  },
-
   // --- 쿠폰 (Coupons) ---
   "/coupons/code": {
     POST: {

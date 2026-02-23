@@ -21,7 +21,7 @@ export const makePayment = async (selectedCoupons: number[]) => {
 };
 
 interface PaymentPollingResult {
-  status: string;
+  status: "NOT_CREATED" | "PENDING" | "COMPLETED";
   finalPrice: number;
 }
 

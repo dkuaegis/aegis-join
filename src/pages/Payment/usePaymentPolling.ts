@@ -88,11 +88,23 @@ export const usePaymentPolling = () => {
     // 결제 생성 및 폴링 시작 로직
     const initializePayment = async () => {
       try {
-        await makePayment([]);
+        const paymentStatus = await pollPaymentStatus();
+        setFinalPrice(paymentStatus.finalPrice);
 
+        if (paymentStatus.status === "COMPLETED") {
+          setStatus("success");
+          return;
+        }
+
+        if (paymentStatus.status === "PENDING") {
+          startPolling();
+          return;
+        }
+
+        await makePayment([]);
         startPolling();
       } catch (error) {
-        // 409 에러는 이미 결제가 생성된 경우이므로, 정상적으로 폴링을 시작합니다.
+        // 409 에러는 상태 조회 이후 동시 요청으로 이미 결제가 생성된 경우이므로 정상적으로 폴링을 시작합니다.
         if (error instanceof ServerError && error.status === 409) {
           startPolling();
         } else {
