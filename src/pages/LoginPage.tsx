@@ -47,7 +47,7 @@ const LoginPage = () => {
           onClick={() => {
             Analytics.safeTrack("Go_Homepage_Click", {
               category: "Auth",
-              method: "Email",
+              method: "Homepage",
             });
           }}
           className="w-full"
