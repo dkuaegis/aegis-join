@@ -1,4 +1,4 @@
-FROM node:22-slim AS builder
+FROM node:24.16-bookworm-slim AS builder
 
 WORKDIR /app
 
@@ -10,10 +10,10 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:1.31.0-alpine
+FROM nginx:1.31.1-alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY build/default.conf /etc/nginx/conf.d/default.conf
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 

@@ -34,9 +34,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }, []);
 
     const handleChange = useCallback(
-      (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        adjustHeight(e.target);
-        const newValue = e.target.value;
+      (e: React.InputEvent<HTMLTextAreaElement>) => {
+        adjustHeight(e.currentTarget);
+        const newValue = e.currentTarget.value;
         onValueChange?.(newValue);
       },
       [adjustHeight, onValueChange]

@@ -1,8 +1,36 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "files": {
-    "includes": ["src/**/*", "!**/.next", "!**/node_modules", "!src/assets"]
+    "maxSize": 3145728,
+    "includes": [
+      "src/**/*",
+      "app/**/*",
+      "*.ts",
+      "*.tsx",
+      "*.js",
+      "*.jsx",
+      "*.mjs",
+      "*.cjs",
+      "*.json",
+      "*.jsonc",
+      "*.css",
+      "!dist",
+      "!build",
+      "!node_modules",
+      "!coverage",
+      "!public",
+      "!src/assets",
+      "!app/assets",
+      "!package-lock.json",
+      "!pnpm-lock.yaml"
+    ]
   },
   "linter": {
     "enabled": true,
@@ -14,17 +42,15 @@
         "useExhaustiveDependencies": "error"
       },
       "nursery": {
-        "useSortedClasses": {
-          "level": "error",
-          "fix": "safe",
-          "options": {}
-        }
+        "useSortedClasses": "off"
       },
       "suspicious": {
-        "noArrayIndexKey": "warn"
+        "noArrayIndexKey": "warn",
+        "noDuplicateProperties": "warn"
       },
       "complexity": {
-        "useArrowFunction":"error"
+        "noImportantStyles": "warn",
+        "useArrowFunction": "error"
       }
     }
   },

@@ -166,5 +166,5 @@ const chapters: Chapter[] = [
   },
 ];
 
+export type { Article, Chapter, ConsentState };
 export { chapters };
-export type { ConsentState, Chapter, Article };
