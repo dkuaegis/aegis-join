@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { httpClient } from "@/api/api";
 import Rocket from "@/assets/lottie/Rocket.json";
 import { Analytics } from "@/service/analytics";
@@ -6,7 +6,7 @@ import { usePersonalInfoStore } from "@/stores/personalInfoStore";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 import CompleteNotice from "./JoinComplete.Notice";
 
-const Lottie = lazy(() => import("lottie-react"));
+import Lottie from "lottie-react";
 
 interface RequiredMemberInfo {
   studentId: string;
@@ -47,18 +47,12 @@ const JoinComplete = () => {
 
   return (
     <Wrapper>
-      <Suspense
-        fallback={
-          <div className="mx-auto" style={{ width: 240, height: 240 }} />
-        }
-      >
-        {/* Lottie 애니메이션 크기를 줄여 세로 공간을 확보합니다. */}
-        <Lottie
-          animationData={Rocket}
-          loop={true}
-          style={{ width: 240, height: 240, margin: "0 auto" }}
-        />
-      </Suspense>
+      {/* Lottie 애니메이션 크기를 줄여 세로 공간을 확보합니다. */}
+      <Lottie
+        animationData={Rocket}
+        loop={true}
+        style={{ width: 240, height: 240, margin: "0 auto" }}
+      />
       <p className="mt-4 font-bold text-3xl">등록이 완료됐어요</p>
       <CompleteNotice />
       <KakaoChatroom />
