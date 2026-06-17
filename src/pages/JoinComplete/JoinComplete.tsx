@@ -1,12 +1,11 @@
 import { useEffect, useRef } from "react";
+import lottie from "lottie-web";
 import { httpClient } from "@/api/api";
 import Rocket from "@/assets/lottie/Rocket.json";
 import { Analytics } from "@/service/analytics";
 import { usePersonalInfoStore } from "@/stores/personalInfoStore";
 import KakaoChatroom from "./JoinComplete.KakaoChatroom";
 import CompleteNotice from "./JoinComplete.Notice";
-
-import Lottie from "lottie-react";
 
 interface RequiredMemberInfo {
   studentId: string;
@@ -16,6 +15,7 @@ interface RequiredMemberInfo {
 const JoinComplete = () => {
   const studentId = usePersonalInfoStore((s) => s.personalInfoData?.studentId);
   const identifiedRef = useRef(false);
+  const lottieContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     Analytics.safeTrack("Complete_View", { category: "Complete" });
@@ -29,7 +29,6 @@ const JoinComplete = () => {
           identifiedRef.current = true;
           return;
         }
-        // 스토어에 없으면 백엔드에서 가져와서 식별
         const profile = await httpClient.get<RequiredMemberInfo>("/members");
         if (profile.studentId) {
           Analytics.identifyStudent(String(profile.studentId), profile.name);
@@ -45,12 +44,24 @@ const JoinComplete = () => {
     void identify();
   }, [studentId]);
 
+  useEffect(() => {
+    if (!lottieContainerRef.current) return;
+    const animation = lottie.loadAnimation({
+      container: lottieContainerRef.current,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      animationData: Rocket,
+    });
+    return () => {
+      animation.destroy();
+    };
+  }, []);
+
   return (
     <Wrapper>
-      {/* Lottie 애니메이션 크기를 줄여 세로 공간을 확보합니다. */}
-      <Lottie
-        animationData={Rocket}
-        loop={true}
+      <div
+        ref={lottieContainerRef}
         style={{ width: 240, height: 240, margin: "0 auto" }}
       />
       <p className="mt-4 font-bold text-3xl">등록이 완료됐어요</p>
